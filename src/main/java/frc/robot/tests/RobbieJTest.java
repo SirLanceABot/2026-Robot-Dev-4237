@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Agitator;
+import frc.robot.subsystems.Climb;
 
 @SuppressWarnings("unused")
 public class RobbieJTest implements Test
@@ -29,6 +30,7 @@ public class RobbieJTest implements Test
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
     private Agitator agitator;
+    private Climb climb;
     private final CommandXboxController controller = new CommandXboxController(0);
 
 
@@ -47,6 +49,7 @@ public class RobbieJTest implements Test
 
         this.robotContainer = robotContainer;
         agitator = robotContainer.getAgitator();
+        climb = robotContainer.getClimb();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -65,9 +68,12 @@ public class RobbieJTest implements Test
      */
     public void init()
     {
-        controller.x().onTrue(agitator.forwardCommand());
-        controller.a().onTrue(agitator.reverseCommand());
-        controller.b().onTrue(agitator.stopCommand());
+        // controller.x().onTrue(agitator.forwardCommand());
+        // controller.a().onTrue(agitator.reverseCommand());
+        // controller.b().onTrue(agitator.stopCommand());
+        controller.x().onTrue(climb.ascendL1Command());
+        controller.a().onTrue(climb.descendL1Command());
+        controller.b().onTrue(climb.stopCommand());
     }
 
     /**

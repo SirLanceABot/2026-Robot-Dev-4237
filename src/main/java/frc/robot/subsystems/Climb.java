@@ -33,7 +33,7 @@ public class Climb extends SubsystemBase
     // Put all inner enums and inner classes here
     private enum climbPosition
     {
-        kL1(4237), kL2(4237), kL3(4237), kSTART(4237);
+        kL1(8), kL2(4237), kL3(4237), kSTART(0.0);
 
         public final double value;
         private climbPosition(double value)
@@ -45,15 +45,15 @@ public class Climb extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance motor1 = new TalonFXLance(Constants.Climb.MOTOR1, Constants.Climb.MOTOR_CAN_BUS, "Motor 1");
-    private final TalonFXLance motor2 = new TalonFXLance(Constants.Climb.MOTOR2, Constants.Climb.MOTOR_CAN_BUS, "Motor 2");
+    private final TalonFXLance leadMotor = new TalonFXLance(Constants.Climb.MOTOR1, "ROBORIO", "Motor 1");
+    private final TalonFXLance followMotor = new TalonFXLance(Constants.Climb.MOTOR2, "ROBORIO", "Motor 2");
     
-    private final double tolerance = 4237;
+    private final double tolerance = 2048/4;
 
-    private static final double kPUP = 4237;
-    private static final double kPDOWN = 4237;
-    private static final double kI = 4237;
-    private static final double kD = 4237;
+    private static final double kPUP = 0.5;
+    private static final double kPDOWN = 0.1;
+    private static final double kI = 0;
+    private static final double kD = 0;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -77,47 +77,60 @@ public class Climb extends SubsystemBase
 
     private void configMotors()
     {
-        motor1.setupFactoryDefaults();
-        motor2.setupFactoryDefaults();
+        leadMotor.setupFactoryDefaults();
+        followMotor.setupFactoryDefaults();
 
-        motor1.setupBrakeMode();
-        motor2.setupBrakeMode();
+        leadMotor.setupBrakeMode();
+        followMotor.setupBrakeMode();
 
-        motor1.setPosition(0.0);
-        motor2.setPosition(0.0);
+        leadMotor.setPosition(0.0);
+        followMotor.setPosition(0.0);
 
-        motor1.setupForwardSoftLimit(0, false);
-        motor2.setupForwardSoftLimit(0, false);
+        leadMotor.setupForwardSoftLimit(0, false);
+        followMotor.setupForwardSoftLimit(0, false);
 
-        motor1.setupReverseSoftLimit(0, false);
-        motor2.setupReverseSoftLimit(0, false);
+        leadMotor.setupReverseSoftLimit(0, false);
+        followMotor.setupReverseSoftLimit(0, false);
 
-        motor1.setupPIDController(0, kPUP, kI, kD); 
-        motor1.setupPIDController(1, kPDOWN, kI, kD); 
+        followMotor.setupFollower(Constants.Climb.MOTOR1, true);
+
+
+        leadMotor.setupPIDController(0, kPUP, kI, kD); 
+        leadMotor.setupPIDController(1, kPDOWN, kI, kD); 
 
     }
 
     private double getPosition()
     {
-        return motor1.getPosition();
+        return leadMotor.getPosition();
     }
 
      public BooleanSupplier isAtPosition(climbPosition position)
     {
-        return () -> Math.abs(motor1.getPosition() - position.value) < tolerance;
+        return () -> Math.abs(leadMotor.getPosition() - position.value) < tolerance;
+    }
+
+    private void stop()
+    {
+        leadMotor.set(0.0);
     }
 
     private void moveToPosition(climbPosition targetPosition)
     {
         if(targetPosition.value < getPosition())
         {
-            motor1.setControlPosition(targetPosition.value, 0);
+            leadMotor.setControlPosition(targetPosition.value, 0);
         }
         else if(targetPosition.value > getPosition())
         {
-            motor1.setControlPosition(targetPosition.value, 1);
+            leadMotor.setControlPosition(targetPosition.value, 1);
 
         }
+    }
+
+    public Command stopCommand()
+    {
+        return run( () -> stop());
     }
 
     public Command ascendL1Command()
