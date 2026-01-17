@@ -6,11 +6,12 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
+// import edu.wpi.first.math.MathUtil;
+// import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
 
 /**
@@ -35,15 +36,15 @@ public class Flywheel extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance leadMotor = new TalonFXLance(1, ROBORIO, "Motor 1");
-    private final TalonFXLance followMotor = new TalonFXLance(2, ROBORIO, "Motor 2");
+    private final TalonFXLance leadMotor = new TalonFXLance(Constants.Flywheel.LEADMOTOR, ROBORIO, "Motor 1");
+    private final TalonFXLance followMotor = new TalonFXLance(Constants.Flywheel.FOLLOWMOTOR, ROBORIO, "Motor 2");
 
     // PID constants
-    private final double kP = 0.0;
+    private final double kP = 0.3;
     private final double kI = 0.0;
     private final double kD = 0.0;
     private final double kS = 0.0;
-    private final double kv = 0.0;
+    private final double kV = 0.0;
 
     private final double velocityConversionFactor = 1.0; // figure out units
 
@@ -67,6 +68,8 @@ public class Flywheel extends SubsystemBase
 
         configMotors();
         configScoreMap();
+        // configLeftPassMap();
+        // configRightPassMap();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -85,18 +88,41 @@ public class Flywheel extends SubsystemBase
         leadMotor.setSafetyEnabled(true);
         followMotor.setSafetyEnabled(true);
 
-        leadMotor.setupCoastMode();
-        followMotor.setupCoastMode();
+        leadMotor.setupBrakeMode();
+        followMotor.setupBrakeMode();
 
-        leadMotor.setupPIDController(0, kP, kI, kD);
+        leadMotor.setupPIDController(0, kP, kI, kD, kS, kV);
         
         leadMotor.setupVelocityConversionFactor(velocityConversionFactor);
     }
 
     private void configScoreMap()
     {
-        scoreMap.put(0.0, 0.0);
+        // first value is distance from the hub (in alliance zone), second is motor power
+        // not tested values
+        scoreMap.put(0.0, 4237.0);
+        scoreMap.put(1.0, 4237.0);
+        scoreMap.put(2.0, 4237.0);
+        scoreMap.put(3.0, 4237.0);
+        scoreMap.put(4.0, 4237.0);
+        scoreMap.put(5.0, 4237.0);
+        scoreMap.put(6.0, 4237.0);
+        scoreMap.put(7.0, 4237.0);
+        scoreMap.put(8.0, 4237.0);
+        scoreMap.put(9.0, 4237.0);
+        scoreMap.put(10.0, 4237.0);
+        scoreMap.put(11.0, 4237.0);
+        scoreMap.put(12.0, 4237.0);
+        scoreMap.put(13.0, 4237.0);
+        scoreMap.put(14.0, 4237.0);
     }
+
+    // idk if we need these maps or not
+    // private void configLeftPassMap()
+    // {}
+
+    // private void configRightPassMap()
+    // {}
 
     /**
      * This sets the speed of the motors.
@@ -105,12 +131,13 @@ public class Flywheel extends SubsystemBase
     private void set(double speed)
     {
         leadMotor.set(speed);
+        // followMotor.set(speed);
     }
     
     private void setControlVelocity(double speed)
     {
         leadMotor.setControlVelocity(speed);
-        // followMotor.set(speed);
+        // followMotor.setControlVelocity(speed);
     }
 
     private void stop()
@@ -123,6 +150,11 @@ public class Flywheel extends SubsystemBase
         setControlVelocity(speed);
     }
 
+    public double getVelocity()
+    {
+        return leadMotor.getVelocity();
+    }
+
     // private double calcScoreVelocityFromDistance()
     // {}
 
@@ -132,7 +164,7 @@ public class Flywheel extends SubsystemBase
 
     public Command onCommand()
     {
-        return run( () -> set(0.25) );
+        return run( () -> set(0.1) );
     }
 
     public Command shootCommand(DoubleSupplier speed)
@@ -178,6 +210,6 @@ public class Flywheel extends SubsystemBase
     @Override
     public String toString()
     {
-        return "";
+        return "Flywheel Velocity = " + getVelocity();
     }
 }

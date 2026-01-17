@@ -2,6 +2,8 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.RobotContainer;
 
 @SuppressWarnings("unused")
@@ -26,6 +28,8 @@ public class RobbieFTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
+    private final CommandXboxController controller = new CommandXboxController(0);
+    private final Flywheel flywheel = new Flywheel();
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -64,7 +68,28 @@ public class RobbieFTest implements Test
      * This method runs periodically (every 20ms).
      */
     public void periodic()
-    {}
+    {
+        controller.x().onTrue(
+            flywheel.onCommand()
+        );
+        controller.b().onTrue(
+            flywheel.stopCommand()
+        );
+        controller.a().onTrue(
+            flywheel.shootCommand(() -> 10.0)
+        );
+
+        if(flywheel.isAtSetSpeed(10.0, 1.0).getAsBoolean())
+        {
+            System.out.println("AT TARGET SPEED**********************************");
+        }
+        else
+        {
+            System.out.println("NOT AT TARGET SPEED------------------------------");
+        }
+
+        System.out.println("_________velocity_________ = " + flywheel.getVelocity());
+    }
     
     /**
      * This method runs one time after the periodic() method.
