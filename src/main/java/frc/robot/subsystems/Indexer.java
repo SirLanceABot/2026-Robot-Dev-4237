@@ -35,6 +35,7 @@ public class Indexer extends SubsystemBase
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
     private final SparkMaxLance motor = new SparkMaxLance(3, ROBORIO, "Motor");
+    // private final TalonFXS motor2 = new TalonFXS(0, ROBORIO, "motor 2");
 
     private final double kP = 0.0;
     private final double kI = 0.0;
@@ -69,6 +70,8 @@ public class Indexer extends SubsystemBase
         motor.setSafetyEnabled(true);
         motor.setupPIDController(0, kP, kI, kD);
         motor.setupCoastMode();
+
+        // motor2.setupFactoryDefaults();
     }
 
     /**
@@ -80,12 +83,16 @@ public class Indexer extends SubsystemBase
         motor.set(speed);
         motor.feed();
         
+        // motor2.set(speed);
+        // motor2.feed();
     }
 
     private void setVelocity(double speed)
     {
         motor.setControlVelocity(speed);
         // add conversion factor
+
+        // motor2.setControlVelocity(speed);
     }
 
     public void stop()
