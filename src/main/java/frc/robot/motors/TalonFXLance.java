@@ -2,6 +2,7 @@ package frc.robot.motors;
 
 import java.lang.invoke.MethodHandles;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -77,7 +78,8 @@ public class TalonFXLance extends MotorControllerLance
 
         this.motorControllerName = motorControllerName;
 
-        motor = new TalonFX(deviceId, canbus);
+        // motor = new TalonFX(deviceId, canbus);           // 2025 version
+        motor = new TalonFX(deviceId, new CANBus(canbus));
         positionVoltage = new PositionVoltage(0.0);
         velocityVoltage = new VelocityVoltage(0);
 
