@@ -43,6 +43,14 @@ public final class Constants
 
     }
 
+    public static class Climb
+    {
+        public static final int MOTOR1                   = 4237;
+        public static final int MOTOR2                   = 4237;
+
+        public static final String MOTOR_CAN_BUS                        = "4237";    
+    }
+
     /**
      * This class contains the port numbers of the controllers
      */

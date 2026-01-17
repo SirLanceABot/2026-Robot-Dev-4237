@@ -9,13 +9,12 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.motors.SparkMaxLance;
 import frc.robot.motors.TalonFXLance;
 
 /**
  * This is an example of what a subsystem should look like.
  */
-public class Agitator extends SubsystemBase
+public class Climb extends SubsystemBase
 {
     // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -35,8 +34,8 @@ public class Agitator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance agitatorMotor = new SparkMaxLance(Constants.Agitator.MOTOR, Constants.Agitator.MOTOR_CAN_BUS, "");
-    // private final SparkMaxLance agitatorMotor = new SparkMaxLance(3, "ROBORIO", "Agitator");
+    private final TalonFXLance motor1 = new TalonFXLance(Constants.Climb.MOTOR1, Constants.Climb.MOTOR_CAN_BUS, "Motor 1");
+    private final TalonFXLance motor2 = new TalonFXLance(Constants.Climb.MOTOR2, Constants.Climb.MOTOR_CAN_BUS, "Motor 2");
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -45,7 +44,7 @@ public class Agitator extends SubsystemBase
     /** 
      * Creates a new ExampleSubsystem. 
      */
-    public Agitator()
+    public Climb()
     {
         super("Example Subsystem");
         System.out.println("  Constructor Started:  " + fullClassName);
@@ -61,7 +60,8 @@ public class Agitator extends SubsystemBase
 
     private void configMotors()
     {
-        agitatorMotor.setupFactoryDefaults();
+        motor1.setupFactoryDefaults();
+        motor2.setupFactoryDefaults();
     }
 
     /**
@@ -70,22 +70,24 @@ public class Agitator extends SubsystemBase
      */
     private void set(double speed)
     {
-        agitatorMotor.set(speed);
+        motor1.set(speed);
+        motor2.set(speed);
     }
 
     public void stop()
     {
-        agitatorMotor.set(0.0);
+        set(0.0);
+        set(0.0);
     }
 
-    public Command forwardCommand()
+    public Command onCommand()
     {
         return run( () -> set(0.25) );
     }
 
-    public Command reverseCommand()
+    public Command setCommand(DoubleSupplier speed)
     {
-        return run( () -> set(-0.25) );
+        return run( () -> set(MathUtil.clamp(speed.getAsDouble(), 0.0, 0.5)) );
     }
 
     // Use a method reference instead of this method
