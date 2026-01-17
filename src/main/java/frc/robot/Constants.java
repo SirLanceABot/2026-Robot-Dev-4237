@@ -51,6 +51,14 @@ public final class Constants
         public static final String MOTOR_CAN_BUS                        = "4237";    
     }
 
+    public static class Flywheel
+    {
+        public static final int LEADMOTOR               = 4237;
+        public static final int FOLLOWMOTOR             = 4237;
+
+        public static final String MOTOR_CAN_BUS        = "4237";
+    }
+
     /**
      * This class contains the port numbers of the controllers
      */
