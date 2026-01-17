@@ -40,7 +40,7 @@ public class Indexer extends SubsystemBase
     // Put all class constructors here
 
     /** 
-     * Creates a new ExampleSubsystem. 
+     * Creates a new Indexer. 
      */
     public Indexer()
     {
@@ -77,9 +77,14 @@ public class Indexer extends SubsystemBase
 
     public Command onCommand()
     {
-        return run( () -> set(0.25) );
+        return run( () -> set(0.1) );
     }
 
+    /**
+     * Sets motor to run at a speed from 0.0 - 0.5
+     * @param speed
+     * @return
+     */
     public Command setCommand(DoubleSupplier speed)
     {
         return run( () -> set(MathUtil.clamp(speed.getAsDouble(), 0.0, 0.5)) );
