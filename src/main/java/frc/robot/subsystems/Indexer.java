@@ -34,7 +34,14 @@ public class Indexer extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance motor = new SparkMaxLance(1, ROBORIO, "Motor 1");
+    private final SparkMaxLance motor = new SparkMaxLance(3, ROBORIO, "Motor");
+
+    private final double kP = 0.0;
+    private final double kI = 0.0;
+    private final double kD = 0.0;
+    private final double kS = 0.0;  // small number
+    private final double kV = 1000; // change once roller is attached
+    private final double kA = 0.0;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -59,6 +66,9 @@ public class Indexer extends SubsystemBase
     private void configMotors()
     {
         motor.setupFactoryDefaults();
+        motor.setSafetyEnabled(true);
+        motor.setupPIDController(0, kP, kI, kD);
+        motor.setupCoastMode();
     }
 
     /**
@@ -68,6 +78,14 @@ public class Indexer extends SubsystemBase
     private void set(double speed)
     {
         motor.set(speed);
+        motor.feed();
+        
+    }
+
+    private void setVelocity(double speed)
+    {
+        motor.setControlVelocity(speed);
+        // add conversion factor
     }
 
     public void stop()
@@ -88,6 +106,11 @@ public class Indexer extends SubsystemBase
     public Command setCommand(DoubleSupplier speed)
     {
         return run( () -> set(MathUtil.clamp(speed.getAsDouble(), 0.0, 0.5)) );
+    }
+
+    public Command setVelocityCommand(DoubleSupplier speed)
+    {
+        return run( () -> setVelocity(speed.getAsDouble()));
     }
 
     // Use a method reference instead of this method
