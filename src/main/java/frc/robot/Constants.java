@@ -35,6 +35,14 @@ public final class Constants
         public static final String ROBORIO  = "rio";
     }
 
+    public static class Agitator
+    {
+        public static final int MOTOR                   = 4237;
+
+        public static final String MOTOR_CAN_BUS                        = "4237";
+
+    }
+
     /**
      * This class contains the port numbers of the controllers
      */
