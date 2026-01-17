@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.ExampleSubsystem;
 
 /**
@@ -29,9 +30,11 @@ public class RobotContainer
     // Select the robot components to use
     private boolean useFullRobot = false;
     private boolean useExampleSubsystem = false;
+    private boolean useAgitator = false;
 
     // Robot components
     private ExampleSubsystem exampleSubsystem = null;
+    private Agitator agitator = null;
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -40,11 +43,19 @@ public class RobotContainer
         // Instantiate ONLY the components selected above
         if(useFullRobot || useExampleSubsystem)
             exampleSubsystem = new ExampleSubsystem();
+
+        if(useFullRobot || useAgitator)
+            agitator = new Agitator(); 
     }
 
     public ExampleSubsystem getExampleSubsystem()
     {
         return exampleSubsystem;
+    }
+
+    public Agitator getAgitator()
+    {
+        return agitator;
     }
 
 }

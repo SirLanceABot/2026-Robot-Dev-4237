@@ -35,8 +35,7 @@ public class Agitator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance motor1 = new TalonFXLance(1, ROBORIO, "Motor 1");
-    private final SparkMaxLance shootMotor = new SparkMaxLance(Constants.Agitator.MOTOR, Constants.Agitator.MOTOR_CAN_BUS, "");
+    private final SparkMaxLance agitatorMotor = new SparkMaxLance(Constants.Agitator.MOTOR, Constants.Agitator.MOTOR_CAN_BUS, "");
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -61,7 +60,7 @@ public class Agitator extends SubsystemBase
 
     private void configMotors()
     {
-        motor1.setupFactoryDefaults();
+        agitatorMotor.setupFactoryDefaults();
     }
 
     /**
@@ -70,22 +69,22 @@ public class Agitator extends SubsystemBase
      */
     private void set(double speed)
     {
-        motor1.set(speed);
+        agitatorMotor.set(speed);
     }
 
     public void stop()
     {
-        motor1.set(0.0);
+        agitatorMotor.set(0.0);
     }
 
-    public Command onCommand()
+    public Command forwardCommand()
     {
         return run( () -> set(0.25) );
     }
 
-    public Command setCommand(DoubleSupplier speed)
+    public Command reverseCommand()
     {
-        return run( () -> set(MathUtil.clamp(speed.getAsDouble(), 0.0, 0.5)) );
+        return run( () -> set(-0.25) );
     }
 
     // Use a method reference instead of this method
