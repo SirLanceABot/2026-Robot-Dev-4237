@@ -35,7 +35,8 @@ public class Agitator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance agitatorMotor = new SparkMaxLance(Constants.Agitator.MOTOR, Constants.Agitator.MOTOR_CAN_BUS, "");
+    // private final SparkMaxLance agitatorMotor = new SparkMaxLance(Constants.Agitator.MOTOR, Constants.Agitator.MOTOR_CAN_BUS, "");
+    private final SparkMaxLance agitatorMotor = new SparkMaxLance(3, "ROBORIO", "Agitator");
 
 
     // *** CLASS CONSTRUCTORS ***

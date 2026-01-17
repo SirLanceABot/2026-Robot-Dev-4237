@@ -2,7 +2,9 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Agitator;
 
 @SuppressWarnings("unused")
 public class RobbieJTest implements Test
@@ -26,6 +28,9 @@ public class RobbieJTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
+    private Agitator agitator;
+    private final CommandXboxController controller = new CommandXboxController(0);
+
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -41,6 +46,7 @@ public class RobbieJTest implements Test
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.robotContainer = robotContainer;
+        agitator = robotContainer.getAgitator();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -58,13 +64,20 @@ public class RobbieJTest implements Test
      * This method runs one time before the periodic() method.
      */
     public void init()
-    {}
+    {
+        controller.x().onTrue(agitator.forwardCommand());
+        controller.a().onTrue(agitator.reverseCommand());
+        controller.b().onTrue(agitator.stopCommand());
+    }
 
     /**
      * This method runs periodically (every 20ms).
      */
     public void periodic()
-    {}
+    {
+
+
+    }
     
     /**
      * This method runs one time after the periodic() method.
