@@ -13,7 +13,7 @@ import frc.robot.motors.SparkMaxLance;
 import frc.robot.motors.TalonFXLance;
 
 /**
- * This is an example of what a subsystem should look like.
+ * Creates an agitator
  */
 public class Agitator extends SubsystemBase
 {
@@ -43,11 +43,11 @@ public class Agitator extends SubsystemBase
     // Put all class constructors here
 
     /** 
-     * Creates a new ExampleSubsystem. 
+     * Creates a new agitator. 
      */
     public Agitator()
     {
-        super("Example Subsystem");
+        super("Agitator Subsystem");
         System.out.println("  Constructor Started:  " + fullClassName);
 
         configMotors();
@@ -75,7 +75,7 @@ public class Agitator extends SubsystemBase
 
     public void stop()
     {
-        agitatorMotor.set(0.0);
+        set(0.0);
     }
 
     public Command forwardCommand()
