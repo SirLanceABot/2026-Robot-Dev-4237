@@ -75,8 +75,8 @@ public class ExampleSubsystem extends SubsystemBase
 
     public void stop()
     {
-        motor1.set(0.0);
-        motor2.set(0.0);
+        set(0.0);
+        set(0.0);
     }
 
     public Command onCommand()
