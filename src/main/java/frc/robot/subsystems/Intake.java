@@ -34,9 +34,9 @@ public class Intake extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance motor1 = new TalonFXLance(1, ROBORIO, "Motor 1");
-    private final TalonFXLance motor2 = new TalonFXLance(2, ROBORIO, "Motor 2");
-    private final TalonFXLance followMotor = new TalonFXLance(3, ROBORIO, "Motor 3");
+    private final TalonFXLance intakePivotMotor = new TalonFXLance(1, ROBORIO, "Motor 1");
+    private final TalonFXLance intakeRollersMotor = new TalonFXLance(2, ROBORIO, "Motor 2");
+    private final TalonFXLance intakeRollersFollower = new TalonFXLance(3, ROBORIO, "Follow Motor");
     private double rollerPosition = 0.0;
 
     // private final double kP = 0.04;
@@ -65,31 +65,33 @@ public class Intake extends SubsystemBase
 
     private void configMotors()
     {
-        // FACTORY DEFAULTS 
+        // Factory Default all motors
+        intakePivotMotor.setupFactoryDefaults();
+        intakeRollersMotor.setupFactoryDefaults();
+        intakeRollersFollower.setupFactoryDefaults();
 
-        motor1.setupFactoryDefaults();
-        motor2.setupFactoryDefaults();
-        followMotor.setupFactoryDefaults();
+        // Sets up motors to be inverted or not (handle inversion on leaders)
+        intakePivotMotor.setupInverted(true);
+        intakeRollersMotor.setupInverted(true);
 
-        // Sets up motors to be inverted
-        motor1.setupInverted(true);
-        motor2.setupInverted(true);
-        followMotor.setupInverted(true);
+        // Sets up Brake Mode / Neutral Mode for leader + follower
+        intakePivotMotor.setupBrakeMode();
+        intakeRollersMotor.setupBrakeMode();
+        intakeRollersFollower.setupBrakeMode();
 
-        // Sets up Brake Mode
-        motor1.setupBrakeMode();
-        motor2.setupBrakeMode();
-        followMotor.setupBrakeMode();
+        // Sets up position (encoder) for leader + follower
+        intakePivotMotor.setPosition(0.0);
+        intakeRollersMotor.setPosition(0.0);
+        intakeRollersFollower.setPosition(0.0);
 
-        //Sets up position
-        motor1.setPosition(0.0);
-        motor2.setPosition(0.0);
-        followMotor.setPosition(0.0);
+        // Set up Safety for leader + follower
+        intakePivotMotor.setSafetyEnabled(false);
+        intakeRollersMotor.setSafetyEnabled(false);
+        intakeRollersFollower.setSafetyEnabled(false);
 
-        // Set up Safety
-        motor1.setSafetyEnabled(false);
-        motor2.setSafetyEnabled(false);
-        followMotor.setSafetyEnabled(false);
+        // Configure the follower last so configurables above are not overwritten
+        // Make device 3 follow device 2 with inverted alignment (opposed sides)
+        intakeRollersFollower.setupFollower(2, true);
     }
 
     /**
@@ -98,38 +100,35 @@ public class Intake extends SubsystemBase
      */
     public void set(double speed)
     {
-        motor1.set(speed);
-        motor2.set(speed);
-        followMotor.set(speed);
+        intakePivotMotor.set(speed);
+        intakeRollersMotor.set(speed);
     }
 
     public void setVoltage(double voltage)
     {
-        motor1.setVoltage(voltage);
-        motor2.setVoltage(voltage);
-        followMotor.setVoltage(voltage);
+        intakePivotMotor.setVoltage(voltage);
+        intakeRollersMotor.setVoltage(voltage);
     }
 
     public void pickUpFuel()
     {
-        motor1.setupCoastMode();
-        motor2.setupCoastMode();
-        followMotor.setupCoastMode();
+        intakePivotMotor.setupCoastMode();
+        intakeRollersMotor.setupCoastMode();
+        intakeRollersFollower.setupCoastMode();
         set(-0.2);
     }
 
     public void ejectFuel()
     {
-       motor1.setupCoastMode();
-       motor2.setupCoastMode();
-       followMotor.setupCoastMode();
+       intakePivotMotor.setupCoastMode();
+       intakeRollersMotor.setupCoastMode();
+       intakeRollersFollower.setupCoastMode();
        set(0.2);
     }
     public void stop()
     {
-        motor1.set(0.0);
-        motor2.set(0.0);
-        followMotor.set(0.0);
+        intakePivotMotor.set(0.0);
+        intakeRollersMotor.set(0.0);
     }
 
     public Command pickupFuelCommand()

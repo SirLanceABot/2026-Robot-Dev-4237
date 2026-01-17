@@ -3,6 +3,7 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Indexer;
 
@@ -29,7 +30,7 @@ public class GretaHTest implements Test
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
     private final Indexer indexer;
-    private final Joystick joystick = new Joystick(0);
+    private final CommandXboxController controller = new CommandXboxController(0);
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -63,30 +64,18 @@ public class GretaHTest implements Test
      * This method runs one time before the periodic() method.
      */
     public void init()
-    {}
+    {
+        // controller.a().onTrue(indexer.onCommand());
+        // controller.b().onTrue(indexer.stopCommand());
+        // controller.x().onTrue(indexer.setVelocityCommand(() -> 0.7));
+    }
 
     /**
      * This method runs periodically (every 20ms).
      */
     public void periodic()
     {
-        // if(joystick.getRawButton(1))
-        // {
-        //     indexer.onCommand();
-        // }
-        // else
-        // {
-        //     indexer.stopCommand();
-        // }
 
-        // if(joystick.getRawButton(1))
-        // {
-        //     indexer.setCommand(() -> 0.1);
-        // }
-        // else
-        // {
-        //     indexer.stopCommand();
-        // }
     }
     
     /**
