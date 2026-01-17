@@ -10,6 +10,7 @@ import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -35,12 +36,14 @@ public class RobotContainer
     private boolean useAgitator = false;
     private boolean useIndexer = false;
     private boolean useFlywheel = false;
+    private boolean useIntake = true;
 
     // Robot components
     private ExampleSubsystem exampleSubsystem = null;
     private Agitator agitator = null;
     private Indexer indexer = null;
     private Flywheel flywheel = null;
+    private Intake intake = null;
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -58,6 +61,9 @@ public class RobotContainer
 
         if(useFullRobot || useFlywheel)
             flywheel = new Flywheel();
+        
+        if(useFullRobot || useIntake)
+            intake = new Intake();
     }
 
     public ExampleSubsystem getExampleSubsystem()
@@ -80,4 +86,8 @@ public class RobotContainer
         return flywheel;
     }
 
+    public Intake getIntake()
+    {
+        return intake;
+    }
 }
