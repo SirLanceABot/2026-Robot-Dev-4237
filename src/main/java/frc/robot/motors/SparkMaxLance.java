@@ -138,14 +138,12 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupFactoryDefaults()
     {
-        // setup(() -> motor.restoreFactoryDefaults(false), "Setup Factory Defaults");
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         setup(() -> motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters), "Setup Factory Defaults");
     }
 
     public void setupRemoteCANCoder(int remoteSensorId)
     {
-        // sparkAbsoluteEncoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.fromId(remoteSensorId));
         sparkAbsoluteEncoder = motor.getAbsoluteEncoder();
 
         SparkMaxConfig motorConfig = new SparkMaxConfig();
@@ -161,36 +159,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupPeriodicFramePeriod(int frameNumber, int periodMs)
     {
-        // switch(frameNumber)
-        // {
-        //     case 0:
-        //         setup(() -> motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus1, periodMs), "Setup Periodic Frame Period 0");
-        //         break;
-        //     case 1:
-        //         setup(() -> motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus1, periodMs), "Setup Periodic Frame Period 1");
-        //         break;
-        //     case 2:
-        //         setup(() -> motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus2, periodMs), "Setup Periodic Frame Period 2");
-        //         break;
-        //     case 3:
-        //         setup(() -> motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus3, periodMs), "Setup Periodic Frame Period 3");
-        //         break;
-        //     case 4:
-        //         setup(() -> motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus4, periodMs), "Setup Periodic Frame Period 4");
-        //         break;
-        //     case 5:
-        //         setup(() -> motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus5, periodMs), "Setup Periodic Frame Period 5");
-        //         break;
-        //     case 6:
-        //         setup(() -> motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus6, periodMs), "Setup Periodic Frame Period 6");
-        //         break;
-        //     case 7:
-        //         setup(() -> motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus7, periodMs), "Setup Periodic Frame Period 7");
-        //         break;
-        //     default:
-        //         System.out.println("ERROR - Invalid Status Frame Period");
-        //         break;
-        // }
         motor.setControlFramePeriodMs(periodMs);
     }
 
@@ -200,7 +168,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupInverted(boolean isInverted)
     {
-        // motor.setInverted(isInverted);
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.inverted(isInverted);
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Inverted");
@@ -212,7 +179,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupBrakeMode()
     {
-        // setup(() -> motor.setIdleMode(IdleMode.kBrake), "Setup Brake Mode");
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.idleMode(IdleMode.kBrake);
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Brake Mode");
@@ -223,7 +189,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupCoastMode()
     {
-        // setup(() -> motor.setIdleMode(IdleMode.kCoast), "Setup Coast Mode");
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.idleMode(IdleMode.kCoast);
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Coast Mode");
@@ -236,8 +201,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupForwardSoftLimit(double limit, boolean isEnabled)
     {
-        // setup(() -> motor.setSoftLimit(SoftLimitDirection.kForward, (float) limit), "Setup Forward Soft Limit");
-        // setup(() -> motor.enableSoftLimit(SoftLimitDirection.kForward, isEnabled), "Enable Forward Soft Limit");
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.softLimit.forwardSoftLimit(limit);
         motorConfig.softLimit.forwardSoftLimitEnabled(isEnabled);
@@ -251,8 +214,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupReverseSoftLimit(double limit, boolean isEnabled)
     {
-        // setup(() -> motor.setSoftLimit(SoftLimitDirection.kReverse, (float) limit), "Setup Reverse Soft Limit");
-        // setup(() -> motor.enableSoftLimit(SoftLimitDirection.kReverse, isEnabled), "Enable Reverse Soft Limit");
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.softLimit.reverseSoftLimit(limit);
         motorConfig.softLimit.reverseSoftLimitEnabled(isEnabled);
@@ -262,15 +223,10 @@ public class SparkMaxLance extends MotorControllerLance
     /**
      * Enable or disable the forward hard limit switch.
      * @param isEnabled True to enable the hard limit switch
+     * @param isNormallyOpen True if the limit switch is normally open
      */
     public void setupForwardHardLimitSwitch(boolean isEnabled, boolean isNormallyOpen)
     {
-        // if(isNormallyOpen)
-        //     forwardLimitSwitch = motor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-        // else
-        //     forwardLimitSwitch = motor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
-        // setup(() -> forwardLimitSwitch.enableLimitSwitch(isEnabled), "Setup Forward Hard Limit");
-
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         forwardLimitSwitch = motor.getForwardLimitSwitch();
         if(isNormallyOpen)
@@ -289,15 +245,10 @@ public class SparkMaxLance extends MotorControllerLance
     /**
      * Enable or disable the reverse hard limit switch.
      * @param isEnabled True to enable the hard limit switch
+     * @param isNormallyOpen True if the limit switch is normally open
      */
     public void setupReverseHardLimitSwitch(boolean isEnabled, boolean isNormallyOpen)
     {
-        // if(isNormallyOpen)
-        //     reverseLimitSwitch = motor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-        // else
-        //     reverseLimitSwitch = motor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-        // setup(() -> reverseLimitSwitch.enableLimitSwitch(isEnabled), "Setup Reverse Hard Limit");
-
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         reverseLimitSwitch = motor.getReverseLimitSwitch();
         if(isNormallyOpen)
@@ -321,8 +272,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupCurrentLimit(double currentLimit, double currentThreshold, double timeThreshold)
     {
-        // setup(() -> motor.setSmartCurrentLimit((int) currentLimit), "Setup Smart Current Limit");
-        // setup(() -> motor.setSecondaryCurrentLimit(currentThreshold, (int) (timeThreshold / 0.00005) ), "Setup Secondary Current Limit");
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.smartCurrentLimit((int) currentLimit);
         motorConfig.secondaryCurrentLimit(currentThreshold, (int) (timeThreshold * 20000));
@@ -340,7 +289,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupOpenLoopRampRate(double rampRateSeconds)
     {
-        // setup(() -> motor.setOpenLoopRampRate(rampRateSeconds), "Setup Open Loop Ramp Rate");
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.openLoopRampRate(rampRateSeconds);
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Open Loop Ramp Rate");
@@ -352,7 +300,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupClosedLoopRampRate(double rampRateSeconds)
     {
-        // setup(() -> motor.setOpenLoopRampRate(rampRateSeconds), "Setup Open Loop Ramp Rate");
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.closedLoopRampRate(rampRateSeconds);
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Closed Loop Ramp Rate");
@@ -364,7 +311,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupVoltageCompensation(double voltageCompensation)
     {
-        // setup(() -> motor.enableVoltageCompensation(voltageCompensation), "Setup Voltage Compensation");
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.voltageCompensation(voltageCompensation);
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Voltage Compensation");
@@ -376,10 +322,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupPositionConversionFactor(double factor)
     {
-        // if(sparkAbsoluteEncoder == null)
-        //     setup(() -> encoder.setPositionConversionFactor(factor), "Setup Position Conversion Factor");
-        // else
-        //     setup(() -> sparkAbsoluteEncoder.setPositionConversionFactor(factor), "Setup Position Conversion Factor");
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         
         if(sparkAbsoluteEncoder == null)
@@ -395,10 +337,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupVelocityConversionFactor(double factor)
     {
-        // if(sparkAbsoluteEncoder == null)
-        //     setup(() -> encoder.setVelocityConversionFactor(factor), "Setup Velocity Conversion Factor");
-        // else
-        //     setup(() -> sparkAbsoluteEncoder.setVelocityConversionFactor(factor), "Setup Velocity Conversion Factor");
         SparkMaxConfig motorConfig = new SparkMaxConfig();
 
         if(sparkAbsoluteEncoder == null)
@@ -409,31 +347,28 @@ public class SparkMaxLance extends MotorControllerLance
     }
 
     /**
+     * Checks if the slotId is valid (0-3)
+     * @param slotId The PID slot (0-3)
+     * @return True if the slotId is valid
+     */
+    private boolean isValidSlotId(int slotId)
+    {
+        return slotId >= 0 && slotId <= 3;
+    }
+
+    /**
      * Set the PID controls for the motor.
-     * @param slotID The PID slot (0-3)
+     * @param slotId The PID slot (0-3)
      * @param kP The Proportional gain constant
      * @param kI The Integral gain constant
      * @param kD The Derivative gain constant
      */
     public void setupPIDController(int slotId, double kP, double kI, double kD)
     {
-        // if(slotId >= 0 && slotId <= 3)
-        // {
-        //     // set PID coefficients
-        //     setup(() -> sparkPIDController.setP(kP, slotId), "Setup PIDController(kP)");
-        //     setup(() -> sparkPIDController.setI(kI, slotId), "Setup PIDController(kI)");
-        //     setup(() -> sparkPIDController.setD(kD, slotId), "Setup PIDController(kD)");
-        // }
-
-        // pidController.setIZone(kIz);
-        // pidController.setFF(kFF);
-        // pidController.setOutputRange(kMinOutput, kMaxOutput);
-
-        SparkMaxConfig motorConfig = new SparkMaxConfig();
-        ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
-
-        if(slotId >= 0 && slotId <= 3)
+        if(isValidSlotId(slotId))
         {
+            SparkMaxConfig motorConfig = new SparkMaxConfig();
+            ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
             if(slotId == 0)
                 closedLoopSlot = ClosedLoopSlot.kSlot0;
             else if(slotId == 1)
@@ -444,25 +379,55 @@ public class SparkMaxLance extends MotorControllerLance
                 closedLoopSlot = ClosedLoopSlot.kSlot3;
 
             motorConfig.closedLoop.pid(kP, kI, kD, closedLoopSlot);
+            setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
         }
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
     }
 
+    /**
+     * Set the PID controls for the motor.
+     * @param slotId The PID slot (0-3)
+     * @param kP The Proportional gain constant
+     * @param kI The Integral gain constant
+     * @param kD The Derivative gain constant
+     * @param kS Static feedforward gain
+     * @param kV Velocity feedforward gain
+     * @param kA Acceleration feedforward gain
+     * @param kG Gravity feedforward/feedback gain
+     */
+    public void setupPIDController(int slotId, double kP, double kI, double kD, double kS, double kV, double kA, double kG)
+    {
+        if(isValidSlotId(slotId))
+        {
+            SparkMaxConfig motorConfig = new SparkMaxConfig();
+            ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
+
+            if(slotId == 0)
+                closedLoopSlot = ClosedLoopSlot.kSlot0;
+            else if(slotId == 1)
+                closedLoopSlot = ClosedLoopSlot.kSlot1;
+            else if(slotId == 2)
+                closedLoopSlot = ClosedLoopSlot.kSlot2;
+            else if(slotId == 3)
+                closedLoopSlot = ClosedLoopSlot.kSlot3;
+
+            motorConfig.closedLoop.pid(kP, kI, kD, closedLoopSlot)
+                .feedForward.svag(kS, kV, kA, kG, closedLoopSlot);    
+            setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
+        }
+    }
+
+    /**
+     * Returns the PID values stored in the slotId
+     * @param slotId The PID slot (0-3)
+     * @return An array containing the PID values
+     */
     public double[] getPID(int slotId)
     {
         double[] pid = {0.0, 0.0, 0.0};
 
-        // if(slotId >= 0 && slotId <= 3)
-        // {
-        //     pid[0] = sparkPIDController.getP(slotId);
-        //     pid[1] = sparkPIDController.getI(slotId);
-        //     pid[2] = sparkPIDController.getD(slotId);
-        // }
-        // return pid;
-
-        ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
-        if(slotId >= 0 & slotId <= 3)
+        if(isValidSlotId(slotId))
         {
+            ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
             if(slotId == 0)
                 closedLoopSlot = ClosedLoopSlot.kSlot0;
             else if(slotId == 1)
@@ -488,7 +453,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setupFollower(int leaderId, boolean isInverted)
     {
-        // setup(() -> motor.follow(CANSparkBase.ExternalFollower.kFollowerSpark, leaderId, isInverted), "Setup Follower");
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.follow(leaderId, isInverted);
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Follower");
@@ -511,29 +475,10 @@ public class SparkMaxLance extends MotorControllerLance
     }
 
     /**
-     * Logs the sticky faults
+     * Logs and then clears the sticky faults
      */
     public void logStickyFaults()
     {
-        // int faults = motor.getStickyFaults();
-        // strEntry = canSparkMaxTable.getStringTopic("Motors/Faults").getEntry("");
-        // // motorLogEntry = new StringLogEntry(log, "/motors/faults", "Faults");
-
-        // if(faults > 0)
-        // {
-        //     for(int i = 0; i < 16; i++)
-        //     {
-        //         if((faults & (1 << i)) > 0)
-        //             strEntry.set(motorControllerName + " : " + CANSparkBase.FaultID.fromId(i));
-        //             // motorLogEntry.append(motorControllerName + " : " + CANSparkBase.FaultID.fromId(i));
-        //     }
-        // }
-        // else
-        //     strEntry.set(motorControllerName + " : No Sticky Faults");
-        //     // motorLogEntry.append(motorControllerName + " : No Sticky Faults");
-
-        // clearStickyFaults();
-
         int faultsCount = 0;
         Faults faults = motor.getStickyFaults();
         Warnings warnings = motor.getStickyWarnings();
@@ -596,7 +541,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setControlPosition(double position)
     {
-        // sparkPIDController.setReference(position, CANSparkBase.ControlType.kPosition);
         setControlPosition(position, 0);
     }
 
@@ -604,13 +548,13 @@ public class SparkMaxLance extends MotorControllerLance
      * Move the motor to a position using PID control.
      * Units are rotations by default, but can be changed using the conversion factor.
      * @param position The position to move the motor to
-     * @param slotID The PID slot (0-3)
+     * @param slotId The PID slot (0-3)
      */
     public void setControlPosition(double position, int slotId)
     {
         ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
 
-        if(slotId >= 0 && slotId <= 3)
+        if(isValidSlotId(slotId))
         {
             if(slotId == 0)
                 closedLoopSlot = ClosedLoopSlot.kSlot0;
@@ -633,7 +577,6 @@ public class SparkMaxLance extends MotorControllerLance
      */
     public void setControlVelocity(double velocity)
     {
-        // sparkPIDController.setReference(velocity, CANSparkBase.ControlType.kVelocity);
         setControlVelocity(velocity, 0);
     }
 
@@ -641,13 +584,13 @@ public class SparkMaxLance extends MotorControllerLance
      * Spin the motor to a velocity using PID control.
      * Units are rotations by default, but can be changed using the conversion factor.
      * @param velocity The velocity to spin the motor at
-     * @param slotID The PID slot (0-3)
+     * @param slotId The PID slot (0-3)
      */
     public void setControlVelocity(double velocity, int slotId)
     {
         ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
 
-        if(slotId >= 0 && slotId <= 3)
+        if(isValidSlotId(slotId))
         {
             if(slotId == 0)
                 closedLoopSlot = ClosedLoopSlot.kSlot0;
