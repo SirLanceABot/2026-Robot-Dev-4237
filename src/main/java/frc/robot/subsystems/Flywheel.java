@@ -91,7 +91,7 @@ public class Flywheel extends SubsystemBase
         leadMotor.setupBrakeMode();
         followMotor.setupBrakeMode();
 
-        leadMotor.setupPIDController(0, kP, kI, kD, kS, kV);
+        leadMotor.setupPIDController(0, kP, kI, kD, kS, kV, 0.0, 0.0);
         
         leadMotor.setupVelocityConversionFactor(velocityConversionFactor);
     }
