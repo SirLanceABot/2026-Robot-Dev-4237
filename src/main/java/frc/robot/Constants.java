@@ -35,6 +35,14 @@ public final class Constants
         public static final String ROBORIO  = "rio";
     }
 
+    public static class ExampleSubsystem
+    {
+        public static final String MOTOR_CAN_BUS = CANbus.ROBORIO;
+
+        public static final int MOTOR1 = 1;
+        public static final int MOTOR2 = 2;
+    }
+
     public static class Agitator
     {
         public static final int MOTOR                   = 4237;
