@@ -2,7 +2,10 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
+import frc.robot.motors.TalonFXSLance;
 
 @SuppressWarnings("unused")
 public class JWoodTest implements Test
@@ -26,6 +29,8 @@ public class JWoodTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
+    private final CommandXboxController xbox = new CommandXboxController(0);
+    private final TalonFXSLance motor = new TalonFXSLance(1, "rio", "motor");
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -58,7 +63,12 @@ public class JWoodTest implements Test
      * This method runs one time before the periodic() method.
      */
     public void init()
-    {}
+    {
+        xbox.a()
+            .whileTrue(Commands.run(() -> motor.set(0.2)))
+            .whileFalse(Commands.run(() -> motor.set(0.0)));
+
+    }
 
     /**
      * This method runs periodically (every 20ms).
