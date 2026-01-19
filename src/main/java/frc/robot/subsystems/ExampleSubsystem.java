@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.CANbus.*;
+import static frc.robot.Constants.ExampleSubsystem.*;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
@@ -33,8 +33,8 @@ public class ExampleSubsystem extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance motor1 = new TalonFXLance(1, ROBORIO, "Motor 1");
-    private final TalonFXLance motor2 = new TalonFXLance(2, ROBORIO, "Motor 2");
+    private final TalonFXLance motor1 = new TalonFXLance(MOTOR1, MOTOR_CAN_BUS, "Motor 1");
+    private final TalonFXLance motor2 = new TalonFXLance(MOTOR2, MOTOR_CAN_BUS, "Motor 2");
 
 
     // *** CLASS CONSTRUCTORS ***
