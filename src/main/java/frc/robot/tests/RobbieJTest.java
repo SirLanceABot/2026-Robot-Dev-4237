@@ -4,8 +4,13 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
+import frc.robot.commands.IntakeAndScoreCommand;
+import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 
 @SuppressWarnings("unused")
 public class RobbieJTest implements Test
@@ -31,6 +36,11 @@ public class RobbieJTest implements Test
     private final RobotContainer robotContainer;
     private Agitator agitator;
     private Climb climb;
+    private Intake intake;
+    private Indexer indexer;
+    private Accelerator accelerator;
+    private Flywheel flywheel; 
+    
     private final CommandXboxController controller = new CommandXboxController(0);
 
 
@@ -49,7 +59,12 @@ public class RobbieJTest implements Test
 
         this.robotContainer = robotContainer;
         agitator = robotContainer.getAgitator();
-        climb = robotContainer.getClimb();
+        intake = robotContainer.getIntake();
+        indexer = robotContainer.getIndexer();
+        accelerator = robotContainer.getAccelerator();
+        flywheel = robotContainer.getFlywheel();
+
+        // climb = robotContainer.getClimb();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -68,12 +83,14 @@ public class RobbieJTest implements Test
      */
     public void init()
     {
+        controller.x().onTrue(IntakeAndScoreCommand.IntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
+        controller.a().onTrue(IntakeAndScoreCommand.StopIntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
         // controller.x().onTrue(agitator.forwardCommand());
         // controller.a().onTrue(agitator.reverseCommand());
         // controller.b().onTrue(agitator.stopCommand());
-        controller.x().onTrue(climb.ascendL1Command());
-        controller.a().onTrue(climb.descendL1Command());
-        controller.b().onTrue(climb.stopCommand());
+        // controller.x().onTrue(climb.ascendL1Command());
+        // controller.a().onTrue(climb.descendL1Command());
+        // controller.b().onTrue(climb.stopCommand());
     }
 
     /**

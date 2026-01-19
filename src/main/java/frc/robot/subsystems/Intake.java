@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.CANbus.*;
+import static frc.robot.Constants.ExampleSubsystem.MOTOR_CAN_BUS;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
@@ -8,6 +9,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
 
 /**
@@ -34,9 +36,9 @@ public class Intake extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance intakePivotMotor = new TalonFXLance(1, ROBORIO, "Motor 1");
-    private final TalonFXLance intakeRollersMotor = new TalonFXLance(2, ROBORIO, "Motor 2");
-    private final TalonFXLance intakeRollersFollower = new TalonFXLance(3, ROBORIO, "Follow Motor");
+    private final TalonFXLance intakePivotMotor = new TalonFXLance(Constants.Intake.INTAKEPIVOTMOTOR, MOTOR_CAN_BUS, "Pivot Motor");
+    private final TalonFXLance intakeRollersMotor = new TalonFXLance(Constants.Intake.INTAKEROLLERLEADER, MOTOR_CAN_BUS, "Lead Roller Motor");
+    private final TalonFXLance intakeRollersFollower = new TalonFXLance(Constants.Intake.INTAKEROLLERFOLLOWER, MOTOR_CAN_BUS, "Follow Roller Motor");
     private double rollerPosition = 0.0;
 
     // private final double kP = 0.04;

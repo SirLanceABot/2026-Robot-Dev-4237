@@ -48,7 +48,7 @@ public final class Constants
 
     public static class Agitator
     {
-        public static final int MOTOR                   = 4237;
+        public static final int MOTOR                   = 1;
 
         public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
 
@@ -62,20 +62,36 @@ public final class Constants
         public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;    
     }
 
+    public static class Accelerator
+    {
+        public static final int MOTOR                   = 3;
+
+        public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
+    }
+
     public static class Flywheel
     {
-        public static final int LEADMOTOR               = 4237;
+        public static final int LEADMOTOR               = 1;
         public static final int FOLLOWMOTOR             = 4237;
 
-        public static final String MOTOR_CAN_BUS        = "4237";
+        public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
     }
     
     public static class Indexer
     {
-        public static final int MOTOR                   = 4237;
+        public static final int MOTOR                   = 2;
 
         public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
     }
+
+    public static class Intake
+    {
+        public static final int INTAKEPIVOTMOTOR            = 4;
+        public static final int INTAKEROLLERLEADER          = 3;
+        public static final int INTAKEROLLERFOLLOWER        = 12;
+
+        public static final String MOTOR_CAN_BUS            = CANbus.ROBORIO;
+    }   
 
     /**
      * This class contains the port numbers of the controllers

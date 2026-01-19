@@ -39,8 +39,8 @@ public class Flywheel extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance leadMotor = new TalonFXLance(Constants.Flywheel.LEADMOTOR, MOTOR_CAN_BUS, "Motor 1");
-    private final TalonFXLance followMotor = new TalonFXLance(Constants.Flywheel.FOLLOWMOTOR, MOTOR_CAN_BUS, "Motor 2");
+    private final TalonFXLance leadMotor = new TalonFXLance(Constants.Flywheel.LEADMOTOR, MOTOR_CAN_BUS, "Flywheel lead ");
+    private final TalonFXLance followMotor = new TalonFXLance(Constants.Flywheel.FOLLOWMOTOR, MOTOR_CAN_BUS, "Flywheel follow");
 
     // PID constants
    

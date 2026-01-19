@@ -76,6 +76,41 @@ public class IntakeAndScoreCommand extends Command
         return null; 
     } 
 
+    public static Command IntakeAndScoreCommand2(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    {
+
+        
+        if(intake != null && agitator != null && indexer != null  && accelerator != null  && flywheel != null )
+        {
+            // return  Commands.parallel( (accelerator.feedToShooterCommand(() -> 0.25)),
+            //         (flywheel.shootCommand(() -> 10.0))).until(flywheel.isAtSetSpeed(10, 1))
+            //         .andThen.
+            //         commands.parallel(
+            //     (intake.pickupFuelCommand()),
+            //     (agitator.forwardCommand()),
+            //     (indexer.onCommand()));
+
+        }
+        return null; 
+    } 
+
+
+    public static Command StopIntakeAndScoreCommand(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    {
+
+        
+        if(intake != null && agitator != null && indexer != null  && accelerator != null  && flywheel != null )
+        {
+            return  Commands.parallel(
+                (intake.stopCommand()),
+                (agitator.stopCommand()),
+                (indexer.stopCommand()),
+                (accelerator.stopCommand()),
+                (flywheel.stopCommand()));
+        }
+        return null; 
+    } 
+
     // Called when the command is initially scheduled.
     @Override
     public void initialize()
