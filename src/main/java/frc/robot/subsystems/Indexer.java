@@ -9,7 +9,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.motors.SparkMaxLance;
-import frc.robot.motors.TalonFXLance;
 
 /**
  * Indexer
@@ -40,9 +39,9 @@ public class Indexer extends SubsystemBase
     private final double kP = 0.0;
     private final double kI = 0.0;
     private final double kD = 0.0;
-    private final double kS = 0.0;  // small number
-    private final double kV = 1000; // change once roller is attached
-    private final double kA = 0.0;
+    // private final double kS = 0.0;  // small number
+    // private final double kV = 1000; // change once roller is attached
+    // private final double kA = 0.0;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -110,15 +109,25 @@ public class Indexer extends SubsystemBase
      * @param speed
      * @return
      */
-    public Command setCommand(DoubleSupplier speed)
+    public Command setForwardCommand(DoubleSupplier speed)
     {
         return run( () -> set(MathUtil.clamp(speed.getAsDouble(), 0.0, 0.5)) );
     }
 
-    public Command setVelocityCommand(DoubleSupplier speed)
+    // public Command setBackwardCommand(DoubleSupplier speed)
+    // {
+    //     return run( () -> set(MathUtil.clamp(-speed.getAsDouble(), -0.5, 0.0)));
+    // }
+
+    public Command setVelocityForwardCommand(DoubleSupplier speed)
     {
         return run( () -> setVelocity(speed.getAsDouble()));
     }
+
+    // public Command setVelocityBackwardCommand(DoubleSupplier speed)
+    // {
+    //     return run( () -> setVelocity(-speed.getAsDouble()));
+    // }
 
     // Use a method reference instead of this method
     public Command stopCommand()

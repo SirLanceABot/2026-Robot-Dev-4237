@@ -65,8 +65,9 @@ public class GretaHTest implements Test
      */
     public void init()
     {
-        // controller.a().onTrue(indexer.onCommand());
+        // controller.a().onTrue(indexer.setForwardCommand(() -> 0.3));
         // controller.b().onTrue(indexer.stopCommand());
+        // controller.x().onTrue(indexer.setBackwardCommand(() -> 0.3));
         // controller.x().onTrue(indexer.setVelocityCommand(() -> 0.7));
     }
 
