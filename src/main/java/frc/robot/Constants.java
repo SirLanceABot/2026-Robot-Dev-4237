@@ -35,6 +35,9 @@ public final class Constants
         public static final String ROBORIO  = "rio";
     }
 
+    /**
+     * This class contains the constants used for the ExampleSubsystem
+     */
     public static class ExampleSubsystem
     {
         public static final String MOTOR_CAN_BUS = CANbus.ROBORIO;
