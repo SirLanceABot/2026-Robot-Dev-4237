@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -38,6 +39,7 @@ public class RobotContainer
     private boolean useIndexer = false;
     private boolean useFlywheel = false;
     private boolean useIntake = false;
+    private boolean useAccelerator = false;
     private boolean useClimb = false;
 
     // Robot components
@@ -46,6 +48,7 @@ public class RobotContainer
     private Indexer indexer = null;
     private Flywheel flywheel = null;
     private Intake intake = null;
+    private Accelerator accelerator;
     private Climb climb = null;
 
 
@@ -67,6 +70,9 @@ public class RobotContainer
         
         if(useFullRobot || useIntake)
             intake = new Intake();
+
+        if(useFullRobot || useAccelerator)
+            accelerator = new Accelerator();
 
         if(useFullRobot || useClimb)
             climb = new Climb();
@@ -95,6 +101,11 @@ public class RobotContainer
     public Intake getIntake()
     {
         return intake;
+    }
+
+    public Accelerator getAccelerator()
+    {
+        return accelerator;
     }
 
     public Climb getClimb()
