@@ -1,21 +1,16 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.CANbus.*;
+import static frc.robot.Constants.Climb.FOLLOWMOTOR;
+import static frc.robot.Constants.Climb.LEADMOTOR;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
 
-/**
- * This is an example of what a subsystem should look like.
- */
+
 public class Climb extends SubsystemBase
 {
     // This string gets the full name of the class, including the package name
@@ -45,8 +40,8 @@ public class Climb extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance leadMotor = new TalonFXLance(Constants.Climb.MOTOR1, "ROBORIO", "Motor 1");
-    private final TalonFXLance followMotor = new TalonFXLance(Constants.Climb.MOTOR2, "ROBORIO", "Motor 2");
+    private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, "ROBORIO", "Lead Climb Motor ");
+    private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, "ROBORIO", "Follower climb Motor");
     
     private final double tolerance = 2048/4;
 
@@ -59,11 +54,11 @@ public class Climb extends SubsystemBase
     // Put all class constructors here
 
     /** 
-     * Creates a new ExampleSubsystem. 
+     * Creates a Climb. 
      */
     public Climb()
     {
-        super("Example Subsystem");
+        super("Climb Subsystem");
         System.out.println("  Constructor Started:  " + fullClassName);
 
         configMotors();
@@ -92,7 +87,7 @@ public class Climb extends SubsystemBase
         leadMotor.setupReverseSoftLimit(0, false);
         followMotor.setupReverseSoftLimit(0, false);
 
-        followMotor.setupFollower(Constants.Climb.MOTOR1, true);
+        followMotor.setupFollower(LEADMOTOR, true);
 
 
         leadMotor.setupPIDController(0, kPUP, kI, kD); 

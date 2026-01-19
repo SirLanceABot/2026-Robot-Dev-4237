@@ -1,16 +1,13 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.CANbus.*;
+import static frc.robot.Constants.Agitator.MOTOR;
 
 import java.lang.invoke.MethodHandles;
-import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.motors.SparkMaxLance;
-import frc.robot.motors.TalonFXLance;
 
 /**
  * Creates an agitator
@@ -35,7 +32,7 @@ public class Agitator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance agitatorMotor = new SparkMaxLance(Constants.Agitator.MOTOR, Constants.Agitator.MOTOR_CAN_BUS, "");
+    private final SparkMaxLance agitatorMotor = new SparkMaxLance(MOTOR, Constants.Agitator.MOTOR_CAN_BUS, "");
     // private final SparkMaxLance agitatorMotor = new SparkMaxLance(3, "ROBORIO", "Agitator");
 
 

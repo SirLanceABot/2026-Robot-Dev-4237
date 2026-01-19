@@ -50,16 +50,16 @@ public final class Constants
     {
         public static final int MOTOR                   = 4237;
 
-        public static final String MOTOR_CAN_BUS                        = "4237";
+        public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
 
     }
 
     public static class Climb
     {
-        public static final int MOTOR1                   = 4237;
-        public static final int MOTOR2                   = 4237;
+        public static final int LEADMOTOR          = 4237;
+        public static final int FOLLOWMOTOR        = 4237;
 
-        public static final String MOTOR_CAN_BUS                        = "4237";    
+        public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;    
     }
 
     public static class Flywheel
