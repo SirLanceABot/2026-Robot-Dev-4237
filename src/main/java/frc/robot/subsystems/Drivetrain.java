@@ -3,11 +3,13 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -23,7 +25,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
+import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -44,6 +46,39 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
     private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.k180deg;
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean m_hasAppliedOperatorPerspective = false;
+
+    //Drive Speed
+    public static double MaxDriveSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 270 degrees per second is the maximum angular velocity
+    //Driving the Robot
+    private static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+            .withDeadband(MaxDriveSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 5% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
+    //Lock the wheels of the robot
+    public static final SwerveRequest.SwerveDriveBrake lock = new SwerveRequest.SwerveDriveBrake();
+
+    //Point the wheels of the robot without moving
+    public static final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+
+    //TODO still needs tuning
+    private static final SwerveRequest.FieldCentricFacingAngle angleLockDrive = new SwerveRequest.FieldCentricFacingAngle()
+            .withDeadband(MaxDriveSpeed * 0.05)
+            .withRotationalDeadband(0.05) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+            .withMaxAbsRotationalRate(1)
+            .withHeadingPID(0.5, 0, 0); //Maximum rotational rate
+
+    public double getAngleLockVelocityX()
+    {
+        return angleLockDrive.VelocityX;
+    }
+    
+    public double getAngleLockVelocityY()
+    {
+        return angleLockDrive.VelocityY;
+    }
+
 
     /* Swerve requests to apply during SysId characterization */
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
@@ -196,6 +231,64 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
      */
     public Command applyRequest(Supplier<SwerveRequest> request) {
         return run(() -> this.setControl(request.get()));
+    }
+
+    /**
+     * Returns a command that will lock the wheels of the robot
+     * @return Command to lock wheels
+     * @author Matthew Fontecchio
+     */
+    public Command lockWheelsCommand()
+    {
+        return applyRequest(() -> lock);
+    }
+
+    /**
+     * Returns a command that will point the wheels without moving the robot
+     * @return Command to point wheels
+     * @author Matthew Fontecchio
+     */
+    public Command pointWheelsCommand()
+    {
+        return applyRequest(() -> point);
+    }
+
+    /**
+     * Returns a command that will drive the robot
+     * @param leftYAxis the left Y axis of the controller
+     * @param leftXAxis the left X axis of the controller
+     * @param rightXAxis the right X axis of the controller
+     * @param setScaleFactor decimal number that reduces drive speed
+     * @return Command to Drive
+     * @author Matthew Fontecchio
+     */
+    public Command driveCommand(DoubleSupplier leftYAxis, DoubleSupplier leftXAxis, DoubleSupplier rightXAxis, DoubleSupplier setScaleFactor)
+    {
+        return applyRequest(
+            () -> drive
+                .withVelocityX(leftYAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
+                .withVelocityY(leftXAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
+                .withRotationalRate(rightXAxis.getAsDouble() * (MaxAngularRate * (setScaleFactor.getAsDouble() >= 1.0? 1.0:setScaleFactor.getAsDouble()) ) )
+        );
+    }
+
+    /**
+     * Returns a command that will drive the robot while keeping it locked at a specific angle
+     * @param leftYAxis the left Y axis of the controller
+     * @param leftXAxis left X axis of the controller
+     * @param setScaleFactor decimal number that reduces drive speed
+     * @param lockAngle angle to lock the robot's rotation at
+     * @author Matthew Fontecchio
+     */
+    public Command angleLockDriveCommand(DoubleSupplier leftYAxis, DoubleSupplier leftXAxis, DoubleSupplier setScaleFactor, Rotation2d lockAngle)
+    {
+        return applyRequest(
+            () -> angleLockDrive
+                .withVelocityX(leftYAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
+                .withVelocityY(leftXAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
+                .withTargetDirection(lockAngle)
+                .withTargetRateFeedforward(0)
+        );   
     }
 
     /**
