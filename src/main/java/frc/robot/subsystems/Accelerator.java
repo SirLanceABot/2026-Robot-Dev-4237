@@ -8,7 +8,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.motors.TalonFXLance;
+import frc.robot.motors.SparkMaxLance;
 
 /**
  * This is an example of what a subsystem should look like.
@@ -33,7 +33,7 @@ public class Accelerator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance motor = new TalonFXLance(1, ROBORIO, "Motor 1");
+    private final SparkMaxLance acceleratorMotor = new SparkMaxLance(1, ROBORIO, "Motor 1");
 
     double rollerPosition;
     double rollerVelocity;
@@ -60,11 +60,11 @@ public class Accelerator extends SubsystemBase
 
     private void configMotors()
     {
-        motor.setupFactoryDefaults();
+        acceleratorMotor.setupFactoryDefaults();
 
         // motor.setupInverted(false); // Find out later
 
-        motor.setupBrakeMode();
+        acceleratorMotor.setupBrakeMode();
         // motor.setupCoastMode();
     }
 
@@ -84,12 +84,12 @@ public class Accelerator extends SubsystemBase
      */
     private void set(double speed)
     {
-        motor.set(speed);
+        acceleratorMotor.set(speed);
     }
 
     public void stop()
     {
-        motor.set(0.0);
+        acceleratorMotor.set(0.0);
     }
 
     public Command onCommand()
@@ -130,7 +130,7 @@ public class Accelerator extends SubsystemBase
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
 
-        rollerPosition = motor.getPosition();
+        rollerPosition = acceleratorMotor.getPosition();
 
         // System.out.println("Accelerator Velocity: " + (motor.getVelocity() * 2 * (Math.PI) * (r))); // Find out radius of rods
     }

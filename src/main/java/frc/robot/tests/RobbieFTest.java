@@ -3,6 +3,7 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.RobotContainer;
 
@@ -29,7 +30,8 @@ public class RobbieFTest implements Test
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
     private final CommandXboxController controller = new CommandXboxController(0);
-    private final Flywheel flywheel = new Flywheel();
+    private final Flywheel flywheel;
+    private final Accelerator accelerator;
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -45,6 +47,10 @@ public class RobbieFTest implements Test
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.robotContainer = robotContainer;
+
+        flywheel = new Flywheel();
+        accelerator = new Accelerator();
+
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -69,26 +75,43 @@ public class RobbieFTest implements Test
      */
     public void periodic()
     {
+        // controller.x().onTrue(
+        //     flywheel.shootCommand(() -> 5.0)
+        // );
+        // controller.b().onTrue(
+        //     flywheel.shootCommand(() -> 15.0)
+        // );
+        // controller.a().onTrue(
+        //     flywheel.shootCommand(() -> 25.0)
+        // );
+        // controller.y().onTrue(
+        //     flywheel.shootCommand(() -> 1.0)
+        // );
+        // controller.leftBumper().onTrue(
+        //     flywheel.stopCommand()
+        // );
+
         controller.x().onTrue(
-            flywheel.onCommand()
+            accelerator.onCommand()
+        );
+        controller.y().onTrue(
+            accelerator.reverseCommand(() -> -0.25)
         );
         controller.b().onTrue(
-            flywheel.stopCommand()
-        );
-        controller.a().onTrue(
-            flywheel.shootCommand(() -> 10.0)
+            accelerator.stopCommand()
         );
 
-        if(flywheel.isAtSetSpeed(10.0, 1.0).getAsBoolean())
-        {
-            System.out.println("AT TARGET SPEED**********************************");
-        }
-        else
-        {
-            System.out.println("NOT AT TARGET SPEED------------------------------");
-        }
 
-        System.out.println("_________velocity_________ = " + flywheel.getVelocity());
+        // if(flywheel.isAtSetSpeed(1.0, 1.0).getAsBoolean())
+        // {
+        //     System.out.println("AT TARGET SPEED**********************************");
+        // }
+        // else
+        // {
+        //     System.out.println("NOT AT TARGET SPEED------------------------------");
+        // }
+
+        // System.out.println("_________velocity_________ = " + flywheel.getVelocity());
     }
     
     /**

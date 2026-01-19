@@ -6,8 +6,11 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-// import edu.wpi.first.math.MathUtil;
-// import edu.wpi.first.math.controller.PIDController;
+import com.ctre.phoenix6.CANBus;
+
+import static frc.robot.Constants.Flywheel.*;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,17 +39,23 @@ public class Flywheel extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance leadMotor = new TalonFXLance(Constants.Flywheel.LEADMOTOR, ROBORIO, "Motor 1");
-    private final TalonFXLance followMotor = new TalonFXLance(Constants.Flywheel.FOLLOWMOTOR, ROBORIO, "Motor 2");
+    private final TalonFXLance leadMotor = new TalonFXLance(Constants.Flywheel.LEADMOTOR, MOTOR_CAN_BUS, "Motor 1");
+    private final TalonFXLance followMotor = new TalonFXLance(Constants.Flywheel.FOLLOWMOTOR, MOTOR_CAN_BUS, "Motor 2");
 
     // PID constants
+   
     private final double kP = 0.3;
     private final double kI = 0.0;
     private final double kD = 0.0;
-    private final double kS = 0.0;
-    private final double kV = 0.0;
+    private final double kS = 0.19;
+    private final double kV = 0.1;
+    private final double kA = 0.0;
+    private final double kG = 0.0;
 
-    private final double velocityConversionFactor = 1.0; // figure out units
+
+    private final double velocityConversionFactor = 1.0; // figure out units (currently default rev/sec)
+
+    SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(kS, kV);
 
     InterpolatingDoubleTreeMap scoreMap = new InterpolatingDoubleTreeMap();
     // InterpolatingDoubleTreeMap passLeftMap = new InterpolatingDoubleTreeMap();
@@ -64,6 +73,7 @@ public class Flywheel extends SubsystemBase
     public Flywheel()
     {
         super("Flywheel");
+        
         System.out.println("  Constructor Started:  " + fullClassName);
 
         configMotors();
@@ -91,14 +101,14 @@ public class Flywheel extends SubsystemBase
         leadMotor.setupBrakeMode();
         followMotor.setupBrakeMode();
 
-        leadMotor.setupPIDController(0, kP, kI, kD, kS, kV, 0.0, 0.0);
+        leadMotor.setupPIDController(0, kP, kI, kD, kS, kV, kA, kG);
         
         leadMotor.setupVelocityConversionFactor(velocityConversionFactor);
     }
 
     private void configScoreMap()
     {
-        // first value is distance from the hub (in alliance zone), second is motor power
+        // first value is distance (ft) from the hub (in alliance zone), second is motor power
         // not tested values
         scoreMap.put(0.0, 4237.0);
         scoreMap.put(1.0, 4237.0);
@@ -140,6 +150,11 @@ public class Flywheel extends SubsystemBase
         // followMotor.setControlVelocity(speed);
     }
 
+    private void burpFuel()
+    {
+        leadMotor.setControlVelocity(-10.0);
+    }
+
     private void stop()
     {
         set(0.0);
@@ -149,6 +164,16 @@ public class Flywheel extends SubsystemBase
     {
         setControlVelocity(speed);
     }
+
+    public void setVoltage(double voltage)
+    {
+        leadMotor.setVoltage(voltage);
+    }
+    
+    // private void runMotorUsingFF(double speed)
+    // {
+    //     setVoltage(feedForward.calculateWithVelocities(getVelocity(), speed));
+    // }
 
     public double getVelocity()
     {
@@ -170,6 +195,11 @@ public class Flywheel extends SubsystemBase
     public Command shootCommand(DoubleSupplier speed)
     {
         return run( () -> shoot(speed.getAsDouble()));
+    }
+
+    public Command burpFuelCommand()
+    {
+        return run( () -> burpFuel());
     }
 
     public BooleanSupplier isAtSetSpeed(double targetSpeed, double speedTolerance)
@@ -194,6 +224,16 @@ public class Flywheel extends SubsystemBase
     {
         return runOnce( () -> stop());
     }
+
+    public Command runMotorUsingVoltageCommand(double voltage)
+    {
+        return run( () -> setVoltage(voltage));
+    }
+
+    // public Command runMotorUsingFFCommand(double speed)
+    // {
+    //     return run( () -> runMotorUsingFF(speed));
+    // }
 
 
     // *** OVERRIDEN METHODS ***
