@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -29,7 +30,6 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.ReverseLimitSourceValue;
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
-import com.ctre.phoenix6.spns.SpnValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -52,6 +52,12 @@ public class TalonFXLance extends MotorControllerLance
         public abstract StatusCode doAction();
     }
 
+    @FunctionalInterface
+    private interface StatusSignalFunction
+    {
+        public abstract StatusSignal<Boolean> doAction();
+    }
+
     private final TalonFX motor;
     private final PositionVoltage positionVoltage;
     private final VelocityVoltage velocityVoltage;
@@ -61,6 +67,7 @@ public class TalonFXLance extends MotorControllerLance
 
     private final int SETUP_ATTEMPT_LIMIT = 5;
     private int setupErrorCount = 0;
+    private int stickyFaultCount = 0;
 
     /**
      * Creates a TalonFX on the CANbus with a brushless motor (Falcon500 or Kraken).
@@ -150,6 +157,7 @@ public class TalonFXLance extends MotorControllerLance
     public void clearStickyFaults()
     {
         setup(() -> motor.clearStickyFaults(), "Clear Sticky Faults");
+        stickyFaultCount = 0;
     }
 
     /**
@@ -533,143 +541,174 @@ public class TalonFXLance extends MotorControllerLance
             setup(() -> motor.setControl(new Follower(leaderId, MotorAlignmentValue.Aligned)), "Setup Follower");
     }
 
+    private void checkFault(StatusSignalFunction func)
+    {
+        if(func.doAction().getValue())
+        {
+            motorFaultsPublisher.set(motorControllerName + " : " + func.doAction().getName());
+            stickyFaultCount++;
+        }
+    }
+
     /**
      * Logs and then clears the sticky faults
      */
     public void logStickyFaults()
     {
-        int faultsCount = 0;
-        String prefix = motorControllerName + " : ";
-
         if(setupErrorCount > 0)
         {
-            motorSetupPublisher.set(prefix + setupErrorCount + " setup errors");
+            motorSetupPublisher.set(motorControllerName + " : " + setupErrorCount + " setup errors");
         }
 
-        if(motor.getStickyFault_BootDuringEnable().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_BootDuringEnable);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_BridgeBrownout().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_BridgeBrownout);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_DeviceTemp().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_DeviceTemp);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_ForwardHardLimit().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_ForwardHardLimit);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_ForwardSoftLimit().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_ForwardSoftLimit);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_FusedSensorOutOfSync().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_FusedSensorOutOfSync);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_Hardware().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_Hardware);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_MissingDifferentialFX().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_MissingDifferentialFX);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_MissingHardLimitRemote().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_MissingRemHardLim);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_MissingSoftLimitRemote().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_MissingRemSoftLim);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_OverSupplyV().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_OverSupplyV);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_ProcTemp().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_ProcTemp);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_RemoteSensorDataInvalid().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_MissingRemoteSensor);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_RemoteSensorPosOverflow().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_RemoteSensorPosOverflow);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_RemoteSensorReset().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_RemoteSensorReset);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_ReverseHardLimit().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_ReverseHardLimit);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_ReverseSoftLimit().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_ReverseSoftLimit);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_StaticBrakeDisabled().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_StaticBrakeDisabled);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_StatorCurrLimit().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_StatorCurrLimit);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_SupplyCurrLimit().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_SupplyCurrLimit);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_Undervoltage().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_Undervoltage);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_UnlicensedFeatureInUse().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_UnlicensedFeatureInUse);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_UnstableSupplyV().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_UnstableSupplyV);
-            faultsCount++;
-        }
-        if(motor.getStickyFault_UsingFusedCANcoderWhileUnlicensed().getValue())
-        {
-            motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_UsingFusedCCWhileUnlicensed);
-            faultsCount++;
-        }
+        checkFault(() -> motor.getStickyFault_BootDuringEnable());
+        checkFault(() -> motor.getStickyFault_BridgeBrownout());
+        checkFault(() -> motor.getStickyFault_DeviceTemp());
+        checkFault(() -> motor.getStickyFault_ForwardHardLimit());
+        checkFault(() -> motor.getStickyFault_ForwardSoftLimit());
+        checkFault(() -> motor.getStickyFault_FusedSensorOutOfSync());
+        checkFault(() -> motor.getStickyFault_Hardware());
+        checkFault(() -> motor.getStickyFault_MissingDifferentialFX());
+        checkFault(() -> motor.getStickyFault_MissingHardLimitRemote());
+        checkFault(() -> motor.getStickyFault_MissingSoftLimitRemote());
+        checkFault(() -> motor.getStickyFault_OverSupplyV());
+        checkFault(() -> motor.getStickyFault_ProcTemp());
+        checkFault(() -> motor.getStickyFault_RemoteSensorDataInvalid());
+        checkFault(() -> motor.getStickyFault_RemoteSensorPosOverflow());
+        checkFault(() -> motor.getStickyFault_RemoteSensorReset());
+        checkFault(() -> motor.getStickyFault_ReverseHardLimit());
+        checkFault(() -> motor.getStickyFault_ReverseSoftLimit());
+        checkFault(() -> motor.getStickyFault_StaticBrakeDisabled());
+        checkFault(() -> motor.getStickyFault_StatorCurrLimit());
+        checkFault(() -> motor.getStickyFault_SupplyCurrLimit());
+        checkFault(() -> motor.getStickyFault_Undervoltage());
+        checkFault(() -> motor.getStickyFault_UnlicensedFeatureInUse());
+        checkFault(() -> motor.getStickyFault_UnstableSupplyV());
+        checkFault(() -> motor.getStickyFault_UsingFusedCANcoderWhileUnlicensed());
 
-        if(faultsCount == 0)
+        // if(motor.getStickyFault_BootDuringEnable().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_BootDuringEnable);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_BridgeBrownout().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_BridgeBrownout);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_DeviceTemp().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_DeviceTemp);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_ForwardHardLimit().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_ForwardHardLimit);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_ForwardSoftLimit().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_ForwardSoftLimit);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_FusedSensorOutOfSync().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_FusedSensorOutOfSync);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_Hardware().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_Hardware);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_MissingDifferentialFX().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_MissingDifferentialFX);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_MissingHardLimitRemote().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_MissingRemHardLim);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_MissingSoftLimitRemote().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_MissingRemSoftLim);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_OverSupplyV().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_OverSupplyV);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_ProcTemp().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_ProcTemp);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_RemoteSensorDataInvalid().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_MissingRemoteSensor);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_RemoteSensorPosOverflow().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_RemoteSensorPosOverflow);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_RemoteSensorReset().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_RemoteSensorReset);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_ReverseHardLimit().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_ReverseHardLimit);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_ReverseSoftLimit().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_ReverseSoftLimit);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_StaticBrakeDisabled().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_StaticBrakeDisabled);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_StatorCurrLimit().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_StatorCurrLimit);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_SupplyCurrLimit().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_SupplyCurrLimit);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_Undervoltage().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_Undervoltage);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_UnlicensedFeatureInUse().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_UnlicensedFeatureInUse);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_UnstableSupplyV().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_UnstableSupplyV);
+        //     faultsCount++;
+        // }
+        // if(motor.getStickyFault_UsingFusedCANcoderWhileUnlicensed().getValue())
+        // {
+        //     motorFaultsPublisher.set(prefix + SpnValue.StickyFault_TALONFX_UsingFusedCCWhileUnlicensed);
+        //     faultsCount++;
+        // }
+
+        if(stickyFaultCount == 0)
         {
-            motorFaultsPublisher.set(motorControllerName + " : No Sticky Faults");
+            motorFaultsPublisher.set(motorControllerName + " : " + "No Sticky Faults");
         }
 
         clearStickyFaults();
