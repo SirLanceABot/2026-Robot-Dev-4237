@@ -49,7 +49,7 @@ public class Climb extends SubsystemBase
     private static final double kPDOWN = 9.9;
     private static final double kI = 0;
     private static final double kD = 0.0;
-    private static final double kV = 0.3;
+
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -91,8 +91,8 @@ public class Climb extends SubsystemBase
         followMotor.setupFollower(LEADMOTOR, true);
 
 
-        leadMotor.setupPIDController(0, kPUP, kI, kD, 0.0 ,kV,0.0,0.0); 
-        leadMotor.setupPIDController(1, kPDOWN, kI, kD, 0.0 ,kV,0.0,0.0); 
+        leadMotor.setupPIDController(0, kPUP, kI, kD); 
+        leadMotor.setupPIDController(1, kPDOWN, kI, kD); 
 
     }
 
