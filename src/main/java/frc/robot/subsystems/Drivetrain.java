@@ -16,6 +16,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -68,16 +69,6 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
             .withMaxAbsRotationalRate(1)
             .withHeadingPID(0.5, 0, 0); //Maximum rotational rate
-
-    public double getAngleLockVelocityX()
-    {
-        return angleLockDrive.VelocityX;
-    }
-    
-    public double getAngleLockVelocityY()
-    {
-        return angleLockDrive.VelocityY;
-    }
 
 
     /* Swerve requests to apply during SysId characterization */
@@ -223,6 +214,31 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
         }
     }
 
+    public double getAngleLockVelocityX()
+    {
+        return angleLockDrive.VelocityX;
+    }
+    
+    public double getAngleLockVelocityY()
+    {
+        return angleLockDrive.VelocityY;
+    }
+
+    public Pose2d getPose()
+    {
+        return getState().Pose; 
+    }
+
+    public ChassisSpeeds getRobotRelativeSpeeds()
+    {
+        return getState().Speeds;
+    }
+
+    public void resetOdometryPose(Pose2d pose)
+    {
+        resetPose(pose);
+    }
+
     /**
      * Returns a command that applies the specified control request to this swerve drivetrain.
      *
@@ -248,9 +264,12 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
      * @return Command to point wheels
      * @author Matthew Fontecchio
      */
-    public Command pointWheelsCommand()
+    public Command pointWheelsCommand(DoubleSupplier leftYAxis, DoubleSupplier leftXAxis)
     {
-        return applyRequest(() -> point);
+        return applyRequest(
+            () -> point
+                .withModuleDirection(new Rotation2d(leftYAxis.getAsDouble(), leftXAxis.getAsDouble()))
+        );
     }
 
     /**
