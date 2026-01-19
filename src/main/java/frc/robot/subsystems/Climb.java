@@ -43,12 +43,13 @@ public class Climb extends SubsystemBase
     private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, "ROBORIO", "Lead Climb Motor ");
     private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, "ROBORIO", "Follower climb Motor");
     
-    private final double tolerance = 2048/4;
+    private final double tolerance = 0.2;
 
-    private static final double kPUP = 0.5;
-    private static final double kPDOWN = 0.1;
+    private static final double kPUP = 9.9;
+    private static final double kPDOWN = 9.9;
     private static final double kI = 0;
-    private static final double kD = 0;
+    private static final double kD = 0.0;
+    private static final double kV = 0.3;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -90,19 +91,20 @@ public class Climb extends SubsystemBase
         followMotor.setupFollower(LEADMOTOR, true);
 
 
-        leadMotor.setupPIDController(0, kPUP, kI, kD); 
-        leadMotor.setupPIDController(1, kPDOWN, kI, kD); 
+        leadMotor.setupPIDController(0, kPUP, kI, kD, 0.0 ,kV,0.0,0.0); 
+        leadMotor.setupPIDController(1, kPDOWN, kI, kD, 0.0 ,kV,0.0,0.0); 
 
     }
 
-    private double getPosition()
+    public double getPosition()
     {
         return leadMotor.getPosition();
     }
 
-     public BooleanSupplier isAtPosition(climbPosition position)
+    public BooleanSupplier isAtPosition(climbPosition position)
     {
         return () -> Math.abs(leadMotor.getPosition() - position.value) < tolerance;
+        // return () -> false;
     }
 
     private void stop()
@@ -130,12 +132,14 @@ public class Climb extends SubsystemBase
 
     public Command ascendL1Command()
     {
-        return run( () -> moveToPosition(climbPosition.kL1)).until(isAtPosition(climbPosition.kL1));
+        return run( () -> moveToPosition(climbPosition.kL1)).until(isAtPosition(climbPosition.kL1))
+                .andThen(stopCommand());
     }
     
     public Command descendL1Command()
     {
-        return run( () -> moveToPosition(climbPosition.kSTART)).until(isAtPosition(climbPosition.kL1));
+        return run( () -> moveToPosition(climbPosition.kSTART)).until(isAtPosition(climbPosition.kL1))
+        .andThen(stopCommand());
     }
 
     // *** OVERRIDEN METHODS ***

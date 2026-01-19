@@ -81,8 +81,7 @@ public class RobbieJTest implements Test
      */
     public void periodic()
     {
-
-
+        System.out.println(climb.getPosition());
     }
     
     /**
