@@ -93,7 +93,7 @@ public class RobotContainer
         return indexer;
     }
 
-    public Flywheel flywheel()
+    public Flywheel getFlywheel()
     {
         return flywheel;
     }
