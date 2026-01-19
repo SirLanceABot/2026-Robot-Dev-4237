@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.CANbus.*;
+import static frc.robot.Constants.Indexer.*;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
@@ -33,15 +33,17 @@ public class Indexer extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance motor = new SparkMaxLance(3, ROBORIO, "Motor");
+    private final SparkMaxLance motor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Indexer Motor");
     // private final TalonFXS motor2 = new TalonFXS(0, ROBORIO, "motor 2");
 
-    private final double kP = 0.0;
+    private final double kP = 0.000075;
     private final double kI = 0.0;
     private final double kD = 0.0;
-    // private final double kS = 0.0;  // small number
-    // private final double kV = 1000; // change once roller is attached
+    private final double kF = 0.000085;
+    // private final double kS = 0.0121;  // small number
+    // private final double kV = 0.000084; // change once roller is attached
     // private final double kA = 0.0;
+    // private final double kG = 0.0;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -67,7 +69,7 @@ public class Indexer extends SubsystemBase
     {
         motor.setupFactoryDefaults();
         motor.setSafetyEnabled(true);
-        motor.setupPIDController(0, kP, kI, kD);
+        motor.setupPIDController(0, kP, kI, kD, kF);
         motor.setupCoastMode();
 
         // motor2.setupFactoryDefaults();
@@ -104,6 +106,11 @@ public class Indexer extends SubsystemBase
         return run( () -> set(0.1) );
     }
 
+    public double getVelocity()
+    {
+        return motor.getVelocity();
+    }
+
     /**
      * Sets motor to run at a speed from 0.0 - 0.5
      * @param speed
@@ -114,20 +121,20 @@ public class Indexer extends SubsystemBase
         return run( () -> set(MathUtil.clamp(speed.getAsDouble(), 0.0, 0.5)) );
     }
 
-    // public Command setBackwardCommand(DoubleSupplier speed)
-    // {
-    //     return run( () -> set(MathUtil.clamp(-speed.getAsDouble(), -0.5, 0.0)));
-    // }
+    public Command setBackwardCommand(DoubleSupplier speed)
+    {
+        return run( () -> set(MathUtil.clamp(-speed.getAsDouble(), -0.5, 0.0)));
+    }
 
     public Command setVelocityForwardCommand(DoubleSupplier speed)
     {
         return run( () -> setVelocity(speed.getAsDouble()));
     }
 
-    // public Command setVelocityBackwardCommand(DoubleSupplier speed)
-    // {
-    //     return run( () -> setVelocity(-speed.getAsDouble()));
-    // }
+    public Command setVelocityBackwardCommand(DoubleSupplier speed)
+    {
+        return run( () -> setVelocity(-speed.getAsDouble()));
+    }
 
     // Use a method reference instead of this method
     public Command stopCommand()

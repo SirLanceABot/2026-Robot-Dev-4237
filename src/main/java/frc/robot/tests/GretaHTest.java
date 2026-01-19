@@ -65,9 +65,9 @@ public class GretaHTest implements Test
      */
     public void init()
     {
-        // controller.a().onTrue(indexer.setForwardCommand(() -> 0.3));
-        // controller.b().onTrue(indexer.stopCommand());
-        // controller.x().onTrue(indexer.setBackwardCommand(() -> 0.3));
+        controller.a().onTrue(indexer.setVelocityForwardCommand(() -> 300));
+        controller.b().onTrue(indexer.stopCommand());
+        controller.x().onTrue(indexer.setVelocityBackwardCommand(() -> 300));
         // controller.x().onTrue(indexer.setVelocityCommand(() -> 0.7));
     }
 
@@ -76,7 +76,7 @@ public class GretaHTest implements Test
      */
     public void periodic()
     {
-
+        System.out.println(indexer.getVelocity());
     }
     
     /**
