@@ -5,10 +5,13 @@ import static frc.robot.Constants.Indexer.*;
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 
+// import com.ctre.phoenix6.hardware.TalonFXS;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.motors.SparkMaxLance;
+import frc.robot.motors.TalonFXSLance;
 
 /**
  * Indexer
@@ -34,14 +37,16 @@ public class Indexer extends SubsystemBase
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
     private final SparkMaxLance motor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Indexer Motor");
-    // private final TalonFXS motor2 = new TalonFXS(0, ROBORIO, "motor 2");
+    // private final TalonFXSLance motor = new TalonFXSLance(MOTOR, MOTOR_CAN_BUS, "Indexer Motor");
 
     private final double kP = 0.000075;
     private final double kI = 0.0;
     private final double kD = 0.0;
-    private final double kF = 0.000085;
-    // private final double kS = 0.0121;  // small number
-    // private final double kV = 0.000084; // change once roller is attached
+    private final double kF = 0.000085;     // use for SparkMaxLance
+    
+    // test for TalonFXSLance
+    // private final double kS = 0.0121;    // small number
+    // private final double kV = 0.000084;  // change once roller is attached
     // private final double kA = 0.0;
     // private final double kG = 0.0;
 
@@ -71,8 +76,6 @@ public class Indexer extends SubsystemBase
         motor.setSafetyEnabled(true);
         motor.setupPIDController(0, kP, kI, kD, kF);
         motor.setupCoastMode();
-
-        // motor2.setupFactoryDefaults();
     }
 
     /**
