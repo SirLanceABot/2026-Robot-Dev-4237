@@ -35,7 +35,7 @@ public class RobbieJTest implements Test
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
     private Agitator agitator;
-    private Climb climb;
+    // private Climb climb;
     private Intake intake;
     private Indexer indexer;
     private Accelerator accelerator;
@@ -85,6 +85,7 @@ public class RobbieJTest implements Test
     {
         controller.x().onTrue(IntakeAndScoreCommand.IntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
         controller.a().onTrue(IntakeAndScoreCommand.StopIntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
+        controller.b().onTrue(IntakeAndScoreCommand.IntakeAndScoreCommandTheSequal(intake, agitator, indexer, accelerator, flywheel));
         // controller.x().onTrue(agitator.forwardCommand());
         // controller.a().onTrue(agitator.reverseCommand());
         // controller.b().onTrue(agitator.stopCommand());
@@ -98,7 +99,7 @@ public class RobbieJTest implements Test
      */
     public void periodic()
     {
-        System.out.println(climb.getPosition());
+        // System.out.println(climb.getPosition());
     }
     
     /**

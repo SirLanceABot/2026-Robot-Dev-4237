@@ -72,7 +72,7 @@ public final class Constants
     public static class Flywheel
     {
         public static final int LEADMOTOR               = 1;
-        public static final int FOLLOWMOTOR             = 4237;
+        public static final int FOLLOWMOTOR             = 2;
 
         public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
     }

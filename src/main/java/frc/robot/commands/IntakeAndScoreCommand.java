@@ -76,19 +76,19 @@ public class IntakeAndScoreCommand extends Command
         return null; 
     } 
 
-    public static Command IntakeAndScoreCommand2(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    public static Command IntakeAndScoreCommandTheSequal(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
     {
 
         
         if(intake != null && agitator != null && indexer != null  && accelerator != null  && flywheel != null )
         {
-            // return  Commands.parallel( (accelerator.feedToShooterCommand(() -> 0.25)),
-            //         (flywheel.shootCommand(() -> 10.0))).until(flywheel.isAtSetSpeed(10, 1))
-            //         .andThen.
-            //         commands.parallel(
-            //     (intake.pickupFuelCommand()),
-            //     (agitator.forwardCommand()),
-            //     (indexer.onCommand()));
+            return  Commands.parallel( (accelerator.feedToShooterCommand(() -> 0.25)),
+                    (flywheel.shootCommand(() -> 75.7))).until(flywheel.isAtSetSpeed(100, 5))
+                    .andThen
+                    // .commands.parallel(
+                (intake.pickupFuelCommand()).andThen
+                (agitator.forwardCommand()).andThen
+                (indexer.onCommand());
 
         }
         return null; 

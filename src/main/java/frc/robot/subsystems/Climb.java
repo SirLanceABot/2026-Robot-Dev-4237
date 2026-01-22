@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Climb.FOLLOWMOTOR;
-import static frc.robot.Constants.Climb.LEADMOTOR;
+import static frc.robot.Constants.Climb.*;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
@@ -40,8 +39,8 @@ public class Climb extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, "ROBORIO", "Lead Climb Motor ");
-    private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, "ROBORIO", "Follower climb Motor");
+    private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Lead Climb Motor ");
+    private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Follower Climb Motor");
     
     private final double tolerance = 0.2;
 
