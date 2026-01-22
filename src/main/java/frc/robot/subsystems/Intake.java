@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.CANbus.*;
-import static frc.robot.Constants.ExampleSubsystem.MOTOR_CAN_BUS;
+import static frc.robot.Constants.Intake.*;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
@@ -36,9 +35,9 @@ public class Intake extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance intakePivotMotor = new TalonFXLance(Constants.Intake.INTAKEPIVOTMOTOR, MOTOR_CAN_BUS, "Pivot Motor");
-    private final TalonFXLance intakeRollersMotor = new TalonFXLance(Constants.Intake.INTAKEROLLERLEADER, MOTOR_CAN_BUS, "Lead Roller Motor");
-    private final TalonFXLance intakeRollersFollower = new TalonFXLance(Constants.Intake.INTAKEROLLERFOLLOWER, MOTOR_CAN_BUS, "Follow Roller Motor");
+    private final TalonFXLance intakePivotMotor = new TalonFXLance(INTAKEPIVOTMOTOR, MOTOR_CAN_BUS, "Pivot Motor");
+    private final TalonFXLance intakeRollersMotor = new TalonFXLance(INTAKEROLLERLEADER, MOTOR_CAN_BUS, "Lead Roller Motor");
+    private final TalonFXLance intakeRollersFollower = new TalonFXLance(INTAKEROLLERFOLLOWER, MOTOR_CAN_BUS, "Follow Roller Motor");
     private double rollerPosition = 0.0;
 
     // private final double kP = 0.04;
@@ -93,7 +92,7 @@ public class Intake extends SubsystemBase
 
         // Configure the follower last so configurables above are not overwritten
         // Make device 3 follow device 2 with inverted alignment (opposed sides)
-        intakeRollersFollower.setupFollower(2, true);
+        intakeRollersFollower.setupFollower(INTAKEROLLERLEADER, true);
     }
 
     /**

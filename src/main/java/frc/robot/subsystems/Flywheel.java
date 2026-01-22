@@ -1,20 +1,17 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.CANbus.*;
+
+import static frc.robot.Constants.Flywheel.FOLLOWMOTOR;
+import static frc.robot.Constants.Flywheel.LEADMOTOR;
+import static frc.robot.Constants.Flywheel.MOTOR_CAN_BUS;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import com.ctre.phoenix6.CANBus;
-
-import static frc.robot.Constants.Flywheel.*;
-
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
 
 /**
@@ -39,8 +36,8 @@ public class Flywheel extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance leadMotor = new TalonFXLance(Constants.Flywheel.LEADMOTOR, MOTOR_CAN_BUS, "Flywheel Lead Motor");
-    private final TalonFXLance followMotor = new TalonFXLance(Constants.Flywheel.FOLLOWMOTOR, MOTOR_CAN_BUS, "Flywheel Follow Motor");
+    private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Flywheel Lead Motor");
+    private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Flywheel Follow Motor");
 
     // PID constants
    
@@ -93,7 +90,7 @@ public class Flywheel extends SubsystemBase
         leadMotor.setupFactoryDefaults();
         followMotor.setupFactoryDefaults();
 
-        followMotor.setupFollower(1, false);
+        followMotor.setupFollower(LEADMOTOR, false);
 
         leadMotor.setSafetyEnabled(true);
         followMotor.setSafetyEnabled(true);
