@@ -19,6 +19,7 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -367,6 +368,34 @@ public class SparkFlexLance extends MotorControllerLance
         }
     }
 
+    /**
+     * Set the PID controls for the motor.
+     * @param slotId The PID slot (0-3)
+     * @param kP The Proportional gain constant
+     * @param kI The Integral gain constant
+     * @param kD The Derivative gain constant
+     * @param kF The Velocity feedforward value
+     */
+    public void setupPIDController(int slotId, double kP, double kI, double kD, double kF)
+    {
+        if(isValidSlotId(slotId))
+        {
+            SparkMaxConfig motorConfig = new SparkMaxConfig();
+            ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
+            if(slotId == 0)
+                closedLoopSlot = ClosedLoopSlot.kSlot0;
+            else if(slotId == 1)
+                closedLoopSlot = ClosedLoopSlot.kSlot1;
+            else if(slotId == 2)
+                closedLoopSlot = ClosedLoopSlot.kSlot2;
+            else if(slotId == 3)
+                closedLoopSlot = ClosedLoopSlot.kSlot3;
+
+            motorConfig.closedLoop.pidf(kP, kI, kD, kF, closedLoopSlot);
+            setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
+        }
+    }
+    
     /**
      * Set the PID controls for the motor.
      * @param slotId The PID slot (0-3)
