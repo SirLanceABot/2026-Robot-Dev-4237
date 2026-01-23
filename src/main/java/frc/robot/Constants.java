@@ -18,6 +18,7 @@ public final class Constants
 {
     // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+    public static final String ADVANTAGE_SCOPE_TABLE_NAME = "ASTable";
 
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded

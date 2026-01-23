@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.robot.sensors.Camera;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
@@ -13,6 +14,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.PoseEstimator;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -41,6 +43,10 @@ public class RobotContainer
     private boolean useIntake = false;
     private boolean useAccelerator = false;
     private boolean useClimb = false;
+    private boolean usePoseEstimator = false;
+
+    private boolean useShooterCamera = false;
+    private boolean useIntakeCamera = false;
 
     // Robot components
     private ExampleSubsystem exampleSubsystem = null;
@@ -50,6 +56,9 @@ public class RobotContainer
     private Intake intake = null;
     private Accelerator accelerator;
     private Climb climb = null;
+    private PoseEstimator poseEstimator = null;
+
+    private final Camera[] cameraArray = new Camera[2];
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -76,6 +85,19 @@ public class RobotContainer
 
         if(useFullRobot || useClimb)
             climb = new Climb();
+        
+        if(useFullRobot || usePoseEstimator)
+            poseEstimator = new PoseEstimator(null, null);
+
+        if(useFullRobot || useShooterCamera)
+            cameraArray[0] = new Camera("limelight-shooter");
+        else
+            cameraArray[0] = null;
+        
+        if(useFullRobot || useIntakeCamera)
+            cameraArray[1] = new Camera("limelight-intake");
+        else
+            cameraArray[1] = null;
     }
 
     public ExampleSubsystem getExampleSubsystem()
@@ -111,5 +133,20 @@ public class RobotContainer
     public Climb getClimb()
     {
         return climb;
+    }
+
+    public PoseEstimator getPoseEstimator()
+    {
+        return poseEstimator;
+    }
+
+    public Camera getShooterCamera()
+    {
+        return cameraArray[0];
+    }
+
+    public Camera getIntakeCamera()
+    {
+        return cameraArray[1];
     }
 }
