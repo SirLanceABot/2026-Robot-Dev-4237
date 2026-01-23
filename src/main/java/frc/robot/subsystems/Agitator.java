@@ -1,12 +1,11 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Agitator.MOTOR;
+import static frc.robot.Constants.Agitator.*;
 
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.motors.SparkMaxLance;
 
 /**
@@ -32,9 +31,13 @@ public class Agitator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance agitatorMotor = new SparkMaxLance(MOTOR, Constants.Agitator.MOTOR_CAN_BUS, "");
+    private final SparkMaxLance motor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Agitator Motor ");
     // private final SparkMaxLance agitatorMotor = new SparkMaxLance(3, "ROBORIO", "Agitator");
 
+    //PID
+    private final double kP = 0.0001;
+    private final double kI = 0.0;
+    private final double kD = 0.0;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -58,31 +61,34 @@ public class Agitator extends SubsystemBase
 
     private void configMotors()
     {
-        agitatorMotor.setupFactoryDefaults();
+        motor.setupFactoryDefaults();
+        motor.setupPIDController(0, kP, kI, kD);
+        motor.setupCoastMode();
     }
 
     /**
      * This sets the speed of the motors.
-     * @param speed The motor speed (-1.0 to 1.0)
+     * @param speed The motor speed 
      */
-    private void set(double speed)
+    private void setVelocity(double speed)
     {
-        agitatorMotor.set(speed);
+        // motor.set(speed);
+        motor.setControlVelocity(speed);
     }
 
     public void stop()
     {
-        set(0.0);
+        setVelocity(0.0);
     }
 
     public Command forwardCommand()
     {
-        return run( () -> set(0.25) );
+        return run( () -> setVelocity(500) );
     }
 
     public Command reverseCommand()
     {
-        return run( () -> set(-0.25) );
+        return run( () -> setVelocity(-500) );
     }
 
     // Use a method reference instead of this method

@@ -1,0 +1,100 @@
+package frc.robot.commands;
+
+import java.lang.invoke.MethodHandles;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Accelerator;
+import frc.robot.subsystems.Agitator;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
+
+public class ScoringCommands
+{
+    // This string gets the full name of the class, including the package name
+    private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+
+    // *** STATIC INITIALIZATION BLOCK ***
+    // This block of code is run first when the class is loaded
+    static
+    {
+        System.out.println("Loading: " + fullClassName);
+    }
+
+  // *** CLASS VARIABLES & INSTANCE VARIABLES ***
+  // Put all class variables and instance variables here
+    private static Intake intake; 
+    private static Agitator agitator;
+    private static Indexer indexer;
+    private static Accelerator accelerator;
+    private static Flywheel flywheel;
+
+
+    public static void createCommands(RobotContainer robotContainer)
+    {        
+        System.out.println("  Constructor Started:  " + fullClassName);
+
+
+        intake = robotContainer.getIntake();
+        agitator = robotContainer.getAgitator();
+        indexer = robotContainer.getIndexer();
+        accelerator = robotContainer.getAccelerator();
+        flywheel = robotContainer.getFlywheel();
+
+        System.out.println("  Constructor Finished: " + fullClassName);
+
+    }
+
+    public static Command IntakeAndScoreCommand(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    {
+
+        
+        if(intake != null && agitator != null && indexer != null  && accelerator != null  && flywheel != null )
+        {
+            return  Commands.parallel(
+                (intake.pickupFuelCommand()),
+                (agitator.forwardCommand()),
+                (indexer.onCommand()),
+                (accelerator.feedToShooterCommand(()-> 0.25)),
+                (flywheel.shootCommand(() -> 10.0)));
+        }
+        return null; 
+    } 
+
+    public static Command IntakeAndScoreCommandTheSequal(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    {
+
+        
+        if(intake != null && agitator != null && indexer != null  && accelerator != null  && flywheel != null )
+        {
+            return  Commands.parallel( (accelerator.feedToShooterCommand(() -> 0.25)),
+                    (flywheel.shootCommand(() -> 75.7))).until(flywheel.isAtSetSpeed(100, 5))
+                    .andThen
+                    // .commands.parallel(
+                (intake.pickupFuelCommand()).andThen
+                (agitator.forwardCommand()).andThen
+                (indexer.onCommand());
+
+        }
+        return null; 
+    } 
+
+
+    public static Command StopIntakeAndScoreCommand(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    {
+
+        
+        if(intake != null && agitator != null && indexer != null  && accelerator != null  && flywheel != null )
+        {
+            return  Commands.parallel(
+                (intake.stopCommand()),
+                (agitator.stopCommand()),
+                (indexer.stopCommand()),
+                (accelerator.stopCommand()),
+                (flywheel.stopCommand()));
+        }
+        return null; 
+    } 
+}

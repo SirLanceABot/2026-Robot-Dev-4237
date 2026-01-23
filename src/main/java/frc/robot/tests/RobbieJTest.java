@@ -4,7 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
-import frc.robot.commands.IntakeAndScoreCommand;
+import frc.robot.commands.ScoringCommands;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
@@ -83,12 +83,12 @@ public class RobbieJTest implements Test
      */
     public void init()
     {
-        controller.x().onTrue(IntakeAndScoreCommand.IntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
-        controller.a().onTrue(IntakeAndScoreCommand.StopIntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
-        controller.b().onTrue(IntakeAndScoreCommand.IntakeAndScoreCommandTheSequal(intake, agitator, indexer, accelerator, flywheel));
-        // controller.x().onTrue(agitator.forwardCommand());
-        // controller.a().onTrue(agitator.reverseCommand());
-        // controller.b().onTrue(agitator.stopCommand());
+        // controller.x().onTrue(ScoringCommands.IntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
+        // controller.a().onTrue(ScoringCommands.StopIntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
+        // controller.b().onTrue(ScoringCommands.IntakeAndScoreCommandTheSequal(intake, agitator, indexer, accelerator, flywheel));
+        controller.x().onTrue(agitator.forwardCommand());
+        controller.a().onTrue(agitator.reverseCommand());
+        controller.b().onTrue(agitator.stopCommand());
         // controller.x().onTrue(climb.ascendL1Command());
         // controller.a().onTrue(climb.descendL1Command());
         // controller.b().onTrue(climb.stopCommand());
