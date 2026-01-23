@@ -47,6 +47,13 @@ public final class Constants
         public static final int MOTOR2 = 2;
     }
 
+    public static class Accelerator
+    {
+        public static final int MOTOR                   = 3;
+
+        public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
+    }
+
     public static class Agitator
     {
         public static final int MOTOR                   = 1;
@@ -63,11 +70,13 @@ public final class Constants
         public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;    
     }
 
-    public static class Accelerator
+     /**
+     * This class contains the port numbers of the controllers
+     */
+    public static class Controllers
     {
-        public static final int MOTOR                   = 3;
-
-        public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
+        public static final int DRIVER_CONTROLLER_PORT = 0;
+        public static final int OPERATOR_CONTROLLER_PORT = 1;
     }
 
     public static class Flywheel
@@ -94,13 +103,10 @@ public final class Constants
         public static final String MOTOR_CAN_BUS            = CANbus.ROBORIO;
     }   
 
-    /**
-     * This class contains the port numbers of the controllers
-     */
-    public static class Controllers
+    public static class LEDs
     {
-        public static final int DRIVER_CONTROLLER_PORT = 0;
-        public static final int OPERATOR_CONTROLLER_PORT = 1;
+        public static final int LED_LENGTH = 60;
+        public static final int LED_PORT = 9;
     }
 
     /**
@@ -110,12 +116,6 @@ public final class Constants
     {
         public static final String TEAM_TABLE = "TeamLance";
         public static final String ADVANTAGE_SCOPE_TABLE = "ASTable";
-    }
-
-    public static class LEDs
-    {
-        public static final int LED_LENGTH = 60;
-        public static final int LED_PORT = 9;
     }
 
 }
