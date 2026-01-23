@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -19,6 +20,8 @@ import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -59,12 +62,18 @@ public class TalonFXLance extends MotorControllerLance
     }
 
     private final TalonFX motor;
+    private final TalonFXConfiguration motorConfigs;
+    private final String motorControllerName;
+
     private final PositionVoltage positionVoltage;
     private final VelocityVoltage velocityVoltage;
-    private final String motorControllerName;
+    private final MotionMagicVoltage motionMagicVoltage;
+    private final MotionMagicVelocityVoltage motionMagicVelocityVoltage;
+    private boolean useMotionMagic = false;
+    private double kF = 0.0;
+
     private DigitalInput forwardHardLimit = null;
     private DigitalInput reverseHardLimit = null;
-    private double kF = 0.0;
 
     private final int SETUP_ATTEMPT_LIMIT = 5;
     private int setupErrorCount = 0;
@@ -87,8 +96,11 @@ public class TalonFXLance extends MotorControllerLance
 
         // motor = new TalonFX(deviceId, canbus);           // 2025 version
         motor = new TalonFX(deviceId, new CANBus(canbus));
+        motorConfigs = new TalonFXConfiguration();
         positionVoltage = new PositionVoltage(0.0);
         velocityVoltage = new VelocityVoltage(0.0);
+        motionMagicVoltage = new MotionMagicVoltage(0.0);
+        motionMagicVelocityVoltage = new MotionMagicVelocityVoltage(0.0);
 
         clearStickyFaults();
         setupFactoryDefaults();
@@ -520,6 +532,26 @@ public class TalonFXLance extends MotorControllerLance
     }
 
     /**
+     * Set the Motion Magic controls for the motor.
+     * @param velocity The target cruise velocity (rotations per second)
+     * @param acceleration The target acceleration (rotations per second^2)
+     * @param jerk The target jerk (rotations per second^3)
+     */
+    public void setupMotionMagicConfigs(double velocity, double acceleration, double jerk)
+    {
+        MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
+        setup(() -> motor.getConfigurator().refresh(motionMagicConfigs), "");
+
+        motionMagicConfigs.MotionMagicCruiseVelocity = velocity;
+        motionMagicConfigs.MotionMagicAcceleration = acceleration;
+        motionMagicConfigs.MotionMagicJerk = jerk;
+
+        useMotionMagic = true;
+
+        setup(() -> motor.getConfigurator().apply(motionMagicConfigs), "Setup Motion Magic");
+    }
+
+    /**
      * Returns the PID values stored in the slotId
      * @param slotId The PID slot (0-2)
      * @return An array containing the PID values
@@ -757,13 +789,28 @@ public class TalonFXLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            positionVoltage.Slot = slotId;
-            positionVoltage.Position = position;
-            positionVoltage.FeedForward = kF;
-            positionVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
-            positionVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+            if(!useMotionMagic)
+            {
+                positionVoltage.Slot = slotId;
+                positionVoltage.Position = position;
+                positionVoltage.FeedForward = kF;
+                positionVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+                positionVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
 
-            motor.setControl(positionVoltage);
+                motor.setControl(positionVoltage);
+            }
+            else
+            {
+                motionMagicVoltage.Slot = slotId;
+                motionMagicVoltage.Position = position;
+                motionMagicVoltage.FeedForward = kF;
+                motionMagicVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+                motionMagicVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+
+                motor.setControl(motionMagicVoltage);
+            }
+
+
 
             // if(forwardHardLimit == null && reverseHardLimit == null)
             // {
@@ -817,13 +864,26 @@ public class TalonFXLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            velocityVoltage.Slot = slotId;
-            velocityVoltage.Velocity = velocity;
-            velocityVoltage.FeedForward = kF;
-            velocityVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
-            velocityVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
-            
-            motor.setControl(velocityVoltage);
+            if(!useMotionMagic)
+            {
+                velocityVoltage.Slot = slotId;
+                velocityVoltage.Velocity = velocity;
+                velocityVoltage.FeedForward = kF;
+                velocityVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+                velocityVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+                
+                motor.setControl(velocityVoltage);
+            }
+            else
+            {
+                motionMagicVelocityVoltage.Slot = slotId;
+                motionMagicVelocityVoltage.Velocity = velocity;
+                motionMagicVelocityVoltage.FeedForward = kF;
+                motionMagicVelocityVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+                motionMagicVelocityVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+                
+                motor.setControl(motionMagicVelocityVoltage);
+            }
 
             // if(forwardHardLimit == null && reverseHardLimit == null)
             // {
