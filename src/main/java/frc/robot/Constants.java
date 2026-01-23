@@ -112,4 +112,10 @@ public final class Constants
         public static final String ADVANTAGE_SCOPE_TABLE = "ASTable";
     }
 
+    public static class LEDs
+    {
+        public static final int LED_LENGTH = 60;
+        public static final int LED_PORT = 9;
+    }
+
 }

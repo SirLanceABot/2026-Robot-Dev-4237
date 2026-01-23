@@ -15,6 +15,7 @@ import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.LEDs;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -59,6 +60,7 @@ public class RobotContainer
     private PoseEstimator poseEstimator = null;
 
     private final Camera[] cameraArray = new Camera[2];
+    private final LEDs leds;
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -98,6 +100,8 @@ public class RobotContainer
             cameraArray[1] = new Camera("limelight-intake");
         else
             cameraArray[1] = null;
+
+        leds = new LEDs();
     }
 
     public ExampleSubsystem getExampleSubsystem()
@@ -148,5 +152,10 @@ public class RobotContainer
     public Camera getIntakeCamera()
     {
         return cameraArray[1];
+    }
+
+    public LEDs getLEDs()
+    {
+        return leds;
     }
 }
