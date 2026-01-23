@@ -85,10 +85,6 @@ public class Indexer extends SubsystemBase
     private void set(double speed)
     {
         motor.set(speed);
-        motor.feed();
-        
-        // motor2.set(speed);
-        // motor2.feed();
     }
 
     private void setVelocity(double speed)
