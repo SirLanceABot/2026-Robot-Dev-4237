@@ -72,23 +72,37 @@ public class MatthewFTest implements Test
      * This method runs one time before the periodic() method.
      */
     public void init()
-    {}
+    {
+        //TODO for angleLock drive based on gyro
+        // drivetrain.getPigeon2().reset();
+    }
 
     /**
      * This method runs periodically (every 20ms).
      */
     public void periodic()
     {
+        //angleLock drive in test
         if(joystick.getRawButton(1))
         {
-            drivetrain.angleLockDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), () -> 0.1, end).schedule();
+            drivetrain.angleLockDriveCommand(() -> -joystick.getRawAxis(1), () -> -joystick.getRawAxis(0), () -> 0.1, end).schedule();
 
         }
         else
         {
-            drivetrain.angleLockDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), () -> 0.1, start).schedule();
+            drivetrain.angleLockDriveCommand(() -> -joystick.getRawAxis(1), () -> -joystick.getRawAxis(0), () -> 0.1, start).schedule();
         }
         System.out.println("Angle: " + drivetrain.getPigeon2().getRotation2d().getRadians());
+
+        //TODO for angleLock drive based on gyro
+        // if(joystick.getRawButton(1))
+        // {
+        //     drivetrain.angleLockDriveCommand(() -> -joystick.getRawAxis(1), () -> -joystick.getRawAxis(0), () -> 0.1, drivetrain.getPigeon2().getRotation2d().plus(end)).schedule();
+        // }
+        // else
+        // {
+        //     drivetrain.angleLockDriveCommand(() -> -joystick.getRawAxis(1), () -> -joystick.getRawAxis(0), () -> 0.1, drivetrain.getPigeon2().getRotation2d().plus(start)).schedule();
+        // }
 
     }
     

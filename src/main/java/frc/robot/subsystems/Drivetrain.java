@@ -68,7 +68,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             .withRotationalDeadband(0.05) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
             .withMaxAbsRotationalRate(1)
-            .withHeadingPID(0.5, 0, 0); //Maximum rotational rate
+            .withHeadingPID(5.0, 0, 0); //Maximum rotational rate
 
 
     /* Swerve requests to apply during SysId characterization */
