@@ -64,6 +64,7 @@ public class TalonFXLance extends MotorControllerLance
     private final String motorControllerName;
     private DigitalInput forwardHardLimit = null;
     private DigitalInput reverseHardLimit = null;
+    private double kF = 0.0;
 
     private final int SETUP_ATTEMPT_LIMIT = 5;
     private int setupErrorCount = 0;
@@ -87,7 +88,7 @@ public class TalonFXLance extends MotorControllerLance
         // motor = new TalonFX(deviceId, canbus);           // 2025 version
         motor = new TalonFX(deviceId, new CANBus(canbus));
         positionVoltage = new PositionVoltage(0.0);
-        velocityVoltage = new VelocityVoltage(0);
+        velocityVoltage = new VelocityVoltage(0.0);
 
         clearStickyFaults();
         setupFactoryDefaults();
@@ -286,8 +287,8 @@ public class TalonFXLance extends MotorControllerLance
     public void setupForwardHardLimitSwitch(boolean isEnabled, boolean isNormallyOpen, int roboRIOPort)
     {
         forwardHardLimit = new DigitalInput(roboRIOPort);
-        positionVoltage.LimitForwardMotion = true;
-        velocityVoltage.LimitForwardMotion = true;
+        // positionVoltage.LimitForwardMotion = true;
+        // velocityVoltage.LimitForwardMotion = true;
 
         HardwareLimitSwitchConfigs hardwareLimitSwitchConfigs = new HardwareLimitSwitchConfigs();
         setup(() -> motor.getConfigurator().refresh(hardwareLimitSwitchConfigs), "");
@@ -328,8 +329,8 @@ public class TalonFXLance extends MotorControllerLance
     public void setupReverseHardLimitSwitch(boolean isEnabled, boolean isNormallyOpen, int roboRIOPort)
     {
         reverseHardLimit = new DigitalInput(roboRIOPort);
-        positionVoltage.LimitReverseMotion = true;
-        velocityVoltage.LimitReverseMotion = true;
+        // positionVoltage.LimitReverseMotion = true;
+        // velocityVoltage.LimitReverseMotion = true;
 
         HardwareLimitSwitchConfigs hardwareLimitSwitchConfigs = new HardwareLimitSwitchConfigs();
         setup(() -> motor.getConfigurator().refresh(hardwareLimitSwitchConfigs), "");
@@ -462,6 +463,30 @@ public class TalonFXLance extends MotorControllerLance
             slotConfigs.kP = kP;
             slotConfigs.kI = kI;
             slotConfigs.kD = kD;
+            setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller"); 
+        }
+    }
+
+    /**
+     * Set the PID controls for the motor.
+     * @param slotId The PID slot (0-3)
+     * @param kP The Proportional gain constant
+     * @param kI The Integral gain constant
+     * @param kD The Derivative gain constant
+     * @param kF The Feedforward value
+     */
+    public void setupPIDController(int slotId, double kP, double kI, double kD, double kF)
+    {
+        if(isValidSlotId(slotId))
+        {
+            SlotConfigs slotConfigs = new SlotConfigs();
+            setup(() -> motor.getConfigurator().refresh(slotConfigs), "");
+
+            slotConfigs.SlotNumber = slotId;
+            slotConfigs.kP = kP;
+            slotConfigs.kI = kI;
+            slotConfigs.kD = kD;
+            this.kF = kF;
             setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller"); 
         }
     }
@@ -734,29 +759,44 @@ public class TalonFXLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            if(forwardHardLimit == null && reverseHardLimit == null)
-            {
-                motor.setControl(positionVoltage.withPosition(position).withSlot(slotId));
-            }
-            else if(forwardHardLimit != null && reverseHardLimit != null)
-            {
-                motor.setControl(positionVoltage.withPosition(position).withSlot(slotId)
-                    .withLimitForwardMotion(!forwardHardLimit.get())
-                    .withLimitReverseMotion(!reverseHardLimit.get()));
-            }
-            else if(forwardHardLimit != null && reverseHardLimit == null)
-            {
-                motor.setControl(positionVoltage.withPosition(position).withSlot(slotId)
-                    .withLimitForwardMotion(!forwardHardLimit.get()));
-            }
-            else if(forwardHardLimit == null && reverseHardLimit != null)
-            {
-                motor.setControl(positionVoltage.withPosition(position).withSlot(slotId)
-                    .withLimitReverseMotion(!reverseHardLimit.get()));
-            }
+            positionVoltage.Slot = slotId;
+            positionVoltage.Position = position;
+            positionVoltage.FeedForward = kF;
+            positionVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+            positionVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+
+            motor.setControl(positionVoltage);
+
+            // if(forwardHardLimit == null && reverseHardLimit == null)
+            // {
+            //     motor.setControl(positionVoltage.withSlot(slotId)
+            //         .withPosition(position)
+            //         .withFeedForward(kF));
+            // }
+            // else if(forwardHardLimit != null && reverseHardLimit != null)
+            // {
+            //     motor.setControl(positionVoltage.withSlot(slotId)
+            //         .withPosition(position)
+            //         .withLimitForwardMotion(!forwardHardLimit.get())
+            //         .withLimitReverseMotion(!reverseHardLimit.get())
+            //         .withFeedForward(kF));
+            // }
+            // else if(forwardHardLimit != null && reverseHardLimit == null)
+            // {
+            //     motor.setControl(positionVoltage.withSlot(slotId)
+            //         .withPosition(position)
+            //         .withLimitForwardMotion(!forwardHardLimit.get())
+            //         .withFeedForward(kF));
+            // }
+            // else if(forwardHardLimit == null && reverseHardLimit != null)
+            // {
+            //     motor.setControl(positionVoltage.withSlot(slotId)
+            //         .withPosition(position)
+            //         .withLimitReverseMotion(!reverseHardLimit.get())
+            //         .withFeedForward(kF));
+            // }
         }
     }
-
 
     /**
      * Spin the motor to a velocity using PID control.
@@ -765,7 +805,8 @@ public class TalonFXLance extends MotorControllerLance
      */
     public void setControlVelocity(double velocity)
     {
-        motor.setControl(velocityVoltage.withVelocity(velocity));
+        // motor.setControl(velocityVoltage.withVelocity(velocity));
+        setControlVelocity(velocity, 0);
     }
 
     /**
@@ -778,26 +819,42 @@ public class TalonFXLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            if(forwardHardLimit == null && reverseHardLimit == null)
-            {
-                motor.setControl(velocityVoltage.withVelocity(velocity).withSlot(slotId));
-            }
-            else if(forwardHardLimit != null && reverseHardLimit != null)
-            {
-                motor.setControl(velocityVoltage.withVelocity(velocity).withSlot(slotId)
-                    .withLimitForwardMotion(!forwardHardLimit.get())
-                    .withLimitReverseMotion(!reverseHardLimit.get()));
-            }
-            else if(forwardHardLimit != null && reverseHardLimit == null)
-            {
-                motor.setControl(velocityVoltage.withVelocity(velocity).withSlot(slotId)
-                    .withLimitForwardMotion(!forwardHardLimit.get()));
-            }
-            else if(forwardHardLimit == null && reverseHardLimit != null)
-            {
-                motor.setControl(velocityVoltage.withVelocity(velocity).withSlot(slotId)
-                    .withLimitReverseMotion(!reverseHardLimit.get()));
-            }
+            velocityVoltage.Slot = slotId;
+            velocityVoltage.Velocity = velocity;
+            velocityVoltage.FeedForward = kF;
+            velocityVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+            velocityVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+            
+            motor.setControl(velocityVoltage);
+
+            // if(forwardHardLimit == null && reverseHardLimit == null)
+            // {
+            //     motor.setControl(velocityVoltage.withSlot(slotId)
+            //         .withVelocity(velocity)
+            //         .withFeedForward(kF));
+            // }
+            // else if(forwardHardLimit != null && reverseHardLimit != null)
+            // {
+            //     motor.setControl(velocityVoltage.withSlot(slotId)
+            //         .withVelocity(velocity)
+            //         .withLimitForwardMotion(!forwardHardLimit.get())
+            //         .withLimitReverseMotion(!reverseHardLimit.get())
+            //         .withFeedForward(kF));
+            // }
+            // else if(forwardHardLimit != null && reverseHardLimit == null)
+            // {
+            //     motor.setControl(velocityVoltage.withSlot(slotId)
+            //         .withVelocity(velocity)
+            //         .withLimitForwardMotion(!forwardHardLimit.get())
+            //         .withFeedForward(kF));
+            // }
+            // else if(forwardHardLimit == null && reverseHardLimit != null)
+            // {
+            //     motor.setControl(velocityVoltage.withSlot(slotId)
+            //         .withVelocity(velocity)
+            //         .withLimitReverseMotion(!reverseHardLimit.get())
+            //         .withFeedForward(kF));
+            // }
         }
     }
 

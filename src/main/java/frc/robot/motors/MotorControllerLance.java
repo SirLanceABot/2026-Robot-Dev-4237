@@ -99,6 +99,7 @@ public abstract class MotorControllerLance extends MotorSafety implements MotorC
     public abstract void setupPositionConversionFactor(double factor);
     public abstract void setupVelocityConversionFactor(double factor);
     public abstract void setupPIDController(int slotId, double kP, double kI, double kD);
+    public abstract void setupPIDController(int slotId, double kP, double kI, double kD, double kF);
     public abstract void setupPIDController(int slotId, double kP, double kI, double kD, double kS, double kV, double kA, double kG);
     public abstract void setupFollower(int leaderId, boolean isInverted);
 

@@ -55,6 +55,7 @@ public class TalonFXSLance extends MotorControllerLance
     private final PositionVoltage positionVoltage;
     private final VelocityVoltage velocityVoltage;
     private final String motorControllerName;
+    private double kF = 0.0;
 
     private final int SETUP_ATTEMPT_LIMIT = 5;
     private int setupErrorCount = 0;
@@ -78,7 +79,7 @@ public class TalonFXSLance extends MotorControllerLance
         motor = new TalonFXS(deviceId, new CANBus(canbus));
         motorConfigs = new TalonFXSConfiguration();
         positionVoltage = new PositionVoltage(0.0);
-        velocityVoltage = new VelocityVoltage(0);
+        velocityVoltage = new VelocityVoltage(0.0);
 
         clearStickyFaults();
         setupFactoryDefaults();
@@ -358,7 +359,65 @@ public class TalonFXSLance extends MotorControllerLance
      */
     public void setupPIDController(int slotId, double kP, double kI, double kD)
     {
-        setupPIDController(slotId, kP, kI, kD, 0.0, 0.0, 0.0, 0.0);
+        if(isValidSlotId(slotId))
+        {
+            SlotConfigs slotConfigs = new SlotConfigs();
+
+            slotConfigs.SlotNumber = slotId;
+            slotConfigs.kP = kP;
+            slotConfigs.kI = kI;
+            slotConfigs.kD = kD;
+
+            switch(slotId)
+            {
+                case 0:
+                    motorConfigs.Slot0 = Slot0Configs.from(slotConfigs);
+                    break;
+                case 1:
+                    motorConfigs.Slot1 = Slot1Configs.from(slotConfigs);
+                    break;
+                case 2:
+                    motorConfigs.Slot2 = Slot2Configs.from(slotConfigs);
+                    break;
+            }
+            setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller");
+        }
+    }
+
+    /**
+     * Set the PID controls for the motor.
+     * @param slotId The PID slot (0-2)
+     * @param kP The Proportional constant
+     * @param kI The Integral constant
+     * @param kD The Derivative constant
+     * @param kF The Feedforward value
+     */
+    public void setupPIDController(int slotId, double kP, double kI, double kD, double kF)
+    {
+        if(isValidSlotId(slotId))
+        {
+            SlotConfigs slotConfigs = new SlotConfigs();
+
+            slotConfigs.SlotNumber = slotId;
+            slotConfigs.kP = kP;
+            slotConfigs.kI = kI;
+            slotConfigs.kD = kD;
+            this.kF = kF;
+
+            switch(slotId)
+            {
+                case 0:
+                    motorConfigs.Slot0 = Slot0Configs.from(slotConfigs);
+                    break;
+                case 1:
+                    motorConfigs.Slot1 = Slot1Configs.from(slotConfigs);
+                    break;
+                case 2:
+                    motorConfigs.Slot2 = Slot2Configs.from(slotConfigs);
+                    break;
+            }
+            setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller");
+        }
     }
 
     /**
@@ -686,6 +745,7 @@ public class TalonFXSLance extends MotorControllerLance
         {
             positionVoltage.Slot = slotId;
             positionVoltage.Position = position;
+            positionVoltage.FeedForward = kF;
             
             motor.setControl(positionVoltage);
         }
@@ -714,6 +774,7 @@ public class TalonFXSLance extends MotorControllerLance
         {
             velocityVoltage.Slot = slotId;
             velocityVoltage.Velocity = velocity;
+            velocityVoltage.FeedForward = kF;
 
             motor.setControl(velocityVoltage);
         }
