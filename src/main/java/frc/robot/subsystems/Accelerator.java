@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.CANbus.*;
-import static frc.robot.Constants.ExampleSubsystem.MOTOR_CAN_BUS;
+import static frc.robot.Constants.Accelerator.*;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
@@ -35,10 +34,8 @@ public class Accelerator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance acceleratorMotor = new SparkMaxLance(Constants.Accelerator.MOTOR, MOTOR_CAN_BUS, "Motor 1");
+    private final SparkMaxLance motor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Accelerator Motor");
 
-    double rollerPosition;
-    double rollerVelocity;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -62,22 +59,22 @@ public class Accelerator extends SubsystemBase
 
     private void configMotors()
     {
-        acceleratorMotor.setupFactoryDefaults();
-
+        motor.setupFactoryDefaults();
         // motor.setupInverted(false); // Find out later
+        // motor.setupVelocityConversionFactor();
 
-        acceleratorMotor.setupBrakeMode();
-        // motor.setupCoastMode();
+        motor.setupPIDController(0, 0.1, 0.001, 2);
+        motor.setupCoastMode();
     }
 
     public double getPosition() 
     {
-        return rollerPosition;
+        return motor.getPosition();
     }
 
     public double getVelocity() 
     {
-        return rollerVelocity;
+        return motor.getVelocity();
     }
 
     /**
@@ -86,12 +83,17 @@ public class Accelerator extends SubsystemBase
      */
     private void set(double speed)
     {
-        acceleratorMotor.set(speed);
+        motor.set(speed);
+    }
+
+    private void setControlVelocity(double velocity)
+    {
+        motor.setControlVelocity(velocity);
     }
 
     public void stop()
     {
-        acceleratorMotor.set(0.0);
+        set(0.0);
     }
 
     public Command onCommand()
@@ -114,6 +116,11 @@ public class Accelerator extends SubsystemBase
         return run( () -> set(MathUtil.clamp(speed.getAsDouble(), -0.5, 0.0)) );
     }
 
+    public Command setVelocityCommand(double targetSpeed)
+    {
+        return run( () -> setControlVelocity(targetSpeed));
+    }
+
     // Use a method reference instead of this method
     public Command stopCommand()
     {
@@ -132,14 +139,12 @@ public class Accelerator extends SubsystemBase
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
 
-        rollerPosition = acceleratorMotor.getPosition();
-
         // System.out.println("Accelerator Velocity: " + (motor.getVelocity() * 2 * (Math.PI) * (r))); // Find out radius of rods
     }
 
     @Override
     public String toString()
     {
-        return "Current Accelerator Position: " + rollerPosition;
+        return "Current Accelerator Position: " + getPosition();
     }
 }
