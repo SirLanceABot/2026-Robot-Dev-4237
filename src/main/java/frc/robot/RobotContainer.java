@@ -6,10 +6,12 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.robot.generated.TunerConstants;
 import frc.robot.sensors.Camera;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexer;
@@ -45,6 +47,7 @@ public class RobotContainer
     private boolean useAccelerator = false;
     private boolean useClimb = false;
     private boolean usePoseEstimator = false;
+    private boolean useDrivetrain = false;
 
     private boolean useShooterCamera = false;
     private boolean useIntakeCamera = false;
@@ -58,6 +61,7 @@ public class RobotContainer
     private Accelerator accelerator;
     private Climb climb = null;
     private PoseEstimator poseEstimator = null;
+    private Drivetrain drivetrain = null;
 
     private final Camera[] cameraArray = new Camera[2];
     private final LEDs leds;
@@ -100,6 +104,10 @@ public class RobotContainer
             cameraArray[1] = new Camera("limelight-intake");
         else
             cameraArray[1] = null;
+
+        if(useFullRobot || useDrivetrain)
+            drivetrain = TunerConstants.createDrivetrain();
+            
 
         leds = new LEDs();
     }
@@ -157,5 +165,10 @@ public class RobotContainer
     public LEDs getLEDs()
     {
         return leds;
+    }
+
+    public Drivetrain getDrivetrain()
+    {
+        return drivetrain;
     }
 }

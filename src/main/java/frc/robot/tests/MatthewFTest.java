@@ -36,13 +36,10 @@ public class MatthewFTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
-    private final Drivetrain drivetrain = TunerConstants.createDrivetrain();
+    private final Drivetrain drivetrain;
     private final Joystick joystick = new Joystick(0);
-    private final double scaleFactor = 0.1;
-    private DoubleSupplier scaleSupplier;
-    private DoubleSupplier angleLockSupplier;
-    private Rotation2d lockAngle1 = new Rotation2d(1.0);
-    private Rotation2d lockAngle0 = new Rotation2d(0.0);
+    private Rotation2d start = new Rotation2d(0.0);
+    private Rotation2d end = new Rotation2d(Math.PI / 4.0);
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -58,6 +55,7 @@ public class MatthewFTest implements Test
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.robotContainer = robotContainer;
+        drivetrain = robotContainer.getDrivetrain();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -74,9 +72,7 @@ public class MatthewFTest implements Test
      * This method runs one time before the periodic() method.
      */
     public void init()
-    {
-        drivetrain.getPigeon2().reset();
-    }
+    {}
 
     /**
      * This method runs periodically (every 20ms).
@@ -85,14 +81,14 @@ public class MatthewFTest implements Test
     {
         if(joystick.getRawButton(1))
         {
-            drivetrain.angleLockDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), () -> 0.1, lockAngle0).schedule();
+            drivetrain.angleLockDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), () -> 0.1, end).schedule();
 
         }
         else
         {
-            drivetrain.angleLockDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), () -> 0.1, lockAngle1).schedule();
+            drivetrain.angleLockDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), () -> 0.1, start).schedule();
         }
-        System.out.println("Angle: " + drivetrain.getPigeon2().getRotation2d().getRadians() + "    X Velocity: " + drivetrain.getAngleLockVelocityX() + "   Y Velocity: " + drivetrain.getAngleLockVelocityY());
+        System.out.println("Angle: " + drivetrain.getPigeon2().getRotation2d().getRadians());
 
     }
     
