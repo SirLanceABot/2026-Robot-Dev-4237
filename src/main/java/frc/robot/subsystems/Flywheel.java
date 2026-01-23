@@ -1,13 +1,15 @@
 package frc.robot.subsystems;
 
 
-import static frc.robot.Constants.Flywheel.FOLLOWMOTOR;
-import static frc.robot.Constants.Flywheel.LEADMOTOR;
-import static frc.robot.Constants.Flywheel.MOTOR_CAN_BUS;
+import static frc.robot.Constants.Flywheel.*;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,20 +41,22 @@ public class Flywheel extends SubsystemBase
     private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Flywheel Lead Motor");
     private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Flywheel Follow Motor");
 
+    private final TalonFX motor = new TalonFX(1, MOTOR_CAN_BUS);
+
+    final MotionMagicExpoVoltage m_request = new MotionMagicExpoVoltage(0);
+    
     // PID constants
-   
     private final double kP = 0.3;
     private final double kI = 0.0;
     private final double kD = 0.0;
     private final double kS = 0.19;
-    private final double kV = 0.1;
-    private final double kA = 0.0;
+    private final double kV = 0.13;
+    private final double kA = 0.01;
     private final double kG = 0.0;
 
 
     private final double velocityConversionFactor = 1.0; // figure out units (currently default rev/sec)
 
-    // SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(kS, kV);
 
     InterpolatingDoubleTreeMap scoreMap = new InterpolatingDoubleTreeMap();
     // InterpolatingDoubleTreeMap passLeftMap = new InterpolatingDoubleTreeMap();
@@ -95,18 +99,38 @@ public class Flywheel extends SubsystemBase
         leadMotor.setSafetyEnabled(true);
         followMotor.setSafetyEnabled(true);
 
-        leadMotor.setupBrakeMode();
-        followMotor.setupBrakeMode();
+        leadMotor.setupCoastMode();
+        followMotor.setupCoastMode();
 
         leadMotor.setupPIDController(0, kP, kI, kD, kS, kV, kA, kG);
         
         leadMotor.setupVelocityConversionFactor(velocityConversionFactor);
+
+        // var talonFXConfigs = new TalonFXConfiguration();
+
+        // var slot0configs = talonFXConfigs.Slot0;
+        // slot0configs.kP = kP;
+        // slot0configs.kI = kI;
+        // slot0configs.kD = kD;
+        // slot0configs.kS = kS;
+        // slot0configs.kV = kV;
+        // slot0configs.kA = kA;
+
+        // var motionMagicConfigs = talonFXConfigs.MotionMagic;
+        // motionMagicConfigs.MotionMagicCruiseVelocity = 0.0;
+        // motionMagicConfigs.MotionMagicExpo_kV = kV;
+        // motionMagicConfigs.MotionMagicExpo_kA = 0.1;
+
+        // leadMotor.getConfigurator().apply(talonFXConfigs);
+
+        // motor.getConfigurator().apply(talonFXConfigs);
     }
 
     private void configScoreMap()
     {
-        // first value is distance (ft) from the hub (in alliance zone), second is motor power
-        // not tested values
+        // first value is distance (ft) from the hub (in alliance zone), second is flywheel velo
+        
+        // calculated distances using phsyics model
         scoreMap.put(0.0, 4237.0);
         scoreMap.put(1.0, 4237.0);
         scoreMap.put(2.0, 4237.0);
@@ -122,6 +146,12 @@ public class Flywheel extends SubsystemBase
         scoreMap.put(12.0, 4237.0);
         scoreMap.put(13.0, 4237.0);
         scoreMap.put(14.0, 4237.0);
+        scoreMap.put(15.0, 4237.0);
+        scoreMap.put(16.0, 4237.0);
+        scoreMap.put(17.0, 4237.0);
+        scoreMap.put(18.0, 4237.0);
+        scoreMap.put(19.0, 4237.0);
+        scoreMap.put(20.0, 4237.0);
     }
 
     // idk if we need these maps or not
@@ -166,11 +196,11 @@ public class Flywheel extends SubsystemBase
     {
         leadMotor.setVoltage(voltage);
     }
-    
-    // private void runMotorUsingFF(double speed)
-    // {
-    //     setVoltage(feedForward.calculateWithVelocities(getVelocity(), speed));
-    // }
+
+    public void motionMagic(double position)
+    {
+        motor.setControl(m_request.withPosition(position));
+    }
 
     public double getVelocity()
     {
@@ -225,6 +255,11 @@ public class Flywheel extends SubsystemBase
     public Command runMotorUsingVoltageCommand(double voltage)
     {
         return run( () -> setVoltage(voltage));
+    }
+
+    public Command useMotionMagicCommand(double position)
+    {
+        return run( () -> motionMagic(position));
     }
 
     // public Command runMotorUsingFFCommand(double speed)

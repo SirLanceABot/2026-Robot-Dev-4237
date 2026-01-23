@@ -30,8 +30,8 @@ public class RobbieFTest implements Test
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
     private final CommandXboxController controller = new CommandXboxController(0);
-    // private final Flywheel flywheel;
-    private final Accelerator accelerator;
+    private final Flywheel flywheel;
+    // private final Accelerator accelerator;
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -48,8 +48,8 @@ public class RobbieFTest implements Test
 
         this.robotContainer = robotContainer;
 
-        // flywheel = new Flywheel();
-        accelerator = robotContainer.getAccelerator();
+        flywheel = robotContainer.getFlywheel();
+        // accelerator = robotContainer.getAccelerator();
 
 
         System.out.println("  Constructor Finished: " + fullClassName);
@@ -91,14 +91,23 @@ public class RobbieFTest implements Test
         //     flywheel.stopCommand()
         // );
 
+        // controller.x().onTrue(
+        //     accelerator.onCommand()
+        // );
+        // controller.y().onTrue(
+        //     accelerator.reverseCommand(() -> -0.25)
+        // );
+        // controller.b().onTrue(
+        //     accelerator.stopCommand()
+        // );
+
+
+
         controller.x().onTrue(
-            accelerator.onCommand()
-        );
-        controller.y().onTrue(
-            accelerator.reverseCommand(() -> -0.25)
+            flywheel.useMotionMagicCommand(500.0)
         );
         controller.b().onTrue(
-            accelerator.stopCommand()
+            flywheel.stopCommand()
         );
 
 
