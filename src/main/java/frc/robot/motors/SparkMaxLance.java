@@ -421,9 +421,8 @@ public class SparkMaxLance extends MotorControllerLance
      * @param kS Static feedforward gain
      * @param kV Velocity feedforward gain
      * @param kA Acceleration feedforward gain
-     * @param kG Gravity feedforward/feedback gain
      */
-    public void setupPIDController(int slotId, double kP, double kI, double kD, double kS, double kV, double kA, double kG)
+    public void setupPIDController(int slotId, double kP, double kI, double kD, double kS, double kV, double kA)
     {
         if(isValidSlotId(slotId))
         {
@@ -440,7 +439,7 @@ public class SparkMaxLance extends MotorControllerLance
                 closedLoopSlot = ClosedLoopSlot.kSlot3;
 
             motorConfig.closedLoop.pid(kP, kI, kD, closedLoopSlot)
-                .feedForward.svag(kS, kV, kA, kG, closedLoopSlot);    
+                .feedForward.sva(kS, kV, kA, closedLoopSlot);    
             setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
         }
     }

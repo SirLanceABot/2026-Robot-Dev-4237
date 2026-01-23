@@ -52,7 +52,6 @@ public class Flywheel extends SubsystemBase
     private final double kS = 0.19;
     private final double kV = 0.13;
     private final double kA = 0.01;
-    private final double kG = 0.0;
 
 
     private final double velocityConversionFactor = 1.0; // figure out units (currently default rev/sec)
@@ -102,7 +101,7 @@ public class Flywheel extends SubsystemBase
         leadMotor.setupCoastMode();
         followMotor.setupCoastMode();
 
-        leadMotor.setupPIDController(0, kP, kI, kD, kS, kV, kA, kG);
+        leadMotor.setupPIDController(0, kP, kI, kD, kS, kV, kA);
         
         leadMotor.setupVelocityConversionFactor(velocityConversionFactor);
 
