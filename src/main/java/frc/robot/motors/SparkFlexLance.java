@@ -19,7 +19,6 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -42,12 +41,15 @@ public class SparkFlexLance extends MotorControllerLance
     }
 
     private final SparkFlex motor;
+    private final String motorControllerName;
+
     private final RelativeEncoder encoder;
     private SparkAbsoluteEncoder sparkAbsoluteEncoder = null;
     private SparkLimitSwitch forwardLimitSwitch = null;
     private SparkLimitSwitch reverseLimitSwitch = null;
     private SparkClosedLoopController sparkPIDController = null;
-    private final String motorControllerName;
+    private boolean useMaxMotion = false;
+    
     private final ResetMode resetMode = ResetMode.kNoResetSafeParameters;
     private final PersistMode persistMode = PersistMode.kNoPersistParameters;
 
@@ -376,11 +378,12 @@ public class SparkFlexLance extends MotorControllerLance
      * @param kD The Derivative gain constant
      * @param kF The Velocity feedforward value
      */
+    @SuppressWarnings("removal")
     public void setupPIDController(int slotId, double kP, double kI, double kD, double kF)
     {
         if(isValidSlotId(slotId))
         {
-            SparkMaxConfig motorConfig = new SparkMaxConfig();
+            SparkFlexConfig motorConfig = new SparkFlexConfig();
             ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
             if(slotId == 0)
                 closedLoopSlot = ClosedLoopSlot.kSlot0;
@@ -425,6 +428,40 @@ public class SparkFlexLance extends MotorControllerLance
             motorConfig.closedLoop.pid(kP, kI, kD, closedLoopSlot)
                 .feedForward.sva(kS, kV, kA, closedLoopSlot);
             setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
+        }
+    }
+
+    /**
+     * Set the Motion Magic controls for the motor.
+     * @param slotId The PID slot (0-3)
+     * @param velocity The target cruise velocity (rpm)
+     * @param acceleration The target acceleration (rpm / sec)
+     * @param error The allowable error (rotations)
+     */
+    public void setupMaxMotion(int slotId, double velocity, double acceleration, double error)
+    {
+        if(isValidSlotId(slotId))
+        {
+            SparkFlexConfig motorConfig = new SparkFlexConfig();
+            ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
+
+            if(slotId == 0)
+                closedLoopSlot = ClosedLoopSlot.kSlot0;
+            else if(slotId == 1)
+                closedLoopSlot = ClosedLoopSlot.kSlot1;
+            else if(slotId == 2)
+                closedLoopSlot = ClosedLoopSlot.kSlot2;
+            else if(slotId == 3)
+                closedLoopSlot = ClosedLoopSlot.kSlot3;
+
+            motorConfig.closedLoop.maxMotion
+                .cruiseVelocity(velocity)
+                .maxAcceleration(acceleration)
+                .allowedProfileError(error, closedLoopSlot);
+
+            useMaxMotion = true;
+
+            setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Max Motion");
         }
     }
 
@@ -578,7 +615,10 @@ public class SparkFlexLance extends MotorControllerLance
             else if(slotId == 3)
                 closedLoopSlot = ClosedLoopSlot.kSlot3;
 
-            sparkPIDController.setSetpoint(position, ControlType.kPosition, closedLoopSlot);
+            if(!useMaxMotion)
+                sparkPIDController.setSetpoint(position, ControlType.kPosition, closedLoopSlot);
+            else
+                sparkPIDController.setSetpoint(position, ControlType.kMAXMotionPositionControl, closedLoopSlot);
         }
     }
 
@@ -614,7 +654,10 @@ public class SparkFlexLance extends MotorControllerLance
             else if(slotId == 3)
                 closedLoopSlot = ClosedLoopSlot.kSlot3;
 
-            sparkPIDController.setSetpoint(velocity, ControlType.kVelocity, closedLoopSlot);
+            if(!useMaxMotion)
+                sparkPIDController.setSetpoint(velocity, ControlType.kVelocity, closedLoopSlot);
+            else
+                sparkPIDController.setSetpoint(velocity, ControlType.kMAXMotionVelocityControl, closedLoopSlot);
         }
     }
 
