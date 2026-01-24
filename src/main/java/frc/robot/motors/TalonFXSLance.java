@@ -10,11 +10,13 @@ import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.Slot2Configs;
 import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.ExternalFeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
@@ -60,6 +62,8 @@ public class TalonFXSLance extends MotorControllerLance
     private final VelocityVoltage velocityVoltage;
     private final MotionMagicVoltage motionMagicVoltage;
     private final MotionMagicVelocityVoltage motionMagicVelocityVoltage;
+    private final DutyCycleOut dutyCycleOut;
+    private final VoltageOut voltageOut;
     private boolean useMotionMagic = false;
     private double kF = 0.0;
 
@@ -88,6 +92,8 @@ public class TalonFXSLance extends MotorControllerLance
         velocityVoltage = new VelocityVoltage(0.0);
         motionMagicVoltage = new MotionMagicVoltage(0.0);
         motionMagicVelocityVoltage = new MotionMagicVelocityVoltage(0.0);
+        dutyCycleOut = new DutyCycleOut(0.0);
+        voltageOut = new VoltageOut(0.0);
 
         clearStickyFaults();
         setupFactoryDefaults();
@@ -888,14 +894,22 @@ public class TalonFXSLance extends MotorControllerLance
     @Override
     public void set(double speed)
     {
-        motor.set(speed);
+        // motor.set(speed);
+        // feed();
+
+        dutyCycleOut.Output = speed;
+        motor.setControl(dutyCycleOut);
         feed();
     }
 
     @Override
     public void setVoltage(double outputVolts) 
     {
-        motor.setVoltage(outputVolts);
+        // motor.setVoltage(outputVolts);
+        // feed();
+
+        voltageOut.Output = outputVolts;
+        motor.setControl(voltageOut);
         feed();
     }
 
