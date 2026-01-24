@@ -537,7 +537,7 @@ public class TalonFXLance extends MotorControllerLance
      * @param acceleration The target acceleration (rotations per second^2)
      * @param jerk The target jerk (rotations per second^3)
      */
-    public void setupMotionMagicConfigs(double velocity, double acceleration, double jerk)
+    public void setupMotionMagic(double velocity, double acceleration, double jerk)
     {
         MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
         setup(() -> motor.getConfigurator().refresh(motionMagicConfigs), "");

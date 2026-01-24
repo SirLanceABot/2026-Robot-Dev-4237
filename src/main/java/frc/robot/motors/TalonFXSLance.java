@@ -474,7 +474,7 @@ public class TalonFXSLance extends MotorControllerLance
      * @param acceleration The target acceleration (rotations per second^2)
      * @param jerk The target jerk (rotations per second^3)
      */
-    public void setupMotionMagicConfigs(double velocity, double acceleration, double jerk)
+    public void setupMotionMagic(double velocity, double acceleration, double jerk)
     {
         motorConfigs.MotionMagic.MotionMagicCruiseVelocity = velocity;
         motorConfigs.MotionMagic.MotionMagicAcceleration = acceleration;
