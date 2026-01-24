@@ -56,6 +56,7 @@ public class SparkMaxLance extends MotorControllerLance
 
     private final int SETUP_ATTEMPT_LIMIT = 5;
     private int setupErrorCount = 0;
+    private int stickyFaultCount = 0;
 
     /**
      * Creates a CANSparkMax on the CANbus with a brushless motor (Neo550 or Neo1650).
@@ -134,6 +135,7 @@ public class SparkMaxLance extends MotorControllerLance
     public void clearStickyFaults()
     {
         setup(() -> motor.clearFaults(), "Clear Sticky Faults");
+        stickyFaultCount = 0;
     }
 
     /**
@@ -539,12 +541,20 @@ public class SparkMaxLance extends MotorControllerLance
         return reverseLimitSwitch.isPressed();
     }
 
+    private void checkFault(boolean check, String msg)
+    {
+        if(check)
+        {
+            motorSetupPublisher.set(motorControllerName + " : " + msg);
+            stickyFaultCount++;
+        }
+    }
+
     /**
      * Logs and then clears the sticky faults
      */
     public void logStickyFaults()
     {
-        int faultsCount = 0;
         Faults faults = motor.getStickyFaults();
         Warnings warnings = motor.getStickyWarnings();
 
@@ -553,44 +563,61 @@ public class SparkMaxLance extends MotorControllerLance
             motorSetupPublisher.set(motorControllerName + " : " + setupErrorCount + " setup errors");
         }
 
-        if(faults.can)
-        {
-            motorFaultsPublisher.set(motorControllerName + " : Fault - CAN");
-            faultsCount++;
-        }
-        if(faults.sensor)
-        {
-            motorFaultsPublisher.set(motorControllerName + " : Fault - Sensor");
-            faultsCount++;
-        }
-        if(faults.temperature)
-        {
-            motorFaultsPublisher.set(motorControllerName + " : Fault - Temperature");
-            faultsCount++;
-        }
+        checkFault(faults.can, "Fault - CAN");
+        checkFault(faults.escEeprom, "Fault - Esc Eeprom");
+        checkFault(faults.firmware, "Fault - Firmware");
+        checkFault(faults.gateDriver, "Fault - Gate Driver");
+        checkFault(faults.motorType, "Fault - Motor Type");
+        checkFault(faults.other, "Fault - Other");
+        checkFault(faults.sensor, "Fault - Sensor");
+        checkFault(faults.temperature, "Fault - Temperature");
+        checkFault(warnings.brownout, "Warning - Brownout");
+        checkFault(warnings.escEeprom, "Warning - Esc Eeprom");
+        checkFault(warnings.extEeprom, "Warning - Ext Eeprom");
+        checkFault(warnings.hasReset, "Warning - Has Reset");
+        checkFault(warnings.other, "Warning - Other");
+        checkFault(warnings.overcurrent, "Warning - Overcurrent");
+        checkFault(warnings.sensor, "Warning - Sensor");
+        checkFault(warnings.stall, "Warning - Stall");
 
-        if(warnings.brownout)
-        {
-            motorFaultsPublisher.set(motorControllerName + " : Warning - Brownout");
-            faultsCount++;
-        }
-        if(warnings.hasReset)
-        {
-            motorFaultsPublisher.set(motorControllerName + " : Warning - Has Reset");
-            faultsCount++;
-        }
-        if(warnings.overcurrent)
-        {
-            motorFaultsPublisher.set(motorControllerName + " : Warning - Overcurrent");
-            faultsCount++;
-        }
-        if(warnings.stall)
-        {
-            motorFaultsPublisher.set(motorControllerName + " : Warning - Stall");
-            faultsCount++;
-        }
+        // if(faults.can)
+        // {
+        //     motorFaultsPublisher.set(motorControllerName + " : Fault - CAN");
+        //     faultsCount++;
+        // }
+        // if(faults.sensor)
+        // {
+        //     motorFaultsPublisher.set(motorControllerName + " : Fault - Sensor");
+        //     faultsCount++;
+        // }
+        // if(faults.temperature)
+        // {
+        //     motorFaultsPublisher.set(motorControllerName + " : Fault - Temperature");
+        //     faultsCount++;
+        // }
 
-        if(faultsCount == 0)
+        // if(warnings.brownout)
+        // {
+        //     motorFaultsPublisher.set(motorControllerName + " : Warning - Brownout");
+        //     faultsCount++;
+        // }
+        // if(warnings.hasReset)
+        // {
+        //     motorFaultsPublisher.set(motorControllerName + " : Warning - Has Reset");
+        //     faultsCount++;
+        // }
+        // if(warnings.overcurrent)
+        // {
+        //     motorFaultsPublisher.set(motorControllerName + " : Warning - Overcurrent");
+        //     faultsCount++;
+        // }
+        // if(warnings.stall)
+        // {
+        //     motorFaultsPublisher.set(motorControllerName + " : Warning - Stall");
+        //     faultsCount++;
+        // }
+
+        if(stickyFaultCount == 0)
         {
             motorFaultsPublisher.set(motorControllerName + " : No Sticky Faults");
         }
