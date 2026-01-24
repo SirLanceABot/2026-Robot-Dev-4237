@@ -5,10 +5,8 @@ import static frc.robot.Constants.Intake.*;
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
 
 /**
@@ -38,7 +36,6 @@ public class Intake extends SubsystemBase
     private final TalonFXLance intakePivotMotor = new TalonFXLance(INTAKEPIVOTMOTOR, MOTOR_CAN_BUS, "Pivot Motor");
     private final TalonFXLance intakeRollersMotor = new TalonFXLance(INTAKEROLLERLEADER, MOTOR_CAN_BUS, "Lead Roller Motor");
     private final TalonFXLance intakeRollersFollower = new TalonFXLance(INTAKEROLLERFOLLOWER, MOTOR_CAN_BUS, "Follow Roller Motor");
-    private double rollerPosition = 0.0;
 
     // private final double kP = 0.04;
     // private final double kI = 0.0;
@@ -71,65 +68,77 @@ public class Intake extends SubsystemBase
         intakeRollersMotor.setupFactoryDefaults();
         intakeRollersFollower.setupFactoryDefaults();
 
-        // Sets up motors to be inverted or not (handle inversion on leaders)
+        // Sets up motors to be inverted or not
         intakePivotMotor.setupInverted(true);
         intakeRollersMotor.setupInverted(true);
 
-        // Sets up Brake Mode / Neutral Mode for leader + follower
-        intakePivotMotor.setupBrakeMode();
-        intakeRollersMotor.setupBrakeMode();
-        intakeRollersFollower.setupBrakeMode();
+        // Sets up Coast Mode
+        intakePivotMotor.setupCoastMode();
+        intakeRollersMotor.setupCoastMode();
+        intakeRollersFollower.setupCoastMode();
 
-        // Sets up position (encoder) for leader + follower
+        // Sets up position
         intakePivotMotor.setPosition(0.0);
         intakeRollersMotor.setPosition(0.0);
         intakeRollersFollower.setPosition(0.0);
 
-        // Set up Safety for leader + follower
+        // Set up Safety
         intakePivotMotor.setSafetyEnabled(false);
         intakeRollersMotor.setSafetyEnabled(false);
         intakeRollersFollower.setSafetyEnabled(false);
 
         // Configure the follower last so configurables above are not overwritten
-        // Make device 3 follow device 2 with inverted alignment (opposed sides)
-        intakeRollersFollower.setupFollower(INTAKEROLLERLEADER, true);
+        intakeRollersFollower.setupFollower(2, true);
     }
 
     /**
-     * This sets the speed of the motors.
-     * @param speed The motor speed (-1.0 to 1.0)
+     * This sets the voltage of the motors.
+     * @param voltage
      */
-    public void set(double speed)
-    {
-        intakePivotMotor.set(speed);
-        intakeRollersMotor.set(speed);
-    }
-
     public void setVoltage(double voltage)
     {
         intakePivotMotor.setVoltage(voltage);
         intakeRollersMotor.setVoltage(voltage);
     }
 
-    public void pickUpFuel()
+    /**
+     * This sets the velocity of the motors.
+     * @param velocity 
+     */
+    public void setVelocity(double velocity)
     {
-        intakePivotMotor.setupCoastMode();
-        intakeRollersMotor.setupCoastMode();
-        intakeRollersFollower.setupCoastMode();
-        set(-0.2);
+        intakePivotMotor.setControlVelocity(velocity);
+        intakeRollersMotor.setControlVelocity(velocity);
     }
 
+    /** 
+     * This method makes the intake pick up fuel
+     */
+    public void pickUpFuel()
+    {
+        setVelocity(-0.2);
+    }
+
+    /** 
+     * This method makes the intake eject fuel
+     */
     public void ejectFuel()
     {
-       intakePivotMotor.setupCoastMode();
-       intakeRollersMotor.setupCoastMode();
-       intakeRollersFollower.setupCoastMode();
-       set(0.2);
+        setVelocity(0.2);
     }
+
+    /**
+     * This method stops the intake motors
+     */
     public void stop()
     {
         intakePivotMotor.set(0.0);
         intakeRollersMotor.set(0.0);
+    }
+
+    public Command setVelocityCommand(DoubleSupplier speed)
+    {
+        return run( () -> setVelocity(speed.getAsDouble()));
     }
 
     public Command pickupFuelCommand()
@@ -144,12 +153,7 @@ public class Intake extends SubsystemBase
 
     public Command onCommand()
     {
-        return run( () -> set(0.25) );
-    }
-
-    public Command setCommand(DoubleSupplier speed)
-    {
-        return run( () -> set(MathUtil.clamp(speed.getAsDouble(), 0.0, 0.5)) );
+        return run( () -> setVelocity(0.25) );
     }
 
     // Use a method reference instead of this method
@@ -173,6 +177,7 @@ public class Intake extends SubsystemBase
     @Override
     public String toString()
     {
-        return "Current Intake Position: " + rollerPosition;
+        // No idea how to get that
+        return "Current Intake Velocity: " + intakePivotMotor.getVelocity();
     }
 }
