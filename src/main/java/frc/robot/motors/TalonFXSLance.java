@@ -21,12 +21,14 @@ import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.ExternalFeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
+import com.ctre.phoenix6.signals.ForwardLimitValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.ReverseLimitSourceValue;
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
+import com.ctre.phoenix6.signals.ReverseLimitValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -839,6 +841,24 @@ public class TalonFXSLance extends MotorControllerLance
     public void setPosition(double position)
     {
         motor.setPosition(position);
+    }
+
+    /**
+     * Returns the value of the forward hard limit
+     * @return The status of the limit switch
+     */
+    public boolean getForwardHardLimit()
+    {
+        return motor.getForwardLimit().getValue() == ForwardLimitValue.ClosedToGround;
+    }
+
+    /**
+     * Returns the value of the reverse hard limit
+     * @return The status of the limit switch
+     */    
+    public boolean getReverseHardLimit()
+    {
+        return motor.getReverseLimit().getValue() == ReverseLimitValue.ClosedToGround;
     }
 
     /**

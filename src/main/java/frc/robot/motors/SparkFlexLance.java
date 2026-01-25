@@ -510,21 +510,21 @@ public class SparkFlexLance extends MotorControllerLance
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Follower");
     }
 
-    /**
-     * @return true if limit switch is pressed
-     */
-    public boolean isForwardLimitSwitchPressed()
-    {
-        return forwardLimitSwitch.isPressed();
-    }
+    // /**
+    //  * @return true if limit switch is pressed
+    //  */
+    // public boolean isForwardLimitSwitchPressed()
+    // {
+    //     return forwardLimitSwitch.isPressed();
+    // }
 
-    /**
-     * @return true if limit switch is pressed
-     */
-    public boolean isReverseLimitSwitchPressed()
-    {
-        return reverseLimitSwitch.isPressed();
-    }
+    // /**
+    //  * @return true if limit switch is pressed
+    //  */
+    // public boolean isReverseLimitSwitchPressed()
+    // {
+    //     return reverseLimitSwitch.isPressed();
+    // }
 
     private void checkFault(boolean check, String msg)
     {
@@ -696,6 +696,24 @@ public class SparkFlexLance extends MotorControllerLance
     public void setPosition(double position)
     {
         encoder.setPosition(position);
+    }
+    
+    /**
+     * Returns the value of the forward hard limit
+     * @return The status of the limit switch
+     */
+    public boolean getForwardHardLimit()
+    {
+        return forwardLimitSwitch.isPressed();
+    }
+
+    /**
+     * Returns the value of the reverse hard limit
+     * @return The status of the limit switch
+     */    
+    public boolean getReverseHardLimit()
+    {
+        return reverseLimitSwitch.isPressed();
     }
 
     /**

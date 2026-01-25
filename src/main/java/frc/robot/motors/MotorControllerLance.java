@@ -109,6 +109,9 @@ public abstract class MotorControllerLance extends MotorSafety implements MotorC
     public abstract void setControlPosition(double position);
     public abstract void setControlVelocity(double velocity);
     public abstract void setPosition(double position);
+
+    public abstract boolean getForwardHardLimit();
+    public abstract boolean getReverseHardLimit();
     public abstract double getPosition();
     public abstract double getVelocity();
     public abstract double getMotorVoltage();
