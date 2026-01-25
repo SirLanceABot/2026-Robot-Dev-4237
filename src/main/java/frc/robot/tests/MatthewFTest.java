@@ -38,8 +38,8 @@ public class MatthewFTest implements Test
     private final RobotContainer robotContainer;
     private final Drivetrain drivetrain;
     private final Joystick joystick = new Joystick(0);
-    private Rotation2d start = new Rotation2d(0.0);
-    private Rotation2d end = new Rotation2d(Math.PI / 4.0);
+    private DoubleSupplier start = () -> 0.0;
+    private DoubleSupplier end = () -> Math.PI / 4.0;
 
 
     // *** CLASS CONSTRUCTORS ***

@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.generated.TunerConstants;
@@ -239,6 +240,16 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
         resetPose(pose);
     }
 
+    //TODO order matters
+    public void driveFieldCentric()
+    {
+        getPigeon2().reset();
+        seedFieldCentric();
+
+        // seedFieldCentric();
+        // getPigeon2().reset();
+    }
+
     /**
      * Returns a command that applies the specified control request to this swerve drivetrain.
      *
@@ -296,16 +307,16 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
      * @param leftYAxis the left Y axis of the controller
      * @param leftXAxis left X axis of the controller
      * @param setScaleFactor decimal number that reduces drive speed
-     * @param lockAngle angle to lock the robot's rotation at
+     * @param lockAngle angle to lock the robot's rotation at in radians
      * @author Matthew Fontecchio
      */
-    public Command angleLockDriveCommand(DoubleSupplier leftYAxis, DoubleSupplier leftXAxis, DoubleSupplier setScaleFactor, Rotation2d lockAngle)
+    public Command angleLockDriveCommand(DoubleSupplier leftYAxis, DoubleSupplier leftXAxis, DoubleSupplier setScaleFactor, DoubleSupplier lockAngleRadians)
     {
         return applyRequest(
             () -> angleLockDrive
                 .withVelocityX(leftYAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
                 .withVelocityY(leftXAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
-                .withTargetDirection(lockAngle)
+                .withTargetDirection(new Rotation2d(lockAngleRadians.getAsDouble()))
                 .withTargetRateFeedforward(0)
         );   
     }

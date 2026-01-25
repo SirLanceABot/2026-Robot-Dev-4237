@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.sensors.Camera;
 import frc.robot.subsystems.Accelerator;
@@ -38,19 +39,23 @@ public class RobotContainer
     }
 
     // Select the robot components to use
-    private boolean useFullRobot = false;
-    private boolean useExampleSubsystem = false;
-    private boolean useAgitator = false;
-    private boolean useIndexer = false;
-    private boolean useFlywheel = false;
-    private boolean useIntake = false;
-    private boolean useAccelerator = false;
-    private boolean useClimb = false;
-    private boolean usePoseEstimator = false;
-    private boolean useDrivetrain = false;
+    private boolean useFullRobot                = false;
 
-    private boolean useShooterCamera = false;
-    private boolean useIntakeCamera = false;
+    private boolean useExampleSubsystem         = false;
+    private boolean useAgitator                 = false;
+    private boolean useIndexer                  = false;
+    private boolean useFlywheel                 = false;
+    private boolean useIntake                   = false;
+    private boolean useAccelerator              = false;
+    private boolean useClimb                    = false;
+    private boolean usePoseEstimator            = false;
+    private boolean useDrivetrain               = false;
+
+    private boolean useDriverController         = false;
+    private boolean useOperatorController       = false;
+
+    private boolean useShooterCamera            = false;
+    private boolean useIntakeCamera             = false;
 
     // Robot components
     private ExampleSubsystem exampleSubsystem = null;
@@ -62,6 +67,9 @@ public class RobotContainer
     private Climb climb = null;
     private PoseEstimator poseEstimator = null;
     private Drivetrain drivetrain = null;
+
+    private CommandXboxController driverController = null;
+    private CommandXboxController operatorController = null;
 
     private final Camera[] cameraArray = new Camera[2];
     private final LEDs leds;
@@ -107,6 +115,12 @@ public class RobotContainer
 
         if(useFullRobot || useDrivetrain)
             drivetrain = TunerConstants.createDrivetrain();
+
+        if(useFullRobot || useDriverController)
+            driverController = new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT);
+
+        if(useFullRobot || useOperatorController)
+            operatorController = new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT);
             
 
         leds = new LEDs();
@@ -170,5 +184,15 @@ public class RobotContainer
     public Drivetrain getDrivetrain()
     {
         return drivetrain;
+    }
+
+    public CommandXboxController getDriverController()
+    {
+        return driverController;
+    }
+
+    public CommandXboxController getOperatorController()
+    {
+        return operatorController;
     }
 }
