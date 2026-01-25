@@ -81,11 +81,11 @@ public class Climb extends SubsystemBase
         leadMotor.setPosition(0.0);
         followMotor.setPosition(0.0);
 
-        leadMotor.setupForwardSoftLimit(16, true);
-        followMotor.setupForwardSoftLimit(0, false);
+        // leadMotor.setupForwardSoftLimit(16, true);
+        // followMotor.setupForwardSoftLimit(0, false);
 
-        leadMotor.setupReverseSoftLimit(0.0, true);
-        followMotor.setupReverseSoftLimit(0, false);
+        // leadMotor.setupReverseSoftLimit(0.0, true);
+        // followMotor.setupReverseSoftLimit(0, false);
 
         leadMotor.setupForwardHardLimitSwitch(true, true, 0);
         leadMotor.setupReverseHardLimitSwitch(true, true, 1);
@@ -95,6 +95,11 @@ public class Climb extends SubsystemBase
         leadMotor.setupPIDController(0, kPUP, kI, kD); 
         leadMotor.setupPIDController(1, kPDOWN, kI, kD); 
 
+    }
+
+    public boolean getForwardHardLimit()
+    {
+        return leadMotor.getForwardHardLimit();
     }
 
     public double getPosition()
@@ -139,13 +144,13 @@ public class Climb extends SubsystemBase
     public Command ascendL1Command()
     {
         // Add limit switch to until statement
-        return run( () -> moveToPosition(climbPosition.kL1)).until(isAtPosition(climbPosition.kL1))
+        return run( () -> moveToPosition(climbPosition.kL1)).until(() -> (isAtPosition(climbPosition.kL1).getAsBoolean() || (leadMotor.getForwardHardLimit())))
                 .andThen(stopCommand());
     }
     
     public Command descendL1Command()
     {
-        return run( () -> moveToPosition(climbPosition.kSTART)).until(isAtPosition(climbPosition.kL1))
+        return run( () -> moveToPosition(climbPosition.kSTART)).until(() -> (isAtPosition(climbPosition.kSTART).getAsBoolean() || (leadMotor.getReverseHardLimit())))
         .andThen(stopCommand());
     }
 

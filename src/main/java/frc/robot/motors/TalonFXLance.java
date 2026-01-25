@@ -1123,7 +1123,7 @@ public class TalonFXLance extends MotorControllerLance
     public boolean getForwardHardLimit()
     {
         if(forwardHardLimit != null)
-            return forwardHardLimit.get();
+            return !(forwardHardLimit.get());
         else
             return motor.getForwardLimit().getValue() == ForwardLimitValue.ClosedToGround;
     }
@@ -1135,7 +1135,7 @@ public class TalonFXLance extends MotorControllerLance
     public boolean getReverseHardLimit()
     {
         if(reverseHardLimit != null)
-            return reverseHardLimit.get();
+            return !(reverseHardLimit.get());
         else
             return motor.getReverseLimit().getValue() == ReverseLimitValue.ClosedToGround;
     }

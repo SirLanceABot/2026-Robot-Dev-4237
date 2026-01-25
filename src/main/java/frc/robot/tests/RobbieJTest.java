@@ -99,7 +99,7 @@ public class RobbieJTest implements Test
      */
     public void periodic()
     {
-        // System.out.println(climb.getPosition());
+        System.out.println(climb.getForwardHardLimit());
     }
     
     /**
