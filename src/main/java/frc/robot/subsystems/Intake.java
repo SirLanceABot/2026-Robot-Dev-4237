@@ -37,9 +37,11 @@ public class Intake extends SubsystemBase
     private final TalonFXLance intakeRollersMotor = new TalonFXLance(INTAKEROLLERLEADER, MOTOR_CAN_BUS, "Lead Roller Motor");
     private final TalonFXLance intakeRollersFollower = new TalonFXLance(INTAKEROLLERFOLLOWER, MOTOR_CAN_BUS, "Follow Roller Motor");
 
-    // private final double kP = 0.04;
-    // private final double kI = 0.0;
-    // private final double kD = 0.0;
+    private final double kP = 0.7;
+    private final double kI = 0.0;
+    private final double kD = 0.0;
+    private final double kS = 0.01;
+    private final double kV = 0.15;
     // private final double theshold = 4.0;
 
     // *** CLASS CONSTRUCTORS ***
@@ -87,9 +89,20 @@ public class Intake extends SubsystemBase
         intakeRollersMotor.setSafetyEnabled(false);
         intakeRollersFollower.setSafetyEnabled(false);
 
+        // Set up PID Controllers
+        intakePivotMotor.setupPIDController(0, kP, kI, kD, kS, kV, 0);
+        intakeRollersMotor.setupPIDController(0, kP, kI, kD, kS, kV, 0);
+        intakeRollersFollower.setupPIDController(0, kP, kI, kD, kS, kV, 0);
+
         // Configure the follower last so configurables above are not overwritten
-        intakeRollersFollower.setupFollower(2, true);
+        intakeRollersFollower.setupFollower(INTAKEROLLERLEADER, true);
     }
+
+    // private void set()
+    // {
+    //     intakePivotMotor.set(0.2);
+    //     intakeRollersMotor.set(0.2);
+    // }
 
     /**
      * This sets the voltage of the motors.
@@ -116,7 +129,7 @@ public class Intake extends SubsystemBase
      */
     public void pickUpFuel()
     {
-        setVelocity(-0.2);
+        setVelocity(0.2);
     }
 
     /** 
@@ -124,7 +137,7 @@ public class Intake extends SubsystemBase
      */
     public void ejectFuel()
     {
-        setVelocity(0.2);
+        setVelocity(-0.2);
     }
 
     /**
@@ -132,8 +145,9 @@ public class Intake extends SubsystemBase
      */
     public void stop()
     {
-        intakePivotMotor.set(0.0);
-        intakeRollersMotor.set(0.0);
+        // intakePivotMotor.set(0.0);
+        // intakeRollersMotor.set(0.0);
+        setVelocity(0.0);
     }
 
     public Command setVelocityCommand(DoubleSupplier speed)
@@ -146,7 +160,7 @@ public class Intake extends SubsystemBase
         return run(() -> pickUpFuel()).withName("Pickup Fuel");
     }
 
-    public Command ejectCoralCommand() 
+    public Command ejectFuelCommand() 
     {
         return run(() -> ejectFuel()).withName("Eject Fuel");
     }

@@ -46,16 +46,16 @@ public class NiyatiPTest implements Test
 
         this.robotContainer = robotContainer;
         // Prefer the Intake from RobotContainer if available
-        if (robotContainer != null && robotContainer.getIntake() != null)
-        {
+        // if (robotContainer != null && robotContainer.getIntake() != null)
+        // {
             intake = robotContainer.getIntake();
-            System.out.println("good intake :)");
-        }
-        else
-        {
-            System.out.println("no intake :(");
-            intake = new Intake();
-        }
+        //     System.out.println("good intake :)");
+        // }
+        // else
+        // {
+        //     System.out.println("no intake :(");
+        //     intake = new Intake();
+        // }
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -75,13 +75,13 @@ public class NiyatiPTest implements Test
     public void init()
     {
         // X to pickup
-        controller.x().onTrue(intake.pickupFuelCommand());
+        controller.x().onTrue(intake.pickupFuelCommand()).debounce(0.1);
 
         // A to eject
-        controller.a().onTrue(intake.ejectCoralCommand());
+        controller.a().onTrue(intake.ejectFuelCommand()).debounce(0.1);
 
         // B to stop
-        controller.b().onTrue(intake.stopCommand());
+        controller.b().onTrue(intake.stopCommand()).debounce(0.1);
     }
 
     /**
