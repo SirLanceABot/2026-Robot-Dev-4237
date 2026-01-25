@@ -35,7 +35,7 @@ public class RobbieJTest implements Test
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
     private Agitator agitator;
-    // private Climb climb;
+    private Climb climb;
     private Intake intake;
     private Indexer indexer;
     private Accelerator accelerator;
@@ -64,7 +64,7 @@ public class RobbieJTest implements Test
         accelerator = robotContainer.getAccelerator();
         flywheel = robotContainer.getFlywheel();
 
-        // climb = robotContainer.getClimb();
+        climb = robotContainer.getClimb();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -86,12 +86,12 @@ public class RobbieJTest implements Test
         // controller.x().onTrue(ScoringCommands.IntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
         // controller.a().onTrue(ScoringCommands.StopIntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
         // controller.b().onTrue(ScoringCommands.IntakeAndScoreCommandTheSequal(intake, agitator, indexer, accelerator, flywheel));
-        controller.x().onTrue(agitator.forwardCommand());
-        controller.a().onTrue(agitator.reverseCommand());
-        controller.b().onTrue(agitator.stopCommand());
-        // controller.x().onTrue(climb.ascendL1Command());
-        // controller.a().onTrue(climb.descendL1Command());
-        // controller.b().onTrue(climb.stopCommand());
+        // controller.x().onTrue(agitator.forwardCommand());
+        // controller.a().onTrue(agitator.reverseCommand());
+        // controller.b().onTrue(agitator.stopCommand());
+        controller.x().onTrue(climb.ascendL1Command());
+        controller.a().onTrue(climb.descendL1Command());
+        controller.b().onTrue(climb.stopCommand());
     }
 
     /**

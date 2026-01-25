@@ -27,7 +27,7 @@ public class Climb extends SubsystemBase
     // Put all inner enums and inner classes here
     private enum climbPosition
     {
-        kL1(8), kL2(4237), kL3(4237), kSTART(0.0);
+        kL1(32), kL2(4237), kL3(4237), kSTART(0.0);
 
         public final double value;
         private climbPosition(double value)
@@ -81,14 +81,16 @@ public class Climb extends SubsystemBase
         leadMotor.setPosition(0.0);
         followMotor.setPosition(0.0);
 
-        leadMotor.setupForwardSoftLimit(0, false);
+        leadMotor.setupForwardSoftLimit(16, true);
         followMotor.setupForwardSoftLimit(0, false);
 
-        leadMotor.setupReverseSoftLimit(0, false);
+        leadMotor.setupReverseSoftLimit(0.0, true);
         followMotor.setupReverseSoftLimit(0, false);
 
-        followMotor.setupFollower(LEADMOTOR, true);
+        leadMotor.setupForwardHardLimitSwitch(true, true, 0);
+        leadMotor.setupReverseHardLimitSwitch(true, true, 1);
 
+        followMotor.setupFollower(LEADMOTOR, true);
 
         leadMotor.setupPIDController(0, kPUP, kI, kD); 
         leadMotor.setupPIDController(1, kPDOWN, kI, kD); 
@@ -124,6 +126,11 @@ public class Climb extends SubsystemBase
         }
     }
 
+    /**
+     * 
+     * Returns a command to stop climb
+     * @return stop climb method
+     */
     public Command stopCommand()
     {
         return run( () -> stop());
@@ -131,6 +138,7 @@ public class Climb extends SubsystemBase
 
     public Command ascendL1Command()
     {
+        // Add limit switch to until statement
         return run( () -> moveToPosition(climbPosition.kL1)).until(isAtPosition(climbPosition.kL1))
                 .andThen(stopCommand());
     }

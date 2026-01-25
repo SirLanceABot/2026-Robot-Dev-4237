@@ -2,11 +2,13 @@ package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
@@ -30,6 +32,7 @@ public class ScoringCommands
     private static Indexer indexer;
     private static Accelerator accelerator;
     private static Flywheel flywheel;
+    private static Drivetrain drivetrain;
 
 
     public static void createCommands(RobotContainer robotContainer)
@@ -42,6 +45,7 @@ public class ScoringCommands
         indexer = robotContainer.getIndexer();
         accelerator = robotContainer.getAccelerator();
         flywheel = robotContainer.getFlywheel();
+        drivetrain = robotContainer.getDrivetrain();
 
         System.out.println("  Constructor Finished: " + fullClassName);
 
@@ -97,4 +101,9 @@ public class ScoringCommands
         }
         return null; 
     } 
+
+    // public static Command ShootOnFly(Drivetrain drivetrain, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    // {
+
+    // }
 }
