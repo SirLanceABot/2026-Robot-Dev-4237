@@ -2,6 +2,7 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Flywheel;
@@ -75,40 +76,16 @@ public class RobbieFTest implements Test
      */
     public void periodic()
     {
-        // controller.x().onTrue(
-        //     flywheel.shootCommand(() -> 5.0)
-        // );
-        // controller.b().onTrue(
-        //     flywheel.shootCommand(() -> 15.0)
-        // );
-        // controller.a().onTrue(
-        //     flywheel.shootCommand(() -> 25.0)
-        // );
-        // controller.y().onTrue(
-        //     flywheel.shootCommand(() -> 1.0)
-        // );
-        // controller.leftBumper().onTrue(
-        //     flywheel.stopCommand()
-        // );
-
-        // controller.x().onTrue(
-        //     accelerator.onCommand()
-        // );
-        // controller.y().onTrue(
-        //     accelerator.reverseCommand(() -> -0.25)
-        // );
-        // controller.b().onTrue(
-        //     accelerator.stopCommand()
-        // );
-
-
-
         controller.x().onTrue(
-            flywheel.useMotionMagicCommand(500.0)
+            flywheel.useTBHCommand(10.0)
         );
+        // controller.y().onTrue(
+        //     flywheel.shootCommand(() -> 50.0)
+        // );
         controller.b().onTrue(
             flywheel.stopCommand()
         );
+
 
 
         // if(flywheel.isAtSetSpeed(1.0, 1.0).getAsBoolean())

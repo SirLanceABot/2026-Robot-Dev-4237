@@ -30,7 +30,7 @@ public final class AdaptiveSlewRateLimiter
 
     /**
      * AdaptiveSlewRateLimiter for drivetrain
-     * @author Robbie F.
+     * @author Robbie F (from Sam's code).
      */
     public AdaptiveSlewRateLimiter(double accelRateLimit, double decelRateLimit)
     {
