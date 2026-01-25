@@ -81,11 +81,17 @@ public class Agitator extends SubsystemBase
         setVelocity(0.0);
     }
 
+    /**
+     * This sets the velocity of the motors to 500 rps
+     */
     public Command forwardCommand()
     {
         return run( () -> setVelocity(500) );
     }
 
+    /**
+     * This sets the velocity of the motors to -500 rps
+     */
     public Command reverseCommand()
     {
         return run( () -> setVelocity(-500) );

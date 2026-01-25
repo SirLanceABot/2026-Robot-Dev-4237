@@ -107,6 +107,7 @@ public class Climb extends SubsystemBase
         return leadMotor.getPosition();
     }
 
+
     public BooleanSupplier isAtPosition(climbPosition position)
     {
         return () -> Math.abs(leadMotor.getPosition() - position.value) < tolerance;
@@ -141,13 +142,20 @@ public class Climb extends SubsystemBase
         return run( () -> stop());
     }
 
+    /**
+     * @author Robbie J
+     * @return move to position L1, until at position or hard limit hit; then stops 
+     */
     public Command ascendL1Command()
     {
-        // Add limit switch to until statement
         return run( () -> moveToPosition(climbPosition.kL1)).until(() -> (isAtPosition(climbPosition.kL1).getAsBoolean() || (leadMotor.getForwardHardLimit())))
                 .andThen(stopCommand());
     }
-    
+
+    /**
+     * @author Robbie J
+     * @return move to position start, until at position or hard limit hit; then stops 
+     */
     public Command descendL1Command()
     {
         return run( () -> moveToPosition(climbPosition.kSTART)).until(() -> (isAtPosition(climbPosition.kSTART).getAsBoolean() || (leadMotor.getReverseHardLimit())))
