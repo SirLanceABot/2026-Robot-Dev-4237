@@ -56,12 +56,12 @@ public final class DriverBindings {
     private static DoubleSupplier scaleFactorSupplier;
     private static DoubleSupplier lockAngleSupplier;
 
-    // private static final double CRAWL_SPEED = 0.225;
-    // private static final double WALK_SPEED = 0.675;
-    // private static final double RUN_SPEED = 1.0;
+    private static final double CRAWL_SPEED = 0.225;
+    private static final double WALK_SPEED = 0.675;
+    private static final double RUN_SPEED = 1.0;
     private static double scaleFactor = 0.5;
 
-    private static int rumbleTime = 0;
+    private static int rumbleTime = 3;
 
 
 
@@ -153,6 +153,9 @@ public final class DriverBindings {
     private static void configLeftBumper()
     {
         Trigger leftBumper = controller.leftBumper();
+        //Decreases Drive speed each time you press the left bumper
+        leftBumper
+        .onTrue(Commands.runOnce(() -> scaleFactor = (scaleFactor > WALK_SPEED ? WALK_SPEED : CRAWL_SPEED)));
     }
 
 
@@ -171,13 +174,17 @@ public final class DriverBindings {
     private static void configStartButton()
     {
         Trigger startButton = controller.start();
+        startButton
+            .onTrue(Commands.runOnce(() -> drivetrain.driveFieldCentric(), drivetrain));
     }
-
 
 
     private static void configLeftTrigger()
     {
         Trigger leftTrigger = controller.leftTrigger();
+        //Increases Drive speed each time you press the leftTrigger
+        leftTrigger
+        .onTrue(Commands.runOnce(() -> scaleFactor = (scaleFactor < WALK_SPEED ? WALK_SPEED : RUN_SPEED)));
     }
 
 
