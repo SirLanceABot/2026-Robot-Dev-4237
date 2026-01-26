@@ -183,6 +183,11 @@ public class Flywheel extends SubsystemBase
         // followMotor.setControlVelocity(speed);
     }
 
+    private void setControlTorque(double speed)
+    {
+        leadMotor.setControlTorque(speed);
+    }
+
     private void burpFuel()
     {
         leadMotor.setControlVelocity(-10.0);
@@ -228,6 +233,12 @@ public class Flywheel extends SubsystemBase
         return run( () -> setControlVelocity(speed.getAsDouble()));
     }
 
+    // not tested (so test)
+    public Command setControlTorqueCommand(DoubleSupplier speed)
+    {
+        return run( () -> setControlTorque(speed.getAsDouble()));
+    }
+
     public Command burpFuelCommand()
     {
         return run( () -> burpFuel());
@@ -256,7 +267,7 @@ public class Flywheel extends SubsystemBase
         return runOnce( () -> stop());
     }
 
-    public Command runMotorUsingVoltageCommand(double voltage)
+    public Command runMtorUsingVoltageCommand(double voltage)
     {
         return run( () -> setVoltage(voltage));
     }
