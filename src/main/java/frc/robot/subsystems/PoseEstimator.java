@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -12,6 +13,7 @@ import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -20,6 +22,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.sensors.Camera;
 
 /**
@@ -35,12 +38,6 @@ public class PoseEstimator extends SubsystemBase
     static
     {
         System.out.println("Loading: " + fullClassName);
-    }
-
-    public enum branchSide
-    {
-        kLeft,
-        kRight;
     }
 
     private final Pigeon2 gyro;
@@ -105,8 +102,6 @@ public class PoseEstimator extends SubsystemBase
 
             drivetrain.setVisionMeasurementStdDevs(visionStdDevs);
             drivetrain.setStateStdDevs(stateStdDevs);
-
-
         }
         else
         {
@@ -123,6 +118,7 @@ public class PoseEstimator extends SubsystemBase
 
     /**
      * Tells the PoseEstimator how much to trust both the odometry and the vision.  Higher values indicate less trust for either the swerve states or the vision
+     * check these values later when we know moore robot stuff
      */
     public void configStdDevs()
     {
@@ -182,6 +178,27 @@ public class PoseEstimator extends SubsystemBase
 
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
+    Pose2d redHubPose = new Pose2d(new Translation2d(11.92, 4.030), new Rotation2d(0));
+    Pose2d blueHubPose = new Pose2d(new Translation2d(4.62, 4.030), new Rotation2d(0));
+
+    public DoubleSupplier getAngleToRedHub()
+    {
+        Pose2d robotPose = drivetrain.getState().Pose;
+        DoubleSupplier deltay = () -> (redHubPose.getY() - robotPose.getY());
+        DoubleSupplier deltax = () -> (redHubPose.getX() - robotPose.getX());
+        DoubleSupplier rotation = () -> (Math.atan2((deltay.getAsDouble()), (deltax.getAsDouble())));
+        return rotation;
+    }
+
+    // test this on 2025 bot and field
+    public DoubleSupplier getAngleToBlueHub()
+    {
+        Pose2d robotPose = drivetrain.getState().Pose;
+        DoubleSupplier deltay = () -> (blueHubPose.getY() - robotPose.getY());
+        DoubleSupplier deltax = () -> (blueHubPose.getX() - robotPose.getX());
+        DoubleSupplier rotation = () -> (Math.atan2((deltay.getAsDouble()), (deltax.getAsDouble())));
+        return rotation;
+    }
 
 
     // *** OVERRIDEN METHODS ***
@@ -195,11 +212,51 @@ public class PoseEstimator extends SubsystemBase
     @Override
     public void periodic()
     {
+        for(Camera camera : cameraArray)
+        {
+            if(gyro != null)
+            {
+                LimelightHelpers.SetRobotOrientation(camera.getCameraName(), drivetrain.getState().Pose.getRotation().getDegrees(), 0, 0, 0, 0, 0);
+            }
+
+            // only update if we see 2+ tags
+            if(camera.getTagCount() > 1)
+            {
+                Pose2d visionPose = camera.getPose();
+                double robotVelo = Math.hypot(drivetrain.getState().Speeds.vxMetersPerSecond, drivetrain.getState().Speeds.vyMetersPerSecond);
+                double robotRotation = Math.toDegrees(drivetrain.getState().Speeds.omegaRadiansPerSecond);
+                boolean rejectUpdate = false;
+
+                if(visionPose == null)
+                {
+                    rejectUpdate = true;
+                }
+
+                if(robotVelo > 3.5)
+                {
+                    rejectUpdate = true;
+                }
+
+                if(robotRotation > 720.0)
+                {
+                    rejectUpdate = true;
+                }
+
+                if(!rejectUpdate)
+                {
+                    drivetrain.addVisionMeasurement(
+                                visionPose,
+                                camera.getTimestamp(),
+                                visionStdDevs);
+                }
+            }
+        }
+
         //OUTPUTS
         if(drivetrain != null && gyro != null && poseEstimator != null)
         {
             // grabs the newest estimated pose
-            estimatedPose = drivetrain.getState().Pose; // used to be drivetrain.getPose() <---- CHANGE TOMORROW IF ITS FRICKED UP
+            estimatedPose = drivetrain.getState().Pose;
             // sets it for advantagescope
             poseEstimatorEntry.set(estimatedPose);
         }

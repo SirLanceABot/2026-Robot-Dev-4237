@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.Intake.*;
 
 import java.lang.invoke.MethodHandles;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,6 +43,9 @@ public class Intake extends SubsystemBase
     private final double kD = 0.0;
     private final double kS = 0.01;
     private final double kV = 0.15;
+
+    private final double retractedPosition = 0.0;
+    private final double intakingPosition = 10.0; // TEST FOR TRUE VALUE ON ROBOT
     // private final double theshold = 4.0;
 
     // *** CLASS CONSTRUCTORS ***
@@ -120,7 +124,6 @@ public class Intake extends SubsystemBase
      */
     public void setVelocity(double velocity)
     {
-        intakePivotMotor.setControlVelocity(velocity);
         intakeRollersMotor.setControlVelocity(velocity);
     }
 
@@ -130,6 +133,7 @@ public class Intake extends SubsystemBase
     public void pickUpFuel()
     {
         setVelocity(0.2);
+        intakePivotMotor.setControlPosition(intakingPosition);
     }
 
     /** 
@@ -137,7 +141,19 @@ public class Intake extends SubsystemBase
      */
     public void ejectFuel()
     {
+        intakePivotMotor.setControlPosition(intakingPosition);
         setVelocity(-0.2);
+    }
+
+    public void retractIntake()
+    {
+        intakePivotMotor.setControlPosition(retractedPosition);
+        setVelocity(0.0);
+    }
+
+    public BooleanSupplier isAtPosition(double desiredPosition)
+    {
+        return () -> (Math.abs(intakePivotMotor.getPosition() - desiredPosition) <= 1.0);
     }
 
     /**
@@ -163,6 +179,11 @@ public class Intake extends SubsystemBase
     public Command ejectFuelCommand() 
     {
         return run(() -> ejectFuel()).withName("Eject Fuel");
+    }
+
+    public Command retractIntakeCommand()
+    {
+        return run(() -> retractIntake()).withName("Retract Intake");
     }
 
     public Command onCommand()
@@ -192,6 +213,6 @@ public class Intake extends SubsystemBase
     public String toString()
     {
         // No idea how to get that
-        return "Current Intake Velocity: " + intakePivotMotor.getVelocity();
+        return "Current Intake Velocity: " + intakeRollersMotor.getVelocity();
     }
 }
