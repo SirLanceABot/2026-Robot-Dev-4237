@@ -15,6 +15,8 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -66,6 +68,7 @@ public class TalonFXLance extends MotorControllerLance
     private final MotionMagicVelocityVoltage motionMagicVelocityVoltage;
     private final DutyCycleOut dutyCycleOut;
     private final VoltageOut voltageOut;
+    private final VelocityTorqueCurrentFOC velocityTorqueCurrent;
     private boolean useMotionMagic = false;
     private double kF = 0.0;
 
@@ -100,6 +103,7 @@ public class TalonFXLance extends MotorControllerLance
         motionMagicVelocityVoltage = new MotionMagicVelocityVoltage(0.0);
         dutyCycleOut = new DutyCycleOut(0.0);
         voltageOut = new VoltageOut(0.0);
+        velocityTorqueCurrent = new VelocityTorqueCurrentFOC(0.0);
 
         clearStickyFaults();
         setupFactoryDefaults();
@@ -1106,6 +1110,20 @@ public class TalonFXLance extends MotorControllerLance
         }
     }
 
+    /**
+     * Spin the motor to a velocity using PID control.
+     * Units are rotations by default, but can be changed using the conversion factor.
+     * @param velocity The velocity in rotation per second
+     */
+    public void setControlTorque(double velocity)
+    {
+        velocityTorqueCurrent.Velocity = velocity;
+        velocityTorqueCurrent.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+        velocityTorqueCurrent.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+        
+        motor.setControl(velocityTorqueCurrent);
+    }
+    
     /**
      * Set the position of the encoder.
      * Units are rotations by default, but can be changed using the conversion factor.
