@@ -36,6 +36,7 @@ public class Accelerator extends SubsystemBase
     // Put all class variables and instance variables here
     private final SparkMaxLance motor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Accelerator Motor");
 
+    private final SparkMaxLance motor2 = new SparkMaxLance(1, MOTOR_CAN_BUS, "Follower Motor");
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -60,11 +61,25 @@ public class Accelerator extends SubsystemBase
     private void configMotors()
     {
         motor.setupFactoryDefaults();
-        // motor.setupInverted(false); // Find out later
+        motor.setupInverted(true); // Find out later
         // motor.setupVelocityConversionFactor();
 
-        motor.setupPIDController(0, 0.1, 0.001, 2);
-        motor.setupCoastMode();
+        motor.setPosition(0);
+
+        motor.setupForwardHardLimitSwitch(true, true);
+        motor.setupReverseHardLimitSwitch(true, true);
+
+        motor.setupForwardSoftLimit(100, true);
+        motor.setupReverseSoftLimit(0, true);
+
+        motor.setupPIDController(0, 0.05, 0, 0);
+        // motor.setupCoastMode();
+        motor.setupBrakeMode();
+
+        motor2.setupFactoryDefaults();
+        motor2.setupBrakeMode();
+
+        motor2.setupFollower(MOTOR, false);
     }
 
     public double getPosition() 
@@ -89,6 +104,11 @@ public class Accelerator extends SubsystemBase
     private void setControlVelocity(double velocity)
     {
         motor.setControlVelocity(velocity);
+    }
+
+    private void setControlPosition(double position)
+    {
+        motor.setControlPosition(position);
     }
 
     public void stop()
@@ -121,6 +141,11 @@ public class Accelerator extends SubsystemBase
         return run( () -> setControlVelocity(targetSpeed));
     }
 
+    public Command setPositionCommand(double targetPosition)
+    {
+        return run( () -> setControlPosition(targetPosition));
+    }
+
     // Use a method reference instead of this method
     public Command stopCommand()
     {
@@ -145,6 +170,6 @@ public class Accelerator extends SubsystemBase
     @Override
     public String toString()
     {
-        return "Current Accelerator Position: " + getPosition();
+        return "Current Accelerator Velocity: " + getVelocity();
     }
 }

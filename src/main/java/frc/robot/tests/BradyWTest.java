@@ -2,7 +2,11 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
+import frc.robot.motors.SparkMaxLance;
+import frc.robot.subsystems.Accelerator;
 
 @SuppressWarnings("unused")
 public class BradyWTest implements Test
@@ -26,7 +30,9 @@ public class BradyWTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
-
+    // private SparkMaxLance motor;
+    private Accelerator accelerator;
+    private CommandXboxController controller;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -41,6 +47,12 @@ public class BradyWTest implements Test
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.robotContainer = robotContainer;
+        accelerator = robotContainer.getAccelerator();
+        // motor = new SparkMaxLance(3, "rio", "SparkMax");
+        controller = new CommandXboxController(0);
+
+        // configMotors();
+        bindings();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -49,7 +61,22 @@ public class BradyWTest implements Test
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
 
+    // private void configMotors()
+    // {
+    //     accelerator.setupFactoryDefaults();
+    //     accelerator.setupBrakeMode();
+    // }
+
+    private void bindings()
+    {
+        controller.a().onTrue(accelerator.onCommand());
+        controller.x().onTrue(accelerator.reverseCommand());
+        controller.b().onTrue(accelerator.stopCommand());
         
+        controller.start().onTrue(accelerator.setVelocityCommand(2));
+        controller.back().onTrue(accelerator.setVelocityCommand(-2));
+    }
+    
 
     // *** OVERRIDDEN METHODS ***
     // Put all methods that are Overridden here
@@ -58,13 +85,17 @@ public class BradyWTest implements Test
      * This method runs one time before the periodic() method.
      */
     public void init()
-    {}
+    {
+
+    }
 
     /**
      * This method runs periodically (every 20ms).
      */
     public void periodic()
-    {}
+    {
+        System.out.println("Current Accelerator Position: " + accelerator.getPosition());
+    }
     
     /**
      * This method runs one time after the periodic() method.
