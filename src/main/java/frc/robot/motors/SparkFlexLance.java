@@ -19,6 +19,7 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+// import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -41,6 +42,7 @@ public class SparkFlexLance extends MotorControllerLance
     }
 
     private final SparkFlex motor;
+    private final SparkFlexConfig motorConfigs;
     private final String motorControllerName;
 
     private final RelativeEncoder encoder;
@@ -73,6 +75,7 @@ public class SparkFlexLance extends MotorControllerLance
         this.motorControllerName = motorControllerName;
 
         motor = new SparkFlex(deviceId, SparkLowLevel.MotorType.kBrushless);
+        motorConfigs = new SparkFlexConfig();
         encoder = motor.getEncoder();
         sparkPIDController = motor.getClosedLoopController();
 
@@ -122,9 +125,12 @@ public class SparkFlexLance extends MotorControllerLance
      */
     private void setupFeedbackSensor()
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Feedback Sensor");
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Feedback Sensor");
+
+        motorConfigs.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Feedback Sensor");
     }
 
     /**
@@ -141,17 +147,31 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupFactoryDefaults()
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        setup(() -> motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters), "Setup Factory Defaults");
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // setup(() -> motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters), "Setup Factory Defaults");
+        
+        // Create a new TalonFXS Configuration, which contains factory defaults
+        SparkFlexConfig factoryConfigs = new SparkFlexConfig();
+        
+        // Apply a new configuration to the motor to reset to factory defaults
+        setup(() -> motor.configure(factoryConfigs, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters), "Setup Factory Defaults");
+
+        // Update the motorConfigs with the new motor configuration (factory defaults)
+        motorConfigs.apply(factoryConfigs);
     }
 
     public void setupRemoteCANCoder(int remoteSensorId)
     {
+        // sparkAbsoluteEncoder = motor.getAbsoluteEncoder();
+
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Feedback Sensor");
+
         sparkAbsoluteEncoder = motor.getAbsoluteEncoder();
 
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Feedback Sensor");
+        motorConfigs.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Feedback Sensor");
     }
 
     /**
@@ -171,9 +191,12 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupInverted(boolean isInverted)
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        motorConfig.inverted(isInverted);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Inverted");
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // motorConfig.inverted(isInverted);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Inverted");
+
+        motorConfigs.inverted(isInverted);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Inverted");
     }
     
     /**
@@ -181,9 +204,12 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupBrakeMode()
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        motorConfig.idleMode(IdleMode.kBrake);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Brake Mode");
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // motorConfig.idleMode(IdleMode.kBrake);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Brake Mode");
+
+        motorConfigs.idleMode(IdleMode.kBrake);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Brake Mode");
     }
     
     /**
@@ -191,9 +217,12 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupCoastMode()
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        motorConfig.idleMode(IdleMode.kCoast);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Coast Mode");
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // motorConfig.idleMode(IdleMode.kCoast);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Coast Mode");
+
+        motorConfigs.idleMode(IdleMode.kCoast);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Coast Mode");
     }
 
     /**
@@ -203,10 +232,14 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupForwardSoftLimit(double limit, boolean isEnabled)
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        motorConfig.softLimit.forwardSoftLimit(limit);
-        motorConfig.softLimit.forwardSoftLimitEnabled(isEnabled);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Forward Soft Limit");
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // motorConfig.softLimit.forwardSoftLimit(limit);
+        // motorConfig.softLimit.forwardSoftLimitEnabled(isEnabled);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Forward Soft Limit");
+
+        motorConfigs.softLimit.forwardSoftLimit(limit);
+        motorConfigs.softLimit.forwardSoftLimitEnabled(isEnabled);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Forward Soft Limit");
     }
 
     /**
@@ -216,10 +249,14 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupReverseSoftLimit(double limit, boolean isEnabled)
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        motorConfig.softLimit.reverseSoftLimit(limit);
-        motorConfig.softLimit.reverseSoftLimitEnabled(isEnabled);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Reverse Soft Limit");
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // motorConfig.softLimit.reverseSoftLimit(limit);
+        // motorConfig.softLimit.reverseSoftLimitEnabled(isEnabled);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Reverse Soft Limit");
+
+        motorConfigs.softLimit.reverseSoftLimit(limit);
+        motorConfigs.softLimit.reverseSoftLimitEnabled(isEnabled);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Reverse Soft Limit");
     }
 
     /**
@@ -229,12 +266,19 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupForwardHardLimitSwitch(boolean isEnabled, boolean isNormallyOpen)
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // if(isNormallyOpen)
+        //     motorConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
+        // else
+        //     motorConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyClosed);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Forward Hard Limit");
+
         if(isNormallyOpen)
-            motorConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
+            motorConfigs.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
         else
-            motorConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyClosed);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Forward Hard Limit");
+            motorConfigs.limitSwitch.forwardLimitSwitchType(Type.kNormallyClosed);
+        
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Forward Hard Limit");
     }
 
     /**
@@ -244,12 +288,19 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupReverseHardLimitSwitch(boolean isEnabled, boolean isNormallyOpen)
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // if(isNormallyOpen)
+        //     motorConfig.limitSwitch.reverseLimitSwitchType(Type.kNormallyOpen);
+        // else
+        //     motorConfig.limitSwitch.reverseLimitSwitchType(Type.kNormallyClosed);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Reverse Hard Limit");
+
         if(isNormallyOpen)
-            motorConfig.limitSwitch.reverseLimitSwitchType(Type.kNormallyOpen);
+            motorConfigs.limitSwitch.reverseLimitSwitchType(Type.kNormallyOpen);
         else
-            motorConfig.limitSwitch.reverseLimitSwitchType(Type.kNormallyClosed);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Reverse Hard Limit");
+            motorConfigs.limitSwitch.reverseLimitSwitchType(Type.kNormallyClosed);
+        
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Reverse Hard Limit");
     }
 
     /**
@@ -260,10 +311,14 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupCurrentLimit(double currentLimit, double currentThreshold, double timeThreshold)
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        motorConfig.smartCurrentLimit((int) currentLimit);
-        motorConfig.secondaryCurrentLimit(currentThreshold, (int) (timeThreshold * 20000));
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Current Limit");
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // motorConfig.smartCurrentLimit((int) currentLimit);
+        // motorConfig.secondaryCurrentLimit(currentThreshold, (int) (timeThreshold * 20000));
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Current Limit");
+
+        motorConfigs.smartCurrentLimit((int) currentLimit);
+        motorConfigs.secondaryCurrentLimit(currentThreshold, (int) (timeThreshold * 20000));
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Current Limit");
     }
     
     public double getCurrentAmps()
@@ -277,9 +332,12 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupOpenLoopRampRate(double rampRateSeconds)
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        motorConfig.openLoopRampRate(rampRateSeconds);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Open Loop Ramp Rate");
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // motorConfig.openLoopRampRate(rampRateSeconds);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Open Loop Ramp Rate");
+
+        motorConfigs.openLoopRampRate(rampRateSeconds);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Open Loop Ramp Rate");
     }
 
     /**
@@ -288,9 +346,12 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupClosedLoopRampRate(double rampRateSeconds)
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        motorConfig.closedLoopRampRate(rampRateSeconds);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Closed Loop Ramp Rate");
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // motorConfig.closedLoopRampRate(rampRateSeconds);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Closed Loop Ramp Rate");
+
+        motorConfigs.closedLoopRampRate(rampRateSeconds);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Closed Loop Ramp Rate");
     }
 
     /**
@@ -299,9 +360,12 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupVoltageCompensation(double voltageCompensation)
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        motorConfig.voltageCompensation(voltageCompensation);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Voltage Compensation");
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // motorConfig.voltageCompensation(voltageCompensation);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Voltage Compensation");
+
+        motorConfigs.voltageCompensation(voltageCompensation);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Voltage Compensation");
     }
 
     /**
@@ -310,13 +374,19 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupPositionConversionFactor(double factor)
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        
+        // if(sparkAbsoluteEncoder == null)
+        //     motorConfig.encoder.positionConversionFactor(factor);
+        // else
+        //     motorConfig.absoluteEncoder.positionConversionFactor(factor);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Position Conversion Factor");
         
         if(sparkAbsoluteEncoder == null)
-            motorConfig.encoder.positionConversionFactor(factor);
+            motorConfigs.encoder.positionConversionFactor(factor);
         else
-            motorConfig.absoluteEncoder.positionConversionFactor(factor);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Position Conversion Factor");
+            motorConfigs.absoluteEncoder.positionConversionFactor(factor);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Position Conversion Factor");
     }
 
     /**
@@ -325,13 +395,19 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupVelocityConversionFactor(double factor)
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+
+        // if(sparkAbsoluteEncoder == null)
+        //     motorConfig.encoder.velocityConversionFactor(factor);
+        // else
+        //     motorConfig.absoluteEncoder.velocityConversionFactor(factor);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Velocity Conversion Factor");
 
         if(sparkAbsoluteEncoder == null)
-            motorConfig.encoder.velocityConversionFactor(factor);
+            motorConfigs.encoder.velocityConversionFactor(factor);
         else
-            motorConfig.absoluteEncoder.velocityConversionFactor(factor);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Velocity Conversion Factor");
+            motorConfigs.absoluteEncoder.velocityConversionFactor(factor);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Velocity Conversion Factor");
     }
 
     /**
@@ -355,7 +431,21 @@ public class SparkFlexLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            SparkFlexConfig motorConfig = new SparkFlexConfig();
+            // SparkFlexConfig motorConfig = new SparkFlexConfig();
+            // ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
+        
+            // if(slotId == 0)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot0;
+            // else if(slotId == 1)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot1;
+            // else if(slotId == 2)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot2;
+            // else if(slotId == 3)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot3;
+
+            // motorConfig.closedLoop.pid(kP, kI, kD, closedLoopSlot);
+            // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
+
             ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
         
             if(slotId == 0)
@@ -367,8 +457,8 @@ public class SparkFlexLance extends MotorControllerLance
             else if(slotId == 3)
                 closedLoopSlot = ClosedLoopSlot.kSlot3;
 
-            motorConfig.closedLoop.pid(kP, kI, kD, closedLoopSlot);
-            setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
+            motorConfigs.closedLoop.pid(kP, kI, kD, closedLoopSlot);
+            setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup PID Controller");
         }
     }
 
@@ -385,7 +475,20 @@ public class SparkFlexLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            SparkFlexConfig motorConfig = new SparkFlexConfig();
+            // SparkFlexConfig motorConfig = new SparkFlexConfig();
+            // ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
+            // if(slotId == 0)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot0;
+            // else if(slotId == 1)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot1;
+            // else if(slotId == 2)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot2;
+            // else if(slotId == 3)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot3;
+
+            // motorConfig.closedLoop.pidf(kP, kI, kD, kF, closedLoopSlot);
+            // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
+
             ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
             if(slotId == 0)
                 closedLoopSlot = ClosedLoopSlot.kSlot0;
@@ -396,8 +499,8 @@ public class SparkFlexLance extends MotorControllerLance
             else if(slotId == 3)
                 closedLoopSlot = ClosedLoopSlot.kSlot3;
 
-            motorConfig.closedLoop.pidf(kP, kI, kD, kF, closedLoopSlot);
-            setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
+            motorConfigs.closedLoop.pidf(kP, kI, kD, kF, closedLoopSlot);
+            setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup PID Controller");
         }
     }
     
@@ -415,7 +518,22 @@ public class SparkFlexLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            SparkFlexConfig motorConfig = new SparkFlexConfig();
+            // SparkFlexConfig motorConfig = new SparkFlexConfig();
+            // ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
+
+            // if(slotId == 0)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot0;
+            // else if(slotId == 1)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot1;
+            // else if(slotId == 2)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot2;
+            // else if(slotId == 3)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot3;
+
+            // motorConfig.closedLoop.pid(kP, kI, kD, closedLoopSlot)
+            //     .feedForward.sva(kS, kV, kA, closedLoopSlot);
+            // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
+
             ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
 
             if(slotId == 0)
@@ -427,9 +545,9 @@ public class SparkFlexLance extends MotorControllerLance
             else if(slotId == 3)
                 closedLoopSlot = ClosedLoopSlot.kSlot3;
 
-            motorConfig.closedLoop.pid(kP, kI, kD, closedLoopSlot)
+            motorConfigs.closedLoop.pid(kP, kI, kD, closedLoopSlot)
                 .feedForward.sva(kS, kV, kA, closedLoopSlot);
-            setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
+            setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup PID Controller");
         }
     }
 
@@ -444,7 +562,27 @@ public class SparkFlexLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            SparkFlexConfig motorConfig = new SparkFlexConfig();
+            // SparkFlexConfig motorConfig = new SparkFlexConfig();
+            // ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
+
+            // if(slotId == 0)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot0;
+            // else if(slotId == 1)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot1;
+            // else if(slotId == 2)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot2;
+            // else if(slotId == 3)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot3;
+
+            // motorConfig.closedLoop.maxMotion
+            //     .cruiseVelocity(velocity)
+            //     .maxAcceleration(acceleration)
+            //     .allowedProfileError(error, closedLoopSlot);
+
+            // useMaxMotion = true;
+
+            // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Max Motion");
+
             ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
 
             if(slotId == 0)
@@ -456,14 +594,14 @@ public class SparkFlexLance extends MotorControllerLance
             else if(slotId == 3)
                 closedLoopSlot = ClosedLoopSlot.kSlot3;
 
-            motorConfig.closedLoop.maxMotion
+            motorConfigs.closedLoop.maxMotion
                 .cruiseVelocity(velocity)
                 .maxAcceleration(acceleration)
                 .allowedProfileError(error, closedLoopSlot);
 
             useMaxMotion = true;
 
-            setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Max Motion");
+            setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Max Motion");
         }
     }
 
@@ -505,9 +643,12 @@ public class SparkFlexLance extends MotorControllerLance
      */
     public void setupFollower(int leaderId, boolean isInverted)
     {
-        SparkFlexConfig motorConfig = new SparkFlexConfig();
-        motorConfig.follow(leaderId, isInverted);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Follower");
+        // SparkFlexConfig motorConfig = new SparkFlexConfig();
+        // motorConfig.follow(leaderId, isInverted);
+        // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Follower");
+
+        motorConfigs.follow(leaderId, isInverted);
+        setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Follower");
     }
 
     // /**
