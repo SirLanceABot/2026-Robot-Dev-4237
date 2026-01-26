@@ -2,7 +2,6 @@ package frc.robot.motors;
 
 import java.lang.invoke.MethodHandles;
 
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.revrobotics.PersistMode;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
@@ -22,8 +21,6 @@ import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.units.VoltageUnit;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class SparkMaxLance extends MotorControllerLance
