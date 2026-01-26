@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
@@ -12,6 +13,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.PoseEstimator;
 
 public class ScoringCommands
 {
@@ -33,6 +35,7 @@ public class ScoringCommands
     private static Accelerator accelerator;
     private static Flywheel flywheel;
     private static Drivetrain drivetrain;
+    private static PoseEstimator poseEstimator;
 
 
     public static void createCommands(RobotContainer robotContainer)
@@ -64,7 +67,10 @@ public class ScoringCommands
                 (accelerator.feedToShooterCommand(()-> 0.25)),
                 (flywheel.shootCommand(() -> 10.0)));
         }
-        return null; 
+        else
+        {
+            return Commands.none();
+        }
     } 
 
     public static Command IntakeAndScoreCommandTheSequal(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
@@ -82,14 +88,15 @@ public class ScoringCommands
                 (indexer.onCommand());
 
         }
-        return null; 
+        else
+        {
+            return Commands.none();
+        }
     } 
 
 
     public static Command StopIntakeAndScoreCommand(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
     {
-
-        
         if(intake != null && agitator != null && indexer != null  && accelerator != null  && flywheel != null )
         {
             return  Commands.parallel(
@@ -99,8 +106,27 @@ public class ScoringCommands
                 (accelerator.stopCommand()),
                 (flywheel.stopCommand()));
         }
-        return null; 
-    } 
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    // TODO implement with shooter speeds
+    public static Command shootFromStandstillCommand(Drivetrain drivetrain, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    {
+        if(drivetrain != null && agitator != null && indexer != null && accelerator != null && flywheel != null)
+        {
+            return
+            drivetrain.lockWheelsCommand()
+            .andThen(
+                drivetrain.angleLockDriveCommand(null, null, null, poseEstimator.getAngleToAllianceHub()));
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
 
     // public static Command ShootOnFly(Drivetrain drivetrain, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
     // {

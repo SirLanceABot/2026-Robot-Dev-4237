@@ -20,6 +20,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -200,6 +201,17 @@ public class PoseEstimator extends SubsystemBase
         return rotation;
     }
 
+    public DoubleSupplier getAngleToAllianceHub()
+    {
+        if(drivetrain.isRedAllianceSupplier().getAsBoolean())
+        {
+            return getAngleToRedHub();
+        }
+        else
+        {
+            return getAngleToBlueHub();
+        }
+    }
 
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here

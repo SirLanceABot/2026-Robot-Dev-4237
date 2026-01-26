@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -341,6 +342,21 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
      */
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineToApply.dynamic(direction);
+    }
+
+    public BooleanSupplier isRedAllianceSupplier()
+    {
+        return () ->
+        {
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent())
+            {
+                System.out.println("Alliance = " + alliance.get());
+                return alliance.get() == DriverStation.Alliance.Red;
+            }
+            DriverStation.reportError("No alliance is avaliable, assuming Blue", false);
+            return false;
+        };
     }
 
     @Override
