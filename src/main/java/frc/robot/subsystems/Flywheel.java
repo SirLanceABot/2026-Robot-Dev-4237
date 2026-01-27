@@ -63,7 +63,7 @@ public class Flywheel extends SubsystemBase
     private final double MOTIONMAGICJERK = 100.0; // target jerk
 
 
-    InterpolatingDoubleTreeMap scoreMap = new InterpolatingDoubleTreeMap();
+    InterpolatingDoubleTreeMap distToVeloMap = new InterpolatingDoubleTreeMap();
     // InterpolatingDoubleTreeMap passLeftMap = new InterpolatingDoubleTreeMap();
     // InterpolatingDoubleTreeMap passRightMap = new InterpolatingDoubleTreeMap();
 
@@ -83,7 +83,7 @@ public class Flywheel extends SubsystemBase
         System.out.println("  Constructor Started:  " + fullClassName);
 
         configMotors();
-        configScoreMap();
+        configShotMap();
         // configLeftPassMap();
         // configRightPassMap();
 
@@ -132,40 +132,34 @@ public class Flywheel extends SubsystemBase
         leadMotor.setupMotionMagic(MOTIONMAGICCRUISEVELOICITY, MOTIONMAGICACCELERATION, MOTIONMAGICJERK);
     }
 
-    private void configScoreMap()
+    private void configShotMap()
     {
-        // first value is distance (ft) from the hub (in alliance zone), second is flywheel velo
-        
-        // calculated distances using phsyics model
-        scoreMap.put(0.0, 4237.0);
-        scoreMap.put(1.0, 4237.0);
-        scoreMap.put(2.0, 4237.0);
-        scoreMap.put(3.0, 4237.0);
-        scoreMap.put(4.0, 4237.0);
-        scoreMap.put(5.0, 4237.0);
-        scoreMap.put(6.0, 4237.0);
-        scoreMap.put(7.0, 4237.0);
-        scoreMap.put(8.0, 4237.0);
-        scoreMap.put(9.0, 4237.0);
-        scoreMap.put(10.0, 4237.0);
-        scoreMap.put(11.0, 4237.0);
-        scoreMap.put(12.0, 4237.0);
-        scoreMap.put(13.0, 4237.0);
-        scoreMap.put(14.0, 4237.0);
-        scoreMap.put(15.0, 4237.0);
-        scoreMap.put(16.0, 4237.0);
-        scoreMap.put(17.0, 4237.0);
-        scoreMap.put(18.0, 4237.0);
-        scoreMap.put(19.0, 4237.0);
-        scoreMap.put(20.0, 4237.0);
+        // first value is distance (ft) from the hub (in alliance zone), second is flywheel velo (ft/s)
+        // TODO test values once we have robot
+        distToVeloMap.put(4.0, 4237.0);
+        distToVeloMap.put(5.0, 4237.0);
+        distToVeloMap.put(6.0, 4237.0);
+        distToVeloMap.put(7.0, 4237.0);
+        distToVeloMap.put(8.0, 4237.0);
+        distToVeloMap.put(9.0, 4237.0);
+        distToVeloMap.put(10.0, 4237.0);
+        distToVeloMap.put(11.0, 4237.0);
+        distToVeloMap.put(12.0, 4237.0);
+        distToVeloMap.put(13.0, 4237.0);
+        distToVeloMap.put(14.0, 4237.0);
+        distToVeloMap.put(15.0, 4237.0);
+        distToVeloMap.put(16.0, 4237.0);
+        distToVeloMap.put(17.0, 4237.0);
+        distToVeloMap.put(18.0, 4237.0);
+        distToVeloMap.put(19.0, 4237.0);
+        distToVeloMap.put(20.0, 4237.0);
     }
 
-    // idk if we need these maps or not
-    // private void configLeftPassMap()
-    // {}
-
-    // private void configRightPassMap()
-    // {}
+    public double getShotPower(double dist)
+    {
+        dist = Math.max(4.0, Math.min(20.0, dist));
+        return distToVeloMap.get(dist);
+    }
 
     /**
      * This sets the speed of the motors.

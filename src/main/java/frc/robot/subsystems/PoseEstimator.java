@@ -14,6 +14,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -55,6 +56,8 @@ public class PoseEstimator extends SubsystemBase
     private final double[] defaultPosition = {0.0, 0.0, 0.0};
     private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
+    private final InterpolatingDoubleTreeMap timeOfFlightMap = new InterpolatingDoubleTreeMap();
+
     // Kalman filter, experiment later
     private Matrix<N3, N1> visionStdDevs;
     private Matrix<N3, N1> stateStdDevs;
@@ -90,6 +93,8 @@ public class PoseEstimator extends SubsystemBase
         stateStdDevs = new Matrix<N3, N1>(Nat.N3(), Nat.N1(), doubleArray);
 
         configStdDevs();
+        configTimeOfFlightMap();
+
 
         if(drivetrain != null && gyro != null)
         {
@@ -110,6 +115,35 @@ public class PoseEstimator extends SubsystemBase
         }
 
         System.out.println("  Constructor Finished: " + fullClassName);
+    }
+
+    private void configTimeOfFlightMap()
+    {
+        // time of flight map, where the first value is distance to hub in feet, second is time fuel is in the air
+        // TODO test time values once we have robot
+        timeOfFlightMap.put(4.0, 0.75);
+        timeOfFlightMap.put(5.0, 0.775);
+        timeOfFlightMap.put(6.0, 0.80);
+        timeOfFlightMap.put(7.0, 0.825);
+        timeOfFlightMap.put(8.0, 0.85);
+        timeOfFlightMap.put(9.0, 0.875);
+        timeOfFlightMap.put(10.0, 0.90);
+        timeOfFlightMap.put(11.0, 0.925);
+        timeOfFlightMap.put(12.0, 0.95);
+        timeOfFlightMap.put(13.0, 0.975);
+        timeOfFlightMap.put(14.0, 1.0);
+        timeOfFlightMap.put(15.0, 1.025);
+        timeOfFlightMap.put(16.0, 1.05);
+        timeOfFlightMap.put(17.0, 1.075);
+        timeOfFlightMap.put(18.0, 1.10);
+        timeOfFlightMap.put(19.0, 1.125);
+        timeOfFlightMap.put(20.0, 1.15);
+    }
+
+    public double getTOF(double dist)
+    {
+        dist = Math.max(4.0, Math.min(20.0, dist));
+        return timeOfFlightMap.get(dist);
     }
 
     public void resetPose(Pose2d pose)
