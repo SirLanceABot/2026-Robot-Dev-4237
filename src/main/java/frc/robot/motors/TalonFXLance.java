@@ -15,7 +15,6 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -41,10 +40,10 @@ public class TalonFXLance extends MotorControllerLance
 
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
-    static
-    {
-        System.out.println("Loading: " + fullClassName);
-    }
+    // static
+    // {
+    //     System.out.println("Loading: " + fullClassName);
+    // }
 
     @FunctionalInterface
     private interface Function

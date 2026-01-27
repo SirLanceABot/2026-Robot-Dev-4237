@@ -30,10 +30,10 @@ public class SparkMaxLance extends MotorControllerLance
 
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
-    static
-    {
-        System.out.println("Loading: " + fullClassName);
-    }
+    // static
+    // {
+    //     System.out.println("Loading: " + fullClassName);
+    // }
 
     @FunctionalInterface
     private interface Function
