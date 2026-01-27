@@ -1,6 +1,5 @@
 package frc.robot.motors;
 
-import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -17,14 +16,14 @@ import frc.robot.Constants.NetworkTableLance;
 public abstract class MotorControllerLance extends MotorSafety implements MotorController
 {
     // This string gets the full name of the class, including the package name
-    private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+    // private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
 
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
-    static
-    {
-        System.out.println("Loading: " + fullClassName);
-    }
+    // static
+    // {
+    //     System.out.println("Loading: " + fullClassName);
+    // }
 
 
     // *** CLASS and INSTANCE VARAIBLES ***
