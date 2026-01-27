@@ -1,7 +1,5 @@
 package frc.robot.motors;
 
-import java.lang.invoke.MethodHandles;
-
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
@@ -35,7 +33,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class TalonFXSLance extends MotorControllerLance
 {
     // This string gets the full name of the class, including the package name
-    private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+    // private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
 
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
@@ -84,7 +82,7 @@ public class TalonFXSLance extends MotorControllerLance
     {
         super(motorControllerName);
 
-        System.out.println("  Constructor Started:  " + fullClassName + " >> " + motorControllerName);
+        // System.out.println("  Constructor Started:  " + fullClassName + " >> " + motorControllerName);
 
         this.motorControllerName = motorControllerName;
 
@@ -101,7 +99,7 @@ public class TalonFXSLance extends MotorControllerLance
         setupFactoryDefaults();
         setupFeedbackSensor();
 
-        System.out.println("  Constructor Finished: " + fullClassName + " >> " + motorControllerName);
+        // System.out.println("  Constructor Finished: " + fullClassName + " >> " + motorControllerName);
     }
 
     /** 

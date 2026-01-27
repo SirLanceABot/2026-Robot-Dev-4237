@@ -1,7 +1,5 @@
 package frc.robot.motors;
 
-import java.lang.invoke.MethodHandles;
-
 import com.revrobotics.PersistMode;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
@@ -26,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class SparkMaxLance extends MotorControllerLance
 {
     // This string gets the full name of the class, including the package name
-    private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+    // private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
 
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
@@ -70,7 +68,7 @@ public class SparkMaxLance extends MotorControllerLance
     {
         super(motorControllerName);
 
-        System.out.println("  Constructor Started:  " + fullClassName + " >> " + motorControllerName);
+        // System.out.println("  Constructor Started:  " + fullClassName + " >> " + motorControllerName);
 
         this.motorControllerName = motorControllerName;
 
@@ -83,7 +81,7 @@ public class SparkMaxLance extends MotorControllerLance
         setupFactoryDefaults();
         setupFeedbackSensor();
         
-        System.out.println("  Constructor Finished: " + fullClassName + " >> " + motorControllerName);
+        // System.out.println("  Constructor Finished: " + fullClassName + " >> " + motorControllerName);
     }
 
     /** 
