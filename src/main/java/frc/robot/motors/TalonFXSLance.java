@@ -363,6 +363,23 @@ public class TalonFXSLance extends MotorControllerLance
     {
         return slotId >= 0 && slotId <= 2;
     }
+        
+    private void setSlot(SlotConfigs slotConfigs)
+    {
+        switch(slotConfigs.SlotNumber)
+        {
+            case 0:
+                motorConfigs.Slot0 = Slot0Configs.from(slotConfigs);
+                break;
+            case 1:
+                motorConfigs.Slot1 = Slot1Configs.from(slotConfigs);
+                break;
+            case 2:
+                motorConfigs.Slot2 = Slot2Configs.from(slotConfigs);
+                break;
+        }
+        setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller");
+    }
 
     /**
      * Set the PID controls for the motor.
@@ -382,19 +399,20 @@ public class TalonFXSLance extends MotorControllerLance
             slotConfigs.kI = kI;
             slotConfigs.kD = kD;
 
-            switch(slotId)
-            {
-                case 0:
-                    motorConfigs.Slot0 = Slot0Configs.from(slotConfigs);
-                    break;
-                case 1:
-                    motorConfigs.Slot1 = Slot1Configs.from(slotConfigs);
-                    break;
-                case 2:
-                    motorConfigs.Slot2 = Slot2Configs.from(slotConfigs);
-                    break;
-            }
-            setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller");
+            // switch(slotId)
+            // {
+            //     case 0:
+            //         motorConfigs.Slot0 = Slot0Configs.from(slotConfigs);
+            //         break;
+            //     case 1:
+            //         motorConfigs.Slot1 = Slot1Configs.from(slotConfigs);
+            //         break;
+            //     case 2:
+            //         motorConfigs.Slot2 = Slot2Configs.from(slotConfigs);
+            //         break;
+            // }
+            // setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller");
+            setSlot(slotConfigs);
         }
     }
 
@@ -418,19 +436,20 @@ public class TalonFXSLance extends MotorControllerLance
             slotConfigs.kD = kD;
             this.kF = kF;
 
-            switch(slotId)
-            {
-                case 0:
-                    motorConfigs.Slot0 = Slot0Configs.from(slotConfigs);
-                    break;
-                case 1:
-                    motorConfigs.Slot1 = Slot1Configs.from(slotConfigs);
-                    break;
-                case 2:
-                    motorConfigs.Slot2 = Slot2Configs.from(slotConfigs);
-                    break;
-            }
-            setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller");
+            // switch(slotId)
+            // {
+            //     case 0:
+            //         motorConfigs.Slot0 = Slot0Configs.from(slotConfigs);
+            //         break;
+            //     case 1:
+            //         motorConfigs.Slot1 = Slot1Configs.from(slotConfigs);
+            //         break;
+            //     case 2:
+            //         motorConfigs.Slot2 = Slot2Configs.from(slotConfigs);
+            //         break;
+            // }
+            // setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller");
+            setSlot(slotConfigs);
         }
     }
 
@@ -458,19 +477,20 @@ public class TalonFXSLance extends MotorControllerLance
             slotConfigs.kV = kV;
             slotConfigs.kA = kA;
 
-            switch(slotId)
-            {
-                case 0:
-                    motorConfigs.Slot0 = Slot0Configs.from(slotConfigs);
-                    break;
-                case 1:
-                    motorConfigs.Slot1 = Slot1Configs.from(slotConfigs);
-                    break;
-                case 2:
-                    motorConfigs.Slot2 = Slot2Configs.from(slotConfigs);
-                    break;
-            }
-            setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller");
+            // switch(slotId)
+            // {
+            //     case 0:
+            //         motorConfigs.Slot0 = Slot0Configs.from(slotConfigs);
+            //         break;
+            //     case 1:
+            //         motorConfigs.Slot1 = Slot1Configs.from(slotConfigs);
+            //         break;
+            //     case 2:
+            //         motorConfigs.Slot2 = Slot2Configs.from(slotConfigs);
+            //         break;
+            // }
+            // setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller");
+            setSlot(slotConfigs);
         }
     }
 
@@ -489,6 +509,18 @@ public class TalonFXSLance extends MotorControllerLance
         useMotionMagic = true;
 
         setup(() -> motor.getConfigurator().apply(motorConfigs.MotionMagic), "Setup Motion Magic");
+    }
+
+    /**
+     * Set the min and max output of the motor
+     * @param minOutput The minimum output value [-1, 1]
+     * @param maxOutput The maximum output value [-1, 1]
+     */
+    public void setupMinMaxOutput(double minOutput, double maxOutput)
+    {
+        motorConfigs.MotorOutput.PeakReverseDutyCycle = minOutput;
+        motorConfigs.MotorOutput.PeakForwardDutyCycle = maxOutput;
+        setup(() -> motor.getConfigurator().apply(motorConfigs.MotorOutput), "Setup Min/Max Output");
     }
 
     /**
