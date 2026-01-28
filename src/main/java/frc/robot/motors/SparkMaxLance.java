@@ -1,5 +1,8 @@
 package frc.robot.motors;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
@@ -56,6 +59,15 @@ public class SparkMaxLance extends MotorControllerLance
     private final int SETUP_ATTEMPT_LIMIT = 5;
     private int setupErrorCount = 0;
     private int stickyFaultCount = 0;
+
+    private final HashMap<Integer, ClosedLoopSlot> pidSlot = new HashMap<>(
+        Map.ofEntries(
+            Map.entry(0, ClosedLoopSlot.kSlot0), 
+            Map.entry(1, ClosedLoopSlot.kSlot1), 
+            Map.entry(2, ClosedLoopSlot.kSlot2), 
+            Map.entry(3, ClosedLoopSlot.kSlot3)
+        )
+    );
 
     /**
      * Creates a CANSparkMax on the CANbus with a brushless motor (Neo550 or Neo1650).
@@ -469,18 +481,7 @@ public class SparkMaxLance extends MotorControllerLance
             // motorConfig.closedLoop.pid(kP, kI, kD, closedLoopSlot);
             // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
 
-            ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
-
-            if(slotId == 0)
-                closedLoopSlot = ClosedLoopSlot.kSlot0;
-            else if(slotId == 1)
-                closedLoopSlot = ClosedLoopSlot.kSlot1;
-            else if(slotId == 2)
-                closedLoopSlot = ClosedLoopSlot.kSlot2;
-            else if(slotId == 3)
-                closedLoopSlot = ClosedLoopSlot.kSlot3;
-
-            motorConfigs.closedLoop.pid(kP, kI, kD, closedLoopSlot);
+            motorConfigs.closedLoop.pid(kP, kI, kD, pidSlot.get(slotId));
             setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup PID Controller");
         }
     }
@@ -512,18 +513,7 @@ public class SparkMaxLance extends MotorControllerLance
             // motorConfig.closedLoop.pidf(kP, kI, kD, kF, closedLoopSlot);
             // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
 
-            ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
-
-            if(slotId == 0)
-                closedLoopSlot = ClosedLoopSlot.kSlot0;
-            else if(slotId == 1)
-                closedLoopSlot = ClosedLoopSlot.kSlot1;
-            else if(slotId == 2)
-                closedLoopSlot = ClosedLoopSlot.kSlot2;
-            else if(slotId == 3)
-                closedLoopSlot = ClosedLoopSlot.kSlot3;
-
-            motorConfigs.closedLoop.pidf(kP, kI, kD, kF, closedLoopSlot);
+            motorConfigs.closedLoop.pidf(kP, kI, kD, kF, pidSlot.get(slotId));
             setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup PID Controller");
         }
     }
@@ -558,19 +548,8 @@ public class SparkMaxLance extends MotorControllerLance
             //     .feedForward.sva(kS, kV, kA, closedLoopSlot);    
             // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup PID Controller");
 
-            ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
-
-            if(slotId == 0)
-                closedLoopSlot = ClosedLoopSlot.kSlot0;
-            else if(slotId == 1)
-                closedLoopSlot = ClosedLoopSlot.kSlot1;
-            else if(slotId == 2)
-                closedLoopSlot = ClosedLoopSlot.kSlot2;
-            else if(slotId == 3)
-                closedLoopSlot = ClosedLoopSlot.kSlot3;
-
-            motorConfigs.closedLoop.pid(kP, kI, kD, closedLoopSlot)
-                .feedForward.sva(kS, kV, kA, closedLoopSlot);    
+            motorConfigs.closedLoop.pid(kP, kI, kD, pidSlot.get(slotId))
+                .feedForward.sva(kS, kV, kA, pidSlot.get(slotId));    
             setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup PID Controller");
         }
     }
@@ -607,25 +586,39 @@ public class SparkMaxLance extends MotorControllerLance
 
             // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Max Motion");
 
-            ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
-
-            if(slotId == 0)
-                closedLoopSlot = ClosedLoopSlot.kSlot0;
-            else if(slotId == 1)
-                closedLoopSlot = ClosedLoopSlot.kSlot1;
-            else if(slotId == 2)
-                closedLoopSlot = ClosedLoopSlot.kSlot2;
-            else if(slotId == 3)
-                closedLoopSlot = ClosedLoopSlot.kSlot3;
-
             motorConfigs.closedLoop.maxMotion
                 .cruiseVelocity(velocity)
                 .maxAcceleration(acceleration)
-                .allowedProfileError(error, closedLoopSlot);
+                .allowedProfileError(error, pidSlot.get(slotId));
 
             useMaxMotion = true;
 
             setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Max Motion");
+        }
+    }
+
+    /**
+     * Set the min and max output of the motor for closed loop control for slot 0
+     * @param minOutput The minimum output value [-1, 1]
+     * @param maxOutput The maximum output value [-1, 1]
+     */
+    public void setupMinMaxOutput(double minOutput, double maxOutput)
+    {
+        setupMinMaxOutput(minOutput, maxOutput, 0);
+    }
+
+    /**
+     * Set the min and max output of the motor for closed loop control
+     * @param minOutput The minimum output value [-1, 1]
+     * @param maxOutput The maximum output value [-1, 1]
+     * @param slotId The PID slot (0-3)
+     */
+    public void setupMinMaxOutput(double minOutput, double maxOutput, int slotId)
+    {
+        if(isValidSlotId(slotId))
+        {
+            motorConfigs.closedLoop.outputRange(minOutput, maxOutput, pidSlot.get(slotId));
+            setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Min/Max Output");
         }
     }
 
@@ -640,20 +633,9 @@ public class SparkMaxLance extends MotorControllerLance
 
         if(isValidSlotId(slotId))
         {
-            ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
-            
-            if(slotId == 0)
-                closedLoopSlot = ClosedLoopSlot.kSlot0;
-            else if(slotId == 1)
-                closedLoopSlot = ClosedLoopSlot.kSlot1;
-            else if(slotId == 2)
-                closedLoopSlot = ClosedLoopSlot.kSlot2;
-            else if(slotId == 3)
-                closedLoopSlot = ClosedLoopSlot.kSlot3;
-                
-            pid[0] = motor.configAccessor.closedLoop.getP(closedLoopSlot);
-            pid[1] = motor.configAccessor.closedLoop.getI(closedLoopSlot);
-            pid[2] = motor.configAccessor.closedLoop.getD(closedLoopSlot);
+            pid[0] = motor.configAccessor.closedLoop.getP(pidSlot.get(slotId));
+            pid[1] = motor.configAccessor.closedLoop.getI(pidSlot.get(slotId));
+            pid[2] = motor.configAccessor.closedLoop.getD(pidSlot.get(slotId));
         }
 
         return pid;
@@ -796,21 +778,21 @@ public class SparkMaxLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
+            // ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
 
-            if(slotId == 0)
-                closedLoopSlot = ClosedLoopSlot.kSlot0;
-            else if(slotId == 1)
-                closedLoopSlot = ClosedLoopSlot.kSlot1;
-            else if(slotId == 2)
-                closedLoopSlot = ClosedLoopSlot.kSlot2;
-            else if(slotId == 3)
-                closedLoopSlot = ClosedLoopSlot.kSlot3;
+            // if(slotId == 0)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot0;
+            // else if(slotId == 1)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot1;
+            // else if(slotId == 2)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot2;
+            // else if(slotId == 3)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot3;
 
             if(!useMaxMotion)
-                sparkPIDController.setSetpoint(position, ControlType.kPosition, closedLoopSlot);
+                sparkPIDController.setSetpoint(position, ControlType.kPosition, pidSlot.get(slotId));
             else
-                sparkPIDController.setSetpoint(position, ControlType.kMAXMotionPositionControl, closedLoopSlot);
+                sparkPIDController.setSetpoint(position, ControlType.kMAXMotionPositionControl, pidSlot.get(slotId));
         }
     }
 
@@ -835,21 +817,21 @@ public class SparkMaxLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
+            // ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
 
-            if(slotId == 0)
-                closedLoopSlot = ClosedLoopSlot.kSlot0;
-            else if(slotId == 1)
-                closedLoopSlot = ClosedLoopSlot.kSlot1;
-            else if(slotId == 2)
-                closedLoopSlot = ClosedLoopSlot.kSlot2;
-            else if(slotId == 3)
-                closedLoopSlot = ClosedLoopSlot.kSlot3;
+            // if(slotId == 0)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot0;
+            // else if(slotId == 1)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot1;
+            // else if(slotId == 2)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot2;
+            // else if(slotId == 3)
+            //     closedLoopSlot = ClosedLoopSlot.kSlot3;
 
             if(!useMaxMotion)
-                sparkPIDController.setSetpoint(velocity, ControlType.kVelocity, closedLoopSlot);
+                sparkPIDController.setSetpoint(velocity, ControlType.kVelocity, pidSlot.get(slotId));
             else
-                sparkPIDController.setSetpoint(velocity, ControlType.kMAXMotionVelocityControl, closedLoopSlot);
+                sparkPIDController.setSetpoint(velocity, ControlType.kMAXMotionVelocityControl, pidSlot.get(slotId));
         }
     }
 
