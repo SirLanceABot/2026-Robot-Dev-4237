@@ -129,7 +129,7 @@ public class Flywheel extends SubsystemBase
         // leadMotor.getConfigurator().apply(talonFXConfigs);
         // motor.getConfigurator().apply(talonFXConfigs);
 
-        leadMotor.setupMotionMagic(MOTIONMAGICCRUISEVELOICITY, MOTIONMAGICACCELERATION, MOTIONMAGICJERK);
+        leadMotor.setupMotionMagicControl(MOTIONMAGICCRUISEVELOICITY, MOTIONMAGICACCELERATION, MOTIONMAGICJERK);
     }
 
     private void configShotMap()
