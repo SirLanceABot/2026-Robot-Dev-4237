@@ -12,6 +12,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -55,6 +56,11 @@ public class TalonFXLance extends MotorControllerLance
         public abstract StatusSignal<Boolean> doAction();
     }
 
+    private enum ControlType
+    {
+        kNormal, kMotionMagic, kTorque
+    }
+
     private final TalonFX motor;
     private final TalonFXConfiguration motorConfigs;
     private final String motorControllerName;
@@ -66,7 +72,9 @@ public class TalonFXLance extends MotorControllerLance
     private final DutyCycleOut dutyCycleOut;
     private final VoltageOut voltageOut;
     private final VelocityTorqueCurrentFOC velocityTorqueCurrent;
-    private boolean useMotionMagic = false;
+    private final PositionTorqueCurrentFOC positionTorqueCurrent;
+    
+    private ControlType controlType = ControlType.kNormal;
     private double kF = 0.0;
 
     private DigitalInput forwardHardLimit = null;
@@ -101,6 +109,7 @@ public class TalonFXLance extends MotorControllerLance
         dutyCycleOut = new DutyCycleOut(0.0);
         voltageOut = new VoltageOut(0.0);
         velocityTorqueCurrent = new VelocityTorqueCurrentFOC(0.0);
+        positionTorqueCurrent = new PositionTorqueCurrentFOC(0.0);
 
         clearStickyFaults();
         setupFactoryDefaults();
@@ -554,7 +563,6 @@ public class TalonFXLance extends MotorControllerLance
         return slotId >= 0 && slotId <= 2;
     }
 
-
     private void setSlot(SlotConfigs slotConfigs)
     {
         switch(slotConfigs.SlotNumber)
@@ -723,7 +731,7 @@ public class TalonFXLance extends MotorControllerLance
      * @param acceleration The target acceleration (rotations per second^2)
      * @param jerk The target jerk (rotations per second^3)
      */
-    public void setupMotionMagic(double velocity, double acceleration, double jerk)
+    public void setupMotionMagicControl(double velocity, double acceleration, double jerk)
     {
         // MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
         // setup(() -> motor.getConfigurator().refresh(motionMagicConfigs), "");
@@ -739,10 +747,17 @@ public class TalonFXLance extends MotorControllerLance
         motorConfigs.MotionMagic.MotionMagicCruiseVelocity = velocity;
         motorConfigs.MotionMagic.MotionMagicAcceleration = acceleration;
         motorConfigs.MotionMagic.MotionMagicJerk = jerk;
-
-        useMotionMagic = true;
+        controlType = ControlType.kMotionMagic;
 
         setup(() -> motor.getConfigurator().apply(motorConfigs.MotionMagic), "Setup Motion Magic");
+    }
+
+    /**
+     * Set the Torque control for the motor.
+     */
+    public void setupTorqueControl()
+    {
+        controlType = ControlType.kTorque;
     }
 
     /**
@@ -1014,28 +1029,36 @@ public class TalonFXLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            if(!useMotionMagic)
+            switch(controlType)
             {
-                positionVoltage.Slot = slotId;
-                positionVoltage.Position = position;
-                positionVoltage.FeedForward = kF;
-                positionVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
-                positionVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+                case kNormal:
+                    positionVoltage.Slot = slotId;
+                    positionVoltage.Position = position;
+                    positionVoltage.FeedForward = kF;
+                    positionVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+                    positionVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
 
-                motor.setControl(positionVoltage);
+                    motor.setControl(positionVoltage);
+                    break;
+                case kMotionMagic:
+                    motionMagicVoltage.Slot = slotId;
+                    motionMagicVoltage.Position = position;
+                    motionMagicVoltage.FeedForward = kF;
+                    motionMagicVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+                    motionMagicVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+
+                    motor.setControl(motionMagicVoltage);
+                    break;
+                case kTorque:
+                    positionTorqueCurrent.Slot = slotId;
+                    positionTorqueCurrent.Position = position;
+                    positionTorqueCurrent.FeedForward = kF;
+                    positionTorqueCurrent.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+                    positionTorqueCurrent.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+                    
+                    motor.setControl(positionTorqueCurrent);
+                    break;
             }
-            else
-            {
-                motionMagicVoltage.Slot = slotId;
-                motionMagicVoltage.Position = position;
-                motionMagicVoltage.FeedForward = kF;
-                motionMagicVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
-                motionMagicVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
-
-                motor.setControl(motionMagicVoltage);
-            }
-
-
 
             // if(forwardHardLimit == null && reverseHardLimit == null)
             // {
@@ -1089,25 +1112,35 @@ public class TalonFXLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            if(!useMotionMagic)
+            switch(controlType)
             {
-                velocityVoltage.Slot = slotId;
-                velocityVoltage.Velocity = velocity;
-                velocityVoltage.FeedForward = kF;
-                velocityVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
-                velocityVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
-                
-                motor.setControl(velocityVoltage);
-            }
-            else
-            {
-                motionMagicVelocityVoltage.Slot = slotId;
-                motionMagicVelocityVoltage.Velocity = velocity;
-                motionMagicVelocityVoltage.FeedForward = kF;
-                motionMagicVelocityVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
-                motionMagicVelocityVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
-                
-                motor.setControl(motionMagicVelocityVoltage);
+                case kNormal:
+                    velocityVoltage.Slot = slotId;
+                    velocityVoltage.Velocity = velocity;
+                    velocityVoltage.FeedForward = kF;
+                    velocityVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+                    velocityVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+                    
+                    motor.setControl(velocityVoltage);
+                    break;
+                case kMotionMagic:
+                    motionMagicVelocityVoltage.Slot = slotId;
+                    motionMagicVelocityVoltage.Velocity = velocity;
+                    motionMagicVelocityVoltage.FeedForward = kF;
+                    motionMagicVelocityVoltage.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+                    motionMagicVelocityVoltage.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+                    
+                    motor.setControl(motionMagicVelocityVoltage);
+                    break;
+                case kTorque:
+                    velocityTorqueCurrent.Slot = slotId;
+                    velocityTorqueCurrent.Velocity = velocity;
+                    velocityTorqueCurrent.FeedForward = kF;
+                    velocityTorqueCurrent.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+                    velocityTorqueCurrent.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+                    
+                    motor.setControl(velocityTorqueCurrent);
+                    break;
             }
 
             // if(forwardHardLimit == null && reverseHardLimit == null)
@@ -1145,7 +1178,10 @@ public class TalonFXLance extends MotorControllerLance
      * Spin the motor to a velocity using PID control.
      * Units are rotations by default, but can be changed using the conversion factor.
      * @param velocity The velocity in rotation per second
+     * @deprecated First call {@link #setupTorqueControl()} method during motor configuration. 
+     * Then call {@link #setControlVelocity(double, int)} method to run the motor.
      */
+    @Deprecated(forRemoval = true)
     public void setControlTorque(double velocity)
     {
         velocityTorqueCurrent.Velocity = velocity;

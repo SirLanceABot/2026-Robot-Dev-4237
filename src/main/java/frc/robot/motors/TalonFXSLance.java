@@ -8,11 +8,14 @@ import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.Slot2Configs;
 import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFXS;
@@ -54,6 +57,11 @@ public class TalonFXSLance extends MotorControllerLance
         public abstract StatusSignal<Boolean> doAction();
     }
 
+    private enum ControlType
+    {
+        kNormal, kMotionMagic, kTorque
+    }
+
     private final TalonFXS motor;
     private final TalonFXSConfiguration motorConfigs;
     private final String motorControllerName;
@@ -64,7 +72,10 @@ public class TalonFXSLance extends MotorControllerLance
     private final MotionMagicVelocityVoltage motionMagicVelocityVoltage;
     private final DutyCycleOut dutyCycleOut;
     private final VoltageOut voltageOut;
-    private boolean useMotionMagic = false;
+    private final VelocityTorqueCurrentFOC velocityTorqueCurrent;
+    private final PositionTorqueCurrentFOC positionTorqueCurrent;
+    
+    private ControlType controlType = ControlType.kNormal;
     private double kF = 0.0;
 
     private final int SETUP_ATTEMPT_LIMIT = 5;
@@ -94,6 +105,8 @@ public class TalonFXSLance extends MotorControllerLance
         motionMagicVelocityVoltage = new MotionMagicVelocityVoltage(0.0);
         dutyCycleOut = new DutyCycleOut(0.0);
         voltageOut = new VoltageOut(0.0);
+        velocityTorqueCurrent = new VelocityTorqueCurrentFOC(0.0);
+        positionTorqueCurrent = new PositionTorqueCurrentFOC(0.0);
 
         clearStickyFaults();
         setupFactoryDefaults();
@@ -500,15 +513,23 @@ public class TalonFXSLance extends MotorControllerLance
      * @param acceleration The target acceleration (rotations per second^2)
      * @param jerk The target jerk (rotations per second^3)
      */
-    public void setupMotionMagic(double velocity, double acceleration, double jerk)
+    public void setupMotionMagicControl(double velocity, double acceleration, double jerk)
     {
         motorConfigs.MotionMagic.MotionMagicCruiseVelocity = velocity;
         motorConfigs.MotionMagic.MotionMagicAcceleration = acceleration;
         motorConfigs.MotionMagic.MotionMagicJerk = jerk;
 
-        useMotionMagic = true;
+        controlType = ControlType.kMotionMagic;
 
         setup(() -> motor.getConfigurator().apply(motorConfigs.MotionMagic), "Setup Motion Magic");
+    }
+
+    /**
+     * Set the Torque control for the motor.
+     */
+    public void setupTorqueControl()
+    {
+        controlType = ControlType.kTorque;
     }
 
     /**
@@ -804,21 +825,47 @@ public class TalonFXSLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            if(!useMotionMagic)
-            {
-                positionVoltage.Slot = slotId;
-                positionVoltage.Position = position;
-                positionVoltage.FeedForward = kF;
+        //     if(!useMotionMagic)
+        //     {
+        //         positionVoltage.Slot = slotId;
+        //         positionVoltage.Position = position;
+        //         positionVoltage.FeedForward = kF;
                 
-                motor.setControl(positionVoltage);
-            }
-            else
-            {
-                motionMagicVoltage.Slot = slotId;
-                motionMagicVoltage.Position = position;
-                motionMagicVoltage.FeedForward = kF;
+        //         motor.setControl(positionVoltage);
+        //     }
+        //     else
+        //     {
+        //         motionMagicVoltage.Slot = slotId;
+        //         motionMagicVoltage.Position = position;
+        //         motionMagicVoltage.FeedForward = kF;
 
-                motor.setControl(motionMagicVoltage);
+        //         motor.setControl(motionMagicVoltage);
+        //     }
+        // }
+
+            switch(controlType)
+            {
+                case kNormal:
+                    positionVoltage.Slot = slotId;
+                    positionVoltage.Position = position;
+                    positionVoltage.FeedForward = kF;
+
+                    motor.setControl(positionVoltage);
+                    break;
+                case kMotionMagic:
+                    motionMagicVoltage.Slot = slotId;
+                    motionMagicVoltage.Position = position;
+                    motionMagicVoltage.FeedForward = kF;
+
+                    motor.setControl(motionMagicVoltage);
+                    break;
+                case kTorque:
+                    positionTorqueCurrent.Slot = slotId;
+                    positionTorqueCurrent.Position = position;
+                    positionTorqueCurrent.FeedForward = kF;
+                    
+                    motor.setControl(positionTorqueCurrent);
+                    break;
             }
         }
     }
@@ -844,21 +891,46 @@ public class TalonFXSLance extends MotorControllerLance
     {
         if(isValidSlotId(slotId))
         {
-            if(!useMotionMagic)
-            {
-                velocityVoltage.Slot = slotId;
-                velocityVoltage.Velocity = velocity;
-                velocityVoltage.FeedForward = kF;
+            // if(!useMotionMagic)
+            // {
+            //     velocityVoltage.Slot = slotId;
+            //     velocityVoltage.Velocity = velocity;
+            //     velocityVoltage.FeedForward = kF;
 
-                motor.setControl(velocityVoltage);
-            }
-            else
-            {
-                motionMagicVelocityVoltage.Slot = slotId;
-                motionMagicVelocityVoltage.Velocity = velocity;
-                motionMagicVelocityVoltage.FeedForward = kF;
+            //     motor.setControl(velocityVoltage);
+            // }
+            // else
+            // {
+            //     motionMagicVelocityVoltage.Slot = slotId;
+            //     motionMagicVelocityVoltage.Velocity = velocity;
+            //     motionMagicVelocityVoltage.FeedForward = kF;
 
-                motor.setControl(motionMagicVelocityVoltage);
+            //     motor.setControl(motionMagicVelocityVoltage);
+            // }
+
+            switch(controlType)
+            {
+                case kNormal:
+                    velocityVoltage.Slot = slotId;
+                    velocityVoltage.Velocity = velocity;
+                    velocityVoltage.FeedForward = kF;
+                    
+                    motor.setControl(velocityVoltage);
+                    break;
+                case kMotionMagic:
+                    motionMagicVelocityVoltage.Slot = slotId;
+                    motionMagicVelocityVoltage.Velocity = velocity;
+                    motionMagicVelocityVoltage.FeedForward = kF;
+                    
+                    motor.setControl(motionMagicVelocityVoltage);
+                    break;
+                case kTorque:
+                    velocityTorqueCurrent.Slot = slotId;
+                    velocityTorqueCurrent.Velocity = velocity;
+                    velocityTorqueCurrent.FeedForward = kF;
+                    
+                    motor.setControl(velocityTorqueCurrent);
+                    break;
             }
         }
     }
