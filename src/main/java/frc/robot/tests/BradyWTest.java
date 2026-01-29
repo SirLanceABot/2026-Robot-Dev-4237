@@ -94,7 +94,7 @@ public class BradyWTest implements Test
      */
     public void periodic()
     {
-        System.out.println("Current Accelerator Position: " + accelerator.getPosition());
+        System.out.println(accelerator);
     }
     
     /**
