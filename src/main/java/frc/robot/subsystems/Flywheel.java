@@ -50,23 +50,20 @@ public class Flywheel extends SubsystemBase
     // PID constants
     private final double kP = 0.2;
     private final double kI = 0.0;
-    private final double kD = 0.01;
+    private final double kD = 0.00;
     private final double kS = 0.19;
     private final double kV = 0.13;
-    private final double kA = 0.01;
+    private final double kA = 0.00;
 
     private final double VELOCITYCONVERSIONFACTOR = 1.0; // figure out units (currently default rev/sec)
 
     // Motion Magic Constants
-    private final double MOTIONMAGICCRUISEVELOICITY = 50.0; // target cruise velocity
+    private final double MOTIONMAGICCRUISEVELOCITY = 100.0; // target cruise velocity
     private final double MOTIONMAGICACCELERATION = 30.0; // target acceleration
     private final double MOTIONMAGICJERK = 100.0; // target jerk
 
 
     InterpolatingDoubleTreeMap distToVeloMap = new InterpolatingDoubleTreeMap();
-    // InterpolatingDoubleTreeMap passLeftMap = new InterpolatingDoubleTreeMap();
-    // InterpolatingDoubleTreeMap passRightMap = new InterpolatingDoubleTreeMap();
-
 
     // private final PIDController flywheelPID = new PIDController(0, 0, 0);
 
@@ -84,8 +81,6 @@ public class Flywheel extends SubsystemBase
 
         configMotors();
         configShotMap();
-        // configLeftPassMap();
-        // configRightPassMap();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -99,8 +94,6 @@ public class Flywheel extends SubsystemBase
         leadMotor.setupFactoryDefaults();
         followMotor.setupFactoryDefaults();
 
-        followMotor.setupFollower(LEADMOTOR, false);
-
         leadMotor.setSafetyEnabled(true);
         followMotor.setSafetyEnabled(true);
 
@@ -108,6 +101,9 @@ public class Flywheel extends SubsystemBase
         followMotor.setupCoastMode();
 
         leadMotor.setupPIDController(0, kP, kI, kD, kS, kV, kA);
+
+        // leadMotor.setupTorqueControl();
+        // followMotor.setupTorqueControl();
         
         leadMotor.setupVelocityConversionFactor(VELOCITYCONVERSIONFACTOR);
 
@@ -129,7 +125,9 @@ public class Flywheel extends SubsystemBase
         // leadMotor.getConfigurator().apply(talonFXConfigs);
         // motor.getConfigurator().apply(talonFXConfigs);
 
-        leadMotor.setupMotionMagicControl(MOTIONMAGICCRUISEVELOICITY, MOTIONMAGICACCELERATION, MOTIONMAGICJERK);
+        // leadMotor.setupMotionMagicControl(MOTIONMAGICCRUISEVELOCITY, MOTIONMAGICACCELERATION, MOTIONMAGICJERK);
+
+        followMotor.setupFollower(LEADMOTOR, false);
     }
 
     private void configShotMap()
@@ -177,11 +175,6 @@ public class Flywheel extends SubsystemBase
         // followMotor.setControlVelocity(speed);
     }
 
-    private void setControlTorque(double speed)
-    {
-        leadMotor.setControlTorque(speed);
-    }
-
     private void burpFuel()
     {
         leadMotor.setControlVelocity(-10.0);
@@ -200,9 +193,8 @@ public class Flywheel extends SubsystemBase
     // uses the Take-Back-Half controller to control velocity
     public void useTBH(double speed)
     {
-        TBHController.setSetpoint(speed, speed / 100.0);
+        TBHController.setSetpoint(speed, speed);
         leadMotor.set(TBHController.calculate(getVelocity()));
-        System.out.println("(alleged) Velocity = " + getVelocity());
     } 
 
     public double getVelocity()
@@ -210,33 +202,11 @@ public class Flywheel extends SubsystemBase
         return leadMotor.getVelocity();
     }
 
-    // private double calcScoreVelocityFromDistance()
-    // {}
-
-    // more than one passing location?
-    // private double calcPassVelocityFromDistance()
-    // {}
-
-    public Command onCommand()
-    {
-        return run( () -> set(0.1) );
-    }
-
-    public Command shootCommand(DoubleSupplier speed)
-    {
-        return run( () -> setControlVelocity(speed.getAsDouble()));
-    }
-
-    // not tested (so test)
-    public Command setControlTorqueCommand(DoubleSupplier speed)
-    {
-        return run( () -> setControlTorque(speed.getAsDouble()));
-    }
-
-    public Command burpFuelCommand()
-    {
-        return run( () -> burpFuel());
-    }
+    // public void displayStatorCurrent()
+    // {
+    //     System.out.println("Lead Motor Stator Current = " + leadMotor.motor.getStatorCurrent());
+    //     System.out.println("Follow Motor Stator Current = " + followMotor.motor.getStatorCurrent());
+    // }
 
     public BooleanSupplier isAtSetSpeed(double targetSpeed, double speedTolerance)
     {
@@ -253,6 +223,26 @@ public class Flywheel extends SubsystemBase
                 return false;
             }
         };
+    }
+
+    public Command onCommand()
+    {
+        return run( () -> set(0.1) );
+    }
+    
+
+    /**
+     * @param speed to spin flywheel at
+     * @return Command to set the control velo of the flywheel, should be using Torque FOC
+     */
+    public Command shootCommand(DoubleSupplier speed)
+    {
+        return run( () -> setControlVelocity(speed.getAsDouble()));
+    }
+
+    public Command burpFuelCommand()
+    {
+        return run( () -> burpFuel());
     }
 
     // Use a method reference instead of this method

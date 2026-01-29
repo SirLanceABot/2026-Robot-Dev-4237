@@ -77,11 +77,14 @@ public class RobbieFTest implements Test
     public void periodic()
     {
         controller.x().onTrue(
-            flywheel.useTBHCommand(10.0)
+            flywheel.shootCommand(() -> 10.0)
         );
-        // controller.y().onTrue(
-        //     flywheel.shootCommand(() -> 50.0)
-        // );
+        controller.y().onTrue(
+            flywheel.shootCommand(() -> 25.0)
+        );
+        controller.a().onTrue(
+            flywheel.shootCommand(() -> 50.0)
+        );
         controller.b().onTrue(
             flywheel.stopCommand()
         );
@@ -97,7 +100,9 @@ public class RobbieFTest implements Test
         //     System.out.println("NOT AT TARGET SPEED------------------------------");
         // }
 
-        // System.out.println("_________velocity_________ = " + flywheel.getVelocity());
+        System.out.println("***************velocity = " + flywheel.getVelocity());
+
+        // flywheel.displayStatorCurrent();
     }
     
     /**
