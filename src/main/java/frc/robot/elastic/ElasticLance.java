@@ -26,6 +26,8 @@ public class ElasticLance
 
     private static Color validAutoColor = new Color();
 
+    private static Color LEDColor = new Color();
+
     static
     {
         System.out.println("Loading: " + fullClassName);
@@ -64,6 +66,7 @@ public class ElasticLance
 
         // updateValidAutoBox();
         // updateAllianceColorBox();
+        // updateLEDColorBox();
 
         // if(!useFullRobot && DriverStation.isDisabled())
         // {
@@ -94,5 +97,12 @@ public class ElasticLance
             allianceColor = Color.kGray;
         }
     }
+
+    // public static void updateLEDColorBox()
+    // {
+    //     LEDColor = allianceColor.LEDs.getColor();
+    // }
+
+    // figure out a way to get the current color from the led class
 
 }
