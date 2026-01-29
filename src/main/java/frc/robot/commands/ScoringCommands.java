@@ -138,7 +138,16 @@ public class ScoringCommands
         }
     }
 
-    // TODO keep updating this so it actually does something, need to think first
+    /**
+     * shoots fuel with constantly updating power values for flywheel while moving
+     * @param drivetrain
+     * @param agitator
+     * @param indexer
+     * @param accelerator
+     * @param flywheel
+     * @param poseEstimator
+     * @return
+     */
     public static Command shootOnTheMoveCommand(Drivetrain drivetrain, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
     {
         if(drivetrain != null && agitator != null && indexer != null && accelerator != null && flywheel != null && poseEstimator != null)
@@ -146,17 +155,21 @@ public class ScoringCommands
             Pose2d robotPose = drivetrain.getState().Pose;
             ChassisSpeeds velocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.getRotation());
 
-            Pose2d calculatedTarget = poseEstimator.getCalculatedTarget(
+            Pose2d calculatedTarget = poseEstimator.getCalculatedTargetPose(
                 poseEstimator.getAllianceHubPose(), 
                 robotPose, 
                 velocity);
-            
+
             double distance = poseEstimator.getDistanceToTarget(robotPose, calculatedTarget).getAsDouble();
             double shooterPower = flywheel.getShotPower(distance);
 
-            double targetHeading = poseEstimator.getAngleToTarget(robotPose, calculatedTarget).getAsDouble();
-
-            return Commands.none();
+            return
+            flywheel.shootCommand(() -> shooterPower).until(flywheel.isAtSetSpeed(distance, 5))     // TODO tune tolerance
+            .andThen(
+                Commands.parallel(
+                    accelerator.feedToShooterCommand(() -> 0.25),
+                    indexer.setForwardCommand(() -> 0.25),
+                    agitator.forwardCommand()));
         }
         else
         {
