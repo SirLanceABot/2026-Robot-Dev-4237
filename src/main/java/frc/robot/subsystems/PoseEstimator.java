@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -216,6 +217,32 @@ public class PoseEstimator extends SubsystemBase
     Pose2d redHubPose = new Pose2d(new Translation2d(11.92, 4.030), new Rotation2d(0));
     Pose2d blueHubPose = new Pose2d(new Translation2d(4.62, 4.030), new Rotation2d(0));
 
+    public Pose2d getRedHubPose()
+    {
+        return redHubPose;
+    }
+
+    public Pose2d getBlueHubPose()
+    {
+        return blueHubPose;
+    }
+
+    /**
+     * gets the pose of the hub of your alliance (ideally)
+     * @return hub pose
+     */
+    public Pose2d getAllianceHubPose()
+    {
+        if(drivetrain.isRedAllianceSupplier().getAsBoolean())
+        {
+            return getRedHubPose();
+        }
+        else
+        {
+            return getBlueHubPose();
+        }
+    }
+
     public DoubleSupplier getDistanceToRedHub()
     {
         Pose2d robotPose = drivetrain.getState().Pose;
@@ -234,6 +261,23 @@ public class PoseEstimator extends SubsystemBase
         return dist;
     }
 
+    /**
+     * gets the distance from robot pose to the target provided
+     * @param robotPose self explanatory
+     * @param target target pose
+     * @return distance
+     */
+    public DoubleSupplier getDistanceToTarget(Pose2d robotPose, Pose2d target)
+    {
+        DoubleSupplier deltay = () -> (target.getY() - robotPose.getY());
+        DoubleSupplier deltax = () -> (target.getX() - robotPose.getX());
+        return () -> Math.hypot(deltax.getAsDouble(), deltay.getAsDouble());
+    }
+
+    /**
+     * gets the distance to the hub of your alliance (ideally)
+     * @return distance to hub, in meters
+     */
     public DoubleSupplier getDistanceToAllianceHub()
     {
         if(drivetrain.isRedAllianceSupplier().getAsBoolean())
@@ -265,6 +309,10 @@ public class PoseEstimator extends SubsystemBase
         return rotation;
     }
 
+    /**
+     * gets the rotation needed to make the robot face the alliance hub directly
+     * @return the angle to rotate to, in radians
+     */
     public DoubleSupplier getAngleToAllianceHub()
     {
         if(drivetrain.isRedAllianceSupplier().getAsBoolean())
@@ -275,6 +323,43 @@ public class PoseEstimator extends SubsystemBase
         {
             return getAngleToBlueHub();
         }
+    }
+
+    public DoubleSupplier getAngleToTarget(Pose2d robotPose, Pose2d target)
+    {
+        DoubleSupplier deltay = () -> (target.getY() - robotPose.getY());
+        DoubleSupplier deltax = () -> (target.getX() - robotPose.getX());
+        return () -> Math.atan2(deltay.getAsDouble(), deltax.getAsDouble());
+    }
+
+    /**
+     * gets the pose of the calculated target for shoot on the move while the robot is in motion. 
+     * if the robot is not moving, the calculated target should be the same as the actual target (alliance hub)
+     * @return the calculated target translation to shoot at
+     * @author biggie cheese
+     */
+    public Pose2d getCalculatedTarget(Pose2d actualTarget, Pose2d robotPose, ChassisSpeeds velocity)
+    {
+        Translation2d targetTranslation = actualTarget.getTranslation();
+        Translation2d robotTranslation = robotPose.getTranslation();
+
+        Translation2d calculatedTargetTranslation = targetTranslation;
+
+        for(int i = 0; i < 3; i++)
+        {
+            double distance = robotTranslation.getDistance(calculatedTargetTranslation);
+
+            double tof = getTOF(distance);
+
+            double xoffset = -tof * velocity.vxMetersPerSecond;
+            double yoffset = -tof * velocity.vyMetersPerSecond;
+
+            calculatedTargetTranslation = new Translation2d(
+                targetTranslation.getX() + xoffset,
+                targetTranslation.getY() + yoffset);
+        }
+
+        return new Pose2d(calculatedTargetTranslation, new Rotation2d());
     }
 
     // *** OVERRIDEN METHODS ***

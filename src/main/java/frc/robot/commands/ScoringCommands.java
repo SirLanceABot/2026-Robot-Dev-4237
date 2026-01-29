@@ -3,6 +3,8 @@ package frc.robot.commands;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -113,7 +115,7 @@ public class ScoringCommands
     }
 
     // TODO implement with shooter speeds
-    public static Command shootFromStandstillCommand(Drivetrain drivetrain, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    public static Command shootFromStandstillCommand(Drivetrain drivetrain, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
     {
         if(drivetrain != null && agitator != null && indexer != null && accelerator != null && flywheel != null)
         {
@@ -129,6 +131,32 @@ public class ScoringCommands
                     agitator.forwardCommand(),
                     indexer.setForwardCommand(() -> 0.25),
                     accelerator.feedToShooterCommand(() -> 0.25)));
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    // TODO keep updating this so it actually does something, need to think first
+    public static Command shootOnTheMoveCommand(Drivetrain drivetrain, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
+    {
+        if(drivetrain != null && agitator != null && indexer != null && accelerator != null && flywheel != null && poseEstimator != null)
+        {
+            Pose2d robotPose = drivetrain.getState().Pose;
+            ChassisSpeeds velocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.getRotation());
+
+            Pose2d calculatedTarget = poseEstimator.getCalculatedTarget(
+                poseEstimator.getAllianceHubPose(), 
+                robotPose, 
+                velocity);
+            
+            double distance = poseEstimator.getDistanceToTarget(robotPose, calculatedTarget).getAsDouble();
+            double shooterPower = flywheel.getShotPower(distance);
+
+            double targetHeading = poseEstimator.getAngleToTarget(robotPose, calculatedTarget).getAsDouble();
+
+            return Commands.none();
         }
         else
         {
