@@ -6,12 +6,20 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.loggers.DataLogFile;
 import frc.robot.motors.MotorControllerLance;
+import frc.robot.pathplanner.PathPlannerLance;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -34,6 +42,10 @@ public class Robot extends TimedRobot
     private Command autonomousCommand = null;
     private boolean isPreMatch = true;
     private TestMode testMode = null;
+
+    private Command selectedCommand = null; 
+    private Command path = Commands.none();
+    private String autoName = "Right";
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -61,7 +73,9 @@ public class Robot extends TimedRobot
 
 
         // 5. Configure PathPlanner
-
+        PathPlannerLance.configPathPlanner(robotContainer);
+        FollowPathCommand.warmupCommand().schedule();
+        PathfindingCommand.warmupCommand().schedule();
     }
 
     /**
@@ -88,6 +102,14 @@ public class Robot extends TimedRobot
         // Put code to run here before the match starts, but not between auto and teleop
         if(isPreMatch)
         {
+            autonomousCommand = PathPlannerLance.getAutonomousCommand();
+            autoName = autonomousCommand.getName();
+
+            if(AutoBuilder.isConfigured())
+            {
+                path = AutoBuilder.buildAuto(autoName);
+                initializePose();
+            }
 
         }
     }
@@ -99,7 +121,18 @@ public class Robot extends TimedRobot
         // Put code to run here before the match starts, but not between auto and teleop
         if(isPreMatch)
         {
-
+            selectedCommand = PathPlannerLance.getAutonomousCommand();
+            if(!selectedCommand.getName().equalsIgnoreCase(autonomousCommand.getName()))
+            {
+                autonomousCommand = selectedCommand;
+                autoName = autonomousCommand.getName();
+                System.out.println("Auto name: " + autonomousCommand.getName());
+                if(AutoBuilder.isConfigured())
+                {
+                    path = AutoBuilder.buildAuto(autoName);
+                    initializePose();
+                }
+            }
         }
     }
 
@@ -108,6 +141,20 @@ public class Robot extends TimedRobot
     public void disabledExit() 
     {}
 
+    public void initializePose()
+    {
+        try {
+            PathPlannerPath ppPath = PathPlannerPath.fromPathFile(autoName);
+            Pose2d initialPose = ppPath.getStartingHolonomicPose().orElse(new Pose2d());
+            robotContainer.getPoseEstimator().resetPose(initialPose);
+        }
+        catch (Exception e)
+        {
+            System.out.println("Path planner loading file error");
+        }
+    }
+
+
     /** This function is called once each time the robot enters Autonomous mode. */
     @Override
     public void autonomousInit() 
@@ -115,6 +162,14 @@ public class Robot extends TimedRobot
         DataLogManager.start();
 
         isPreMatch = false;
+
+        initializePose();
+
+        if(path != null)
+        {
+            path.schedule();
+            System.out.println("Scheduled Auto Command");
+        }
     }
 
     /** This function is called periodically during Autonomous mode. */

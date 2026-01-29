@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -31,7 +32,8 @@ public class PathPlannerLance
     // Put all class variables and instance variables here
 
     private static Drivetrain drivetrain;
-    
+    private static Field2d field;
+
     private static SendableChooser<Command> autoChooser;
 
 
@@ -59,7 +61,7 @@ public class PathPlannerLance
             return false;
         };
     }
-    
+
     private static void configAutoChooser()
     {
         if(AutoBuilder.isConfigured())
