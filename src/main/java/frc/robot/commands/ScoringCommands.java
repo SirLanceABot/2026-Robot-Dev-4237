@@ -120,7 +120,15 @@ public class ScoringCommands
             return
             drivetrain.lockWheelsCommand()
             .andThen(
-                drivetrain.angleLockDriveCommand(null, null, null, poseEstimator.getAngleToAllianceHub()));
+                drivetrain.angleLockDriveCommand(null, null, null, poseEstimator.getAngleToAllianceHub()).withTimeout(0.5))
+            .andThen(
+                flywheel.setControlTorqueCommand(() -> flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble()))
+                    .until(flywheel.isAtSetSpeed(flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble()), 2))) // within 2 feet per second
+            .andThen(
+                Commands.parallel(
+                    agitator.forwardCommand(),
+                    indexer.setForwardCommand(() -> 0.25),
+                    accelerator.feedToShooterCommand(() -> 0.25)));
         }
         else
         {

@@ -244,14 +244,14 @@ public class Flywheel extends SubsystemBase
         
         return () ->
         {
-        if((currentSpeed + speedTolerance > targetSpeed) && (currentSpeed - speedTolerance < targetSpeed))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+            if((currentSpeed + speedTolerance > targetSpeed) && (currentSpeed - speedTolerance < targetSpeed))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         };
     }
 

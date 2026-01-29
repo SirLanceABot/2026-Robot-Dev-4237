@@ -216,6 +216,36 @@ public class PoseEstimator extends SubsystemBase
     Pose2d redHubPose = new Pose2d(new Translation2d(11.92, 4.030), new Rotation2d(0));
     Pose2d blueHubPose = new Pose2d(new Translation2d(4.62, 4.030), new Rotation2d(0));
 
+    public DoubleSupplier getDistanceToRedHub()
+    {
+        Pose2d robotPose = drivetrain.getState().Pose;
+        DoubleSupplier deltay = () -> (redHubPose.getY() - robotPose.getY());
+        DoubleSupplier deltax = () -> (redHubPose.getX() - robotPose.getX());
+        DoubleSupplier dist = () -> Math.hypot(deltax.getAsDouble(), deltay.getAsDouble());
+        return dist;
+    }
+
+    public DoubleSupplier getDistanceToBlueHub()
+    {
+        Pose2d robotPose = drivetrain.getState().Pose;
+        DoubleSupplier deltay = () -> (blueHubPose.getY() - robotPose.getY());
+        DoubleSupplier deltax = () -> (blueHubPose.getX() - robotPose.getX());
+        DoubleSupplier dist = () -> Math.hypot(deltax.getAsDouble(), deltay.getAsDouble());
+        return dist;
+    }
+
+    public DoubleSupplier getDistanceToAllianceHub()
+    {
+        if(drivetrain.isRedAllianceSupplier().getAsBoolean())
+        {
+            return getDistanceToRedHub();
+        }
+        else
+        {
+            return getDistanceToBlueHub();
+        }
+    }
+
     public DoubleSupplier getAngleToRedHub()
     {
         Pose2d robotPose = drivetrain.getState().Pose;
