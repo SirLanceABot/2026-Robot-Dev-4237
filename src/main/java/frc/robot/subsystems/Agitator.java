@@ -3,7 +3,9 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.Agitator.*;
 
 import java.lang.invoke.MethodHandles;
+import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.motors.SparkMaxLance;
@@ -66,11 +68,16 @@ public class Agitator extends SubsystemBase
         motor.setupCoastMode();
     }
 
+    private void set(double speed)
+    {
+        motor.set(speed);
+    }
+
     /**
      * This sets the speed of the motors.
      * @param speed The motor speed 
      */
-    private void setVelocity(double speed)
+    private void setControlVelocity(double speed)
     {
         // motor.set(speed);
         motor.setControlVelocity(speed);
@@ -78,23 +85,23 @@ public class Agitator extends SubsystemBase
 
     public void stop()
     {
-        setVelocity(0.0);
+        setControlVelocity(0.0);
     }
 
     /**
-     * This sets the velocity of the motors to 500 rps
+     * This sets the velocity of the motors in rpm(between 0.0 and 500.0)
      */
-    public Command forwardCommand()
+    public Command forwardCommand(DoubleSupplier speed)
     {
-        return run( () -> setVelocity(500) );
+        return run( () -> setControlVelocity(MathUtil.clamp(speed.getAsDouble(), 0.0, 500.0)) );
     }
 
     /**
-     * This sets the velocity of the motors to -500 rps
+     * This sets the velocity of the motors in rpm(between -500.0 and 0.0)
      */
-    public Command reverseCommand()
+    public Command reverseCommand(DoubleSupplier speed)
     {
-        return run( () -> setVelocity(-500) );
+        return run( () -> setControlVelocity(MathUtil.clamp(speed.getAsDouble(), -500.0, 0.0)) );
     }
 
     // Use a method reference instead of this method

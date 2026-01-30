@@ -134,6 +134,7 @@ public class Flywheel extends SubsystemBase
     {
         // first value is distance (ft) from the hub (in alliance zone), second is flywheel velo (ft/s)
         // TODO test values once we have robot
+        distToVeloMap.put(3.0, 4237.0);
         distToVeloMap.put(4.0, 4237.0);
         distToVeloMap.put(5.0, 4237.0);
         distToVeloMap.put(6.0, 4237.0);
@@ -235,7 +236,7 @@ public class Flywheel extends SubsystemBase
      * @param speed to spin flywheel at
      * @return Command to set the control velo of the flywheel, should be using Torque FOC
      */
-    public Command shootCommand(DoubleSupplier speed)
+    public Command setControlVelocityCommand(DoubleSupplier speed)
     {
         return run( () -> setControlVelocity(speed.getAsDouble()));
     }
@@ -248,7 +249,7 @@ public class Flywheel extends SubsystemBase
     // Use a method reference instead of this method
     public Command stopCommand()
     {
-        return runOnce( () -> stop());
+        return run(this::stop);
     }
 
     public Command runMtorUsingVoltageCommand(double voltage)

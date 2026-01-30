@@ -44,7 +44,6 @@ public class ScoringCommands
     {        
         System.out.println("  Constructor Started:  " + fullClassName);
 
-
         intake = robotContainer.getIntake();
         agitator = robotContainer.getAgitator();
         indexer = robotContainer.getIndexer();
@@ -64,10 +63,10 @@ public class ScoringCommands
         {
             return  Commands.parallel(
                 (intake.pickupFuelCommand()),
-                (agitator.forwardCommand()),
+                (agitator.forwardCommand(() -> 100.0)), // rpm
                 (indexer.onCommand()),
                 (accelerator.feedToShooterCommand(()-> 0.25)),
-                (flywheel.shootCommand(() -> 10.0)));
+                (flywheel.setControlVelocityCommand(() -> 10.0)));
         }
         else
         {
@@ -82,11 +81,11 @@ public class ScoringCommands
         if(intake != null && agitator != null && indexer != null  && accelerator != null  && flywheel != null )
         {
             return  Commands.parallel( (accelerator.feedToShooterCommand(() -> 0.25)),
-                    (flywheel.shootCommand(() -> 75.7))).until(flywheel.isAtSetSpeed(100, 5))
+                    (flywheel.setControlVelocityCommand(() -> 75.7))).until(flywheel.isAtSetSpeed(100, 5))
                     .andThen
                     // .commands.parallel(
                 (intake.pickupFuelCommand()).andThen
-                (agitator.forwardCommand()).andThen
+                (agitator.forwardCommand(() -> 100.0)).andThen  // rpm
                 (indexer.onCommand());
 
         }
@@ -124,11 +123,11 @@ public class ScoringCommands
             .andThen(
                 drivetrain.angleLockDriveCommand(null, null, null, poseEstimator.getAngleToAllianceHub()).withTimeout(0.5))
             .andThen(
-                flywheel.shootCommand(() -> flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble()))
+                flywheel.setControlVelocityCommand(() -> flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble()))
                     .until(flywheel.isAtSetSpeed(flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble()), 2))) // within 2 feet per second
             .andThen(
                 Commands.parallel(
-                    agitator.forwardCommand(),
+                    agitator.forwardCommand(() -> 100.0), // rpm
                     indexer.setForwardCommand(() -> 0.25),
                     accelerator.feedToShooterCommand(() -> 0.25)));
         }
