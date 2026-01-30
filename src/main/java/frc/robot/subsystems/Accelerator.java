@@ -36,7 +36,7 @@ public class Accelerator extends SubsystemBase
     // Put all class variables and instance variables here
     private final SparkMaxLance motor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Accelerator Motor");
 
-    private final SparkMaxLance motor2 = new SparkMaxLance(1, MOTOR_CAN_BUS, "Follower Motor");
+    // private final SparkMaxLance motor2 = new SparkMaxLance(1, MOTOR_CAN_BUS, "Follower Motor");
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -64,6 +64,8 @@ public class Accelerator extends SubsystemBase
         motor.setupInverted(true); // Find out later
         // motor.setupVelocityConversionFactor();
 
+        motor.setSafetyEnabled(false);
+
         motor.setPosition(0);
 
         motor.setupForwardHardLimitSwitch(true, true);
@@ -72,14 +74,15 @@ public class Accelerator extends SubsystemBase
         motor.setupForwardSoftLimit(100, false);
         motor.setupReverseSoftLimit(0, false);
 
-        motor.setupCurrentLimit(30.0, 50.0, 0.5);
+        motor.setupCurrentLimit(5.0, 35.0, 0.5);
+        //Current Threshold depends on speed sent to motor
 
         // motor.setupPIDController(0, 0.05, 0, 0);
         // motor.setupCoastMode();
         motor.setupBrakeMode();
 
-        motor2.setupFactoryDefaults();
-        motor2.setupBrakeMode();
+        // motor2.setupFactoryDefaults();
+        // motor2.setupBrakeMode();
 
         // motor2.setupFollower(MOTOR, false);
     }
@@ -121,11 +124,13 @@ public class Accelerator extends SubsystemBase
     public Command onCommand()
     {
         return run( () -> set(0.25) );
+        // return run( () -> set(0.10) );
     }
 
     public Command reverseCommand()
     {
         return run( () -> set(-0.25) );
+        // return run( () -> set(-0.10) );
     }
 
     public Command feedToShooterCommand(DoubleSupplier speed)

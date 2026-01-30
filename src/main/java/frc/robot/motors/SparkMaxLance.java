@@ -353,7 +353,7 @@ public class SparkMaxLance extends MotorControllerLance
         // setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Current Limit");
 
         motorConfigs.smartCurrentLimit((int) currentLimit);
-        motorConfigs.secondaryCurrentLimit(currentThreshold, (int) (timeThreshold * 20000));
+        motorConfigs.secondaryCurrentLimit(Math.max(10.1, currentThreshold), (int) (timeThreshold * 20000));
         setup(() -> motor.configure(motorConfigs, resetMode, persistMode), "Setup Current Limit");
     }
 
