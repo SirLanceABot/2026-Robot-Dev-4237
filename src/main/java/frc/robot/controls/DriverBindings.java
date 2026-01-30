@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
+import frc.robot.commands.ScoringCommands;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
@@ -128,7 +129,12 @@ public final class DriverBindings {
         Trigger aButton = controller.a();
 
         aButton
-        .whileTrue(drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, lockAngleSupplier));        
+        .whileTrue(
+            Commands.parallel(
+                drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, poseEstimator.getRotationToCalculatedTarget()),
+                ScoringCommands.shootOnTheMoveCommand(drivetrain, agitator, indexer, accelerator, flywheel, poseEstimator)));
+                
+        // TODO add toggle for when command ends to kill all subsystem movement (shooter, indexer, etc.)
     }
 
 

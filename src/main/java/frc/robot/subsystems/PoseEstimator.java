@@ -338,7 +338,7 @@ public class PoseEstimator extends SubsystemBase
      * @return the calculated target translation to shoot at
      * @author biggie cheese
      */
-    public Pose2d getCalculatedTarget(Pose2d actualTarget, Pose2d robotPose, ChassisSpeeds velocity)
+    public Pose2d getCalculatedTargetPose(Pose2d actualTarget, Pose2d robotPose, ChassisSpeeds velocity)
     {
         Translation2d targetTranslation = actualTarget.getTranslation();
         Translation2d robotTranslation = robotPose.getTranslation();
@@ -360,6 +360,26 @@ public class PoseEstimator extends SubsystemBase
         }
 
         return new Pose2d(calculatedTargetTranslation, new Rotation2d());
+    }
+
+    /**
+     * gets the rotation to the calculated target for shoot on the move
+     * @return the target heading, in radians
+     * @author biggie cheese
+     */
+    public DoubleSupplier getRotationToCalculatedTarget()
+    {
+        Pose2d robotPose = drivetrain.getState().Pose;
+        ChassisSpeeds velocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.getRotation());
+
+        Pose2d calculatedTarget = getCalculatedTargetPose(
+            getAllianceHubPose(), 
+            robotPose, 
+            velocity);
+
+        DoubleSupplier targetHeading = () -> getAngleToTarget(robotPose, calculatedTarget).getAsDouble();
+
+        return targetHeading;
     }
 
     // *** OVERRIDEN METHODS ***
