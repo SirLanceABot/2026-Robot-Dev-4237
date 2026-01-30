@@ -122,6 +122,7 @@ public class PoseEstimator extends SubsystemBase
     {
         // time of flight map, where the first value is distance to hub in feet, second is time fuel is in the air
         // TODO test time values once we have robot
+        timeOfFlightMap.put(3.0, 0.70);
         timeOfFlightMap.put(4.0, 0.75);
         timeOfFlightMap.put(5.0, 0.775);
         timeOfFlightMap.put(6.0, 0.80);
