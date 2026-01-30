@@ -163,12 +163,12 @@ public class ScoringCommands
             double shooterPower = flywheel.getShotPower(distance);
 
             return
-            flywheel.shootCommand(() -> shooterPower).until(flywheel.isAtSetSpeed(distance, 5))     // TODO tune tolerance
+            flywheel.setControlVelocityCommand(() -> shooterPower).until(flywheel.isAtSetSpeed(distance, 5))     // TODO tune tolerance
             .andThen(
                 Commands.parallel(
                     accelerator.feedToShooterCommand(() -> 0.25),
                     indexer.setForwardCommand(() -> 0.25),
-                    agitator.forwardCommand()));
+                    agitator.forwardCommand(() -> 100.0 ))); // rpm
         }
         else
         {
