@@ -8,8 +8,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 // import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
-import com.ctre.phoenix6.hardware.TalonFX;
+// import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
+// import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -58,9 +58,9 @@ public class Flywheel extends SubsystemBase
     private final double VELOCITYCONVERSIONFACTOR = 1.0; // figure out units (currently default rev/sec)
 
     // Motion Magic Constants
-    private final double MOTIONMAGICCRUISEVELOCITY = 100.0; // target cruise velocity
-    private final double MOTIONMAGICACCELERATION = 30.0; // target acceleration
-    private final double MOTIONMAGICJERK = 100.0; // target jerk
+    // private final double MOTIONMAGICCRUISEVELOCITY = 100.0; // target cruise velocity
+    // private final double MOTIONMAGICACCELERATION = 30.0; // target acceleration
+    // private final double MOTIONMAGICJERK = 100.0; // target jerk
 
 
     InterpolatingDoubleTreeMap distToVeloMap = new InterpolatingDoubleTreeMap();
@@ -107,26 +107,6 @@ public class Flywheel extends SubsystemBase
         
         leadMotor.setupVelocityConversionFactor(VELOCITYCONVERSIONFACTOR);
 
-        // var talonFXConfigs = new TalonFXConfiguration();
-
-        // var slot0configs = talonFXConfigs.Slot0;
-        // slot0configs.kP = kP;
-        // slot0configs.kI = kI;
-        // slot0configs.kD = kD;
-        // slot0configs.kS = kS;
-        // slot0configs.kV = kV;
-        // slot0configs.kA = kA;
-
-        // var motionMagicConfigs = talonFXConfigs.MotionMagic;
-        // motionMagicConfigs.MotionMagicCruiseVelocity = 0.0;
-        // motionMagicConfigs.MotionMagicExpo_kV = kV;
-        // motionMagicConfigs.MotionMagicExpo_kA = 0.1;
-
-        // leadMotor.getConfigurator().apply(talonFXConfigs);
-        // motor.getConfigurator().apply(talonFXConfigs);
-
-        // leadMotor.setupMotionMagicControl(MOTIONMAGICCRUISEVELOCITY, MOTIONMAGICACCELERATION, MOTIONMAGICJERK);
-
         followMotor.setupFollower(LEADMOTOR, false);
     }
 
@@ -154,6 +134,10 @@ public class Flywheel extends SubsystemBase
         distToVeloMap.put(20.0, 4237.0);
     }
 
+    /**
+     * @param dist from alliance hub
+     * @return corrected distance from hub
+     */
     public double getShotPower(double dist)
     {
         dist = Math.max(4.0, Math.min(20.0, dist));
@@ -170,34 +154,52 @@ public class Flywheel extends SubsystemBase
         // followMotor.set(speed);
     }
     
+    /**
+     * @param speed velocity to set flywheel to
+     */
     private void setControlVelocity(double speed)
     {
         leadMotor.setControlVelocity(speed);
         // followMotor.setControlVelocity(speed);
     }
 
+    /**
+     * burps fuel at 10.0 rps
+     */
     private void burpFuel()
     {
-        leadMotor.setControlVelocity(-10.0);
+        leadMotor.setControlVelocity(10.0);
     }
 
+    /**
+     * method to stop motors
+     */
     private void stop()
     {
         set(0.0);
     }
 
+    /**
+     * @param voltage to run motor at 
+     */
     public void setVoltage(double voltage)
     {
         leadMotor.setVoltage(voltage);
     }
     
-    // uses the Take-Back-Half controller to control velocity
+    /**
+     * uses TBH to control velocity
+     * @param speed velocity to spin flywheel at
+     */
     public void useTBH(double speed)
     {
-        TBHController.setSetpoint(speed, speed);
+        TBHController.setSetpoint(speed, speed); // gain should not be speed (bad)
         leadMotor.set(TBHController.calculate(getVelocity()));
     } 
 
+    /**
+     * @return velocity of lead motor
+     */
     public double getVelocity()
     {
         return leadMotor.getVelocity();
@@ -209,6 +211,11 @@ public class Flywheel extends SubsystemBase
     //     System.out.println("Follow Motor Stator Current = " + followMotor.motor.getStatorCurrent());
     // }
 
+    /**
+     * @param targetSpeed to spin flywheel at
+     * @param speedTolerance speed tolerance
+     * @return boolean for if flywhele is at speed
+     */
     public BooleanSupplier isAtSetSpeed(double targetSpeed, double speedTolerance)
     {
         double currentSpeed = leadMotor.getVelocity();

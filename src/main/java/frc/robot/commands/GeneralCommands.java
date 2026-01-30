@@ -124,7 +124,7 @@ public class GeneralCommands
         if(agitator != null && indexer != null && accelerator != null && flywheel != null)
         {
             return 
-            flywheel.setControlVelocityCommand(() -> 10.0).until(flywheel.isAtSetSpeed(10.0, 1.0)) //velocity that can slowy eject fuel
+            flywheel.burpFuelCommand().until(flywheel.isAtSetSpeed(10.0, 1.0)) //velocity that can slowy eject fuel
             .andThen(
                 Commands.parallel(
                     indexer.setForwardCommand(() -> 0.2),
