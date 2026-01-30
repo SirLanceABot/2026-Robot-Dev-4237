@@ -56,6 +56,7 @@ public class RobotContainer
 
     private boolean useShooterCamera            = false;
     private boolean useIntakeCamera             = false;
+    // private boolean useLEDs                     = false;
 
     // Robot components
     private ExampleSubsystem exampleSubsystem = null;
@@ -67,12 +68,13 @@ public class RobotContainer
     private Climb climb = null;
     private PoseEstimator poseEstimator = null;
     private Drivetrain drivetrain = null;
+    private LEDs leds;
 
     private CommandXboxController driverController = null;
     private CommandXboxController operatorController = null;
 
     private final Camera[] cameraArray = new Camera[2];
-    private final LEDs leds;
+    // private final LEDs leds;
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -122,7 +124,6 @@ public class RobotContainer
         if(useFullRobot || useOperatorController)
             operatorController = new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT);
             
-
         leds = new LEDs();
     }
 

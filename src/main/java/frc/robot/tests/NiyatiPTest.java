@@ -3,8 +3,11 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 
 import frc.robot.RobotContainer;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
+// import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.Joystick;
+// import frc.robot.subsystems.Intake;
 
 @SuppressWarnings("unused")
 public class NiyatiPTest implements Test
@@ -28,9 +31,10 @@ public class NiyatiPTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
-    private Intake intake = null;
-    private final CommandXboxController controller = new CommandXboxController(0);
-
+    // private Intake intake = null;
+    private LEDs leds = null;
+    // private final CommandXboxController controller = new CommandXboxController(0);
+    private final Joystick controller = new Joystick(0);
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -45,10 +49,11 @@ public class NiyatiPTest implements Test
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.robotContainer = robotContainer;
+        // INTAKE STUFF
         // Prefer the Intake from RobotContainer if available
         // if (robotContainer != null && robotContainer.getIntake() != null)
         // {
-            intake = robotContainer.getIntake();
+            // intake = robotContainer.getIntake();
         //     System.out.println("good intake :)");
         // }
         // else
@@ -56,6 +61,9 @@ public class NiyatiPTest implements Test
         //     System.out.println("no intake :(");
         //     intake = new Intake();
         // }
+
+        //LEDS STUFF
+        leds = robotContainer.getLEDs();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -74,14 +82,15 @@ public class NiyatiPTest implements Test
      */
     public void init()
     {
-        // X to pickup
-        controller.x().onTrue(intake.pickupFuelCommand()).debounce(0.1);
+        // INTAKE STUFF
+        // // X to pickup
+        // controller.x().onTrue(intake.pickupFuelCommand()).debounce(0.1);
 
-        // A to eject
-        controller.a().onTrue(intake.ejectFuelCommand()).debounce(0.1);
+        // // A to eject
+        // controller.a().onTrue(intake.ejectFuelCommand()).debounce(0.1);
 
-        // B to stop
-        controller.b().onTrue(intake.stopCommand()).debounce(0.1);
+        // // B to stop
+        // controller.b().onTrue(intake.stopCommand()).debounce(0.1);
     }
 
     /**
@@ -89,7 +98,19 @@ public class NiyatiPTest implements Test
      */
     public void periodic()
     {
-        // nothing here; commands are done with controller bindings
+        // controller.x().onTrue(
+        //     LEDs.setColorSolidCommand(20, LEDs.Color.kRed)
+        // );
+
+        if(controller.getRawButton(1))
+        {
+            leds.setColorSolidCommand(60, Color.kBlue).schedule();
+        }
+        else if (controller.getRawButton(2))
+        {
+            // leds.setColorRainbowCommand();
+            leds.setColorSolidCommand(60, Color.kRed).schedule();
+        }
     }
     
     /**
@@ -97,10 +118,10 @@ public class NiyatiPTest implements Test
      */
     public void exit()
     {
-        if (intake != null)
-        {
-            intake.stop();
-            System.out.println("intake stopped in exit()");
-        }
+        // if (intake != null)
+        // {
+        //     intake.stop();
+        //     System.out.println("intake stopped in exit()");
+        // }
     } 
 }

@@ -103,9 +103,9 @@ public class LEDs extends SubsystemBase
      * @param color The LED color
      * @param brightness The LED brightness
      */
-    private void setColorSolid(int brightness, Color color)
+    private void setColorSolid(Color color)
     {
-        solid = LEDPattern.solid(color).atBrightness(Percent.of(brightness));
+        solid = LEDPattern.solid(color).atBrightness(Percent.of(25));
         solid.applyTo(ledBuffer);
     }
 
@@ -173,7 +173,7 @@ public class LEDs extends SubsystemBase
 
     public Command setColorSolidCommand(int brightness, Color color)
     {
-        return runOnce(() -> setColorSolid(brightness, color)).withName("Set LED Solid");
+        return runOnce(() -> setColorSolid(color)).withName("Set LED Solid");
     }
 
     public Command setColorGradientCommand(int brightness, Color ...colors)
