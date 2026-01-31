@@ -103,7 +103,7 @@ public class Intake extends SubsystemBase
         PivotFollower.setupPIDController(0, kP, kI, kD, kS, kV, 0);
 
         // Configure the follower last so configurables above are not overwritten
-        intakeRollersFollower.setupFollower(INTAKEROLLERLEADER, true);
+        PivotFollower.setupFollower(INTAKEROLLERLEADER, true);
 
         // Configure Velocity Conversion Factor (rev/s to ft/s)
         // intakeRollersMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
