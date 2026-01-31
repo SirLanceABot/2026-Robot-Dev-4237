@@ -41,6 +41,10 @@ public class Agitator extends SubsystemBase
     private final double kI = 0.0;
     private final double kD = 0.0;
 
+    private final double AGITATOR_DIAMETER_FEET = 4237.0;
+    private final double GEAR_RATIO = 1.0 / 1.0;
+    private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * AGITATOR_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
+
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
 
@@ -66,6 +70,7 @@ public class Agitator extends SubsystemBase
         motor.setupFactoryDefaults();
         motor.setupPIDController(0, kP, kI, kD);
         motor.setupCoastMode();
+        // motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR); // rev/s to ft/s
     }
 
     private void set(double speed)

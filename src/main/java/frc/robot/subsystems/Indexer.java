@@ -43,6 +43,10 @@ public class Indexer extends SubsystemBase
     private final double kI = 0.0;
     private final double kD = 0.0;
     private final double kF = 0.000085;     // use for SparkMaxLance
+
+    private final double INDEXER_DIAMETER_FEET = 4237.0;
+    private final double GEAR_RATIO = 1.0 / 1.0;
+    private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INDEXER_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
     
     // test for TalonFXSLance
     // private final double kS = 0.0121;    // small number
@@ -76,6 +80,7 @@ public class Indexer extends SubsystemBase
         motor.setSafetyEnabled(true);
         motor.setupPIDController(0, kP, kI, kD, kF);
         motor.setupCoastMode();
+        // motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR); // rev/s to ft/s
     }
 
     /**

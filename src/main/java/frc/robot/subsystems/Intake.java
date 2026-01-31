@@ -44,6 +44,10 @@ public class Intake extends SubsystemBase
     private final double kS = 0.01;
     private final double kV = 0.15;
 
+    private final double INTAKE_ROLLER_DIAMETER_FEET = 4237.0;
+    private final double GEAR_RATIO = 1.0 / 1.0;
+    private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INTAKE_ROLLER_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
+
     private final double retractedPosition = 0.0;
     private final double intakingPosition = 10.0; // TEST FOR TRUE VALUE ON ROBOT
     // private final double theshold = 4.0;
@@ -100,6 +104,9 @@ public class Intake extends SubsystemBase
 
         // Configure the follower last so configurables above are not overwritten
         intakeRollersFollower.setupFollower(INTAKEROLLERLEADER, true);
+
+        // Configure Velocity Conversion Factor (rev/s to ft/s)
+        // intakeRollersMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
     }
 
     // private void set()

@@ -38,6 +38,10 @@ public class Accelerator extends SubsystemBase
 
     // private final SparkMaxLance motor2 = new SparkMaxLance(1, MOTOR_CAN_BUS, "Follower Motor");
 
+    private final double ACCELERATOR_DIAMETER = 4237.0;
+    private final double GEAR_RATIO = 1.0 / 1.0;
+    private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * ACCELERATOR_DIAMETER) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
+
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
 
@@ -85,6 +89,8 @@ public class Accelerator extends SubsystemBase
         // motor2.setupBrakeMode();
 
         // motor2.setupFollower(MOTOR, false);
+
+        // motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR); // rev/s to ft/s
     }
 
     public double getPosition() 

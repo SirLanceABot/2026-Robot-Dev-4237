@@ -55,8 +55,10 @@ public class Flywheel extends SubsystemBase
     private final double kV = 0.13;
     private final double kA = 0.00;
 
-    private final double VELOCITYCONVERSIONFACTOR = 1.0; // figure out units (currently default rev/sec)
-
+    private final double FLYWHEEL_DIAMETER_FEET  = 4.25 / 12.0; // 4.25 in
+    private final double GEAR_RATIO = 2.0 / 1.0;
+    private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * FLYWHEEL_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
+    
     // Motion Magic Constants
     // private final double MOTIONMAGICCRUISEVELOCITY = 100.0; // target cruise velocity
     // private final double MOTIONMAGICACCELERATION = 30.0; // target acceleration
@@ -105,14 +107,14 @@ public class Flywheel extends SubsystemBase
         // leadMotor.setupTorqueControl();
         // followMotor.setupTorqueControl();
         
-        leadMotor.setupVelocityConversionFactor(VELOCITYCONVERSIONFACTOR);
+        leadMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
 
         followMotor.setupFollower(LEADMOTOR, false);
     }
 
     private void configShotMap()
     {
-        // first value is distance (ft) from the hub (in alliance zone), second is flywheel velo (ft/s)
+        // first value is distance (ft) from the hub (in alliance zone), second is flywheel velo (currently ft/s)
         // TODO test values once we have robot
         distToVeloMap.put(3.0, 4237.0);
         distToVeloMap.put(4.0, 4237.0);

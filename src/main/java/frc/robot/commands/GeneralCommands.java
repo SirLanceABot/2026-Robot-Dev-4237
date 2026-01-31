@@ -2,19 +2,16 @@ package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
 
-import javax.lang.model.util.ElementScanner14;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.PoseEstimator;
 
 public class GeneralCommands
@@ -58,7 +55,7 @@ public class GeneralCommands
     }
 
     // not tested
-    public static Command intakeCommand(Intake intake)
+    public static Command intakeCommand()
     {
         if(intake != null)
         {
@@ -75,7 +72,7 @@ public class GeneralCommands
     }
 
     // not tested
-    public static Command resetIntakeCommand(Intake intake, Agitator agitator)
+    public static Command resetIntakeCommand()
     {
         if(intake != null && agitator != null)
         {
@@ -92,7 +89,7 @@ public class GeneralCommands
     }
 
     // not tested
-    public static Command ejectFuelInIntakeCommand(Intake intake, Agitator agitator)
+    public static Command ejectFuelInIntakeCommand()
     {
         if(intake != null && agitator != null)
         {
@@ -106,7 +103,7 @@ public class GeneralCommands
 
     // not tested
     // ejects fuel backward relative to the shooter
-    public static Command stopEjectingFuelInIntakeCommand(Intake intake, Agitator agitator)
+    public static Command stopEjectingFuelInIntakeCommand()
     {
         if(intake != null && agitator != null)
         {
@@ -119,12 +116,12 @@ public class GeneralCommands
     }
 
     // not tested
-    public static Command ejectAllFuelSlowlyCommand(Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    public static Command ejectAllFuelSlowlyCommand()
     {
         if(agitator != null && indexer != null && accelerator != null && flywheel != null)
         {
             return 
-            flywheel.burpFuelCommand().until(flywheel.isAtSetSpeed(10.0, 1.0)) //velocity that can slowy eject fuel
+            flywheel.burpFuelCommand().until(flywheel.isAtSetSpeed(10.0, 1.0)) // velocity that can slowy eject fuel
             .andThen(
                 Commands.parallel(
                     indexer.setForwardCommand(() -> 0.2),
@@ -141,7 +138,7 @@ public class GeneralCommands
 
     // not tested
     // ejects fuel forward relative to the shooter
-    public static Command stopEjectingAllFuelCommand(Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    public static Command stopEjectingAllFuelCommand()
     {
         if(agitator != null && indexer != null && accelerator != null && flywheel != null)
         {
@@ -161,11 +158,11 @@ public class GeneralCommands
 
     // not tested
     // no clue what actual climb will look like
-    public static Command ascendToL1Command(Climb climb)
+    public static Command ascendToL1Command()
     {
         if(climb != null)
         {
-            return Commands.run(() -> climb.ascendL1Command());
+            return climb.ascendL1Command();
         }
         else
         {
@@ -175,12 +172,13 @@ public class GeneralCommands
 
     // also not tested
     // still no clue what actual climb will look like
-    public static Command descendFromL1Command(Climb climb, Drivetrain drivetrain)
+    public static Command descendFromL1Command()
     {
         if(climb != null)
         {
-            return Commands.run(() -> climb.descendL1Command());
-        }
+            return climb.descendL1Command()
+            .andThen( () -> drivetrain.resetForFieldCentric());
+        } 
         else
         {
             return Commands.none();
