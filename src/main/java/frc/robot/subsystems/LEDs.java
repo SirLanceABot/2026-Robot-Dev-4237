@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -63,13 +64,15 @@ public class LEDs extends SubsystemBase
     private LEDPattern gradient;
     private LEDPattern breathe;
     private LEDPattern progressBar;
+    private LEDPattern movingRainbow;
+    private LEDPattern mask;
     private LEDPattern rainbow = LEDPattern.rainbow(255, 255);
     private LEDPattern off = LEDPattern.solid(Color.kBlack);
 
     private LEDPattern base;
-    private LEDPattern mask;
+    // private LEDPattern progressPattern = LEDPattern.progressMaskLayer(() -> climb.getHeight() / climb.getMaxHieght());
 
-    private Map<Double, Color> maskSteps = Map.of(0.5, Color.kWhite, 0.8, Color.kBlack);
+    private Map<Double, Color> maskSteps = Map.of(0.0, Color.kWhite, 0.5, Color.kBlack);
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -103,9 +106,9 @@ public class LEDs extends SubsystemBase
      * @param color The LED color
      * @param brightness The LED brightness
      */
-    private void setColorSolid(Color color)
+    private void setColorSolid(int brightness, Color color)
     {
-        solid = LEDPattern.solid(color).atBrightness(Percent.of(25));
+        solid = LEDPattern.solid(color).atBrightness(Percent.of(brightness));
         solid.applyTo(ledBuffer);
     }
 
@@ -114,7 +117,7 @@ public class LEDs extends SubsystemBase
      * @param color The LED colors
      * @param brightness The LED brightness
      */
-    private void setColorBlink(int brightness, Color... colors)
+    private void setColorBlink(Color... colors)
     {
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
         blink = base.breathe(Units.Seconds.of(0.5));
@@ -132,7 +135,7 @@ public class LEDs extends SubsystemBase
         gradient.applyTo(ledBuffer);
     }
 
-    /**
+    /*C
      * This sets the LEDs to breathe pattern
      * @param color The LED colors
      * @param brightness The LED brightness
@@ -151,7 +154,7 @@ public class LEDs extends SubsystemBase
      */
     private void setColorProgressBar(int brightness, Color... colors)
     {
-        // progressBar = LEDPattern.gradient(colors).atBrightness(Percent.of(brightness));
+        // base = LEDPattern.progressMaskLayer(() -> Climb.getPosition() / Climb.climbPosition.kL1);
         progressBar.applyTo(ledBuffer);
     }
 
@@ -161,6 +164,14 @@ public class LEDs extends SubsystemBase
     private void setColorRainbow()
     {
         rainbow.applyTo(ledBuffer);
+    }
+
+    private void setMovingRainbow()
+    {
+        base = LEDPattern.rainbow(255, 255);
+        mask = LEDPattern.steps(maskSteps).scrollAtRelativeSpeed(Percent.per(Second).of(200));
+        movingRainbow = base.mask(mask);
+        movingRainbow.applyTo(ledBuffer);
     }
 
     private void off()
@@ -173,7 +184,7 @@ public class LEDs extends SubsystemBase
 
     public Command setColorSolidCommand(int brightness, Color color)
     {
-        return runOnce(() -> setColorSolid(color)).withName("Set LED Solid");
+        return runOnce(() -> setColorSolid(brightness, color)).withName("Set LED Solid");
     }
 
     public Command setColorGradientCommand(int brightness, Color ...colors)
@@ -181,9 +192,9 @@ public class LEDs extends SubsystemBase
         return runOnce(() -> setColorGradient(brightness, colors)).withName("Set LED Gradient");
     }
 
-    public Command setColorBlinkCommand(int brightness, Color ...colors)
+    public Command setColorBlinkCommand(Color ...colors)
     {
-        return runOnce(() -> setColorBlink(brightness, colors)).withName("Set LED Blink");
+        return runOnce(() -> setColorBlink(colors)).withName("Set LED Blink");
     }
 
     public Command setColorProgressBarCommand(int brightness, Color ...colors)
@@ -194,6 +205,11 @@ public class LEDs extends SubsystemBase
     public Command setColorRainbowCommand()
     {
         return runOnce(() -> setColorRainbow()).withName("Set LED Rainbow");
+    }
+
+    public Command setMovingRainbowCommand()
+    {
+        return run(() -> setMovingRainbow()).withName("Set LED Moving Rainbow");
     }
 
     public Command offCommand()

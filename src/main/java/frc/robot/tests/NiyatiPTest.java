@@ -4,7 +4,10 @@ import java.lang.invoke.MethodHandles;
 
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.LEDs;
-// import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.Joystick;
 // import frc.robot.subsystems.Intake;
@@ -33,8 +36,8 @@ public class NiyatiPTest implements Test
     private final RobotContainer robotContainer;
     // private Intake intake = null;
     private LEDs leds = null;
-    // private final CommandXboxController controller = new CommandXboxController(0);
-    private final Joystick controller = new Joystick(0);
+    private final CommandXboxController controller = new CommandXboxController(0);
+    private final Joystick joystick = new Joystick(0);
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -98,19 +101,18 @@ public class NiyatiPTest implements Test
      */
     public void periodic()
     {
-        // controller.x().onTrue(
-        //     LEDs.setColorSolidCommand(20, LEDs.Color.kRed)
-        // );
+        controller.x().onTrue(leds.setColorSolidCommand(20, Color.kRed));
+        controller.a().onTrue(leds.setMovingRainbowCommand()); //is there no way to add a .schedule?
 
-        if(controller.getRawButton(1))
-        {
-            leds.setColorSolidCommand(60, Color.kBlue).schedule();
-        }
-        else if (controller.getRawButton(2))
-        {
-            // leds.setColorRainbowCommand();
-            leds.setColorSolidCommand(60, Color.kRed).schedule();
-        }
+        // if(joystick.getRawButton(1))
+        // {
+        //     leds.setColorSolidCommand(60, Color.kBlue).schedule();
+        // }
+        // else if (joystick.getRawButton(2))
+        // {
+        //     // leds.setColorRainbowCommand();
+        //     leds.setColorSolidCommand(60, Color.kRed).schedule();
+        // }
     }
     
     /**

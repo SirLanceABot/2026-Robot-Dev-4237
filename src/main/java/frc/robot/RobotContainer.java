@@ -56,7 +56,6 @@ public class RobotContainer
 
     private boolean useShooterCamera            = false;
     private boolean useIntakeCamera             = false;
-    // private boolean useLEDs                     = false;
 
     // Robot components
     private ExampleSubsystem exampleSubsystem = null;
