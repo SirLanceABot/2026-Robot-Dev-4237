@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
@@ -12,6 +13,8 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.LEDs.ColorPattern;
 import frc.robot.subsystems.PoseEstimator;
 
 public class GeneralCommands
@@ -36,6 +39,7 @@ public class GeneralCommands
     private static Drivetrain drivetrain;
     private static PoseEstimator poseEstimator;
     private static Climb climb;
+    private static LEDs leds;
 
 
     public static void createCommands(RobotContainer robotContainer)
@@ -54,6 +58,46 @@ public class GeneralCommands
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
+    /**
+     * Command to set the led color and pattern,
+     * use this so that leds don't break the robot when disabled
+     * @param pattern pattern of the led color(s)
+     * @param colors the color(s) of the led
+     * @return the command to set the led color and pattern
+     * @author Matthew Fontecchio
+     */
+    public static Command setLEDCommand(ColorPattern pattern, Color... colors)
+    {
+        if(leds != null)
+        {
+            switch(pattern)
+            {
+                case kSolid:
+                    return colors != null ? leds.setColorSolidCommand(100, colors[0]) : Commands.none();
+                case kBlink:
+                    return colors != null ? leds.setColorBlinkCommand(colors) : Commands.none();
+                case kGradient:
+                    return colors != null ? leds.setColorGradientCommand(100, colors) : Commands.none();
+                case kRainbow:
+                    return leds.setColorRainbowCommand();
+                case kOff:
+                    return leds.offCommand();
+                default:
+                    return Commands.none();
+            }
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    // color and pattern for LEDS to default to during a match
+    public static Command defaultLEDCommand()
+    {
+        return setLEDCommand(ColorPattern.kSolid, Color.kRed).withName("Set LED to default (red)");
+    }
+
     // not tested
     public static Command intakeCommand()
     {
@@ -61,9 +105,10 @@ public class GeneralCommands
         {
             return 
             Commands.parallel(
+                setLEDCommand(ColorPattern.kSolid, Color.kYellow),
                 intake.pickupFuelCommand(),
-                agitator.forwardCommand(() -> 500.0) // rpm
-            );
+                agitator.forwardCommand(() -> 500.0)) // rpm
+            .withName("Intaking Fuel");
         }
         else
         {
@@ -79,8 +124,10 @@ public class GeneralCommands
             return 
             Commands.parallel(
                 intake.retractIntakeCommand(),
-                agitator.stopCommand()
-            );
+                agitator.stopCommand())
+            .andThen(setLEDCommand(ColorPattern.kBlink, Color.kGreen)).withTimeout(0.5)
+            .andThen(defaultLEDCommand())
+            .withName("Intake Reset Into Robot");
         }
         else
         {
@@ -93,7 +140,10 @@ public class GeneralCommands
     {
         if(intake != null && agitator != null)
         {
-            return intake.ejectFuelCommand();
+            return Commands.parallel(
+                setLEDCommand(ColorPattern.kSolid, Color.kOrange),
+                intake.ejectFuelCommand())
+                .withName("Ejecting Fuel In Intake");
         }
         else
         {
@@ -107,7 +157,9 @@ public class GeneralCommands
     {
         if(intake != null && agitator != null)
         {
-            return intake.retractIntakeCommand();
+            return intake.retractIntakeCommand()
+            .andThen(defaultLEDCommand())
+            .withName("Stopping Ejecting Fuel In Intake");
         }
         else
         {
@@ -121,14 +173,15 @@ public class GeneralCommands
         if(agitator != null && indexer != null && accelerator != null && flywheel != null)
         {
             return 
-            flywheel.burpFuelCommand().until(flywheel.isAtSetSpeed(10.0, 1.0)) // velocity that can slowy eject fuel
+            Commands.parallel(
+            setLEDCommand(ColorPattern.kSolid, Color.kOrange),
+            flywheel.burpFuelCommand().until(flywheel.isAtSetSpeed(10.0, 1.0))) // velocity that can slowy eject fuel
             .andThen(
                 Commands.parallel(
                     indexer.setForwardCommand(() -> 0.2),
                     accelerator.feedToShooterCommand(() -> 0.2),
-                    agitator.forwardCommand(() -> 500.0) // rpm
-                )
-            );
+                    agitator.forwardCommand(() -> 500.0))) // rpm
+            .withName("Ejecting All Fuel Slowly");
         }
         else
         {
@@ -147,8 +200,25 @@ public class GeneralCommands
                 flywheel.stopCommand(),
                 indexer.stopCommand(),
                 accelerator.stopCommand(),
-                agitator.stopCommand()
-            );
+                agitator.stopCommand())
+            .andThen(defaultLEDCommand())
+            .withName("Stopped Ejecting All Fuel");
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    public static Command extendClimbToL1Command()
+    {
+        if(climb != null)
+        {
+            return
+            Commands.parallel(
+                setLEDCommand(ColorPattern.kRainbow),
+                climb.extendToL1Command())
+            .withName("Climb Extended To L1 Position");       
         }
         else
         {
@@ -158,11 +228,12 @@ public class GeneralCommands
 
     // not tested
     // no clue what actual climb will look like
-    public static Command ascendToL1Command()
+    public static Command ascendL1Command()
     {
         if(climb != null)
         {
-            return climb.ascendL1Command();
+            return climb.retractFromL1Command()
+            .withName("Climb Mounted L1");
         }
         else
         {
@@ -176,8 +247,10 @@ public class GeneralCommands
     {
         if(climb != null)
         {
-            return climb.descendL1Command()
-            .andThen( () -> drivetrain.resetForFieldCentric());
+            return climb.extendToL1Command()
+            .andThen( () -> drivetrain.resetForFieldCentric())
+            .andThen(defaultLEDCommand())
+            .withName("Climb Unmounted L1");
         } 
         else
         {
@@ -186,4 +259,27 @@ public class GeneralCommands
     }
 
     // maybe L3?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // please?
 }

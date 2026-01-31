@@ -195,4 +195,9 @@ public class RobotContainer
     {
         return operatorController;
     }
+
+    public boolean useFullRobot()
+    {
+        return useFullRobot;
+    }
 }

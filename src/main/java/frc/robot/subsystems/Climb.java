@@ -146,7 +146,7 @@ public class Climb extends SubsystemBase
      * @author Robbie J
      * @return move to position L1, until at position or hard limit hit; then stops 
      */
-    public Command ascendL1Command()
+    public Command extendToL1Command()
     {
         return run( () -> moveToPosition(climbPosition.kL1)).until(() -> (isAtPosition(climbPosition.kL1).getAsBoolean() || (leadMotor.getForwardHardLimit())))
                 .andThen(stopCommand());
@@ -156,7 +156,7 @@ public class Climb extends SubsystemBase
      * @author Robbie J
      * @return move to position start, until at position or hard limit hit; then stops 
      */
-    public Command descendL1Command()
+    public Command retractFromL1Command()
     {
         return run( () -> moveToPosition(climbPosition.kSTART)).until(() -> (isAtPosition(climbPosition.kSTART).getAsBoolean() || (leadMotor.getReverseHardLimit())))
         .andThen(stopCommand());

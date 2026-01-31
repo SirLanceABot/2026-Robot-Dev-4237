@@ -38,7 +38,7 @@ public class CommandsManager extends Command
     public CommandsManager() 
     {}
 
-    public void createCommands(RobotContainer robotcontainer)
+    public static void createCommands(RobotContainer robotcontainer)
     {
         System.out.println("Constructor Started: " + fullClassName);
 
@@ -65,10 +65,11 @@ public class CommandsManager extends Command
         // Scoring Commands
 
         // Climbing Commands
-        NamedCommands.registerCommand("Ascend To L1 Command", GeneralCommands.ascendToL1Command());
-        NamedCommands.registerCommand("Descend From L1 Command", GeneralCommands.descendFromL1Command());
+        NamedCommands.registerCommand("Extend Climb To L1 Command", GeneralCommands.extendClimbToL1Command());
+        NamedCommands.registerCommand("Ascend L1 Command", GeneralCommands.ascendL1Command());
+        NamedCommands.registerCommand("Descend L1 Command", GeneralCommands.descendFromL1Command());
 
-
+        
         SmartDashboard.putData(CommandScheduler.getInstance());
     }
 }

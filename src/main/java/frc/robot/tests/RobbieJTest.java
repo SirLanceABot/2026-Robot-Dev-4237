@@ -89,8 +89,8 @@ public class RobbieJTest implements Test
         // controller.x().onTrue(agitator.forwardCommand());
         // controller.a().onTrue(agitator.reverseCommand());
         // controller.b().onTrue(agitator.stopCommand());
-        controller.x().onTrue(climb.ascendL1Command());
-        controller.a().onTrue(climb.descendL1Command());
+        controller.x().onTrue(climb.extendToL1Command());
+        controller.a().onTrue(climb.retractFromL1Command());
         controller.b().onTrue(climb.stopCommand());
     }
 
