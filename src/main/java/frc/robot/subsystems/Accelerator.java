@@ -66,7 +66,7 @@ public class Accelerator extends SubsystemBase
     {
         motor.setupFactoryDefaults();
         motor.setupInverted(true); // Find out later
-        // motor.setupVelocityConversionFactor();
+        // motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR); // rev/s to ft/s
 
         motor.setSafetyEnabled(false);
 
@@ -78,10 +78,12 @@ public class Accelerator extends SubsystemBase
         motor.setupForwardSoftLimit(100, false);
         motor.setupReverseSoftLimit(0, false);
 
-        motor.setupCurrentLimit(5.0, 35.0, 0.5);
+        // motor.setupMaxMotion(600.0, 6.0, 0.0, 0);
+
+        // motor.setupCurrentLimit(5.0, 45.0, 0.5);
         //Current Threshold depends on speed sent to motor
 
-        // motor.setupPIDController(0, 0.05, 0, 0);
+        motor.setupPIDController(0, 0.0001, 0, 0);
         // motor.setupCoastMode();
         motor.setupBrakeMode();
 
@@ -89,8 +91,6 @@ public class Accelerator extends SubsystemBase
         // motor2.setupBrakeMode();
 
         // motor2.setupFollower(MOTOR, false);
-
-        // motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR); // rev/s to ft/s
     }
 
     public double getPosition() 
@@ -129,14 +129,14 @@ public class Accelerator extends SubsystemBase
 
     public Command onCommand()
     {
-        return run( () -> set(0.25) );
-        // return run( () -> set(0.10) );
+        // return run( () -> set(0.25) );
+        return run( () -> set(0.10) );
     }
 
     public Command reverseCommand()
     {
-        return run( () -> set(-0.25) );
-        // return run( () -> set(-0.10) );
+        // return run( () -> set(-0.25) );
+        return run( () -> set(-0.10) );
     }
 
     public Command feedToShooterCommand(DoubleSupplier speed)
@@ -183,6 +183,6 @@ public class Accelerator extends SubsystemBase
     @Override
     public String toString()
     {
-        return "Accelerator Current Amps: " + motor.getCurrentAmps();
+        return "Accelerator Current Velocity: " + getVelocity();
     }
 }
