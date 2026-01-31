@@ -303,18 +303,19 @@ public class PoseEstimator extends SubsystemBase
         return rotation;
     }
 
-    // test this on 2025 bot and field
+    // tested on 2025 bot and works now
     public DoubleSupplier getAngleToBlueHub()
     {
         Pose2d robotPose = drivetrain.getState().Pose;
         DoubleSupplier deltay = () -> (blueHubPose.getY() - robotPose.getY());
         DoubleSupplier deltax = () -> (blueHubPose.getX() - robotPose.getX());
-        DoubleSupplier rotation = () -> (Math.atan2((deltay.getAsDouble()), (deltax.getAsDouble())));
+        DoubleSupplier rotation = () -> (Math.atan2((-deltay.getAsDouble()), (-deltax.getAsDouble())));
         return rotation;
     }
 
     /**
      * gets the rotation needed to make the robot face the alliance hub directly
+     * TESTED ON 2025 BOT AND WORKS
      * @return the angle to rotate to, in radians
      */
     public DoubleSupplier getAngleToAllianceHub()
@@ -329,11 +330,18 @@ public class PoseEstimator extends SubsystemBase
         }
     }
 
-    public DoubleSupplier getAngleToTarget(Pose2d robotPose, Pose2d target)
+    public DoubleSupplier getAngleToRedTarget(Pose2d robotPose, Pose2d target)
     {
         DoubleSupplier deltay = () -> (target.getY() - robotPose.getY());
         DoubleSupplier deltax = () -> (target.getX() - robotPose.getX());
         return () -> Math.atan2(deltay.getAsDouble(), deltax.getAsDouble());
+    }
+
+    public DoubleSupplier getAngleToBlueTarget(Pose2d robotPose, Pose2d target)
+    {
+        DoubleSupplier deltay = () -> (target.getY() - robotPose.getY());
+        DoubleSupplier deltax = () -> (target.getX() - robotPose.getX());
+        return () -> Math.atan2(-deltay.getAsDouble(), -deltax.getAsDouble());
     }
 
     /**
@@ -381,9 +389,16 @@ public class PoseEstimator extends SubsystemBase
             robotPose, 
             velocity);
 
-        DoubleSupplier targetHeading = () -> getAngleToTarget(robotPose, calculatedTarget).getAsDouble();
-
-        return targetHeading;
+        if(drivetrain.isRedAllianceSupplier().getAsBoolean())
+        {
+            DoubleSupplier targetHeading = () -> (getAngleToRedTarget(robotPose, calculatedTarget).getAsDouble());
+            return targetHeading;
+        }
+        else
+        {
+            DoubleSupplier targetHeading = () -> (getAngleToBlueTarget(robotPose, calculatedTarget).getAsDouble());
+            return targetHeading;
+        }
     }
 
 

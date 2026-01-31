@@ -131,7 +131,7 @@ public final class DriverBindings {
         aButton
         .whileTrue(
             Commands.parallel(
-                drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, poseEstimator.getRotationToCalculatedTarget()),
+                drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getRotationToCalculatedTarget().getAsDouble())), // Tested this command in 25 repo, works there
                 ScoringCommands.shootOnTheMoveCommand(drivetrain, agitator, indexer, accelerator, flywheel, poseEstimator)));
                 
         // TODO add toggle for when command ends to kill all subsystem movement (shooter, indexer, etc.)

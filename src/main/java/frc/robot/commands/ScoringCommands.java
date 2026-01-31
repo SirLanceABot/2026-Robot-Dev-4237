@@ -114,14 +114,15 @@ public class ScoringCommands
     }
 
     // TODO implement with shooter speeds
+    // alignment to hub works, need to test everything after the angle lock drive command 
     public static Command shootFromStandstillCommand(Drivetrain drivetrain, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
     {
         if(drivetrain != null && agitator != null && indexer != null && accelerator != null && flywheel != null)
         {
             return
-            drivetrain.lockWheelsCommand()
+            drivetrain.lockWheelsCommand().withTimeout(0.1)
             .andThen(
-                drivetrain.angleLockDriveCommand(null, null, null, poseEstimator.getAngleToAllianceHub()).withTimeout(0.5))
+                drivetrain.angleLockDriveCommand(() -> 0, () -> 0, () -> 0.05, () -> (poseEstimator.getAngleToAllianceHub().getAsDouble())).withTimeout(0.75))
             .andThen(
                 flywheel.setControlVelocityCommand(() -> flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble()))
                     .until(flywheel.isAtSetSpeed(flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble()), 2))) // within 2 feet per second
