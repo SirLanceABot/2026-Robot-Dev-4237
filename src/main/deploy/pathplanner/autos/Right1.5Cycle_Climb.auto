@@ -7,25 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftTrench_CloseLeftNZ"
+            "pathName": "RightTrench_CloseRightNZ"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "CloseLeftNZ_LeftTrenchShot"
+            "pathName": "CloseRightNZ_RightTrenchShot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "LeftTrenchShot_FarLeftNZ"
+            "pathName": "RightTrenchShot_FarRightNZ"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "FarLeftNZ_LeftClimb"
+            "pathName": "FarRightNZ_RightClimb"
           }
         }
       ]
