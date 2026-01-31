@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightTrench_CloseRightNZ"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CloseRightNZ_RightTrenchShot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightTrenchShot_FarRightNZ"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FarRightNZ_RightTrenchShot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

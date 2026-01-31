@@ -3,35 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.723127346096096,
-        "y": 5.5311861275337835
+        "x": 4.060078864173945,
+        "y": 0.6256246019832599
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.346437816248126,
-        "y": 6.706143471233133
+        "x": 5.060078864173945,
+        "y": 0.6256246019832599
       },
       "isLocked": false,
-      "linkedName": "Close Left NZ"
+      "linkedName": "Right Trench Shot"
     },
     {
       "anchor": {
-        "x": 4.078938870408546,
-        "y": 7.481772102230135
+        "x": 7.799316605258369,
+        "y": 3.471017671943232
       },
       "prevControl": {
-        "x": 6.984385717297601,
-        "y": 7.511624402642429
+        "x": 7.415050661844978,
+        "y": 0.439026735352984
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Trench Shot"
+      "linkedName": "Far Right NZ"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.8469966419956135,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 0.22708504660087708,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 0.8740834018640353,
+      "rotationDegrees": -112.6330227413164
     }
   ],
   "constraintZones": [],
@@ -47,13 +51,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -90.660272240895
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.31372211858692
+    "rotation": 90.32363344624723
   },
   "useDefaultConstraints": true
 }
