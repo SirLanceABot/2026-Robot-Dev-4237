@@ -96,9 +96,9 @@ public final class Constants
 
     public static class Intake
     {
-        public static final int INTAKEPIVOTMOTOR            = 4;
-        public static final int INTAKEROLLERLEADER          = 3;
-        public static final int INTAKEROLLERFOLLOWER        = 12;
+        public static final int ROLLER_MOTOR               = 4;
+        public static final int PIVOT_MOTOR_LEADER          = 3;
+        public static final int PIVOT_MOTOR_FOLLOWER        = 12;
 
         public static final String MOTOR_CAN_BUS            = CANbus.ROBORIO;
     }   

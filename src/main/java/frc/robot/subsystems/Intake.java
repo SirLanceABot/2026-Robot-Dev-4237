@@ -34,9 +34,9 @@ public class Intake extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance RollersMotor = new TalonFXLance(INTAKEPIVOTMOTOR, MOTOR_CAN_BUS, "Roller Motor");
-    private final TalonFXLance PivotMotor = new TalonFXLance(INTAKEROLLERLEADER, MOTOR_CAN_BUS, "Lead Pivot Motor");
-    private final TalonFXLance PivotFollower = new TalonFXLance(INTAKEROLLERFOLLOWER, MOTOR_CAN_BUS, "Follow Pivot Motor");
+    private final TalonFXLance RollersMotor = new TalonFXLance(ROLLER_MOTOR, MOTOR_CAN_BUS, "Roller Motor");
+    private final TalonFXLance PivotMotor = new TalonFXLance(PIVOT_MOTOR_LEADER, MOTOR_CAN_BUS, "Lead Pivot Motor");
+    private final TalonFXLance PivotFollower = new TalonFXLance(PIVOT_MOTOR_FOLLOWER, MOTOR_CAN_BUS, "Follow Pivot Motor");
 
     private final double kP = 0.7;
     private final double kI = 0.0;
@@ -103,7 +103,7 @@ public class Intake extends SubsystemBase
         PivotFollower.setupPIDController(0, kP, kI, kD, kS, kV, 0);
 
         // Configure the follower last so configurables above are not overwritten
-        PivotFollower.setupFollower(INTAKEROLLERLEADER, true);
+        PivotFollower.setupFollower(PIVOT_MOTOR_LEADER, true);
 
         // Configure Velocity Conversion Factor (rev/s to ft/s)
         // intakeRollersMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
