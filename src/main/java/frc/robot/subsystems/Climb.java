@@ -40,7 +40,7 @@ public class Climb extends SubsystemBase
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
     private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Lead Climb Motor ");
-    private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Follower Climb Motor");
+    // private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Follower Climb Motor");
     
     private final double tolerance = 0.2;
 
@@ -73,13 +73,13 @@ public class Climb extends SubsystemBase
     private void configMotors()
     {
         leadMotor.setupFactoryDefaults();
-        followMotor.setupFactoryDefaults();
+        // followMotor.setupFactoryDefaults();
 
         leadMotor.setupBrakeMode();
-        followMotor.setupBrakeMode();
+        // followMotor.setupBrakeMode();
 
         leadMotor.setPosition(0.0);
-        followMotor.setPosition(0.0);
+        // followMotor.setPosition(0.0);
 
         // leadMotor.setupForwardSoftLimit(16, true);
         // followMotor.setupForwardSoftLimit(0, false);
@@ -90,7 +90,7 @@ public class Climb extends SubsystemBase
         leadMotor.setupForwardHardLimitSwitch(true, true, 0);
         leadMotor.setupReverseHardLimitSwitch(true, true, 1);
 
-        followMotor.setupFollower(LEADMOTOR, true);
+        // followMotor.setupFollower(LEADMOTOR, true);
 
         leadMotor.setupPIDController(0, kPUP, kI, kD); 
         leadMotor.setupPIDController(1, kPDOWN, kI, kD); 
