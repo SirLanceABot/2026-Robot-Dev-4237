@@ -181,7 +181,7 @@ public final class DriverBindings {
     {
         Trigger startButton = controller.start();
         startButton
-            .onTrue(Commands.runOnce(() -> drivetrain.driveFieldCentric(), drivetrain));
+            .onTrue(Commands.runOnce(() -> drivetrain.resetForFieldCentric(), drivetrain));
     }
 
 

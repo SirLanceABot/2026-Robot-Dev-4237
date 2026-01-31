@@ -94,7 +94,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
         )
     );
 
-    /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
+    /* SysId routine Fr characterizing steer. This is used to find PID gains for the steer motors. */
     private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
         new SysIdRoutine.Config(
             null,        // Use default ramp rate (1 V/s)
@@ -242,7 +242,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     //TODO order matters
-    public void driveFieldCentric()
+    public void resetForFieldCentric()
     {
         getPigeon2().reset();
         seedFieldCentric();

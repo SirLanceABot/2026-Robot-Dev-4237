@@ -55,7 +55,6 @@ public class GeneralCommands
         poseEstimator = robotContainer.getPoseEstimator();
 
         System.out.println("  Constructor Finished: " + fullClassName);
-
     }
 
     // not tested
@@ -106,6 +105,7 @@ public class GeneralCommands
     }
 
     // not tested
+    // ejects fuel backward relative to the shooter
     public static Command stopEjectingFuelInIntakeCommand(Intake intake, Agitator agitator)
     {
         if(intake != null && agitator != null)
@@ -140,6 +140,7 @@ public class GeneralCommands
     }
 
     // not tested
+    // ejects fuel forward relative to the shooter
     public static Command stopEjectingAllFuelCommand(Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
     {
         if(agitator != null && indexer != null && accelerator != null && flywheel != null)
@@ -157,4 +158,34 @@ public class GeneralCommands
             return Commands.none();
         }
     }
+
+    // not tested
+    // no clue what actual climb will look like
+    public static Command ascendToL1Command(Climb climb)
+    {
+        if(climb != null)
+        {
+            return Commands.run(() -> climb.ascendL1Command());
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    // also not tested
+    // still no clue what actual climb will look like
+    public static Command descendFromL1Command(Climb climb, Drivetrain drivetrain)
+    {
+        if(climb != null)
+        {
+            return Commands.run(() -> climb.descendL1Command());
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    // maybe L3?
 }
