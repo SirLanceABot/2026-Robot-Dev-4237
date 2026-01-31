@@ -34,9 +34,9 @@ public class Intake extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance intakePivotMotor = new TalonFXLance(INTAKEPIVOTMOTOR, MOTOR_CAN_BUS, "Pivot Motor");
-    private final TalonFXLance intakeRollersMotor = new TalonFXLance(INTAKEROLLERLEADER, MOTOR_CAN_BUS, "Lead Roller Motor");
-    private final TalonFXLance intakeRollersFollower = new TalonFXLance(INTAKEROLLERFOLLOWER, MOTOR_CAN_BUS, "Follow Roller Motor");
+    private final TalonFXLance RollersMotor = new TalonFXLance(INTAKEPIVOTMOTOR, MOTOR_CAN_BUS, "Roller Motor");
+    private final TalonFXLance PivotMotor = new TalonFXLance(INTAKEROLLERLEADER, MOTOR_CAN_BUS, "Lead Pivot Motor");
+    private final TalonFXLance PivotFollower = new TalonFXLance(INTAKEROLLERFOLLOWER, MOTOR_CAN_BUS, "Follow Pivot Motor");
 
     private final double kP = 0.7;
     private final double kI = 0.0;
@@ -70,36 +70,36 @@ public class Intake extends SubsystemBase
     private void configMotors()
     {
         // Factory Default all motors
-        intakePivotMotor.setupFactoryDefaults();
-        intakeRollersMotor.setupFactoryDefaults();
-        intakeRollersFollower.setupFactoryDefaults();
+        RollersMotor.setupFactoryDefaults();
+        PivotMotor.setupFactoryDefaults();
+        PivotFollower.setupFactoryDefaults();
 
         // Sets up motors to be inverted or not
-        intakePivotMotor.setupInverted(true);
-        intakeRollersMotor.setupInverted(true);
+        RollersMotor.setupInverted(true);
+        PivotMotor.setupInverted(true);
 
         // Sets up Coast Mode
-        intakePivotMotor.setupCoastMode();
-        intakeRollersMotor.setupCoastMode();
-        intakeRollersFollower.setupCoastMode();
+        RollersMotor.setupCoastMode();
+        PivotMotor.setupCoastMode();
+        PivotFollower.setupCoastMode();
 
         // Sets up position
-        intakePivotMotor.setPosition(0.0);
-        intakeRollersMotor.setPosition(0.0);
-        intakeRollersFollower.setPosition(0.0);
+        RollersMotor.setPosition(0.0);
+        PivotMotor.setPosition(0.0);
+        PivotFollower.setPosition(0.0);
 
         // Set up Safety
-        intakePivotMotor.setSafetyEnabled(false);
-        intakeRollersMotor.setSafetyEnabled(false);
-        intakeRollersFollower.setSafetyEnabled(false);
+        RollersMotor.setSafetyEnabled(false);
+        PivotMotor.setSafetyEnabled(false);
+        PivotFollower.setSafetyEnabled(false);
 
         // Set up PID Controllers
-        intakePivotMotor.setupPIDController(0, kP, kI, kD, kS, kV, 0);
-        intakeRollersMotor.setupPIDController(0, kP, kI, kD, kS, kV, 0);
-        intakeRollersFollower.setupPIDController(0, kP, kI, kD, kS, kV, 0);
+        RollersMotor.setupPIDController(0, kP, kI, kD, kS, kV, 0);
+        PivotMotor.setupPIDController(0, kP, kI, kD, kS, kV, 0);
+        PivotFollower.setupPIDController(0, kP, kI, kD, kS, kV, 0);
 
         // Configure the follower last so configurables above are not overwritten
-        intakeRollersFollower.setupFollower(INTAKEROLLERLEADER, true);
+        PivotFollower.setupFollower(INTAKEROLLERLEADER, true);
     }
 
     // private void set()
@@ -114,8 +114,8 @@ public class Intake extends SubsystemBase
      */
     public void setVoltage(double voltage)
     {
-        intakePivotMotor.setVoltage(voltage);
-        intakeRollersMotor.setVoltage(voltage);
+        RollersMotor.setVoltage(voltage);
+        PivotMotor.setVoltage(voltage);
     }
 
     /**
@@ -124,7 +124,7 @@ public class Intake extends SubsystemBase
      */
     public void setVelocity(double velocity)
     {
-        intakeRollersMotor.setControlVelocity(velocity);
+        PivotMotor.setControlVelocity(velocity);
     }
 
     /** 
@@ -133,7 +133,7 @@ public class Intake extends SubsystemBase
     public void pickUpFuel()
     {
         setVelocity(0.2);
-        intakePivotMotor.setControlPosition(intakingPosition);
+        RollersMotor.setControlPosition(intakingPosition);
     }
 
     /** 
@@ -141,19 +141,19 @@ public class Intake extends SubsystemBase
      */
     public void ejectFuel()
     {
-        intakePivotMotor.setControlPosition(intakingPosition);
+        RollersMotor.setControlPosition(intakingPosition);
         setVelocity(-0.2);
     }
 
     public void retractIntake()
     {
-        intakePivotMotor.setControlPosition(retractedPosition);
+        RollersMotor.setControlPosition(retractedPosition);
         setVelocity(0.0);
     }
 
     public BooleanSupplier isAtPosition(double desiredPosition)
     {
-        return () -> (Math.abs(intakePivotMotor.getPosition() - desiredPosition) <= 1.0);
+        return () -> (Math.abs(RollersMotor.getPosition() - desiredPosition) <= 1.0);
     }
 
     /**
@@ -212,7 +212,6 @@ public class Intake extends SubsystemBase
     @Override
     public String toString()
     {
-        // No idea how to get that
-        return "Current Intake Velocity: " + intakeRollersMotor.getVelocity();
+        return "Current Intake Velocity: " + PivotMotor.getVelocity();
     }
 }
