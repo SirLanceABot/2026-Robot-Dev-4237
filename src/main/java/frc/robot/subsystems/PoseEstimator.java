@@ -22,7 +22,6 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -58,6 +57,10 @@ public class PoseEstimator extends SubsystemBase
     private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
     private final InterpolatingDoubleTreeMap timeOfFlightMap = new InterpolatingDoubleTreeMap();
+
+    //For purelyCalculatedLeadingAngle calculations
+    private final double shooterAngleRadians = (72.0/360.0)*(2.0*Math.PI);  
+    private final double robotToHubVerticalDistanceMeters = -1.2954;
 
     // Kalman filter, experiment later
     private Matrix<N3, N1> visionStdDevs;
@@ -382,6 +385,86 @@ public class PoseEstimator extends SubsystemBase
 
         return targetHeading;
     }
+
+
+    /**
+     * Mathematically "pure" leading angle calculation
+     * Calculates leading angle based off time of flight and shooter velocity (no InterpolatingDoubleTreeMap)
+     * @param target : the hub you want to shoot at
+     * @return target angle, in radians
+     * @author Matthew
+     */
+    public DoubleSupplier pureLeadingAngle(Pose2d target)
+    {
+        return () ->
+        {
+            Pose2d robotPose = drivetrain.getState().Pose;            
+
+            double xVelocityField = (drivetrain.getState().Speeds.vxMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getCos()) - drivetrain.getState().Speeds.vyMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getSin()));
+            double yVelocityField = (drivetrain.getState().Speeds.vxMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getSin()) + drivetrain.getState().Speeds.vyMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getCos()));
+
+            double deltax = target.getX() - robotPose.getX();
+            double deltay = target.getY() - robotPose.getY();
+            
+            double distanceFromTarget = 0.0;
+            double velocity = 0.0;
+            double timeOfFlight = 0.0;
+            double xDelta = deltax;
+            double yDelta = deltay;
+
+            for(int i = 0; i < 3; i++)
+            {
+                distanceFromTarget = Math.hypot(xDelta, yDelta);
+                velocity = (distanceFromTarget / Math.cos(shooterAngleRadians)) * Math.sqrt((9.8) / (2 * (robotToHubVerticalDistanceMeters + distanceFromTarget * Math.tan(shooterAngleRadians))));
+                timeOfFlight = ((velocity * Math.sin(shooterAngleRadians)) + Math.sqrt(Math.pow(velocity * Math.sin(shooterAngleRadians), 2) + 2 * 9.8 * robotToHubVerticalDistanceMeters)) / 9.8;
+
+                xDelta = deltax - (xVelocityField * timeOfFlight);
+                yDelta = deltay - (yVelocityField * timeOfFlight);
+                // System.out.println("yDelta: " + yDelta + " xDelta: " + xDelta);
+            }
+            return Math.atan2(yDelta, xDelta);
+        };
+    }
+
+    /**
+     * Mathematically "pure" shooter velocity calculation (for leading angle)
+     * Calculates shooter velocity (no InterpolatingDoubleTreeMap)
+     * @param target : the hub you want to shoot at
+     * @return target shooter velocity for the leading angle
+     * @author Matthew
+     */
+    public DoubleSupplier pureShooterVelocity(Pose2d target)
+    {
+        return () ->
+        {
+            Pose2d robotPose = drivetrain.getState().Pose;            
+
+            double xVelocityField = (drivetrain.getState().Speeds.vxMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getCos()) - drivetrain.getState().Speeds.vyMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getSin()));
+            double yVelocityField = (drivetrain.getState().Speeds.vxMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getSin()) + drivetrain.getState().Speeds.vyMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getCos()));
+
+            double deltax = target.getX() - robotPose.getX();
+            double deltay = target.getY() - robotPose.getY();
+            
+            double distanceFromTarget = 0.0;
+            double velocity = 0.0;
+            double timeOfFlight = 0.0;
+            double xDelta = deltax;
+            double yDelta = deltay;
+
+            for(int i = 0; i < 3; i++)
+            {
+                distanceFromTarget = Math.hypot(xDelta, yDelta);
+                velocity = (distanceFromTarget / Math.cos(shooterAngleRadians)) * Math.sqrt((9.8) / (2 * (robotToHubVerticalDistanceMeters + distanceFromTarget * Math.tan(shooterAngleRadians))));
+                timeOfFlight = ((velocity * Math.sin(shooterAngleRadians)) + Math.sqrt(Math.pow(velocity * Math.sin(shooterAngleRadians), 2) + 2 * 9.8 * robotToHubVerticalDistanceMeters)) / 9.8;
+
+                xDelta = deltax - (xVelocityField * timeOfFlight);
+                yDelta = deltay - (yVelocityField * timeOfFlight);
+            }
+            return velocity;
+        };
+    }
+
+    
 
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
