@@ -9,6 +9,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.motors.SparkMaxLance;
+import frc.robot.motors.TalonFXLance;
 
 /**
  * Creates an agitator
@@ -33,11 +34,11 @@ public class Agitator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance motor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Agitator Motor ");
+    private final TalonFXLance motor = new TalonFXLance(MOTOR, MOTOR_CAN_BUS, "Agitator Motor ");
     // private final SparkMaxLance agitatorMotor = new SparkMaxLance(3, "ROBORIO", "Agitator");
 
     //PID
-    private final double kP = 0.0001;
+    private final double kP = 0.01;
     private final double kI = 0.0;
     private final double kD = 0.0;
 

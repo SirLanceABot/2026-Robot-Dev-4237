@@ -2,7 +2,13 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
+import frc.robot.commands.ScoringCommands;
+import frc.robot.subsystems.Accelerator;
+import frc.robot.subsystems.Agitator;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Indexer;
 
 @SuppressWarnings("unused")
 public class LoganBTest implements Test
@@ -26,6 +32,11 @@ public class LoganBTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
+    private final CommandXboxController controller = new CommandXboxController(0);
+    private final Flywheel flywheel;
+    private final Accelerator acceleartor;
+    private final Agitator agitator;
+    private final Indexer indexer;
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -41,6 +52,10 @@ public class LoganBTest implements Test
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.robotContainer = robotContainer;
+        this.flywheel = robotContainer.getFlywheel();
+        this.acceleartor = robotContainer.getAccelerator();
+        this.agitator = robotContainer.getAgitator();
+        this.indexer = robotContainer.getIndexer();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -48,6 +63,7 @@ public class LoganBTest implements Test
 
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
+    
 
         
 
@@ -64,7 +80,11 @@ public class LoganBTest implements Test
      * This method runs periodically (every 20ms).
      */
     public void periodic()
-    {}
+    {
+        // controller.a().onTrue(
+        //     ScoringCommands.shootFromStandstillCommand(agitator, acceleartor, flywheel)
+        // );
+    }
     
     /**
      * This method runs one time after the periodic() method.

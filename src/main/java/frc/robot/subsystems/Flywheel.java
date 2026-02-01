@@ -39,8 +39,8 @@ public class Flywheel extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Flywheel Lead Motor");
-    private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Flywheel Follow Motor");
+    private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Flywheel Lead Motor"); //X60
+    private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Flywheel Follow Motor"); //X60
 
     // private final TalonFX motor = new TalonFX(1, MOTOR_CAN_BUS);
     
@@ -258,7 +258,7 @@ public class Flywheel extends SubsystemBase
     // Use a method reference instead of this method
     public Command stopCommand()
     {
-        return run(this::stop);
+        return runOnce(this::stop);
     }
 
     public Command runMtorUsingVoltageCommand(double voltage)

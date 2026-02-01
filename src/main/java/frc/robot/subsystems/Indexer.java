@@ -11,6 +11,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.motors.SparkMaxLance;
+import frc.robot.motors.TalonFXLance;
 import frc.robot.motors.TalonFXSLance;
 
 /**
@@ -36,7 +37,7 @@ public class Indexer extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance motor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Indexer Motor");
+    private final TalonFXLance motor = new TalonFXLance(MOTOR, MOTOR_CAN_BUS, "Indexer Motor");
     // private final TalonFXSLance motor = new TalonFXSLance(MOTOR, MOTOR_CAN_BUS, "Indexer Motor");
 
     private final double kP = 0.000075;

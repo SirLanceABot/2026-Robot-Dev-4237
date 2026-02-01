@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Accelerator;
@@ -114,23 +115,22 @@ public class ScoringCommands
     }
 
     // TODO implement with shooter speeds
-    // alignment to hub works, need to test everything after the angle lock drive command 
-    public static Command shootFromStandstillCommand(Drivetrain drivetrain, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
+    // alignment to hub works and flywheel/agitator/accelerator parts work seperately, test together with full robot
+    public static Command shootFromStandstillCommand(Drivetrain drivetrain, Agitator agitator, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
     {
-        if(drivetrain != null && agitator != null && indexer != null && accelerator != null && flywheel != null)
+        if(drivetrain != null && agitator != null  && accelerator != null && flywheel != null && poseEstimator != null)
         {
             return
             drivetrain.lockWheelsCommand().withTimeout(0.1)
             .andThen(
                 drivetrain.angleLockDriveCommand(() -> 0, () -> 0, () -> 0.05, () -> (poseEstimator.getAngleToAllianceHub().getAsDouble())).withTimeout(0.75))
             .andThen(
-                flywheel.setControlVelocityCommand(() -> flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble()))
-                    .until(flywheel.isAtSetSpeed(flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble()), 2))) // within 2 feet per second
+                flywheel.setControlVelocityCommand(() -> 10)
+                    .until(() -> flywheel.isAtSetSpeed(10, 5).getAsBoolean())) // within 2 feet per second
             .andThen(
                 Commands.parallel(
                     agitator.forwardCommand(() -> 100.0), // rpm
-                    indexer.setForwardCommand(() -> 0.25),
-                    accelerator.feedToShooterCommand(() -> 0.25)));
+                    accelerator.feedToShooterCommand(() -> 0.1)));
         }
         else
         {
@@ -164,7 +164,7 @@ public class ScoringCommands
             double shooterPower = flywheel.getShotPower(distance);
 
             return
-            flywheel.setControlVelocityCommand(() -> shooterPower).until(flywheel.isAtSetSpeed(distance, 5))     // TODO tune tolerance
+            flywheel.setControlVelocityCommand(() -> shooterPower).until(flywheel.isAtSetSpeed(shooterPower, 5))     // TODO tune tolerance
             .andThen(
                 Commands.parallel(
                     accelerator.feedToShooterCommand(() -> 0.25),

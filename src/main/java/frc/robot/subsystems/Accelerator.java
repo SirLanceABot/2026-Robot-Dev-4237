@@ -34,7 +34,7 @@ public class Accelerator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance motor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Accelerator Motor");
+    private final SparkMaxLance motor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Accelerator Motor"); // Neo550
 
     // private final SparkMaxLance motor2 = new SparkMaxLance(1, MOTOR_CAN_BUS, "Follower Motor");
 
