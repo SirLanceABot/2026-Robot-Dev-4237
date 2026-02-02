@@ -28,12 +28,7 @@
       "linkedName": "LeftClimb"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5717927631578946,
-      "rotationDegrees": -44.01644537572636
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -179.58060268963945
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Depot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -89.69860874146468
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }
