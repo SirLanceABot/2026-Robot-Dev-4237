@@ -167,6 +167,23 @@ public class GeneralCommands
         }
     }
 
+    public static Command stopShootingCommand()
+    {
+        if(flywheel != null && agitator != null && accelerator != null)
+        {
+            return
+            Commands.parallel(
+                flywheel.stopCommand(),
+                agitator.stopCommand(),
+                accelerator.stopCommand()
+            );
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
     // not tested
     public static Command ejectAllFuelSlowlyCommand()
     {

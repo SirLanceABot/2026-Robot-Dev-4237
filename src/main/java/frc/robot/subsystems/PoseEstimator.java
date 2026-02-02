@@ -57,6 +57,7 @@ public class PoseEstimator extends SubsystemBase
     private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
     private final InterpolatingDoubleTreeMap timeOfFlightMap = new InterpolatingDoubleTreeMap();
+    private final int ITERATIONS = 3; // number of iterations for time of flight to actual target and calculated target to converge
 
     //For purelyCalculatedLeadingAngle calculations
     private final double shooterAngleRadians = (72.0/360.0)*(2.0*Math.PI);  
@@ -357,7 +358,7 @@ public class PoseEstimator extends SubsystemBase
 
         Translation2d calculatedTargetTranslation = targetTranslation;
 
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < ITERATIONS; i++)
         {
             double distance = robotTranslation.getDistance(calculatedTargetTranslation);
 
@@ -500,7 +501,7 @@ public class PoseEstimator extends SubsystemBase
             }
 
             // only update if we see 2+ tags
-            if(camera.getTagCount() > 1)
+            if(camera.getTagCount() > 0)
             {
                 Pose2d visionPose = camera.getPose();
                 double robotVelo = Math.hypot(drivetrain.getState().Speeds.vxMetersPerSecond, drivetrain.getState().Speeds.vyMetersPerSecond);
@@ -517,7 +518,7 @@ public class PoseEstimator extends SubsystemBase
                     rejectUpdate = true;
                 }
 
-                if(robotRotation > 720.0)
+                if(robotRotation > 360.0)
                 {
                     rejectUpdate = true;
                 }

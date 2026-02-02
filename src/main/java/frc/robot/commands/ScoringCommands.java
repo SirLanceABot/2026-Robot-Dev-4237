@@ -116,6 +116,7 @@ public class ScoringCommands
 
     // TODO implement with shooter speeds
     // alignment to hub works and flywheel/agitator/accelerator parts work seperately, test together with full robot
+    // have NOT tested implementeation with varying powers/distances
     public static Command shootFromStandstillCommand(Drivetrain drivetrain, Agitator agitator, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
     {
         if(drivetrain != null && agitator != null  && accelerator != null && flywheel != null && poseEstimator != null)
@@ -125,8 +126,8 @@ public class ScoringCommands
             .andThen(
                 drivetrain.angleLockDriveCommand(() -> 0, () -> 0, () -> 0.05, () -> (poseEstimator.getAngleToAllianceHub().getAsDouble())).withTimeout(0.75))
             .andThen(
-                flywheel.setControlVelocityCommand(() -> 10)
-                    .until(() -> flywheel.isAtSetSpeed(10, 5).getAsBoolean())) // within 2 feet per second
+                flywheel.setControlVelocityCommand(() -> (flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble() * 3.281))) // meters -> feet
+                    .until(() -> flywheel.isAtSetSpeed(flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble() * 3.281), 5).getAsBoolean())) // within 2 feet per second
             .andThen(
                 Commands.parallel(
                     agitator.forwardCommand(() -> 100.0), // rpm
@@ -147,6 +148,7 @@ public class ScoringCommands
      * @param flywheel
      * @param poseEstimator
      * @return
+     * @author Logan Bellinger
      */
     public static Command shootOnTheMoveCommand(Drivetrain drivetrain, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
     {
@@ -155,30 +157,24 @@ public class ScoringCommands
             Pose2d robotPose = drivetrain.getState().Pose;
             ChassisSpeeds velocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.getRotation());
 
-            Pose2d calculatedTarget = poseEstimator.getCalculatedTargetPose(
+            Pose2d calculatedTarget = poseEstimator.getCalculatedTargetPose( // Pose of our caluclated target, adjusting for robot velo
                 poseEstimator.getAllianceHubPose(), 
                 robotPose, 
                 velocity);
 
             double distance = poseEstimator.getDistanceToTarget(robotPose, calculatedTarget).getAsDouble();
-            double shooterPower = flywheel.getShotPower(distance);
+            double shooterPower = flywheel.getShotPower(distance * 3.281); // meters -> feet
 
             return
             flywheel.setControlVelocityCommand(() -> shooterPower).until(flywheel.isAtSetSpeed(shooterPower, 5))     // TODO tune tolerance
             .andThen(
                 Commands.parallel(
-                    accelerator.feedToShooterCommand(() -> 0.25),
-                    indexer.setForwardCommand(() -> 0.25),
-                    agitator.forwardCommand(() -> 100.0 ))); // rpm
+                    agitator.forwardCommand(() -> 100.0), // rpm
+                    accelerator.feedToShooterCommand(() -> 0.1)));
         }
         else
         {
             return Commands.none();
         }
     }
-
-    // public static Command ShootOnFly(Drivetrain drivetrain, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
-    // {
-
-    // }
 }

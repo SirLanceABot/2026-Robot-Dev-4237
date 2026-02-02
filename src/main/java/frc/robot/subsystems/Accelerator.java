@@ -163,7 +163,7 @@ public class Accelerator extends SubsystemBase
     public Command stopCommand()
     {
         // return run( () -> stop() );
-        return run(this::stop);
+        return runOnce(this::stop);
     }
 
 

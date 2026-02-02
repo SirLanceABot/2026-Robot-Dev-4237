@@ -131,7 +131,7 @@ public class Intake extends SubsystemBase
      */
     public void setVelocity(double velocity)
     {
-        PivotMotor.setControlVelocity(velocity);
+        RollersMotor.setControlVelocity(velocity);
     }
 
     /** 
@@ -140,7 +140,7 @@ public class Intake extends SubsystemBase
     public void pickUpFuel()
     {
         setVelocity(0.2);
-        RollersMotor.setControlPosition(intakingPosition);
+        PivotMotor.setControlPosition(intakingPosition);
     }
 
     /** 
@@ -148,19 +148,19 @@ public class Intake extends SubsystemBase
      */
     public void ejectFuel()
     {
-        RollersMotor.setControlPosition(intakingPosition);
+        PivotMotor.setControlPosition(intakingPosition);
         setVelocity(-0.2);
     }
 
     public void retractIntake()
     {
-        RollersMotor.setControlPosition(retractedPosition);
+        PivotMotor.setControlPosition(retractedPosition);
         setVelocity(0.0);
     }
 
     public BooleanSupplier isAtPosition(double desiredPosition)
     {
-        return () -> (Math.abs(RollersMotor.getPosition() - desiredPosition) <= 1.0);
+        return () -> (Math.abs(PivotMotor.getPosition() - desiredPosition) <= 1.0);
     }
 
     /**
