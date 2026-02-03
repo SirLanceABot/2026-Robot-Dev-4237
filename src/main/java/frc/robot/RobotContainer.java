@@ -19,6 +19,7 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.LEDs;
+import frc.robot.sensors.HopperCamera;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -54,6 +55,7 @@ public class RobotContainer
     private boolean useDriverController         = false;
     private boolean useOperatorController       = false;
 
+    private boolean useHopperCamera             = false;
     private boolean useShooterCamera            = false;
     private boolean useIntakeCamera             = false;
 
@@ -68,6 +70,7 @@ public class RobotContainer
     private PoseEstimator poseEstimator = null;
     private Drivetrain drivetrain = null;
     private LEDs leds;
+    private HopperCamera hopperCamera = null;
 
     private CommandXboxController driverController = null;
     private CommandXboxController operatorController = null;
@@ -113,6 +116,11 @@ public class RobotContainer
             cameraArray[1] = new Camera("limelight-intake");
         else
             cameraArray[1] = null;
+
+        if(useFullRobot || useIntakeCamera)
+            hopperCamera = new HopperCamera();
+        else
+            hopperCamera = null; 
 
         if(useFullRobot || useDrivetrain)
             drivetrain = TunerConstants.createDrivetrain();
@@ -164,6 +172,11 @@ public class RobotContainer
     public PoseEstimator getPoseEstimator()
     {
         return poseEstimator;
+    }
+
+    public HopperCamera getHopperCamera()
+    {
+        return hopperCamera;
     }
 
     public Camera getShooterCamera()

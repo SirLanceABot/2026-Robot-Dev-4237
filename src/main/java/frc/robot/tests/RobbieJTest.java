@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ScoringCommands;
+import frc.robot.sensors.HopperCamera;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
@@ -40,6 +41,7 @@ public class RobbieJTest implements Test
     private Indexer indexer;
     private Accelerator accelerator;
     private Flywheel flywheel; 
+    private HopperCamera hopperCamera;
     
     private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -63,7 +65,7 @@ public class RobbieJTest implements Test
         indexer = robotContainer.getIndexer();
         accelerator = robotContainer.getAccelerator();
         flywheel = robotContainer.getFlywheel();
-
+        hopperCamera = robotContainer.getHopperCamera();
         climb = robotContainer.getClimb();
 
         System.out.println("  Constructor Finished: " + fullClassName);
@@ -89,9 +91,9 @@ public class RobbieJTest implements Test
         // controller.x().onTrue(agitator.forwardCommand());
         // controller.a().onTrue(agitator.reverseCommand());
         // controller.b().onTrue(agitator.stopCommand());
-        controller.x().onTrue(climb.extendToL1Command());
-        controller.a().onTrue(climb.retractFromL1Command());
-        controller.b().onTrue(climb.stopCommand());
+        // controller.x().onTrue(climb.extendToL1Command());
+        // controller.a().onTrue(climb.retractFromL1Command());
+        // controller.b().onTrue(climb.stopCommand());
     }
 
     /**
@@ -99,7 +101,7 @@ public class RobbieJTest implements Test
      */
     public void periodic()
     {
-        System.out.println(climb.getForwardHardLimit());
+        // System.out.println(climb.getForwardHardLimit());
     }
     
     /**
