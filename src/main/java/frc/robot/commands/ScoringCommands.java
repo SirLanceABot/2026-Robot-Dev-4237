@@ -177,4 +177,14 @@ public class ScoringCommands
             return Commands.none();
         }
     }
+
+    // public static Command passCommand(Agitator agitator, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
+    // {
+    //     return
+    //     flywheel.setControlVelocityCommand(() -> 0.1)   // test value
+    //     .andThen(
+    //         Commands.parallel(
+    //             agitator.forwardCommand(() -> 100.0), //rpm
+    //             accelerator.feedToShooterCommand(() -> 0.1)));
+    // }
 }
