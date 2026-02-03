@@ -69,12 +69,8 @@ public class RobotContainer
     private Climb climb = null;
     private PoseEstimator poseEstimator = null;
     private Drivetrain drivetrain = null;
-<<<<<<< HEAD
-    private LEDs leds;
     private HopperCamera hopperCamera = null;
-=======
     private LEDs leds = null;
->>>>>>> 7fa1907 (LB MF: drivetrain works!!!11!1!)
 
     private CommandXboxController driverController = null;
     private CommandXboxController operatorController = null;
@@ -89,6 +85,9 @@ public class RobotContainer
         // Instantiate ONLY the components selected above
         if(useFullRobot || useExampleSubsystem)
             exampleSubsystem = new ExampleSubsystem();
+
+        if(useFullRobot || useDrivetrain)
+            drivetrain = TunerConstants.createDrivetrain();
 
         if(useFullRobot || useAgitator)
             agitator = new Agitator(); 
@@ -107,9 +106,6 @@ public class RobotContainer
 
         if(useFullRobot || useClimb)
             climb = new Climb();
-        
-        if(useFullRobot || usePoseEstimator)
-            poseEstimator = new PoseEstimator(null, null);
 
         if(useFullRobot || useShooterCamera)
             cameraArray[0] = new Camera("limelight-shooter");
@@ -122,12 +118,10 @@ public class RobotContainer
             cameraArray[1] = null;
 
         if(useFullRobot || useIntakeCamera)
-            hopperCamera = new HopperCamera();
-        else
-            hopperCamera = null; 
+            hopperCamera = new HopperCamera(); 
 
-        if(useFullRobot || useDrivetrain)
-            drivetrain = TunerConstants.createDrivetrain();
+        if(useFullRobot || usePoseEstimator)
+            poseEstimator = new PoseEstimator(drivetrain, cameraArray);
 
         if(useFullRobot || useDriverController)
             driverController = new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT);
