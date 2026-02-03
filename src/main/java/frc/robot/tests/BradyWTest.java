@@ -48,7 +48,6 @@ public class BradyWTest implements Test
 
         this.robotContainer = robotContainer;
         accelerator = robotContainer.getAccelerator();
-        // motor = new SparkMaxLance(3, "rio", "SparkMax");
         controller = new CommandXboxController(0);
 
         // configMotors();
@@ -73,8 +72,8 @@ public class BradyWTest implements Test
         controller.x().onTrue(accelerator.reverseCommand());
         controller.b().onTrue(accelerator.stopCommand());
         
-        controller.start().onTrue(accelerator.setVelocityCommand(2));
-        controller.back().onTrue(accelerator.setVelocityCommand(-2));
+        controller.start().onTrue(accelerator.setVelocityCommand(1200.0));
+        controller.back().onTrue(accelerator.setVelocityCommand(-1200.0));
     }
     
 

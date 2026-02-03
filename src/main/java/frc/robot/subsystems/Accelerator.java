@@ -66,24 +66,24 @@ public class Accelerator extends SubsystemBase
     {
         motor.setupFactoryDefaults();
         motor.setupInverted(true); // Find out later
-        // motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR); // rev/s to ft/s
+        // motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR); // rev/m to ft/s
 
         motor.setSafetyEnabled(false);
 
         motor.setPosition(0);
 
-        motor.setupForwardHardLimitSwitch(true, true);
-        motor.setupReverseHardLimitSwitch(true, true);
+        motor.setupForwardHardLimitSwitch(false, true);
+        motor.setupReverseHardLimitSwitch(false, true);
 
         motor.setupForwardSoftLimit(100, false);
         motor.setupReverseSoftLimit(0, false);
 
-        // motor.setupMaxMotion(600.0, 6.0, 0.0, 0);
+        motor.setupMaxMotion(600.0, 200.0, 10.0, 0);
 
         // motor.setupCurrentLimit(5.0, 45.0, 0.5);
         //Current Threshold depends on speed sent to motor
 
-        motor.setupPIDController(0, 0.0001, 0, 0);
+        motor.setupPIDController(0, 0.00002, 0.0000002, 0);
         // motor.setupCoastMode();
         motor.setupBrakeMode();
 
@@ -177,7 +177,6 @@ public class Accelerator extends SubsystemBase
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
 
-        // System.out.println("Accelerator Velocity: " + (motor.getVelocity() * 2 * (Math.PI) * (r))); // Find out radius of rods
     }
 
     @Override

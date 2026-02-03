@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3482866731270753,
+        "x": 2.348286673127075,
         "y": 6.1063624429330865
       },
       "isLocked": false,
@@ -20,7 +20,7 @@
         "y": 5.361316912616771
       },
       "prevControl": {
-        "x": 0.49999999999999994,
+        "x": 0.5000000000000001,
         "y": 4.220296062772304
       },
       "nextControl": {
@@ -47,7 +47,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.8907277960526315,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [],
@@ -63,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -89.69860874146468
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Center Wall Starts",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

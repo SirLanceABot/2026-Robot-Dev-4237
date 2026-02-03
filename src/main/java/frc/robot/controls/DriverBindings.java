@@ -125,6 +125,7 @@ public final class DriverBindings {
         lockAngleSupplier = () -> Math.PI / 4.0;
     }
 
+    // shoot on move
     private static void configAButton()
     {
         Trigger aButton = controller.a();
@@ -138,10 +139,12 @@ public final class DriverBindings {
         aButton.onFalse(GeneralCommands.stopShootingCommand()); // TODO test this line
     }
 
-
+    // shoot still
     private static void configBButton()
     {
         Trigger bButton = controller.b();
+        bButton.onTrue(ScoringCommands.shootFromStandstillCommand(drivetrain, agitator, accelerator, flywheel, poseEstimator));
+
     }
 
 
@@ -150,10 +153,12 @@ public final class DriverBindings {
         Trigger xButton = controller.x();
     }
 
-
+    // pass
     private static void configYButton()
     {
         Trigger yButton = controller.y();
+        // yButton.onTrue(ScoringCommands.passCommand(drivetrain, agitator, accelerator, flywheel, poseEstimator));
+        //Pass Command
     }
 
 

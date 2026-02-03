@@ -31,11 +31,11 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.2282994844064388,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 90.0
     },
     {
       "waypointRelativePos": 0.8486780055331994,
-      "rotationDegrees": 120.26586102377833
+      "rotationDegrees": -59.99999999999999
     }
   ],
   "constraintZones": [],
@@ -51,13 +51,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 88.09885182265954
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Left Trench Shot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }
