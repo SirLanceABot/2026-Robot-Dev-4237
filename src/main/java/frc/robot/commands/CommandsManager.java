@@ -65,9 +65,9 @@ public class CommandsManager extends Command
         // Scoring Commands
 
         // Climbing Commands
-        NamedCommands.registerCommand("Extend Climb To L1 Command", GeneralCommands.extendClimbToL1Command());
-        NamedCommands.registerCommand("Ascend L1 Command", GeneralCommands.ascendL1Command());
-        NamedCommands.registerCommand("Descend L1 Command", GeneralCommands.descendFromL1Command());
+        // NamedCommands.registerCommand("Extend Climb To L1 Command", GeneralCommands.extendClimbToL1Command());
+        // NamedCommands.registerCommand("Ascend L1 Command", GeneralCommands.ascendL1Command());
+        // NamedCommands.registerCommand("Descend L1 Command", GeneralCommands.descendFromL1Command());
 
         
         SmartDashboard.putData(CommandScheduler.getInstance());

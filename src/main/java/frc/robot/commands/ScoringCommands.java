@@ -64,7 +64,7 @@ public class ScoringCommands
         {
             return  Commands.parallel(
                 (intake.pickupFuelCommand()),
-                (agitator.forwardCommand(() -> 100.0)), // rpm
+                (agitator.forwardCommand()),
                 (indexer.onCommand()),
                 (accelerator.feedToShooterCommand(()-> 0.25)),
                 (flywheel.setControlVelocityCommand(() -> 10.0)));
@@ -86,7 +86,7 @@ public class ScoringCommands
                     .andThen
                     // .commands.parallel(
                 (intake.pickupFuelCommand()).andThen
-                (agitator.forwardCommand(() -> 100.0)).andThen  // rpm
+                (agitator.forwardCommand()).andThen 
                 (indexer.onCommand());
 
         }
@@ -130,7 +130,7 @@ public class ScoringCommands
                     .until(() -> flywheel.isAtSetSpeed(flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble() * 3.281), 5).getAsBoolean())) // within 2 feet per second
             .andThen(
                 Commands.parallel(
-                    agitator.forwardCommand(() -> 100.0), // rpm
+                    agitator.forwardCommand(), // rpm
                     accelerator.feedToShooterCommand(() -> 0.1)));
         }
         else
@@ -169,7 +169,7 @@ public class ScoringCommands
             flywheel.setControlVelocityCommand(() -> shooterPower).until(flywheel.isAtSetSpeed(shooterPower, 5))     // TODO tune tolerance
             .andThen(
                 Commands.parallel(
-                    agitator.forwardCommand(() -> 100.0), // rpm
+                    agitator.forwardCommand(), // rpm
                     accelerator.feedToShooterCommand(() -> 0.1)));
         }
         else

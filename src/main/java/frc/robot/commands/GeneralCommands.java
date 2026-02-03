@@ -54,6 +54,7 @@ public class GeneralCommands
         drivetrain = robotContainer.getDrivetrain();
         climb = robotContainer.getClimb();
         poseEstimator = robotContainer.getPoseEstimator();
+        leds = robotContainer.getLEDs();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -98,17 +99,21 @@ public class GeneralCommands
         return setLEDCommand(ColorPattern.kSolid, Color.kRed).withName("Set LED to default (red)");
     }
 
-    // not tested
+    // tested
+    /**
+     * @author Robbie F
+     * @return command to do the intake thing
+     */
     public static Command intakeCommand()
     {
-        if(intake != null)
+        if(intake != null && agitator != null)
         {
             return 
             Commands.parallel(
                 setLEDCommand(ColorPattern.kSolid, Color.kYellow),
                 intake.pickupFuelCommand(),
-                agitator.forwardCommand(() -> 500.0)) // rpm
-            .withName("Intaking Fuel");
+                agitator.forwardCommand()
+            .withName("Intaking Fuel"));
         }
         else
         {
@@ -116,7 +121,11 @@ public class GeneralCommands
         }
     }
 
-    // not tested
+    // tested
+    /**
+     * @author Robbie Frank
+     * @return command stop intake rollers and reset it inside the robot
+     */
     public static Command resetIntakeCommand()
     {
         if(intake != null && agitator != null)
@@ -125,7 +134,7 @@ public class GeneralCommands
             Commands.parallel(
                 intake.retractIntakeCommand(),
                 agitator.stopCommand())
-            .andThen(setLEDCommand(ColorPattern.kBlink, Color.kGreen)).withTimeout(0.5)
+            .andThen(setLEDCommand(ColorPattern.kBlink, Color.kYellow)).withTimeout(0.5)
             .andThen(defaultLEDCommand())
             .withName("Intake Reset Into Robot");
         }
@@ -136,6 +145,10 @@ public class GeneralCommands
     }
 
     // not tested
+    /**
+     * @author Robbie F
+     * @return command to reverse intake rollers and eject fuel in the intake
+     */
     public static Command ejectFuelInIntakeCommand()
     {
         if(intake != null && agitator != null)
@@ -152,7 +165,11 @@ public class GeneralCommands
     }
 
     // not tested
-    // ejects fuel backward relative to the shooter
+    /**
+     * @author Robbie F
+     * @return command to stop ejecting the fuel in the intake,
+     * retracts intake pivot and stops the rollers
+     */
     public static Command stopEjectingFuelInIntakeCommand()
     {
         if(intake != null && agitator != null)
@@ -167,6 +184,10 @@ public class GeneralCommands
         }
     }
 
+    /**
+     * @author Logan
+     * @return the thing
+     */
     public static Command stopShootingCommand()
     {
         if(flywheel != null && agitator != null && accelerator != null)
@@ -185,6 +206,10 @@ public class GeneralCommands
     }
 
     // not tested
+    /**
+     * @author Robbie F
+     * @return command to do the thing to eject fuel from the shooter
+     */
     public static Command ejectAllFuelSlowlyCommand()
     {
         if(agitator != null && indexer != null && accelerator != null && flywheel != null)
@@ -197,7 +222,7 @@ public class GeneralCommands
                 Commands.parallel(
                     indexer.setForwardCommand(() -> 0.2),
                     accelerator.feedToShooterCommand(() -> 0.2),
-                    agitator.forwardCommand(() -> 500.0))) // rpm
+                    agitator.forwardCommand()))
             .withName("Ejecting All Fuel Slowly");
         }
         else
@@ -207,7 +232,10 @@ public class GeneralCommands
     }
 
     // not tested
-    // ejects fuel forward relative to the shooter
+    /**
+     * @author Robbie F
+     * @return commmand to stop ejecting fuel from the shooter
+     */
     public static Command stopEjectingAllFuelCommand()
     {
         if(agitator != null && indexer != null && accelerator != null && flywheel != null)
@@ -227,6 +255,10 @@ public class GeneralCommands
         }
     }
 
+    /**
+     * @author Robbie F
+     * @return extend climb so ready climb
+     */
     public static Command extendClimbToL1Command()
     {
         if(climb != null)
@@ -245,6 +277,10 @@ public class GeneralCommands
 
     // not tested
     // no clue what actual climb will look like
+    /**
+     * @author Robbie F
+     * @return command to retract climb after locking in to L1
+     */
     public static Command ascendL1Command()
     {
         if(climb != null)
@@ -258,13 +294,37 @@ public class GeneralCommands
         }
     }
 
-    // also not tested
-    // still no clue what actual climb will look like
-    public static Command descendFromL1Command()
+    // not tested
+    // supposed to be an automated climb command at some point
+    public static Command superCoolAutomatedL1ClimbCommandToScoreManyPoints()
     {
         if(climb != null)
         {
-            return climb.extendToL1Command()
+            return Commands.parallel(
+                setLEDCommand(ColorPattern.kRainbow),
+                climb.extendToL1Command())
+            .andThen(Commands.waitSeconds(1.0))
+            .andThen(descendL1Command())
+            .withName("Climbed L1");
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+
+    // also not tested
+    // still no clue what actual climb will look like
+    /**
+     * @author Robbie F
+     * @return yay climb
+     */
+    public static Command descendL1Command()
+    {
+        if(climb != null)
+        {
+            return extendClimbToL1Command()
             .andThen( () -> drivetrain.resetForFieldCentric())
             .andThen(defaultLEDCommand())
             .withName("Climb Unmounted L1");
@@ -275,6 +335,7 @@ public class GeneralCommands
         }
     }
 
+    
     // maybe L3?
 
 
@@ -282,6 +343,7 @@ public class GeneralCommands
 
 
 
+    
 
 
 

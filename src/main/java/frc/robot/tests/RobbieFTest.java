@@ -3,10 +3,15 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Accelerator;
+import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.LEDs.ColorPattern;
 import frc.robot.RobotContainer;
+import frc.robot.commands.GeneralCommands;
 
 @SuppressWarnings("unused")
 public class RobbieFTest implements Test
@@ -31,7 +36,10 @@ public class RobbieFTest implements Test
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
     private final CommandXboxController controller = new CommandXboxController(0);
+    
     private final Flywheel flywheel;
+    private final Agitator agitator;
+    private final LEDs leds;
     // private final Accelerator accelerator;
 
 
@@ -50,6 +58,8 @@ public class RobbieFTest implements Test
         this.robotContainer = robotContainer;
 
         flywheel = robotContainer.getFlywheel();
+        agitator = robotContainer.getAgitator();
+        leds = robotContainer.getLEDs();
         // accelerator = robotContainer.getAccelerator();
 
 
@@ -77,17 +87,34 @@ public class RobbieFTest implements Test
     public void periodic()
     {
         controller.x().onTrue(
-            flywheel.setControlVelocityCommand(() -> 10.0)
+           GeneralCommands.superCoolAutomatedL1ClimbCommandToScoreManyPoints()
         );
-        controller.y().onTrue(
-            flywheel.setControlVelocityCommand(() -> 25.0)
-        );
-        controller.a().onTrue(
-            flywheel.setControlVelocityCommand(() -> 50.0)
-        );
-        controller.b().onTrue(
-            flywheel.stopCommand()
-        );
+
+        // controller.y().onTrue(
+        //     GeneralCommands.ejectFuelInIntakeCommand()
+        // );
+
+        // controller.b().onTrue(
+        //     GeneralCommands.stopEjectingFuelInIntakeCommand()
+        // );
+
+        // controller.a().onTrue(
+        //     GeneralCommands.resetIntakeCommand()
+        // );
+
+        // controller.b().onTrue(
+        //     leds.setColorSolidCommand(100, Color.kRed)
+        // );
+
+
+
+        // controller.y().onTrue(
+        //     GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kGreen)
+        // );
+       
+        // controller.b().onTrue(
+        //     flywheel.stopCommand()
+        // );
 
 
 
@@ -100,7 +127,7 @@ public class RobbieFTest implements Test
         //     System.out.println("NOT AT TARGET SPEED------------------------------");
         // }
 
-        System.out.println("***************velocity = " + flywheel.getVelocity());
+        // System.out.println("***************velocity = " + flywheel.getVelocity());
 
         // flywheel.displayStatorCurrent();
     }

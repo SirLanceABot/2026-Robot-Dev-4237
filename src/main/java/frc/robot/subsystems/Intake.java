@@ -38,11 +38,17 @@ public class Intake extends SubsystemBase
     private final TalonFXLance PivotMotor = new TalonFXLance(PIVOT_MOTOR_LEADER, MOTOR_CAN_BUS, "Lead Pivot Motor");
     private final TalonFXLance PivotFollower = new TalonFXLance(PIVOT_MOTOR_FOLLOWER, MOTOR_CAN_BUS, "Follow Pivot Motor");
 
-    private final double kP = 0.7;
-    private final double kI = 0.0;
-    private final double kD = 0.0;
-    private final double kS = 0.01;
-    private final double kV = 0.15;
+    private final double PivotkP = 0.7;
+    private final double PivotkI = 0.0;
+    private final double PivotkD = 0.0;
+    private final double PivotkS = 0.19;
+    private final double PivotkV = 0.13;
+
+    private final double RollerkP = 0.2;
+    private final double RollerkI = 0.0;
+    private final double RollerkD = 0.0;
+    private final double RollerkS = 0.19;
+    private final double RollerkV = 0.13;
 
     private final double INTAKE_ROLLER_DIAMETER_FEET = 4237.0;
     private final double GEAR_RATIO = 1.0 / 1.0;
@@ -98,9 +104,9 @@ public class Intake extends SubsystemBase
         PivotFollower.setSafetyEnabled(false);
 
         // Set up PID Controllers
-        RollersMotor.setupPIDController(0, kP, kI, kD, kS, kV, 0);
-        PivotMotor.setupPIDController(0, kP, kI, kD, kS, kV, 0);
-        PivotFollower.setupPIDController(0, kP, kI, kD, kS, kV, 0);
+        RollersMotor.setupPIDController(0, RollerkP, RollerkI, RollerkD, RollerkS, RollerkV, 0);
+        PivotMotor.setupPIDController(0, PivotkP, PivotkI, PivotkD, PivotkS, PivotkV, 0);
+        // PivotFollower.setupPIDController(0, kP, kI, kD, kS, kV, 0);
 
         // Configure the follower last so configurables above are not overwritten
         PivotFollower.setupFollower(PIVOT_MOTOR_LEADER, true);
@@ -139,7 +145,7 @@ public class Intake extends SubsystemBase
      */
     public void pickUpFuel()
     {
-        setVelocity(0.2);
+        setVelocity(20.0);
         PivotMotor.setControlPosition(intakingPosition);
     }
 
@@ -148,8 +154,8 @@ public class Intake extends SubsystemBase
      */
     public void ejectFuel()
     {
+        setVelocity(-20.0);
         PivotMotor.setControlPosition(intakingPosition);
-        setVelocity(-0.2);
     }
 
     public void retractIntake()

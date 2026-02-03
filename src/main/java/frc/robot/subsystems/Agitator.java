@@ -38,7 +38,7 @@ public class Agitator extends SubsystemBase
     // private final SparkMaxLance agitatorMotor = new SparkMaxLance(3, "ROBORIO", "Agitator");
 
     //PID
-    private final double kP = 0.01;
+    private final double kP = 0.3;
     private final double kI = 0.0;
     private final double kD = 0.0;
 
@@ -95,19 +95,19 @@ public class Agitator extends SubsystemBase
     }
 
     /**
-     * This sets the velocity of the motors in rpm(between 0.0 and 500.0)
+     * 
      */
-    public Command forwardCommand(DoubleSupplier speed)
+    public Command forwardCommand()
     {
-        return run( () -> setControlVelocity(MathUtil.clamp(speed.getAsDouble(), 0.0, 500.0)) );
+        return run( () -> setControlVelocity(50.0));
     }
 
     /**
-     * This sets the velocity of the motors in rpm(between -500.0 and 0.0)
+     * 
      */
     public Command reverseCommand(DoubleSupplier speed)
     {
-        return run( () -> setControlVelocity(MathUtil.clamp(speed.getAsDouble(), -500.0, 0.0)) );
+        return run( () -> setControlVelocity(50.0));
     }
 
     // Use a method reference instead of this method
