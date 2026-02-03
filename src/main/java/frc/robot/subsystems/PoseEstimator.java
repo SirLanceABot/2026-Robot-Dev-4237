@@ -495,40 +495,43 @@ public class PoseEstimator extends SubsystemBase
     {
         for(Camera camera : cameraArray)
         {
-            if(gyro != null)
+            if(camera != null)
             {
-                LimelightHelpers.SetRobotOrientation(camera.getCameraName(), drivetrain.getState().Pose.getRotation().getDegrees(), 0, 0, 0, 0, 0);
-            }
-
-            // only update if we see 2+ tags
-            if(camera.getTagCount() > 0)
-            {
-                Pose2d visionPose = camera.getPose();
-                double robotVelo = Math.hypot(drivetrain.getState().Speeds.vxMetersPerSecond, drivetrain.getState().Speeds.vyMetersPerSecond);
-                double robotRotation = Math.toDegrees(drivetrain.getState().Speeds.omegaRadiansPerSecond);
-                boolean rejectUpdate = false;
-
-                if(visionPose == null)
+                if(gyro != null)
                 {
-                    rejectUpdate = true;
+                    LimelightHelpers.SetRobotOrientation(camera.getCameraName(), drivetrain.getState().Pose.getRotation().getDegrees(), 0, 0, 0, 0, 0);
                 }
 
-                if(robotVelo > 3.5)
+                // only update if we see 2+ tags
+                if(camera.getTagCount() > 0)
                 {
-                    rejectUpdate = true;
-                }
+                    Pose2d visionPose = camera.getPose();
+                    double robotVelo = Math.hypot(drivetrain.getState().Speeds.vxMetersPerSecond, drivetrain.getState().Speeds.vyMetersPerSecond);
+                    double robotRotation = Math.toDegrees(drivetrain.getState().Speeds.omegaRadiansPerSecond);
+                    boolean rejectUpdate = false;
 
-                if(robotRotation > 360.0)
-                {
-                    rejectUpdate = true;
-                }
+                    if(visionPose == null)
+                    {
+                        rejectUpdate = true;
+                    }
 
-                if(!rejectUpdate)
-                {
-                    drivetrain.addVisionMeasurement(
-                                visionPose,
-                                camera.getTimestamp(),
-                                visionStdDevs);
+                    if(robotVelo > 3.5)
+                    {
+                        rejectUpdate = true;
+                    }
+
+                    if(robotRotation > 360.0)
+                    {
+                        rejectUpdate = true;
+                    }
+
+                    if(!rejectUpdate)
+                    {
+                        drivetrain.addVisionMeasurement(
+                                    visionPose,
+                                    camera.getTimestamp(),
+                                    visionStdDevs);
+                    }
                 }
             }
         }

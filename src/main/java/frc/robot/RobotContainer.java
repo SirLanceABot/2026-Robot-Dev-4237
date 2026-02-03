@@ -69,8 +69,12 @@ public class RobotContainer
     private Climb climb = null;
     private PoseEstimator poseEstimator = null;
     private Drivetrain drivetrain = null;
+<<<<<<< HEAD
     private LEDs leds;
     private HopperCamera hopperCamera = null;
+=======
+    private LEDs leds = null;
+>>>>>>> 7fa1907 (LB MF: drivetrain works!!!11!1!)
 
     private CommandXboxController driverController = null;
     private CommandXboxController operatorController = null;
