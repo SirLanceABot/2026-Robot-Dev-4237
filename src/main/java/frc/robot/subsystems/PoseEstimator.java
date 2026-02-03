@@ -167,9 +167,9 @@ public class PoseEstimator extends SubsystemBase
         stateStdDevs.set(1, 0, 0.1); // y in meters
         stateStdDevs.set(2, 0, 0.05); // heading in radians
 
-        visionStdDevs.set(0, 0, 0.15); // x in meters // 0.2
-        visionStdDevs.set(1, 0, 0.15); // y in meters // 0.2
-        visionStdDevs.set(2, 0, 0.2); // heading in radians // 0.25
+        visionStdDevs.set(0, 0, 0.1); // x in meters // 0.2
+        visionStdDevs.set(1, 0, 0.1); // y in meters // 0.2
+        visionStdDevs.set(2, 0, 0.15); // heading in radians // 0.25
     }
 
     /**

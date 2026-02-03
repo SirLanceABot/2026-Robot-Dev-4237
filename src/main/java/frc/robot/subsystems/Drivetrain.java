@@ -67,10 +67,10 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
     //TODO still needs tuning
     private static final SwerveRequest.FieldCentricFacingAngle angleLockDrive = new SwerveRequest.FieldCentricFacingAngle()
             .withDeadband(MaxDriveSpeed * 0.05)
-            .withRotationalDeadband(0.05) // Add a 10% deadband
+            .withRotationalDeadband(0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-            .withMaxAbsRotationalRate(1)
-            .withHeadingPID(5.0, 0, 0); //Maximum rotational rate
+            .withMaxAbsRotationalRate(7)
+            .withHeadingPID(7, 0, 0); //Maximum rotational rate
 
 
     /* Swerve requests to apply during SysId characterization */
