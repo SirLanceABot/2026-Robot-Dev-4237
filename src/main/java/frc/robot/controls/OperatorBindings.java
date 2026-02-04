@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
+import frc.robot.commands.GeneralCommands;
+import frc.robot.commands.ScoringCommands;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
@@ -115,48 +117,71 @@ public final class OperatorBindings {
     private static void configAButton()
     {
         Trigger aButton = controller.a();
+
+        // A ~ shoot on the move
+        // aButton.onTrue(ScoringCommands.shootOnTheMoveCommand(drivetrain, agitator, indexer, accelerator, flywheel, poseEstimator));
     }
 
 
     private static void configBButton()
     {
         Trigger bButton = controller.b();
+
+        // B ~ spit out intake (reverse intake)
+        // bButton.onTrue(GeneralCommands.ejectFuelInIntakeCommand());
     }
 
 
     private static void configXButton()
     {
         Trigger xButton = controller.x();
+
+        // X ~ intake on
+        // xButton.onTrue(GeneralCommands.intakeCommand());
     }
 
 
     private static void configYButton()
     {
         Trigger yButton = controller.y();
+
+        // Y ~ spit out shooter (use the slow eject or something)
+        // yButton.onTrue(GeneralCommands.ejectAllFuelSlowlyCommand());
     }
 
 
     private static void configLeftBumper()
     {
         Trigger leftBumper = controller.leftBumper();
+
+        // Left bumper: stop intake while retracting intake
+        // leftBumper.onTrue(GeneralCommands.resetIntakeCommand());
     }
 
 
     private static void configRightBumper()
     {
         Trigger rightBumper = controller.rightBumper();
+
+        // Right bumper ~ stop intake without retracting (stop motors)
+        // rightBumper.onTrue(ScoringCommands.StopIntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
     }
 
 
     private static void configBackButton()
     {
         Trigger backButton = controller.back();
+
+        // Back ~ kill shooter (stop flywheel/agitator/accelerator)
+        // backButton.onTrue(GeneralCommands.stopShootingCommand());
     }
 
 
     private static void configStartButton()
     {
         Trigger startButton = controller.start();
+        // Start ~ auto climb
+        
     }
 
 
@@ -188,6 +213,9 @@ public final class OperatorBindings {
     private static void configDpadUp()
     {
         Trigger dpadUp = controller.povUp();
+
+        // Dpad up ~ climb up to L1
+        // dpadUp.whileTrue(GeneralCommands.ascendL1Command());
     }
 
 
@@ -195,6 +223,8 @@ public final class OperatorBindings {
     {
         Trigger dpadDown = controller.povDown();
 
+        // Dpad down ~ descend from L1
+        // dpadDown.whileTrue(GeneralCommands.descendFromL1Command()); 
     }
 
     private static void configDpadLeft()
