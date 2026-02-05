@@ -72,8 +72,8 @@ public class BradyWTest implements Test
         controller.x().onTrue(accelerator.reverseCommand());
         controller.b().onTrue(accelerator.stopCommand());
         
-        controller.start().onTrue(accelerator.setVelocityCommand(1200.0));
-        controller.back().onTrue(accelerator.setVelocityCommand(-1200.0));
+        controller.start().onTrue(accelerator.setPositionCommand(200.0));
+        controller.back().onTrue(accelerator.setPositionCommand(-200.0));
     }
     
 
@@ -94,6 +94,7 @@ public class BradyWTest implements Test
     public void periodic()
     {
         System.out.println(accelerator);
+        System.out.println("Accelerator Position: " + accelerator.getPosition());
     }
     
     /**

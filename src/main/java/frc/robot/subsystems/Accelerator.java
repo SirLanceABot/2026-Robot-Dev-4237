@@ -72,18 +72,19 @@ public class Accelerator extends SubsystemBase
 
         motor.setPosition(0);
 
-        motor.setupForwardHardLimitSwitch(false, true);
-        motor.setupReverseHardLimitSwitch(false, true);
+        // motor.setupForwardHardLimitSwitch(false, true);
+        // motor.setupReverseHardLimitSwitch(false, true);
 
-        motor.setupForwardSoftLimit(100, false);
-        motor.setupReverseSoftLimit(0, false);
+        // motor.setupForwardSoftLimit(100, false);
+        // motor.setupReverseSoftLimit(0, false);
 
-        motor.setupMaxMotion(600.0, 200.0, 10.0, 0);
+        motor.setupMaxMotion(1200.0, 400.0, 0.05, 0);
+        motor.setupPIDController(0, 0.7, 0.0, 0.0, 0.0001);
 
         // motor.setupCurrentLimit(5.0, 45.0, 0.5);
         //Current Threshold depends on speed sent to motor
 
-        motor.setupPIDController(0, 0.00002, 0.0000002, 0);
+        // motor.setupPIDController(0, 0.00002, 0.0000002, 0);
         // motor.setupCoastMode();
         motor.setupBrakeMode();
 
@@ -156,7 +157,7 @@ public class Accelerator extends SubsystemBase
 
     public Command setPositionCommand(double targetPosition)
     {
-        return run( () -> setControlPosition(targetPosition));
+        return runOnce( () -> setControlPosition(targetPosition));
     }
 
     // Use a method reference instead of this method
@@ -182,6 +183,6 @@ public class Accelerator extends SubsystemBase
     @Override
     public String toString()
     {
-        return "Accelerator Current Velocity: " + getVelocity();
+        return "Accelerator Velocity: " + getVelocity();
     }
 }
