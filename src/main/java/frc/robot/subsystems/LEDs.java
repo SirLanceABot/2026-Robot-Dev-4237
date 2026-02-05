@@ -69,6 +69,8 @@ public class LEDs extends SubsystemBase
     private LEDPattern rainbow = LEDPattern.rainbow(255, 255);
     private LEDPattern off = LEDPattern.solid(Color.kBlack);
 
+    private Color color = Color.kBlack;
+
     private LEDPattern base;
     // private LEDPattern progressPattern = LEDPattern.progressMaskLayer(() -> climb.getHeight() / climb.getMaxHieght());
 
@@ -101,6 +103,11 @@ public class LEDs extends SubsystemBase
         led.start();
     }
 
+    public Color getColor()
+    {
+        return this.color;
+    }
+
     /**
      * This sets the LEDs to a solid color
      * @param color The LED color
@@ -110,6 +117,7 @@ public class LEDs extends SubsystemBase
     {
         solid = LEDPattern.solid(color).atBrightness(Percent.of(brightness));
         solid.applyTo(ledBuffer);
+        this.color = color;
     }
 
     /**
@@ -122,6 +130,7 @@ public class LEDs extends SubsystemBase
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
         blink = base.breathe(Units.Seconds.of(0.5));
         blink.applyTo(ledBuffer);
+        this.color = colors[0];
     }
     
     /**
@@ -133,6 +142,7 @@ public class LEDs extends SubsystemBase
     {
         gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors);
         gradient.applyTo(ledBuffer);
+        this.color = colors[0];
     }
 
     /*C
@@ -145,6 +155,7 @@ public class LEDs extends SubsystemBase
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
         breathe = base.breathe(Units.Seconds.of(2));
         breathe.applyTo(ledBuffer);
+        this.color = colors[0];
     }
 
     /**
@@ -156,6 +167,7 @@ public class LEDs extends SubsystemBase
     {
         // base = LEDPattern.progressMaskLayer(() -> Climb.getPosition() / Climb.climbPosition.kL1);
         progressBar.applyTo(ledBuffer);
+        this.color = colors[0];
     }
 
     /**
@@ -164,6 +176,7 @@ public class LEDs extends SubsystemBase
     private void setColorRainbow()
     {
         rainbow.applyTo(ledBuffer);
+        this.color = Color.kBlack;
     }
 
     private void setMovingRainbow()
@@ -172,12 +185,14 @@ public class LEDs extends SubsystemBase
         mask = LEDPattern.steps(maskSteps).scrollAtRelativeSpeed(Percent.per(Second).of(200));
         movingRainbow = base.mask(mask);
         movingRainbow.applyTo(ledBuffer);
+        this.color = Color.kBlack;
     }
 
     private void off()
     {
         off.applyTo(ledBuffer);
         led.setData(ledBuffer);
+        this.color = Color.kBlack;
     }
 
     // COMMANDS
@@ -195,6 +210,11 @@ public class LEDs extends SubsystemBase
     public Command setColorBlinkCommand(Color ...colors)
     {
         return runOnce(() -> setColorBlink(colors)).withName("Set LED Blink");
+    }
+
+    public Command setColorBreatheCommand(int brightness, Color ...colors)
+    {
+        return runOnce(() -> setColorBreathe(brightness, colors)).withName("Set LED Breathe");
     }
 
     public Command setColorProgressBarCommand(int brightness, Color ...colors)
