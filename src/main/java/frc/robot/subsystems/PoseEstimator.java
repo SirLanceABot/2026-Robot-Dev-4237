@@ -22,6 +22,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -83,7 +84,7 @@ public class PoseEstimator extends SubsystemBase
     {
         super("PoseEstimator");
         System.out.println("  Constructor Started:  " + fullClassName);
-
+        
         this.drivetrain = drivetrain;
         this.gyro = drivetrain.getPigeon2();
         this.cameraArray = cameraArray;
@@ -101,7 +102,7 @@ public class PoseEstimator extends SubsystemBase
         configTimeOfFlightMap();
 
 
-        if(drivetrain != null && gyro != null)
+        if(drivetrain != null && gyro != null && cameraArray != null)
         {
             poseEstimator = new SwerveDrivePoseEstimator(
                 drivetrain.getKinematics(), 
@@ -163,13 +164,13 @@ public class PoseEstimator extends SubsystemBase
      */
     public void configStdDevs()
     {
-        stateStdDevs.set(0, 0, 0.1); // x in meters
-        stateStdDevs.set(1, 0, 0.1); // y in meters
-        stateStdDevs.set(2, 0, 0.05); // heading in radians
+        stateStdDevs.set(0, 0, 0.2); // x in meters
+        stateStdDevs.set(1, 0, 0.2); // y in meters
+        stateStdDevs.set(2, 0, 0.25); // heading in radians
 
-        visionStdDevs.set(0, 0, 0.1); // x in meters // 0.2
-        visionStdDevs.set(1, 0, 0.1); // y in meters // 0.2
-        visionStdDevs.set(2, 0, 0.15); // heading in radians // 0.25
+        visionStdDevs.set(0, 0, 0.2); // x in meters // 0.2
+        visionStdDevs.set(1, 0, 0.2); // y in meters // 0.2
+        visionStdDevs.set(2, 0, 0.25); // heading in radians // 0.25
     }
 
     /**
@@ -484,7 +485,7 @@ public class PoseEstimator extends SubsystemBase
 
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
-
+    boolean isFirstTagSight = true;
     /*
      * This method will be called once per scheduler run
      * Use this for sensors that need to be read periodically.
@@ -497,7 +498,7 @@ public class PoseEstimator extends SubsystemBase
         {
             if(camera != null)
             {
-                if(gyro != null)
+                if(gyro != null && drivetrain != null)
                 {
                     LimelightHelpers.SetRobotOrientation(camera.getCameraName(), drivetrain.getState().Pose.getRotation().getDegrees(), 0, 0, 0, 0, 0);
                 }
@@ -509,6 +510,12 @@ public class PoseEstimator extends SubsystemBase
                     double robotVelo = Math.hypot(drivetrain.getState().Speeds.vxMetersPerSecond, drivetrain.getState().Speeds.vyMetersPerSecond);
                     double robotRotation = Math.toDegrees(drivetrain.getState().Speeds.omegaRadiansPerSecond);
                     boolean rejectUpdate = false;
+
+                    if(isFirstTagSight && visionPose != null)
+                    {
+                        isFirstTagSight = false;
+                        drivetrain.resetPose(visionPose);
+                    }
 
                     if(visionPose == null)
                     {
