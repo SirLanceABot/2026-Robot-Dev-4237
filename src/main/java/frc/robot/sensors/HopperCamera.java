@@ -1,5 +1,6 @@
 package frc.robot.sensors;
 
+import java.io.OutputStream;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -10,6 +11,7 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -36,8 +38,11 @@ public class HopperCamera
 
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-
-
+    int width = 640;
+    int height = 480;
+    Mat mask = new Mat(height, width, CvType.CV_8UC1, new Scalar(0));
+    private final GripPipeline pipeline = new GripPipeline();
+    
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
 
@@ -46,6 +51,8 @@ public class HopperCamera
      */
     public HopperCamera()
     {   
+
+
         System.out.println("  Constructor Started:  " + fullClassName);
 
             Thread m_visionThread = new Thread(
@@ -53,8 +60,11 @@ public class HopperCamera
                             // Get the UsbCamera from CameraServer
                             UsbCamera camera = CameraServer.startAutomaticCapture();
                             // Set the resolution
-                            camera.setResolution(640, 480);
-            
+                            camera.setResolution(width, height);
+                            Imgproc.rectangle(mask, new Point(width,0), new Point(0,height - 20 ), new Scalar(255), -1);
+
+
+
                             // Get a CvSink. This will capture Mats from the camera
                             CvSink cvSink = CameraServer.getVideo();
                             // Setup a CvSource. This will send images back to the Dashboard
@@ -75,14 +85,16 @@ public class HopperCamera
                                 // skip the rest of the current iteration
                                 continue;
                                 }
-                                // Put a rectangle on the image
-                                Imgproc.rectangle(
-                                    mat, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
+                                
+                                pipeline.process(mat,mask);
+
                                 // Give the output stream a new image to display
+
                                 outputStream.putFrame(mat);
-                            }       
+                            }   
+            
                             });
-        // Hopper camera grip pipeline
+                        
         m_visionThread.setDaemon(true);
         m_visionThread.start();
 
@@ -121,6 +133,10 @@ public class HopperCamera
 
         return dst;
     }
+
+
+
+
 
     /**
      * Returns the value of the sensor
