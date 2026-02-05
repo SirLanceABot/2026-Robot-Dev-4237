@@ -69,7 +69,7 @@ public class LEDs extends SubsystemBase
     private LEDPattern rainbow = LEDPattern.rainbow(255, 255);
     private LEDPattern off = LEDPattern.solid(Color.kBlack);
 
-    private Color color = Color.kBlack;
+    private static Color color = Color.kBlack;
 
     private LEDPattern base;
     // private LEDPattern progressPattern = LEDPattern.progressMaskLayer(() -> climb.getHeight() / climb.getMaxHieght());
@@ -103,9 +103,9 @@ public class LEDs extends SubsystemBase
         led.start();
     }
 
-    public Color getColor()
+    public static Color getColor()
     {
-        return this.color;
+        return color;
     }
 
     /**
