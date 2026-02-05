@@ -76,8 +76,6 @@ public class RobotContainer
     private CommandXboxController operatorController = null;
 
     private final Camera[] cameraArray = new Camera[2];
-    // private final LEDs leds;
-
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() 
@@ -117,7 +115,7 @@ public class RobotContainer
         else
             cameraArray[1] = null;
 
-        if(useFullRobot || useIntakeCamera)
+        if(useFullRobot || useHopperCamera)
             hopperCamera = new HopperCamera(); 
 
         if(useFullRobot || usePoseEstimator)

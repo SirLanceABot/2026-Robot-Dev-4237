@@ -12,7 +12,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 import frc.robot.RobotContainer;
+import frc.robot.sensors.Camera;
+import frc.robot.sensors.HopperCamera;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.LEDs;
 
 
 public class ElasticLance 
@@ -39,7 +42,14 @@ public class ElasticLance
     // private static Field2d autofield = new Field2d();
     // private static Field2d field = new Field2d();
 
+    // private static Trajectory trajectory;
+
+    private static Camera intakeCamera;
+    private static Camera shooterCamera;
+    private static HopperCamera hopperCamera;
+    private static LEDs leds;
     private static Drivetrain drivetrain;
+    private static boolean useFullRobot;
 
     // private static Alert autoAlert = new Alert("Invalid Auto", AlertType.kWarning);
     private static Alert useFullRobotAlert = new Alert("NOT using Full Robot!", AlertType.kError);
@@ -51,9 +61,12 @@ public class ElasticLance
 
     public static void configElastic(RobotContainer robotContainer)
     {
-        drivetrain = robotContainer.getDrivetrain();
-        // add to robot container
-        // useFullRobot = robotContainer.useFullRobot();
+        intakeCamera    = robotContainer.getIntakeCamera();
+        shooterCamera   = robotContainer.getShooterCamera();
+        hopperCamera    = robotContainer.getHopperCamera();
+        leds            = robotContainer.getLEDs();
+        drivetrain      = robotContainer.getDrivetrain();
+        useFullRobot    = robotContainer.useFullRobot();
     }
 
     public static void sendDataToSmartDashboard()
@@ -68,10 +81,10 @@ public class ElasticLance
         // updateAllianceColorBox();
         // updateLEDColorBox();
 
-        // if(!useFullRobot && DriverStation.isDisabled())
-        // {
-        //     useFullRobotAlert.set(true);
-        // }
+        if(!useFullRobot && DriverStation.isDisabled())
+        {
+            useFullRobotAlert.set(true);
+            leds.setColorSolidCommand(100, Color.kRed).ignoringDisable(true).schedule();        }
     }
 
     // public static void updateValidAutoBox()
@@ -98,10 +111,10 @@ public class ElasticLance
         }
     }
 
-    // public static void updateLEDColorBox()
-    // {
-    //     LEDColor = allianceColor.LEDs.getColor();
-    // }
+    public static void updateLEDColorBox()
+    {
+        LEDColor = LEDs.getColor();
+    }
 
     // figure out a way to get the current color from the led class
 
