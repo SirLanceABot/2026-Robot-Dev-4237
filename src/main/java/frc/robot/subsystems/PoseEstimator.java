@@ -538,6 +538,7 @@ public class PoseEstimator extends SubsystemBase
                                     visionPose,
                                     camera.getTimestamp(),
                                     visionStdDevs);
+                        drivetrain.resetPose(new Pose2d(visionPose.getTranslation(), drivetrain.getState().RawHeading));
                     }
                 }
             }

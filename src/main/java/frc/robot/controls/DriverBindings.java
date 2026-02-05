@@ -128,14 +128,24 @@ public final class DriverBindings {
     {
         Trigger aButton = controller.a();
 
+        // ANGLE LOCK WORKS ON 2026 DRIVETRAIN FOR BOTH ALLIANCES
+        // aButton
+        // .whileTrue(drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getAngleToAllianceHub().getAsDouble())));
+        
+        // drive part of shoot from stanstill works on 2026 drivetrain for both alliances
+        // aButton
+        // .whileTrue(ScoringCommands.shootFromStandstillCommand(drivetrain, poseEstimator));
+
+        // drive part of shoot on the move works on 2026 drivetrain for both alliances
+        // aButton.whileTrue(drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getRotationToCalculatedTarget().getAsDouble())));
+        
         aButton
-        .whileTrue(drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getAngleToAllianceHub().getAsDouble())));
-        // .whileTrue(
-        //     Commands.parallel(
-        //         drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getRotationToCalculatedTarget().getAsDouble())), // Tested this command in 25 repo, works there
-        //         ScoringCommands.shootOnTheMoveCommand(drivetrain, agitator, indexer, accelerator, flywheel, poseEstimator)));
+        .whileTrue(
+            Commands.parallel(
+                drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getRotationToCalculatedTarget().getAsDouble())), // Tested this command in 25 repo, works there
+                ScoringCommands.shootOnTheMoveCommand(drivetrain, agitator, indexer, accelerator, flywheel, poseEstimator)));
             
-        // aButton.onFalse(GeneralCommands.stopShootingCommand()); // TODO test this line
+        aButton.onFalse(GeneralCommands.stopShootingCommand()); // TODO test this line
     }
 
     // shoot still
