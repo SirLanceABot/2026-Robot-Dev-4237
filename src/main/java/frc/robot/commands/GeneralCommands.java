@@ -16,6 +16,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.LEDs.ColorPattern;
 import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.Climb.climbPosition;
 
 public class GeneralCommands
 {
@@ -255,6 +256,7 @@ public class GeneralCommands
         }
     }
 
+    // not tested
     /**
      * @author Robbie F
      * @return extend climb so ready climb
@@ -266,7 +268,8 @@ public class GeneralCommands
             return
             Commands.parallel(
                 setLEDCommand(ColorPattern.kRainbow),
-                climb.extendToL1Command())
+                climb.extendToL1Command()
+                .until(climb.isAtPosition(climbPosition.kL1)))
             .withName("Climb Extended To L1 Position");       
         }
         else
@@ -286,8 +289,31 @@ public class GeneralCommands
         if(climb != null)
         {
             return climb.retractFromL1Command()
+            .until(climb.isAtPosition(climbPosition.kSTART))
             .withName("Climb Mounted L1");
         }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    // also not tested
+    // still no clue what actual climb will look like
+    /**
+     * @author Robbie F
+     * @return yay climb
+     */
+    public static Command descendL1Command()
+    {
+        if(climb != null && drivetrain != null)
+        {
+            return climb.extendToL1Command()
+            .until(climb.isAtPosition(climbPosition.kL1))
+            // .andThen( () -> drivetrain.resetForFieldCentric())
+            .andThen(defaultLEDCommand())
+            .withName("Climb Unmounted L1");
+        } 
         else
         {
             return Commands.none();
@@ -300,35 +326,11 @@ public class GeneralCommands
     {
         if(climb != null)
         {
-            return Commands.parallel(
-                setLEDCommand(ColorPattern.kRainbow),
-                climb.extendToL1Command())
-            .andThen(Commands.waitSeconds(1.0))
-            .andThen(descendL1Command())
-            .withName("Climbed L1");
-        }
-        else
-        {
-            return Commands.none();
-        }
-    }
-
-
-    // also not tested
-    // still no clue what actual climb will look like
-    /**
-     * @author Robbie F
-     * @return yay climb
-     */
-    public static Command descendL1Command()
-    {
-        if(climb != null)
-        {
             return extendClimbToL1Command()
-            .andThen( () -> drivetrain.resetForFieldCentric())
-            .andThen(defaultLEDCommand())
-            .withName("Climb Unmounted L1");
-        } 
+            .andThen(ascendL1Command())
+            .andThen(descendL1Command())
+            .withName("did the climb thing");
+        }
         else
         {
             return Commands.none();

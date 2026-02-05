@@ -25,7 +25,7 @@ public class Climb extends SubsystemBase
 
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
-    private enum climbPosition
+    public enum climbPosition
     {
         kL1(32), kL2(4237), kL3(4237), kSTART(0.0);
 
@@ -132,6 +132,11 @@ public class Climb extends SubsystemBase
         }
     }
 
+    public void resetPosition()
+    {
+        leadMotor.setPosition(0.0);
+    }
+
     /**
      * 
      * Returns a command to stop climb
@@ -160,6 +165,11 @@ public class Climb extends SubsystemBase
     {
         return run( () -> moveToPosition(climbPosition.kSTART)).until(() -> (isAtPosition(climbPosition.kSTART).getAsBoolean() || (leadMotor.getReverseHardLimit())))
         .andThen(stopCommand());
+    }
+
+    public Command resetPositionCommand()
+    {
+        return run ( () -> resetPosition());
     }
 
     // *** OVERRIDEN METHODS ***

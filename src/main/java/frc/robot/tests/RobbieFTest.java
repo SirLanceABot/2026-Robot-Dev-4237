@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.LEDs.ColorPattern;
@@ -40,6 +41,7 @@ public class RobbieFTest implements Test
     private final Flywheel flywheel;
     private final Agitator agitator;
     private final LEDs leds;
+    private final Climb climb;
     // private final Accelerator accelerator;
 
 
@@ -60,6 +62,7 @@ public class RobbieFTest implements Test
         flywheel = robotContainer.getFlywheel();
         agitator = robotContainer.getAgitator();
         leds = robotContainer.getLEDs();
+        climb = robotContainer.getClimb();
         // accelerator = robotContainer.getAccelerator();
 
 
@@ -90,46 +93,20 @@ public class RobbieFTest implements Test
            GeneralCommands.superCoolAutomatedL1ClimbCommandToScoreManyPoints()
         );
 
-        // controller.y().onTrue(
-        //     GeneralCommands.ejectFuelInIntakeCommand()
-        // );
+        controller.b().onTrue(
+            GeneralCommands.extendClimbToL1Command()
+        );
 
-        // controller.b().onTrue(
-        //     GeneralCommands.stopEjectingFuelInIntakeCommand()
-        // );
+        controller.y().onTrue(
+            GeneralCommands.ascendL1Command()
+        );
 
-        // controller.a().onTrue(
-        //     GeneralCommands.resetIntakeCommand()
-        // );
-
-        // controller.b().onTrue(
-        //     leds.setColorSolidCommand(100, Color.kRed)
-        // );
+        controller.start().onTrue(
+            climb.resetPositionCommand()
+        );
+    
 
 
-
-        // controller.y().onTrue(
-        //     GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kGreen)
-        // );
-       
-        // controller.b().onTrue(
-        //     flywheel.stopCommand()
-        // );
-
-
-
-        // if(flywheel.isAtSetSpeed(1.0, 1.0).getAsBoolean())
-        // {
-        //     System.out.println("AT TARGET SPEED**********************************");
-        // }
-        // else
-        // {
-        //     System.out.println("NOT AT TARGET SPEED------------------------------");
-        // }
-
-        // System.out.println("***************velocity = " + flywheel.getVelocity());
-
-        // flywheel.displayStatorCurrent();
     }
     
     /**
