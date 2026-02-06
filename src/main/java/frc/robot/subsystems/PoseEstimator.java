@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.NetworkTableLance.*;
+
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -22,9 +24,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.sensors.Camera;
 
@@ -89,7 +89,7 @@ public class PoseEstimator extends SubsystemBase
         this.gyro = drivetrain.getPigeon2();
         this.cameraArray = cameraArray;
 
-        ASTable = NetworkTableInstance.getDefault().getTable(Constants.ADVANTAGE_SCOPE_TABLE_NAME);
+        ASTable = NetworkTableInstance.getDefault().getTable(ADVANTAGE_SCOPE_TABLE);
         // This is where the robot starts in AdvantageScope
         poseEstimatorEntry = ASTable.getStructTopic("PoseEstimator", Pose2d.struct).publish();
 

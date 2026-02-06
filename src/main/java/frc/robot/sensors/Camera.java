@@ -1,16 +1,16 @@
 package frc.robot.sensors;
 
+import static frc.robot.Constants.NetworkTableLance.*;
+
 import java.lang.invoke.MethodHandles;
 
 import com.ctre.phoenix6.Utils;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.networktables.DoubleArrayEntry;
-import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
 /**
@@ -38,11 +38,13 @@ public class Camera extends SubsystemBase
     // Put all class variables and instance variables here
     private String cameraName;
     private LimelightHelpers.PoseEstimate poseEstimate;
-    private double[] poseArray = new double[3];
+    // private double[] poseArray = new double[3];
 
-    private DoubleEntry yawEntry;
-    private DoubleArrayEntry poseEntry;
-    private NetworkTable ASTable = NetworkTableInstance.getDefault().getTable(Constants.ADVANTAGE_SCOPE_TABLE_NAME);
+    // private DoubleEntry yawEntry;
+    // private DoubleArrayEntry poseEntry;
+    private NetworkTable ASTable;
+    private StructPublisher<Pose2d> cameraEntry;
+    private Pose2d cameraPose;
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -56,8 +58,10 @@ public class Camera extends SubsystemBase
         this.cameraName = cameraName;
         System.out.println("  Constructor Started:  " + fullClassName + ">>" + cameraName);
 
-        poseEntry = ASTable.getDoubleArrayTopic(cameraName + " pose").getEntry(new double[3]);
-        yawEntry = ASTable.getDoubleTopic("GyroYaw").getEntry(0.0);
+        ASTable = NetworkTableInstance.getDefault().getTable(ADVANTAGE_SCOPE_TABLE);
+        cameraEntry = ASTable.getStructTopic(cameraName + " pose", Pose2d.struct).publish();
+        // poseEntry = ASTable.getDoubleArrayTopic(cameraName + " pose").getEntry(new double[3]);
+        // yawEntry = ASTable.getDoubleTopic("GyroYaw").getEntry(0.0);
 
         System.out.println("  Constructor Finished: " + fullClassName + ">>" + cameraName);
     }
@@ -153,15 +157,22 @@ public class Camera extends SubsystemBase
 
     public void periodic()
     {
-        poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cameraName);
+        // poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cameraName);
 
-        if(poseEstimate != null)
+        // if(poseEstimate != null)
+        // {
+        //     poseArray[0] = poseEstimate.pose.getX();
+        //     poseArray[1] = poseEstimate.pose.getY();
+        //     poseArray[2] = poseEstimate.pose.getRotation().getRadians();
+
+        //     poseEntry.set(poseArray);
+        // }
+
+        
+        cameraPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cameraName).pose;
+        if(cameraPose != null)
         {
-            poseArray[0] = poseEstimate.pose.getX();
-            poseArray[1] = poseEstimate.pose.getY();
-            poseArray[2] = poseEstimate.pose.getRotation().getRadians();
-
-            poseEntry.set(poseArray);
+            cameraEntry.set(cameraPose);
         }
     }
 
