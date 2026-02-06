@@ -178,13 +178,13 @@ public class ScoringCommands
         }
     }
 
-    // public static Command passCommand(Agitator agitator, Accelerator accelerator, Flywheel flywheel)
-    // {
-    //     return
-    //     flywheel.setControlVelocityCommand(() -> 10.0)   // test value
-    //     .andThen(
-    //         Commands.parallel(
-    //             (agitator.forwardCommand()), //rpm
-    //             (accelerator.feedToShooterCommand(() -> 0.1))));
-    // }
+    public static Command passCommand(Agitator agitator, Accelerator accelerator, Flywheel flywheel)
+    {
+        return
+        flywheel.setControlVelocityCommand(() -> 10.0).until(flywheel.isAtSetSpeed(10.0, 5))   // test value
+        .andThen(
+            Commands.parallel(
+                (agitator.forwardCommand()), //rpm
+                (accelerator.feedToShooterCommand(() -> 0.1))));
+    }
 }
