@@ -89,22 +89,35 @@ public class RobbieFTest implements Test
      */
     public void periodic()
     {
-        controller.x().onTrue(
-           GeneralCommands.superCoolAutomatedL1ClimbCommandToScoreManyPoints()
-        );
+        // code for testing climb
 
-        controller.b().onTrue(
-            GeneralCommands.extendClimbToL1Command()
-        );
+        // controller.start().onTrue(
+        //     climb.resetPositionCommand()
+        // );
+        // controller.x().onTrue(
+        //     GeneralCommands.climbToL1Command()
+        // );
+        // controller.b().onTrue(
+        //     GeneralCommands.retractFromL1Command()
+        // );
 
-        controller.y().onTrue(
-            GeneralCommands.ascendL1Command()
-        );
-
-        controller.start().onTrue(
-            climb.resetPositionCommand()
-        );
     
+    
+
+
+
+
+        // code for testing flywheel
+
+        // controller.x().onTrue(
+        //     flywheel.setControlVelocityCommand(() -> 75.0) // ft/sec
+        // );
+        // controller.a().onTrue(
+        //     flywheel.setControlVelocityCommand(() -> -5.0)
+        // );
+        // controller.b().onTrue(
+        //     flywheel.stopCommand()
+        // );
 
 
     }

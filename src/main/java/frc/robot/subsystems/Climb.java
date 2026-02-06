@@ -27,7 +27,7 @@ public class Climb extends SubsystemBase
     // Put all inner enums and inner classes here
     public enum climbPosition
     {
-        kL1(32), kL2(4237), kL3(4237), kSTART(0.0);
+        kEXTENDL1(32.0), kRETRACTL1(10.0), kL2(4237), kL3(4237), kSTART(0.0);
 
         public final double value;
         private climbPosition(double value)
@@ -153,7 +153,7 @@ public class Climb extends SubsystemBase
      */
     public Command extendToL1Command()
     {
-        return run( () -> moveToPosition(climbPosition.kL1)).until(() -> (isAtPosition(climbPosition.kL1).getAsBoolean() || (leadMotor.getForwardHardLimit())))
+        return run( () -> moveToPosition(climbPosition.kEXTENDL1)).until(() -> (isAtPosition(climbPosition.kEXTENDL1).getAsBoolean() || (leadMotor.getForwardHardLimit())))
                 .andThen(stopCommand());
     }
 
@@ -163,8 +163,14 @@ public class Climb extends SubsystemBase
      */
     public Command retractFromL1Command()
     {
+        return run( () -> moveToPosition(climbPosition.kRETRACTL1)).until(() -> (isAtPosition(climbPosition.kRETRACTL1).getAsBoolean() || (leadMotor.getReverseHardLimit())))
+            .andThen(stopCommand());
+    }
+
+    public Command resetToStartCommand()
+    {
         return run( () -> moveToPosition(climbPosition.kSTART)).until(() -> (isAtPosition(climbPosition.kSTART).getAsBoolean() || (leadMotor.getReverseHardLimit())))
-        .andThen(stopCommand());
+            .andThen(stopCommand());
     }
 
     public Command resetPositionCommand()

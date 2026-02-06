@@ -265,11 +265,9 @@ public class GeneralCommands
     {
         if(climb != null)
         {
-            return
-            Commands.parallel(
-                setLEDCommand(ColorPattern.kRainbow),
-                climb.extendToL1Command()
-                .until(climb.isAtPosition(climbPosition.kL1)))
+            return setLEDCommand(ColorPattern.kRainbow)
+            .andThen(climb.extendToL1Command())
+            .until(climb.isAtPosition(climbPosition.kEXTENDL1))
             .withName("Climb Extended To L1 Position");       
         }
         else
@@ -278,18 +276,16 @@ public class GeneralCommands
         }
     }
 
-    // not tested
-    // no clue what actual climb will look like
     /**
      * @author Robbie F
      * @return command to retract climb after locking in to L1
      */
-    public static Command ascendL1Command()
+    public static Command ascendFromL1Command()
     {
         if(climb != null)
         {
             return climb.retractFromL1Command()
-            .until(climb.isAtPosition(climbPosition.kSTART))
+            .until(climb.isAtPosition(climbPosition.kRETRACTL1))
             .withName("Climb Mounted L1");
         }
         else
@@ -298,20 +294,17 @@ public class GeneralCommands
         }
     }
 
-    // also not tested
-    // still no clue what actual climb will look like
     /**
      * @author Robbie F
      * @return yay climb
      */
-    public static Command descendL1Command()
+    public static Command descendFromL1Command()
     {
-        if(climb != null && drivetrain != null)
+        if(climb != null)
         {
             return climb.extendToL1Command()
-            .until(climb.isAtPosition(climbPosition.kL1))
+            .until(climb.isAtPosition(climbPosition.kEXTENDL1))
             // .andThen( () -> drivetrain.resetForFieldCentric())
-            .andThen(defaultLEDCommand())
             .withName("Climb Unmounted L1");
         } 
         else
@@ -320,16 +313,44 @@ public class GeneralCommands
         }
     }
 
+    public static Command resetClimbToStartCommand()
+    {
+        if(climb != null)
+        {
+            return climb.resetToStartCommand()
+            .until(climb.isAtPosition(climbPosition.kSTART))
+            .withName("climb reset to inside robot");
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
     // not tested
-    // supposed to be an automated climb command at some point
-    public static Command superCoolAutomatedL1ClimbCommandToScoreManyPoints()
+    public static Command climbToL1Command()
     {
         if(climb != null)
         {
             return extendClimbToL1Command()
-            .andThen(ascendL1Command())
-            .andThen(descendL1Command())
+            .andThen(ascendFromL1Command())
             .withName("did the climb thing");
+        }
+        else
+        { 
+            return Commands.none();
+        }
+    }
+
+    //not tested
+    public static Command retractFromL1Command()
+    {
+        if(climb != null)
+        {
+            return descendFromL1Command()
+            .andThen(resetClimbToStartCommand())
+            .andThen(defaultLEDCommand())
+            .withName("reset climbing mechanism from L1");
         }
         else
         {
