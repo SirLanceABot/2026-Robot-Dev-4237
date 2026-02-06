@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.motors.SparkMaxLance;
+import frc.robot.motors.TalonFXLance;
 
 /**
  * This is an example of what a subsystem should look like.
@@ -34,13 +35,14 @@ public class Accelerator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance motor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Accelerator Motor"); // Neo550
+    private final SparkMaxLance leadMotor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Lead Motor"); // Neo550
+    private final TalonFXLance followerMotor1 = new TalonFXLance(1, MOTOR_CAN_BUS, "Follower Motor 1"); // Kracken
+    private final TalonFXLance followerMotor2 = new TalonFXLance(2, MOTOR_CAN_BUS, "Follower Motor 2"); // Kracken
 
-    // private final SparkMaxLance motor2 = new SparkMaxLance(1, MOTOR_CAN_BUS, "Follower Motor");
-
-    private final double ACCELERATOR_DIAMETER = 4237.0;
-    private final double GEAR_RATIO = 1.0 / 1.0;
-    private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * ACCELERATOR_DIAMETER) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
+    private final double ACCELERATOR_DIAMETER = 0.1875;
+    // Neo 550:
+    private final double GEAR_RATIO = 12.0 / 1.0;
+    private final double LEAD_MOTOR_VELOCITY_CONVERSION_FACTOR = ((Math.PI * ACCELERATOR_DIAMETER) / GEAR_RATIO) / 60; // rev/m to ft/s using gear ratio
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -64,13 +66,13 @@ public class Accelerator extends SubsystemBase
 
     private void configMotors()
     {
-        motor.setupFactoryDefaults();
-        motor.setupInverted(true); // Find out later
-        // motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR); // rev/m to ft/s
+        leadMotor.setupFactoryDefaults();
+        leadMotor.setupInverted(true); // Find out later
+        leadMotor.setupVelocityConversionFactor(LEAD_MOTOR_VELOCITY_CONVERSION_FACTOR); // rev/m to ft/s
 
-        motor.setSafetyEnabled(false);
+        leadMotor.setSafetyEnabled(false);
 
-        motor.setPosition(0);
+        leadMotor.setPosition(0);
 
         // motor.setupForwardHardLimitSwitch(false, true);
         // motor.setupReverseHardLimitSwitch(false, true);
@@ -78,30 +80,30 @@ public class Accelerator extends SubsystemBase
         // motor.setupForwardSoftLimit(100, false);
         // motor.setupReverseSoftLimit(0, false);
 
-        motor.setupMaxMotion(1200.0, 400.0, 0.05, 0);
-        motor.setupPIDController(0, 0.7, 0.0, 0.0, 0.0001);
+        // motor.setupMaxMotion(1200.0, 400.0, 0.05, 0);
+        // motor.setupPIDController(0, 0.7, 0.0, 0.0, 0.0001);
 
         // motor.setupCurrentLimit(5.0, 45.0, 0.5);
         //Current Threshold depends on speed sent to motor
 
-        // motor.setupPIDController(0, 0.00002, 0.0000002, 0);
-        // motor.setupCoastMode();
-        motor.setupBrakeMode();
+        leadMotor.setupPIDController(0, 0.00002, 0.0000002, 0);
+        leadMotor.setupCoastMode();
+        // motor.setupBrakeMode();
 
-        // motor2.setupFactoryDefaults();
-        // motor2.setupBrakeMode();
+        // followerMotor.setupFactoryDefaults();
+        // followerMotor.setupBrakeMode();
 
-        // motor2.setupFollower(MOTOR, false);
+        // followerMotor.setupFollower(MOTOR, false);
     }
 
     public double getPosition() 
     {
-        return motor.getPosition();
+        return leadMotor.getPosition();
     }
 
     public double getVelocity() 
     {
-        return motor.getVelocity();
+        return leadMotor.getVelocity();
     }
 
     /**
@@ -110,17 +112,17 @@ public class Accelerator extends SubsystemBase
      */
     private void set(double speed)
     {
-        motor.set(speed);
+        leadMotor.set(speed);
     }
 
     private void setControlVelocity(double velocity)
     {
-        motor.setControlVelocity(velocity);
+        leadMotor.setControlVelocity(velocity);
     }
 
     private void setControlPosition(double position)
     {
-        motor.setControlPosition(position);
+        leadMotor.setControlPosition(position);
     }
 
     public void stop()
