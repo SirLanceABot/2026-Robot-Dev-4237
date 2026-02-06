@@ -417,9 +417,10 @@ public class PoseEstimator extends SubsystemBase
         {
             Pose2d robotPose = drivetrain.getState().Pose;            
 
-            double xVelocityField = (drivetrain.getState().Speeds.vxMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getCos()) - drivetrain.getState().Speeds.vyMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getSin()));
-            double yVelocityField = (drivetrain.getState().Speeds.vxMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getSin()) + drivetrain.getState().Speeds.vyMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getCos()));
+            ChassisSpeeds fieldVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.getRotation());
 
+            double xVelocityField = fieldVelocity.vxMetersPerSecond;
+            double yVelocityField = fieldVelocity.vyMetersPerSecond;
             double deltax = target.getX() - robotPose.getX();
             double deltay = target.getY() - robotPose.getY();
             
@@ -439,7 +440,7 @@ public class PoseEstimator extends SubsystemBase
                 yDelta = deltay - (yVelocityField * timeOfFlight);
                 // System.out.println("yDelta: " + yDelta + " xDelta: " + xDelta);
             }
-            return Math.atan2(yDelta, xDelta);
+            return (target == redHubPose) ? Math.atan2(yDelta, xDelta) : Math.atan2(-yDelta, -xDelta);
         };
     }
 
@@ -456,9 +457,10 @@ public class PoseEstimator extends SubsystemBase
         {
             Pose2d robotPose = drivetrain.getState().Pose;            
 
-            double xVelocityField = (drivetrain.getState().Speeds.vxMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getCos()) - drivetrain.getState().Speeds.vyMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getSin()));
-            double yVelocityField = (drivetrain.getState().Speeds.vxMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getSin()) + drivetrain.getState().Speeds.vyMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getCos()));
+            ChassisSpeeds fieldVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.getRotation());
 
+            double xVelocityField = fieldVelocity.vxMetersPerSecond;
+            double yVelocityField = fieldVelocity.vyMetersPerSecond;
             double deltax = target.getX() - robotPose.getX();
             double deltay = target.getY() - robotPose.getY();
             
@@ -538,7 +540,14 @@ public class PoseEstimator extends SubsystemBase
                                     visionPose,
                                     camera.getTimestamp(),
                                     visionStdDevs);
-                        drivetrain.resetPose(new Pose2d(visionPose.getTranslation(), drivetrain.getState().RawHeading));
+                        if(drivetrain.isRedAllianceSupplier().getAsBoolean())
+                        {
+                            drivetrain.resetPose(new Pose2d(visionPose.getTranslation(), new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians()).plus(new Rotation2d(Math.PI))));
+                        }
+                        else
+                        {
+                            drivetrain.resetPose(new Pose2d(visionPose.getTranslation(), new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())));
+                        }
                     }
                 }
             }
