@@ -157,7 +157,7 @@ public class Camera extends SubsystemBase
 
     public void periodic()
     {
-        // poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cameraName);
+        poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cameraName);
 
         // if(poseEstimate != null)
         // {
