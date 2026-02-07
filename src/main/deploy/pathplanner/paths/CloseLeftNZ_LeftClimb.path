@@ -1,0 +1,74 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.723127346096096,
+        "y": 5.5311861275337835
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.446486472793204,
+        "y": 8.601558666087975
+      },
+      "isLocked": false,
+      "linkedName": "Close Left NZ"
+    },
+    {
+      "anchor": {
+        "x": 1.4819790818987366,
+        "y": 4.662893710660144
+      },
+      "prevControl": {
+        "x": 0.8234670138811669,
+        "y": 8.05810662615742
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "LeftClimb"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.35376233552631586,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 0.47588404605263146,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 0.7957545230263159,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Shoot on the Move",
+      "waypointRelativePos": 0.5,
+      "endWaypointRelativePos": 0.85,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Left NZ",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

@@ -13,13 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CloseRightNZ_RightTrenchShot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RightTrenchShot_RightClimb"
+            "pathName": "CloseRightNZ_RightClimb"
           }
         },
         {

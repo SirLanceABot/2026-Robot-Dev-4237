@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.728158092248908,
+        "y": 2.620705854257642
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 8.345452112271335,
+        "y": -0.3244918258087819
+      },
+      "isLocked": false,
+      "linkedName": "Close Right NZ"
+    },
+    {
+      "anchor": {
+        "x": 0.634338971227592,
+        "y": 2.8347510971376484
+      },
+      "prevControl": {
+        "x": -0.46013744212681185,
+        "y": 0.17080208333473657
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Right Climb"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4053556743421051,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Shoot on the Move",
+      "waypointRelativePos": 0.502621470099668,
+      "endWaypointRelativePos": 0.9,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Right NZ",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}
