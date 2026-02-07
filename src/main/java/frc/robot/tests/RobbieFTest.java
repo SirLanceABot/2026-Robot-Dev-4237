@@ -42,6 +42,7 @@ public class RobbieFTest implements Test
     private final Agitator agitator;
     private final LEDs leds;
     private final Climb climb;
+    private final Accelerator accelerator;
     // private final Accelerator accelerator;
 
 
@@ -63,7 +64,7 @@ public class RobbieFTest implements Test
         agitator = robotContainer.getAgitator();
         leds = robotContainer.getLEDs();
         climb = robotContainer.getClimb();
-        // accelerator = robotContainer.getAccelerator();
+        accelerator = robotContainer.getAccelerator();
 
 
         System.out.println("  Constructor Finished: " + fullClassName);
@@ -89,37 +90,15 @@ public class RobbieFTest implements Test
      */
     public void periodic()
     {
-        // code for testing climb
-
-        // controller.start().onTrue(
-        //     climb.resetPositionCommand()
-        // );
-        // controller.x().onTrue(
-        //     GeneralCommands.climbToL1Command()
-        // );
-        // controller.b().onTrue(
-        //     GeneralCommands.retractFromL1Command()
-        // );
-
-    
-    
-
-
-
-
-        // code for testing flywheel
-
-        // controller.x().onTrue(
-        //     flywheel.setControlVelocityCommand(() -> 75.0) // ft/sec
-        // );
-        // controller.a().onTrue(
-        //     flywheel.setControlVelocityCommand(() -> -5.0)
-        // );
-        // controller.b().onTrue(
-        //     flywheel.stopCommand()
-        // );
-
-
+        controller.x().onTrue(
+            flywheel.setControlVelocityCommand(() -> 200.0) // ft/sec
+        );
+        controller.y().onTrue(
+            accelerator.onCommand()
+        );
+        controller.b().onTrue(
+            flywheel.stopCommand()
+        );
     }
     
     /**

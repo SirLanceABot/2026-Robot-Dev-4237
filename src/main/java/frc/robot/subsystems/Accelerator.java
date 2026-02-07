@@ -131,7 +131,7 @@ public class Accelerator extends SubsystemBase
     public Command onCommand()
     {
         // return run( () -> set(0.25) );
-        return run( () -> set(0.10) );
+        return run( () -> set(-1.0) );
     }
 
     public Command reverseCommand()

@@ -96,8 +96,8 @@ public class Flywheel extends SubsystemBase
         leadMotor.setupFactoryDefaults();
         followMotor.setupFactoryDefaults();
 
-        leadMotor.setSafetyEnabled(true);
-        followMotor.setSafetyEnabled(true);
+        leadMotor.setSafetyEnabled(false);
+        followMotor.setSafetyEnabled(false);
 
         leadMotor.setupCoastMode();
         followMotor.setupCoastMode();
@@ -237,7 +237,7 @@ public class Flywheel extends SubsystemBase
 
     public Command onCommand()
     {
-        return run( () -> set(0.1) );
+        return run( () -> set(0.5) );
     }
     
 
