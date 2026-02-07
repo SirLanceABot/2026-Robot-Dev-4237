@@ -37,7 +37,7 @@ public class NiyatiPTest implements Test
     // private Intake intake = null;
     private LEDs leds = null;
     private final CommandXboxController controller = new CommandXboxController(0);
-    private final Joystick joystick = new Joystick(0);
+    // private final Joystick joystick = new Joystick(0);
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here

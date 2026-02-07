@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
  * This class checks the swerves at startup and blinks leds red until tehy are aligned.
@@ -29,10 +30,12 @@ public final class StartUpCommands
         System.out.println("Loading: " + fullClassName);
     }
 
+    private static RobotContainer robotContainer; // should this be final?
     private static Drivetrain drivetrain;
     private static LEDs leds;
     private static Notifier notifier; // background timer
     private static volatile boolean currentlyBlinking = false;
+    private static Command selectedCommand = null;
 
     // tolerance for wheel angle to be considered "forward" (degrees)
     private static final double TOLERANCE_DEGREES = 5.0;
@@ -40,15 +43,20 @@ public final class StartUpCommands
     private static final double PERIOD_S = 0.5;
 
     private StartUpCommands() 
-    { }
+    {
+        robotContainer = new RobotContainer();
+        drivetrain = robotContainer.getDrivetrain();
+        leds = robotContainer.getLEDs();
+    }
 
     /** This function starts the startup monitor that checks wheel alignment and updates LEDs.
      * @param robotContainer
      */
     public static void startMonitor(RobotContainer robotContainer)
     {
-        drivetrain = robotContainer.getDrivetrain();
-        leds = robotContainer.getLEDs();
+        
+        // drivetrain = robotContainer.getDrivetrain();
+        // leds = robotContainer.getLEDs();
 
         if (drivetrain == null || leds == null)
         {
@@ -65,9 +73,30 @@ public final class StartUpCommands
 
     private static void checkAndUpdate()
     {
-        // Only run checks while the robot is disabled so we continuously watch during disabled mode
+        // Only should run checks while the robot is disabled so we continuously watch during disabled mode
         if (!DriverStation.isDisabled())
         {
+            // if(leds != null)
+            // {
+            //     if(!robotContainer.useFullRobot())
+            //     {
+            //         leds.setColorSolidCommand(100, Color.kYellow);
+            //     }
+            //     else if(selectedCommand != null)
+            //     {
+            //         leds.setColorSolidCommand(100, Color.kGreen);
+            //     }
+            //     else
+            //     {
+            //         leds.setColorSolidCommand(100, Color.kYellow);
+            //     }
+            // }
+
+            // if(leds != null)
+            // {
+            //     leds.setColorSolidCommand(100, Color.kRed);
+            // }
+
             return;
         }
 

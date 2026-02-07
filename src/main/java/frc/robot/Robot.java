@@ -112,10 +112,11 @@ public class Robot extends TimedRobot
     @Override
     public void disabledInit() 
     {
-        if(leds != null)
-        {
-            leds.setColorSolidCommand(100, Color.kRed);
-        }
+        // moved to StartUpCommands
+        // if(leds != null)
+        // {
+        //     leds.setColorSolidCommand(100, Color.kRed);
+        // }
 
         // Put code to run here before the match starts, but not between auto and teleop
         if(isPreMatch)
@@ -157,6 +158,7 @@ public class Robot extends TimedRobot
                 // }
             }
 
+            // moved to StartUpCommands
             if(leds != null)
             {
                 if(!robotContainer.useFullRobot())
