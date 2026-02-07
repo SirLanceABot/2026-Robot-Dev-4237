@@ -115,11 +115,13 @@ public class RobbieFTest implements Test
             accelerator.onCommand()  
         );
         controller.x().onTrue(
-            accelerator.setVelocityCommand(() -> 2000.0)
+            accelerator.setVelocityCommand(2000.0)
         );
         controller.b().onTrue(
             accelerator.stopCommand()
         );
+
+        System.out.println("Accelerator Velocity = " + accelerator.getVelocity());
     }
     
     /**

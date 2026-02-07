@@ -86,7 +86,11 @@ public class Accelerator extends SubsystemBase
         // motor.setupCurrentLimit(5.0, 45.0, 0.5);
         //Current Threshold depends on speed sent to motor
 
-        leadMotor.setupPIDController(0, 0.00002, 0.0000002, 0);
+        // both value sets of values currently work (not tuned) on rev/sec - NOT TESTED with the conversion factor
+        leadMotor.setupPIDController(0, 0.00002, 0.0, 0.0, 0.00103);
+        // leadMotor.setupPIDController(0, 0.00003, 0.0, 0, 0.15 , 0.001, 0.0); // kI used to be 0.0000002
+        
+        
         leadMotor.setupCoastMode();
         // motor.setupBrakeMode();
 
@@ -133,7 +137,7 @@ public class Accelerator extends SubsystemBase
     public Command onCommand()
     {
         // return run( () -> set(0.25) );
-        return run( () -> set(1.0) );
+        return run( () -> set(.2) );
     }
 
     public Command reverseCommand()
@@ -152,9 +156,9 @@ public class Accelerator extends SubsystemBase
         return run( () -> set(MathUtil.clamp(speed.getAsDouble(), -0.5, 0.0)) );
     }
 
-    public Command setVelocityCommand(DoubleSupplier targetSpeed)
+    public Command setVelocityCommand(double targetSpeed)
     {
-        return run( () -> setControlVelocity(targetSpeed.getAsDouble()));
+        return run( () -> setControlVelocity(targetSpeed));
     }
 
     public Command setPositionCommand(double targetPosition)
