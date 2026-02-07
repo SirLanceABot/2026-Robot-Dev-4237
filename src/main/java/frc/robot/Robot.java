@@ -84,8 +84,8 @@ public class Robot extends TimedRobot
 
         // 5. Configure PathPlanner
         PathPlannerLance.configPathPlanner(robotContainer);
-        FollowPathCommand.warmupCommand().schedule();
-        PathfindingCommand.warmupCommand().schedule();
+        // FollowPathCommand.warmupCommand().schedule();
+        // PathfindingCommand.warmupCommand().schedule();
 
         // start the startup monitor (checks swerve alignment and controls LEDs)
         StartUpCommands.startMonitor(robotContainer);
