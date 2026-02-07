@@ -21,6 +21,12 @@
           "data": {
             "pathName": "LeftTrenchShot_LeftClimb"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Climb to L1 Command"
+          }
         }
       ]
     }

@@ -54,6 +54,12 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "Shoot on the Move",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 0.6536285299003318,
+      "command": null
+    },
+    {
       "name": "Intake Command",
       "waypointRelativePos": 0.8,
       "endWaypointRelativePos": null,

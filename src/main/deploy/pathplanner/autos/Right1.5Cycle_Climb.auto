@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Shoot From Standstill Command"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "RightTrenchShot_FarRightNZ"
@@ -26,6 +32,12 @@
           "type": "path",
           "data": {
             "pathName": "FarRightNZ_RightClimb"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Climb to L1 Command"
           }
         }
       ]

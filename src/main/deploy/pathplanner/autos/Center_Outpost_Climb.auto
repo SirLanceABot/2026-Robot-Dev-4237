@@ -15,6 +15,12 @@
           "data": {
             "pathName": "Outpost_Climb"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Climb to L1 Command"
+          }
         }
       ]
     }
