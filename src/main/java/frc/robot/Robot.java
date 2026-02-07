@@ -51,7 +51,7 @@ public class Robot extends TimedRobot
 
     private Command selectedCommand = null; 
     private Command path = Commands.none();
-    private String autoName = "Right";
+    // private String autoName = "Right";
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -116,13 +116,16 @@ public class Robot extends TimedRobot
         if(isPreMatch)
         {
             autonomousCommand = PathPlannerLance.getAutonomousCommand();
-            autoName = autonomousCommand.getName();
+            path = PathPlannerLance.buildAutoPath();
 
-            if(AutoBuilder.isConfigured())
-            {
-                path = AutoBuilder.buildAuto(autoName);
-                initializePose();
-            }
+            // autonomousCommand = PathPlannerLance.getAutonomousCommand();
+            // autoName = autonomousCommand.getName();
+
+            // if(AutoBuilder.isConfigured())
+            // {
+            //     path = AutoBuilder.buildAuto(autoName);
+            //     initializePose();
+            // }
         }
     }
 
@@ -136,14 +139,17 @@ public class Robot extends TimedRobot
             selectedCommand = PathPlannerLance.getAutonomousCommand();
             if(!selectedCommand.getName().equalsIgnoreCase(autonomousCommand.getName()))
             {
-                autonomousCommand = selectedCommand;
-                autoName = autonomousCommand.getName();
-                System.out.println("Auto name: " + autonomousCommand.getName());
-                if(AutoBuilder.isConfigured())
-                {
-                    path = AutoBuilder.buildAuto(autoName);
-                    initializePose();
-                }
+                autonomousCommand = PathPlannerLance.getAutonomousCommand();
+                path = PathPlannerLance.buildAutoPath();
+
+                // autonomousCommand = selectedCommand;
+                // autoName = autonomousCommand.getName();
+                // System.out.println("Auto name: " + autonomousCommand.getName());
+                // if(AutoBuilder.isConfigured())
+                // {
+                //     path = AutoBuilder.buildAuto(autoName);
+                //     initializePose();
+                // }
             }
 
             if(leds != null)
@@ -169,18 +175,18 @@ public class Robot extends TimedRobot
     public void disabledExit() 
     {}
 
-    public void initializePose()
-    {
-        try {
-            PathPlannerPath ppPath = PathPlannerPath.fromPathFile(autoName);
-            Pose2d initialPose = ppPath.getStartingHolonomicPose().orElse(new Pose2d());
-            robotContainer.getPoseEstimator().resetPose(initialPose);
-        }
-        catch (Exception e)
-        {
-            System.out.println("Path planner loading file error");
-        }
-    }
+    // public void initializePose()
+    // {
+    //     try {
+    //         PathPlannerPath ppPath = PathPlannerPath.fromPathFile(autoName);
+    //         Pose2d initialPose = ppPath.getStartingHolonomicPose().orElse(new Pose2d());
+    //         robotContainer.getPoseEstimator().resetPose(initialPose);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         System.out.println("Path planner loading file error");
+    //     }
+    // }
 
 
     /** This function is called once each time the robot enters Autonomous mode. */
@@ -191,7 +197,7 @@ public class Robot extends TimedRobot
 
         isPreMatch = false;
 
-        initializePose();
+        // initializePose();
 
         if(path != null)
         {
