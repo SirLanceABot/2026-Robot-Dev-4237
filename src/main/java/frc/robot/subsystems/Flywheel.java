@@ -48,7 +48,7 @@ public class Flywheel extends SubsystemBase
     private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
 
     // PID constants
-    private final double kP = 0.2;
+    private final double kP = 0.4;
     private final double kI = 0.0;
     private final double kD = 0.00;
     private final double kS = 0.19;
@@ -56,7 +56,7 @@ public class Flywheel extends SubsystemBase
     private final double kA = 0.00;
 
     private final double FLYWHEEL_DIAMETER_FEET  = 4.25 / 12.0; // 4.25 in
-    private final double GEAR_RATIO = 2.0 / 1.0;
+    private final double GEAR_RATIO = 16.0 / 30.0;
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * FLYWHEEL_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
     
     // Motion Magic Constants
@@ -108,6 +108,7 @@ public class Flywheel extends SubsystemBase
         // followMotor.setupTorqueControl();
         
         leadMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
+        followMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
 
         followMotor.setupFollower(LEADMOTOR, false);
     }
@@ -277,8 +278,11 @@ public class Flywheel extends SubsystemBase
     @Override
     public void periodic()
     {
-
+        // System.out.println("*****lead motor velocity (fps) = " + leadMotor.getVelocity());
+        // System.out.print("-----follow motor velocity (fps) = " + followMotor.getVelocity());
         // System.out.println("*****Velocity Difference = +/- " + (leadMotor.getVelocity()-followMotor.getVelocity()));
+
+
 
         // This method will be called once per scheduler run
         // Use this for sensors that need to be read periodically.

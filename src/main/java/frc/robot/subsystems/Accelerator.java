@@ -36,8 +36,8 @@ public class Accelerator extends SubsystemBase
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
     private final SparkMaxLance leadMotor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Lead Motor"); // Neo550
-    private final TalonFXLance followerMotor1 = new TalonFXLance(1, MOTOR_CAN_BUS, "Follower Motor 1"); // Kracken
-    private final TalonFXLance followerMotor2 = new TalonFXLance(2, MOTOR_CAN_BUS, "Follower Motor 2"); // Kracken
+    // private final TalonFXLance followerMotor1 = new TalonFXLance(1, MOTOR_CAN_BUS, "Follower Motor 1"); // Kracken
+    // private final TalonFXLance followerMotor2 = new TalonFXLance(2, MOTOR_CAN_BUS, "Follower Motor 2"); // Kracken
 
     private final double ACCELERATOR_DIAMETER = 0.1875;
     // Neo 550:
@@ -67,8 +67,8 @@ public class Accelerator extends SubsystemBase
     private void configMotors()
     {
         leadMotor.setupFactoryDefaults();
-        leadMotor.setupInverted(true); // Find out later
-        leadMotor.setupVelocityConversionFactor(LEAD_MOTOR_VELOCITY_CONVERSION_FACTOR); // rev/m to ft/s
+        leadMotor.setupInverted(false); // isn't inverted on current shooter
+        // leadMotor.setupVelocityConversionFactor(LEAD_MOTOR_VELOCITY_CONVERSION_FACTOR); // rev/m to ft/s
 
         leadMotor.setSafetyEnabled(false);
 
@@ -133,7 +133,7 @@ public class Accelerator extends SubsystemBase
     public Command onCommand()
     {
         // return run( () -> set(0.25) );
-        return run( () -> set(-1.0) );
+        return run( () -> set(1.0) );
     }
 
     public Command reverseCommand()
@@ -152,9 +152,9 @@ public class Accelerator extends SubsystemBase
         return run( () -> set(MathUtil.clamp(speed.getAsDouble(), -0.5, 0.0)) );
     }
 
-    public Command setVelocityCommand(double targetSpeed)
+    public Command setVelocityCommand(DoubleSupplier targetSpeed)
     {
-        return run( () -> setControlVelocity(targetSpeed));
+        return run( () -> setControlVelocity(targetSpeed.getAsDouble()));
     }
 
     public Command setPositionCommand(double targetPosition)

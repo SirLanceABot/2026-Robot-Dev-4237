@@ -62,7 +62,7 @@ public class Robot extends TimedRobot
         // The order of the code below is important.
 
         // 1. Configure the Data Loggers
-        DataLogFile.config();
+        // DataLogFile.config();
         // new CommandSchedulerLog(
         //     EnumSet.of(CommandStageSelector.initialize, CommandStageSelector.interrupt, CommandStageSelector.finish, CommandStageSelector.execute), 
         //     EnumSet.of(LogsSelector.useConsole, LogsSelector.useDataLog, LogsSelector.useShuffleBoardLog));
@@ -187,7 +187,7 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit() 
     {
-        DataLogManager.start();
+        // DataLogManager.start();
 
         isPreMatch = false;
 
@@ -223,7 +223,7 @@ public class Robot extends TimedRobot
     @Override
     public void teleopInit() 
     {
-        DataLogManager.start();
+        // DataLogManager.start();
 
         // This makes sure that the autonomous stops running when teleop starts running.
         if (autonomousCommand != null) 
@@ -244,8 +244,8 @@ public class Robot extends TimedRobot
     @Override
     public void teleopExit() 
     {
-        MotorControllerLance.logAllStickyFaults();
-        DataLogManager.stop();
+        // MotorControllerLance.logAllStickyFaults();
+        // DataLogManager.stop();
 
         isPreMatch = true;
     }
