@@ -244,8 +244,8 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
     //TODO order matters
     public void resetForFieldCentric()
     {
-        getPigeon2().reset();
         seedFieldCentric();
+        getPigeon2().reset();
 
         // seedFieldCentric();
         // getPigeon2().reset();

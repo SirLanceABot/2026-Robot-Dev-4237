@@ -36,7 +36,7 @@
         "y": 2.8347510971376484
       },
       "prevControl": {
-        "x": 0.12149741577335371,
+        "x": 0.1214974157733536,
         "y": 2.5295366936255745
       },
       "nextControl": null,
@@ -56,7 +56,19 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Reset Intake Command",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Reset Intake Command"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

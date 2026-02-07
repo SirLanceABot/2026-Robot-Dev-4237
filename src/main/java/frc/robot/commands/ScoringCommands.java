@@ -178,6 +178,38 @@ public class ScoringCommands
         }
     }
 
+    /**
+     * 
+     * Same as shootOnTheMoveCommand: shoots fuel with constantly updating power values for flywheel while moving,
+     * BUT uses purely calculations to determine shooterVelocity
+     * @param drivetrain
+     * @param poseEstimator
+     * @param agitator
+     * @param indexer
+     * @param accelerator
+     * @param flywheel
+     * @return shooterVelocity to shoot on the move
+     * @author Matthew
+     */
+    public static Command physicsShootOnTheMove(Drivetrain drivetrain, PoseEstimator poseEstimator, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    {
+        if(drivetrain != null && poseEstimator != null && agitator != null && indexer != null && accelerator != null && flywheel != null)
+        {
+            double shooterVelocity = poseEstimator.pureShooterVelocity(poseEstimator.getAllianceHubPose()).getAsDouble();
+
+            return
+            flywheel.setControlVelocityCommand(() -> shooterVelocity).until(flywheel.isAtSetSpeed(shooterVelocity, 5))   //TODO also tun this tolerance
+            .andThen(
+                Commands.parallel(
+                    agitator.forwardCommand(),
+                    accelerator.feedToShooterCommand(() -> 0.1)));
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
     public static Command passCommand(Agitator agitator, Accelerator accelerator, Flywheel flywheel)
     {
         return

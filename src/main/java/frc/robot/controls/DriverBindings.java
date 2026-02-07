@@ -152,6 +152,7 @@ public final class DriverBindings {
     private static void configBButton()
     {
         Trigger bButton = controller.b();
+
         // bButton.onTrue(ScoringCommands.shootFromStandstillCommand(drivetrain, agitator, accelerator, flywheel, poseEstimator));
 
     }
@@ -160,6 +161,14 @@ public final class DriverBindings {
     private static void configXButton()
     {
         Trigger xButton = controller.x();
+    
+        xButton
+        .whileTrue(
+            Commands.parallel(
+                drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> poseEstimator.pureLeadingAngle(poseEstimator.getAllianceHubPose()).getAsDouble()),
+                ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, agitator, indexer, accelerator, flywheel)));
+
+        xButton.onFalse(GeneralCommands.stopShootingCommand());
     }
 
     // pass

@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.NetworkTableLance.*;
+
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -22,9 +24,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.sensors.Camera;
 
@@ -89,7 +89,7 @@ public class PoseEstimator extends SubsystemBase
         this.gyro = drivetrain.getPigeon2();
         this.cameraArray = cameraArray;
 
-        ASTable = NetworkTableInstance.getDefault().getTable(Constants.ADVANTAGE_SCOPE_TABLE_NAME);
+        ASTable = NetworkTableInstance.getDefault().getTable(ADVANTAGE_SCOPE_TABLE);
         // This is where the robot starts in AdvantageScope
         poseEstimatorEntry = ASTable.getStructTopic("PoseEstimator", Pose2d.struct).publish();
 
@@ -417,9 +417,10 @@ public class PoseEstimator extends SubsystemBase
         {
             Pose2d robotPose = drivetrain.getState().Pose;            
 
-            double xVelocityField = (drivetrain.getState().Speeds.vxMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getCos()) - drivetrain.getState().Speeds.vyMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getSin()));
-            double yVelocityField = (drivetrain.getState().Speeds.vxMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getSin()) + drivetrain.getState().Speeds.vyMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getCos()));
+            ChassisSpeeds fieldVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.getRotation());
 
+            double xVelocityField = fieldVelocity.vxMetersPerSecond;
+            double yVelocityField = fieldVelocity.vyMetersPerSecond;
             double deltax = target.getX() - robotPose.getX();
             double deltay = target.getY() - robotPose.getY();
             
@@ -439,7 +440,7 @@ public class PoseEstimator extends SubsystemBase
                 yDelta = deltay - (yVelocityField * timeOfFlight);
                 // System.out.println("yDelta: " + yDelta + " xDelta: " + xDelta);
             }
-            return Math.atan2(yDelta, xDelta);
+            return (target == redHubPose) ? Math.atan2(yDelta, xDelta) : Math.atan2(-yDelta, -xDelta);
         };
     }
 
@@ -456,9 +457,10 @@ public class PoseEstimator extends SubsystemBase
         {
             Pose2d robotPose = drivetrain.getState().Pose;            
 
-            double xVelocityField = (drivetrain.getState().Speeds.vxMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getCos()) - drivetrain.getState().Speeds.vyMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getSin()));
-            double yVelocityField = (drivetrain.getState().Speeds.vxMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getSin()) + drivetrain.getState().Speeds.vyMetersPerSecond * Math.abs(drivetrain.getState().Pose.getRotation().getCos()));
+            ChassisSpeeds fieldVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.getRotation());
 
+            double xVelocityField = fieldVelocity.vxMetersPerSecond;
+            double yVelocityField = fieldVelocity.vyMetersPerSecond;
             double deltax = target.getX() - robotPose.getX();
             double deltay = target.getY() - robotPose.getY();
             
@@ -538,7 +540,14 @@ public class PoseEstimator extends SubsystemBase
                                     visionPose,
                                     camera.getTimestamp(),
                                     visionStdDevs);
-                        drivetrain.resetPose(new Pose2d(visionPose.getTranslation(), drivetrain.getState().RawHeading));
+                        if(drivetrain.isRedAllianceSupplier().getAsBoolean())
+                        {
+                            drivetrain.resetPose(new Pose2d(visionPose.getTranslation(), new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians()).plus(new Rotation2d(Math.PI))));
+                        }
+                        else
+                        {
+                            drivetrain.resetPose(new Pose2d(visionPose.getTranslation(), new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())));
+                        }
                     }
                 }
             }

@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 import org.opencv.core.*;
 import org.opencv.core.Core.*;
+import org.opencv.features2d.Feature2D;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.*;
 import org.opencv.objdetect.*;
@@ -25,12 +26,10 @@ import org.opencv.objdetect.*;
 public class GripPipeline {
 
 	//Outputs
-	private Mat resizeImage0Output = new Mat();
-	private Mat resizeImage1Output = new Mat();
-	private Mat maskOutput = new Mat();
 	private Mat hsvThresholdOutput = new Mat();
 	private Mat cvErodeOutput = new Mat();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
+	private Point newPointOutput = new Point();
 
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -39,38 +38,19 @@ public class GripPipeline {
 	/**
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
-	public void process(Mat source0, Mat source1) {
-		// Step Resize_Image0:
-		Mat resizeImage0Input = source0;
-		double resizeImage0Width = 640;
-		double resizeImage0Height = 480;
-		int resizeImage0Interpolation = Imgproc.INTER_CUBIC;
-		resizeImage(resizeImage0Input, resizeImage0Width, resizeImage0Height, resizeImage0Interpolation, resizeImage0Output);
-
-		// Step Resize_Image1:
-		Mat resizeImage1Input = source1;
-		double resizeImage1Width = 640;
-		double resizeImage1Height = 480;
-		int resizeImage1Interpolation = Imgproc.INTER_CUBIC;
-		resizeImage(resizeImage1Input, resizeImage1Width, resizeImage1Height, resizeImage1Interpolation, resizeImage1Output);
-
-		// Step Mask0:
-		Mat maskInput = resizeImage0Output;
-		Mat maskMask = resizeImage1Output;
-		mask(maskInput, maskMask, maskOutput);
-
+	public void process(Mat source0) {
 		// Step HSV_Threshold0:
-		Mat hsvThresholdInput = maskOutput;
-		double[] hsvThresholdHue = {0.0, 50.98976109215021};
-		double[] hsvThresholdSaturation = {165.10791366906474, 255.0};
-		double[] hsvThresholdValue = {140.0471995285128, 255.0};
+		Mat hsvThresholdInput = source0;
+		double[] hsvThresholdHue = {19.4244585020079, 52.01365383004979};
+		double[] hsvThresholdSaturation = {87.14029105018369, 255.0};
+		double[] hsvThresholdValue = {103.9568283360639, 255.0};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
 		// Step CV_erode0:
 		Mat cvErodeSrc = hsvThresholdOutput;
 		Mat cvErodeKernel = new Mat();
 		Point cvErodeAnchor = new Point(-1, -1);
-		double cvErodeIterations = 2.0;
+		double cvErodeIterations = 3.0;
 		int cvErodeBordertype = Core.BORDER_CONSTANT;
 		Scalar cvErodeBordervalue = new Scalar(-1);
 		cvErode(cvErodeSrc, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBordertype, cvErodeBordervalue, cvErodeOutput);
@@ -80,30 +60,11 @@ public class GripPipeline {
 		boolean findContoursExternalOnly = false;
 		findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
 
-	}
+		// Step New_Point0:
+		double newPointX = -1;
+		double newPointY = -1;
+		newPoint(newPointX, newPointY, newPointOutput);
 
-	/**
-	 * This method is a generated getter for the output of a Resize_Image.
-	 * @return Mat output from Resize_Image.
-	 */
-	public Mat resizeImage0Output() {
-		return resizeImage0Output;
-	}
-
-	/**
-	 * This method is a generated getter for the output of a Resize_Image.
-	 * @return Mat output from Resize_Image.
-	 */
-	public Mat resizeImage1Output() {
-		return resizeImage1Output;
-	}
-
-	/**
-	 * This method is a generated getter for the output of a Mask.
-	 * @return Mat output from Mask.
-	 */
-	public Mat maskOutput() {
-		return maskOutput;
 	}
 
 	/**
@@ -130,31 +91,14 @@ public class GripPipeline {
 		return findContoursOutput;
 	}
 
-
 	/**
-	 * Scales and image to an exact size.
-	 * @param input The image on which to perform the Resize.
-	 * @param width The width of the output in pixels.
-	 * @param height The height of the output in pixels.
-	 * @param interpolation The type of interpolation.
-	 * @param output The image in which to store the output.
+	 * This method is a generated getter for the output of a New_Point.
+	 * @return Point output from New_Point.
 	 */
-	private void resizeImage(Mat input, double width, double height,
-		int interpolation, Mat output) {
-		Imgproc.resize(input, output, new Size(width, height), 0.0, 0.0, interpolation);
+	public Point newPointOutput() {
+		return newPointOutput;
 	}
 
-	/**
-	 * Filter out an area of an image using a binary mask.
-	 * @param input The image on which the mask filters.
-	 * @param mask The binary image that is used to filter.
-	 * @param output The image in which to store the output.
-	 */
-	private void mask(Mat input, Mat mask, Mat output) {
-		mask.convertTo(mask, CvType.CV_8UC1);
-		Core.bitwise_xor(output, output, output);
-		input.copyTo(output, mask);
-	}
 
 	/**
 	 * Segment an image based on hue, saturation, and value ranges.
@@ -216,6 +160,17 @@ public class GripPipeline {
 		}
 		int method = Imgproc.CHAIN_APPROX_SIMPLE;
 		Imgproc.findContours(input, contours, hierarchy, mode, method);
+	}
+
+	/**
+	 * Fills a point with given x and y values.
+	 * @param x the x value to put in the point
+	 * @param y the y value to put in the point
+	 * @param point the point to fill
+	 */
+	private void newPoint(double x, double y, Point point) {
+		point.x = x;
+		point.y = y;
 	}
 
 
