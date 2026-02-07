@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
@@ -24,6 +25,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.PoseEstimator;
 
 public final class DriverBindings {
@@ -50,6 +52,7 @@ public final class DriverBindings {
     private static Flywheel flywheel;
     private static Indexer indexer;
     private static Intake intake;
+    private static LEDs leds;
     private static PoseEstimator poseEstimator;
 
     private static DoubleSupplier leftYAxis;
@@ -275,5 +278,10 @@ public final class DriverBindings {
         {
             drivetrain.setDefaultCommand(drivetrain.driveCommand(leftYAxis, leftXAxis, rightXAxis, scaleFactorSupplier));     
         }
+
+        // if(leds != null)
+        // {
+        //     leds.setDefaultCommand(leds.setColorSolidCommand(100, Color.kRed));
+        // }
     }    
 }

@@ -312,7 +312,11 @@ public class GeneralCommands
             return Commands.none();
         }
     }
-
+    
+    /**
+     * @author Robbie F
+     * @return command to reset climb to the starting position
+     */
     public static Command resetClimbToStartCommand()
     {
         if(climb != null)
@@ -328,6 +332,10 @@ public class GeneralCommands
     }
 
     // not tested
+    /**
+     * @author Robbie F
+     * @return command to climb to L1
+     */
     public static Command climbToL1Command()
     {
         if(climb != null)
@@ -343,6 +351,10 @@ public class GeneralCommands
     }
 
     //not tested
+    /**
+     * @author Robbie F
+     * @return command to retract from L1
+     */
     public static Command retractFromL1Command()
     {
         if(climb != null)
