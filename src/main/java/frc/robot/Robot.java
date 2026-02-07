@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.CommandsManager;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
+import frc.robot.commands.StartUpCommands;
 import frc.robot.loggers.DataLogFile;
 import frc.robot.motors.MotorControllerLance;
 import frc.robot.pathplanner.PathPlannerLance;
@@ -71,6 +72,7 @@ public class Robot extends TimedRobot
         // 2. Create the RobotContainer
         robotContainer = new RobotContainer();
 
+        leds = robotContainer.getLEDs();
 
         // 3. Create the Commands
         CommandsManager.createCommands(robotContainer);
@@ -84,6 +86,9 @@ public class Robot extends TimedRobot
         PathPlannerLance.configPathPlanner(robotContainer);
         FollowPathCommand.warmupCommand().schedule();
         PathfindingCommand.warmupCommand().schedule();
+
+        // start the startup monitor (checks swerve alignment and controls LEDs)
+        StartUpCommands.startMonitor(robotContainer);
     }
 
     /**

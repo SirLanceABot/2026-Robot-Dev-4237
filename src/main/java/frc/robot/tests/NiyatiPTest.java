@@ -101,8 +101,13 @@ public class NiyatiPTest implements Test
      */
     public void periodic()
     {
-        controller.x().onTrue(leds.setColorSolidCommand(20, Color.kRed));
-        controller.a().onTrue(leds.setMovingRainbowCommand()); //is there no way to add a .schedule?
+        // controller.x().onTrue(leds.setColorSolidCommand(20, Color.kRed));
+        // controller.a().onTrue(leds.setMovingRainbowCommand()); //is there no way to add a .schedule?
+
+        if(controller.x().getAsBoolean())
+        {
+            leds.setColorBlinkCommand(Color.kRed).schedule();
+        }
 
         // if(joystick.getRawButton(1))
         // {
