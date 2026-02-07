@@ -17,9 +17,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Shoot From Standstill Command"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot From Standstill Command"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 5.0
+                }
+              }
+            ]
           }
         },
         {
