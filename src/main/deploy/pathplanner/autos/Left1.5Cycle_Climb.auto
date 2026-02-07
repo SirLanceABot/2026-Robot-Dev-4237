@@ -17,6 +17,25 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot From Standstill Command"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 5.0
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "LeftTrenchShot_FarLeftNZ"
@@ -26,6 +45,12 @@
           "type": "path",
           "data": {
             "pathName": "FarLeftNZ_LeftClimb"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Climb to L1 Command"
           }
         }
       ]

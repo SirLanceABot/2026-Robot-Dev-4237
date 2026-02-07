@@ -85,6 +85,12 @@
           "name": "Reset Intake Command"
         }
       }
+    },
+    {
+      "name": "Shoot on the Move",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": 1.7,
+      "command": null
     }
   ],
   "globalConstraints": {

@@ -3,39 +3,52 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5,
-        "y": 4.0
+        "x": 7.723127346096096,
+        "y": 5.5311861275337835
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.059285868108729,
-        "y": 2.301929436255742
+        "x": 6.446486472793204,
+        "y": 8.601558666087975
       },
       "isLocked": false,
-      "linkedName": "Center Wall"
+      "linkedName": "Close Left NZ"
     },
     {
       "anchor": {
-        "x": 0.634338971227592,
-        "y": 2.8347510971376484
+        "x": 1.4819790818987366,
+        "y": 4.662893710660144
       },
       "prevControl": {
-        "x": 0.20581247607197573,
-        "y": 1.4670801229900463
+        "x": 0.8234670138811669,
+        "y": 8.05810662615742
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Climb"
+      "linkedName": "LeftClimb"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.35376233552631586,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 0.47588404605263146,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 0.7957545230263159,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "Shoot on the Move",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 0.5,
+      "waypointRelativePos": 0.5,
+      "endWaypointRelativePos": 0.85,
       "command": null
     }
   ],
@@ -49,13 +62,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Center Wall Starts",
+  "folder": "Left NZ",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

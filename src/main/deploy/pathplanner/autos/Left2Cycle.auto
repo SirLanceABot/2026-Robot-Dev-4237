@@ -5,31 +5,62 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "path",
+          "data": {
+            "pathName": "LeftTrench_CloseLeftNZ"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CloseLeftNZ_LeftTrenchShot"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "LeftTrench_CloseLeftNZ"
+                  "name": "Shoot From Standstill Command"
                 }
               },
               {
-                "type": "path",
+                "type": "wait",
                 "data": {
-                  "pathName": "CloseLeftNZ_LeftTrenchShot"
+                  "waitTime": 5.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftTrenchShot_FarLeftNZ"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FarLeftNZ_LeftTrenchShot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot From Standstill Command"
                 }
               },
               {
-                "type": "path",
+                "type": "wait",
                 "data": {
-                  "pathName": "LeftTrenchShot_FarLeftNZ"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "FarLeftNZ_LeftTrenchShot"
+                  "waitTime": 5.0
                 }
               }
             ]

@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CloseLeftNZ_LeftTrenchShot"
+            "pathName": "CloseLeftNZ_LeftClimb"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "LeftTrenchShot_LeftClimb"
+            "name": "Climb to L1 Command"
           }
         }
       ]
