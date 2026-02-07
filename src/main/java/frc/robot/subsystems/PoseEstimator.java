@@ -63,6 +63,8 @@ public class PoseEstimator extends SubsystemBase
     //For purelyCalculatedLeadingAngle calculations
     private final double shooterAngleRadians = (72.0/360.0)*(2.0*Math.PI);  
     private final double robotToHubVerticalDistanceMeters = -1.2954;
+    private final double robotCenterToShooterMeters = 0.0;    //TODO find out this value
+
 
     // Kalman filter, experiment later
     private Matrix<N3, N1> visionStdDevs;
@@ -423,6 +425,11 @@ public class PoseEstimator extends SubsystemBase
             double yVelocityField = fieldVelocity.vyMetersPerSecond;
             double deltax = target.getX() - robotPose.getX();
             double deltay = target.getY() - robotPose.getY();
+
+            //TODO calculations that theoretically should offset the leading angle calculations based on the position of our shooter
+            double directAngle = (target == redHubPose) ? Math.atan2(deltay, deltax) : Math.atan2(-deltay, -deltax);
+            deltax = deltax - robotCenterToShooterMeters*Math.sin(directAngle);
+            deltay = deltay - robotCenterToShooterMeters*Math.cos(directAngle);
             
             double distanceFromTarget = 0.0;
             double velocity = 0.0;
@@ -438,8 +445,12 @@ public class PoseEstimator extends SubsystemBase
 
                 xDelta = deltax - (xVelocityField * timeOfFlight);
                 yDelta = deltay - (yVelocityField * timeOfFlight);
-                // System.out.println("yDelta: " + yDelta + " xDelta: " + xDelta);
             }
+
+            //TODO calculations that theoretically should offset the leading angle calculations based on the position of our shooter
+            yDelta = yDelta + robotCenterToShooterMeters*Math.cos(directAngle);
+            xDelta = xDelta + robotCenterToShooterMeters*Math.sin(directAngle);
+
             return (target == redHubPose) ? Math.atan2(yDelta, xDelta) : Math.atan2(-yDelta, -xDelta);
         };
     }
@@ -461,8 +472,14 @@ public class PoseEstimator extends SubsystemBase
 
             double xVelocityField = fieldVelocity.vxMetersPerSecond;
             double yVelocityField = fieldVelocity.vyMetersPerSecond;
-            double deltax = target.getX() - robotPose.getX();
-            double deltay = target.getY() - robotPose.getY();
+            double deltax = (target.getX() - robotPose.getX());
+            double deltay = (target.getY() - robotPose.getY());
+
+            //TODO calculations that theoretically should offset the leading angle calculations based on the position of our shooter
+            double directAngle = (target == redHubPose) ? Math.atan2(deltay, deltax) : Math.atan2(-deltay, -deltax);
+            deltax = deltax - robotCenterToShooterMeters*Math.sin(directAngle);
+            deltay = deltay - robotCenterToShooterMeters*Math.cos(directAngle);
+
             
             double distanceFromTarget = 0.0;
             double velocity = 0.0;

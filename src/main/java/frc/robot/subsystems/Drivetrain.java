@@ -18,6 +18,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -219,6 +220,11 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
     public double getAngleLockVelocityX()
     {
         return angleLockDrive.VelocityX;
+    }
+
+    public SwerveModulePosition[] getModuleStates()
+    {
+        return getState().ModulePositions;
     }
     
     public double getAngleLockVelocityY()

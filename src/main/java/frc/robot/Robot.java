@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.CommandsManager;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
+import frc.robot.commands.StartUpCommands;
 import frc.robot.loggers.DataLogFile;
 import frc.robot.motors.MotorControllerLance;
 import frc.robot.pathplanner.PathPlannerLance;
@@ -51,7 +52,7 @@ public class Robot extends TimedRobot
 
     private Command selectedCommand = null; 
     private Command path = Commands.none();
-    private String autoName = "Right";
+    // private String autoName = "Right";
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -71,6 +72,7 @@ public class Robot extends TimedRobot
         // 2. Create the RobotContainer
         robotContainer = new RobotContainer();
 
+        leds = robotContainer.getLEDs();
 
         // 3. Create the Commands
         CommandsManager.createCommands(robotContainer);
@@ -84,6 +86,9 @@ public class Robot extends TimedRobot
         PathPlannerLance.configPathPlanner(robotContainer);
         FollowPathCommand.warmupCommand().schedule();
         PathfindingCommand.warmupCommand().schedule();
+
+        // start the startup monitor (checks swerve alignment and controls LEDs)
+        StartUpCommands.startMonitor(robotContainer);
     }
 
     /**
@@ -116,13 +121,16 @@ public class Robot extends TimedRobot
         if(isPreMatch)
         {
             autonomousCommand = PathPlannerLance.getAutonomousCommand();
-            autoName = autonomousCommand.getName();
+            path = PathPlannerLance.buildAutoPath();
 
-            if(AutoBuilder.isConfigured())
-            {
-                path = AutoBuilder.buildAuto(autoName);
-                initializePose();
-            }
+            // autonomousCommand = PathPlannerLance.getAutonomousCommand();
+            // autoName = autonomousCommand.getName();
+
+            // if(AutoBuilder.isConfigured())
+            // {
+            //     path = AutoBuilder.buildAuto(autoName);
+            //     initializePose();
+            // }
         }
     }
 
@@ -136,14 +144,17 @@ public class Robot extends TimedRobot
             selectedCommand = PathPlannerLance.getAutonomousCommand();
             if(!selectedCommand.getName().equalsIgnoreCase(autonomousCommand.getName()))
             {
-                autonomousCommand = selectedCommand;
-                autoName = autonomousCommand.getName();
-                System.out.println("Auto name: " + autonomousCommand.getName());
-                if(AutoBuilder.isConfigured())
-                {
-                    path = AutoBuilder.buildAuto(autoName);
-                    initializePose();
-                }
+                autonomousCommand = PathPlannerLance.getAutonomousCommand();
+                path = PathPlannerLance.buildAutoPath();
+
+                // autonomousCommand = selectedCommand;
+                // autoName = autonomousCommand.getName();
+                // System.out.println("Auto name: " + autonomousCommand.getName());
+                // if(AutoBuilder.isConfigured())
+                // {
+                //     path = AutoBuilder.buildAuto(autoName);
+                //     initializePose();
+                // }
             }
 
             if(leds != null)
@@ -169,18 +180,18 @@ public class Robot extends TimedRobot
     public void disabledExit() 
     {}
 
-    public void initializePose()
-    {
-        try {
-            PathPlannerPath ppPath = PathPlannerPath.fromPathFile(autoName);
-            Pose2d initialPose = ppPath.getStartingHolonomicPose().orElse(new Pose2d());
-            robotContainer.getPoseEstimator().resetPose(initialPose);
-        }
-        catch (Exception e)
-        {
-            System.out.println("Path planner loading file error");
-        }
-    }
+    // public void initializePose()
+    // {
+    //     try {
+    //         PathPlannerPath ppPath = PathPlannerPath.fromPathFile(autoName);
+    //         Pose2d initialPose = ppPath.getStartingHolonomicPose().orElse(new Pose2d());
+    //         robotContainer.getPoseEstimator().resetPose(initialPose);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         System.out.println("Path planner loading file error");
+    //     }
+    // }
 
 
     /** This function is called once each time the robot enters Autonomous mode. */
@@ -191,7 +202,7 @@ public class Robot extends TimedRobot
 
         isPreMatch = false;
 
-        initializePose();
+        // initializePose();
 
         if(path != null)
         {
