@@ -48,7 +48,7 @@ public final class Constants
 
     public static class Accelerator
     {
-        public static final int MOTOR                   = 1;
+        public static final int MOTOR                   = 3;
 
         public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
     }
