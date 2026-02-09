@@ -1,7 +1,18 @@
 package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.IdealStartingState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -368,6 +379,46 @@ public class GeneralCommands
         {
             return Commands.none();
         }
+    }
+    
+    /**
+     * Drives autonomously from the given pose to the target pose
+     * @param targetPose
+     * @param currentPose
+     * @return
+     * @author Biggie Cheese
+     */
+    public static Command driveToPositionCommand(Pose2d targetPose, Pose2d currentPose)
+    {
+        PathConstraints constraints = new PathConstraints(2.0, 1.0, Units.degreesToRadians(360), Units.degreesToRadians(360));
+        
+        Rotation2d pathTangent = new Rotation2d(
+            targetPose.getX() - currentPose.getX(),
+            targetPose.getY() - currentPose.getY()
+        );
+        
+        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+                                    new Pose2d(currentPose.getTranslation(), pathTangent),
+                                    new Pose2d(targetPose.getTranslation(), pathTangent));          
+
+        double vxMetersPerSecond = drivetrain.getState().Speeds.vxMetersPerSecond;
+        double vyMetersPerSecond = drivetrain.getState().Speeds.vyMetersPerSecond;
+
+        double velocity = Math.sqrt(vxMetersPerSecond * vxMetersPerSecond + vyMetersPerSecond * vyMetersPerSecond);
+
+        Rotation2d rotation = drivetrain.getPose().getRotation();
+
+        IdealStartingState idealStartingState = new IdealStartingState(velocity, rotation);
+
+        PathPlannerPath path = new PathPlannerPath(
+                                    waypoints,
+                                    constraints,
+                                    idealStartingState, // set this to null if not working
+                                    new GoalEndState(0.0, targetPose.getRotation()));
+        path.preventFlipping = true;
+
+
+        return AutoBuilder.followPath(path);
     }
 
     

@@ -1,10 +1,22 @@
 package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
+import java.util.function.BooleanSupplier;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.IdealStartingState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -12,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexer;
@@ -97,7 +110,7 @@ public class ScoringCommands
     } 
 
 
-    public static Command StopIntakeAndScoreCommand(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    public static Command stopIntakeAndShooterCommand(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
     {
         if(intake != null && agitator != null && indexer != null  && accelerator != null  && flywheel != null )
         {
@@ -226,5 +239,46 @@ public class ScoringCommands
             return Commands.none();
         }
         
+    }
+
+    //TODO finish
+    public static Command autoClimb(Drivetrain drivetrain, PoseEstimator poseEstimator, Climb climb, BooleanSupplier isLeft)
+    {
+        if(drivetrain != null && poseEstimator != null && climb != null)
+        {
+            if(drivetrain.isRedAllianceSupplier().getAsBoolean())
+            {
+                if(isLeft.getAsBoolean())
+                {
+                    Pose2d targetClimbPose = new Pose2d( new Translation2d(15.085, 3.437), new Rotation2d(180));
+                }
+                else
+                {
+                    Pose2d targetClimbPose = new Pose2d( new Translation2d(15.906, 5.235), new Rotation2d(0));
+                }
+            }
+            else
+            {
+                if(isLeft.getAsBoolean())
+                {
+                    Pose2d targetClimbPose = new Pose2d( new Translation2d(1.482, 4.633), new Rotation2d(0));
+                }
+                else
+                {
+                    Pose2d targetClimbPose = new Pose2d( new Translation2d(0.634, 2.835), new Rotation2d(180));
+                }
+            }
+
+            return Commands.none();
+            // return
+            // Commands.parallel(
+            //     climb.extendToL1Command(),
+            //     GeneralCommands.driveToPositionCommand(, drivetrain.getState().Pose)
+            // )
+        }
+        else
+        {
+            return Commands.none();
+        }
     }
 }

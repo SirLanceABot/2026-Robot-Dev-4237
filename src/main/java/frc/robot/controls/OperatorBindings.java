@@ -164,7 +164,7 @@ public final class OperatorBindings {
         Trigger rightBumper = controller.rightBumper();
 
         // Right bumper ~ stop intake without retracting (stop motors)
-        // rightBumper.onTrue(ScoringCommands.StopIntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
+        // rightBumper.onTrue(ScoringCommands.stopIntakeAndShooterCommand(intake, agitator, indexer, accelerator, flywheel));
     }
 
 
