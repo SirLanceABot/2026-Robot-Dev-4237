@@ -45,20 +45,15 @@ public final class StartUpCommands
     private static final double PERIOD_S = 0.5;
 
     private StartUpCommands() 
-    {
-        robotContainer = new RobotContainer();
-        drivetrain = robotContainer.getDrivetrain();
-        leds = robotContainer.getLEDs();
-    }
+    {}
 
     /** This function starts the startup monitor that checks wheel alignment and updates LEDs.
      * @param robotContainer
      */
     public static void startMonitor(RobotContainer robotContainer)
     {
-        
-        // drivetrain = robotContainer.getDrivetrain();
-        // leds = robotContainer.getLEDs();
+        drivetrain = robotContainer.getDrivetrain();
+        leds = robotContainer.getLEDs();
 
         if (drivetrain == null || leds == null)
         {
@@ -144,8 +139,9 @@ public final class StartUpCommands
             if (angleToNearestPi > tolRad)
             {
                 anyMisaligned = true;
-                double moduleAngleDeg = Math.toDegrees(angleD);
-                double degFromForward = Math.toDegrees(angleToNearestPi);
+                // used to find angle of misalignment but not needed
+                // double moduleAngleDeg = Math.toDegrees(angleD);
+                // double degFromForward = Math.toDegrees(angleToNearestPi);
                 System.out.println(("StartUpCommands: module " + i));
             }
         }
