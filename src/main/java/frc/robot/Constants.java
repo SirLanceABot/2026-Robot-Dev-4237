@@ -109,6 +109,15 @@ public final class Constants
     }
 
     /**
+     * powerrelated constants like battery thresholds
+     */
+    public static class Power
+    {
+        // battery voltage threshold (volts) below which battery considered not okay
+        public static final double BATTERY_THRESHOLD_VOLTS = 12.0;
+    }
+
+    /**
      * This class contains the names of the Network Tables for logging data
      */
     public static class NetworkTableLance

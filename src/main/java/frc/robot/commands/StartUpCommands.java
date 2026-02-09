@@ -11,12 +11,14 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+// import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants;
 
 /**
  * This class checks the swerves at startup and blinks leds red until tehy are aligned.
@@ -72,7 +74,21 @@ public final class StartUpCommands
     }
 
     private static void checkAndUpdate()
-    {
+    {        
+        // Check battery voltage first. If battery is low, force LEDs to yellow and skip other
+        // startup logic so the low-battery state is clearly visible.
+        double voltage = RobotController.getBatteryVoltage();
+        if (leds != null && voltage < Constants.Power.BATTERY_THRESHOLD_VOLTS)
+        {
+            System.out.println("StartUpCommands: battery low (" + voltage + " V) - setting LEDs yellow");
+            Command yellow = leds.setColorSolidCommand(100, Color.kYellow);
+            
+            if (yellow != null)
+                yellow.ignoringDisable(true).schedule();
+
+            return; // don't override battery warning with other states
+        }
+
         // Only should run checks while the robot is disabled so we continuously watch during disabled mode
         if (!DriverStation.isDisabled())
         {
@@ -158,9 +174,9 @@ public final class StartUpCommands
                 if (solid != null) 
                     solid.ignoringDisable(true).schedule();
 
+                // keep notifier running so we continue monitoring while disabled
                 // if (notifier != null) 
                 //     notifier.stop();
-                // keep notifier running so we continue monitoring while disabled
             }
         }
 
