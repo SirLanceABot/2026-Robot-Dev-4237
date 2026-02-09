@@ -6,26 +6,15 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.FollowPathCommand;
-import com.pathplanner.lib.commands.PathfindingCommand;
-import com.pathplanner.lib.path.PathPlannerPath;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.CommandsManager;
+import frc.robot.commands.StartUpCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
-import frc.robot.commands.StartUpCommands;
-import frc.robot.loggers.DataLogFile;
-import frc.robot.motors.MotorControllerLance;
 import frc.robot.pathplanner.PathPlannerLance;
-import frc.robot.subsystems.LEDs;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -45,7 +34,6 @@ public class Robot extends TimedRobot
     }
 
     private final RobotContainer robotContainer;
-    private LEDs leds;
     private Command autonomousCommand = null;
     private boolean isPreMatch = true;
     private TestMode testMode = null;
@@ -72,7 +60,7 @@ public class Robot extends TimedRobot
         // 2. Create the RobotContainer
         robotContainer = new RobotContainer();
 
-        leds = robotContainer.getLEDs();
+        // leds = robotContainer.getLEDs();
 
         // 3. Create the Commands
         CommandsManager.createCommands(robotContainer);
@@ -159,21 +147,21 @@ public class Robot extends TimedRobot
             }
 
             // moved to StartUpCommands
-            if(leds != null)
-            {
-                if(!robotContainer.useFullRobot())
-                {
-                    leds.setColorSolidCommand(100, Color.kYellow);
-                }
-                else if(selectedCommand != null)
-                {
-                    leds.setColorSolidCommand(100, Color.kGreen);
-                }
-                else
-                {
-                    leds.setColorSolidCommand(100, Color.kYellow);
-                }
-            }
+            // if(leds != null)
+            // {
+            //     if(!robotContainer.useFullRobot())
+            //     {
+            //         leds.setColorSolidCommand(100, Color.kYellow);
+            //     }
+            //     else if(selectedCommand != null)
+            //     {
+            //         leds.setColorSolidCommand(100, Color.kGreen);
+            //     }
+            //     else
+            //     {
+            //         leds.setColorSolidCommand(100, Color.kYellow);
+            //     }
+            // }
         }
     }
 
@@ -204,7 +192,7 @@ public class Robot extends TimedRobot
 
         isPreMatch = false;
 
-        // initializePose();
+        PathPlannerLance.initializePose(autonomousCommand.getName());
 
         if(path != null)
         {
