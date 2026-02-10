@@ -21,6 +21,12 @@
           "data": {
             "name": "Climb to L1 Command"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Retract from L1 Command"
+          }
         }
       ]
     }
