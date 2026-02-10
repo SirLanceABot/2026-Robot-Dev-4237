@@ -425,14 +425,8 @@ public class PoseEstimator extends SubsystemBase
             double yVelocityField = fieldVelocity.vyMetersPerSecond;
             double deltax = target.getX() - robotPose.getX();
             double deltay = target.getY() - robotPose.getY();
-
-            //TODO calculations that theoretically should offset the leading angle calculations based on the position of our shooter
-            double directAngle = (target == redHubPose) ? Math.atan2(deltay, deltax) : Math.atan2(-deltay, -deltax);
-            deltax = (target == redHubPose ? deltax - robotCenterToShooterMeters*Math.sin(directAngle) : deltax + robotCenterToShooterMeters*Math.sin(directAngle));
-            deltay = (target == redHubPose ? deltay - robotCenterToShooterMeters*Math.sin(directAngle) : deltay + robotCenterToShooterMeters*Math.sin(directAngle));
-
             
-
+            double angleToTarget = 0.0;
             double distanceFromTarget = 0.0;
             double velocity = 0.0;
             double timeOfFlight = 0.0;
@@ -441,24 +435,17 @@ public class PoseEstimator extends SubsystemBase
 
             for(int i = 0; i < 3; i++)
             {
-                distanceFromTarget = Math.hypot(xDelta, yDelta);
+                angleToTarget = (target == redHubPose) ? Math.atan2(yDelta, xDelta) : Math.atan2(-yDelta, -xDelta);
+                distanceFromTarget = Math.hypot(Math.abs(xDelta) - Math.abs(robotCenterToShooterMeters*Math.cos(angleToTarget)), Math.abs(yDelta) - Math.abs(robotCenterToShooterMeters*Math.sin(angleToTarget)));
+
+                //distanceFromTarget = Math.hypot(xDelta, yDelta);
+
                 velocity = (distanceFromTarget / Math.cos(shooterAngleRadians)) * Math.sqrt((9.8) / (2 * (robotToHubVerticalDistanceMeters + distanceFromTarget * Math.tan(shooterAngleRadians))));
                 timeOfFlight = ((velocity * Math.sin(shooterAngleRadians)) + Math.sqrt(Math.pow(velocity * Math.sin(shooterAngleRadians), 2) + 2 * 9.8 * robotToHubVerticalDistanceMeters)) / 9.8;
 
                 xDelta = deltax - (xVelocityField * timeOfFlight);
                 yDelta = deltay - (yVelocityField * timeOfFlight);
             }
-
-            //TODO calculations that theoretically should offset the leading angle calculations based on the position of our shooter
-            deltax = (target == redHubPose ? deltax + robotCenterToShooterMeters*Math.sin(directAngle) : deltax - robotCenterToShooterMeters*Math.sin(directAngle));
-            deltay = (target == redHubPose ? deltay + robotCenterToShooterMeters*Math.sin(directAngle) : deltay - robotCenterToShooterMeters*Math.sin(directAngle));
-
-
-            // System.out.println("centerAngle: " + (target == redHubPose ? Math.atan2((target.getY() - robotPose.getY()), (target.getX() - robotPose.getX())) : Math.atan2(-(target.getY() - robotPose.getY()), -(target.getX() - robotPose.getX()))) / (2.0*Math.PI) * 360.0 + " centerVelocity: " + 
-            // (Math.hypot(target.getX() - robotPose.getX(), target.getY() - robotPose.getY()) / Math.cos(shooterAngleRadians)) * Math.sqrt((9.8) / (2 * (robotToHubVerticalDistanceMeters + Math.hypot(target.getX() - robotPose.getX(), target.getY() - robotPose.getY()) * Math.tan(shooterAngleRadians)))));
-            
-            // System.out.println("offsetAngle: " + (target == redHubPose ? Math.atan2(yDelta, xDelta) : Math.atan2(-yDelta, -xDelta)) / (2.0*Math.PI) * 360.0 + " offsetVelocity: " + velocity);
-
 
             return (target == redHubPose) ? Math.atan2(yDelta, xDelta) : Math.atan2(-yDelta, -xDelta);
         };
@@ -484,12 +471,8 @@ public class PoseEstimator extends SubsystemBase
             double deltax = (target.getX() - robotPose.getX());
             double deltay = (target.getY() - robotPose.getY());
 
-            //TODO calculations that theoretically should offset the leading angle calculations based on the position of our shooter
-            double directAngle = (target == redHubPose) ? Math.atan2(deltay, deltax) : Math.atan2(-deltay, -deltax);
-            deltax = (target == redHubPose ? deltax - robotCenterToShooterMeters*Math.sin(directAngle) : deltax + robotCenterToShooterMeters*Math.sin(directAngle));
-            deltay = (target == redHubPose ? deltay - robotCenterToShooterMeters*Math.sin(directAngle) : deltay + robotCenterToShooterMeters*Math.sin(directAngle));
-
-            
+        
+            double angleToTarget = 0.0;
             double distanceFromTarget = 0.0;
             double velocity = 0.0;
             double timeOfFlight = 0.0;
@@ -498,7 +481,11 @@ public class PoseEstimator extends SubsystemBase
 
             for(int i = 0; i < 3; i++)
             {
-                distanceFromTarget = Math.hypot(xDelta, yDelta);
+                angleToTarget = (target == redHubPose) ? Math.atan2(yDelta, xDelta) : Math.atan2(-yDelta, -xDelta);
+                distanceFromTarget = Math.hypot(Math.abs(xDelta) - Math.abs(robotCenterToShooterMeters*Math.cos(angleToTarget)), Math.abs(yDelta) - Math.abs(robotCenterToShooterMeters*Math.sin(angleToTarget)));
+
+                //distanceFromTarget = Math.hypot(xDelta, yDelta);
+
                 velocity = (distanceFromTarget / Math.cos(shooterAngleRadians)) * Math.sqrt((9.8) / (2 * (robotToHubVerticalDistanceMeters + distanceFromTarget * Math.tan(shooterAngleRadians))));
                 timeOfFlight = ((velocity * Math.sin(shooterAngleRadians)) + Math.sqrt(Math.pow(velocity * Math.sin(shooterAngleRadians), 2) + 2 * 9.8 * robotToHubVerticalDistanceMeters)) / 9.8;
 

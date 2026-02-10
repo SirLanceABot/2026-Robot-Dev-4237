@@ -180,6 +180,8 @@ public final class DriverBindings {
         Trigger yButton = controller.y();
         // yButton.onTrue(ScoringCommands.passCommand(drivetrain, agitator, accelerator, flywheel, poseEstimator));
         //Pass Command
+        // yButton.whileTrue(
+        //     new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> true), Set.of()));
     }
 
 

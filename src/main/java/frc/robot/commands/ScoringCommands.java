@@ -242,39 +242,42 @@ public class ScoringCommands
     }
 
     //TODO finish
-    public static Command autoClimb(Drivetrain drivetrain, PoseEstimator poseEstimator, Climb climb, BooleanSupplier isLeft)
+    public static Command autoClimbCommand(Drivetrain drivetrain, PoseEstimator poseEstimator, Climb climb, BooleanSupplier isLeft)
     {
         if(drivetrain != null && poseEstimator != null && climb != null)
         {
+            Pose2d targetClimbPose;
             if(drivetrain.isRedAllianceSupplier().getAsBoolean())
             {
                 if(isLeft.getAsBoolean())
                 {
-                    Pose2d targetClimbPose = new Pose2d( new Translation2d(15.085, 3.437), new Rotation2d(180));
+                    targetClimbPose = new Pose2d( new Translation2d(15.085, 3.437), new Rotation2d(180));
                 }
                 else
                 {
-                    Pose2d targetClimbPose = new Pose2d( new Translation2d(15.906, 5.235), new Rotation2d(0));
+                    targetClimbPose = new Pose2d( new Translation2d(15.906, 5.235), new Rotation2d(0));
                 }
             }
             else
             {
                 if(isLeft.getAsBoolean())
                 {
-                    Pose2d targetClimbPose = new Pose2d( new Translation2d(1.482, 4.633), new Rotation2d(0));
+                    targetClimbPose = new Pose2d( new Translation2d(1.482, 4.633), new Rotation2d(0));
                 }
                 else
                 {
-                    Pose2d targetClimbPose = new Pose2d( new Translation2d(0.634, 2.835), new Rotation2d(180));
+                    targetClimbPose = new Pose2d( new Translation2d(0.634, 2.835), new Rotation2d(180));
                 }
             }
 
-            return Commands.none();
-            // return
+            targetClimbPose = new Pose2d(4.35, 6.458, new Rotation2d());
+
+            return
             // Commands.parallel(
             //     climb.extendToL1Command(),
-            //     GeneralCommands.driveToPositionCommand(, drivetrain.getState().Pose)
-            // )
+                GeneralCommands.driveToPositionCommand(targetClimbPose, drivetrain.getState().Pose);//)
+            // .andThen(
+            //     climb.retractFromL1Command());
         }
         else
         {

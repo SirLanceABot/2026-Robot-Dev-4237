@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
-// import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
 
 /**
@@ -32,12 +31,11 @@ public final class StartUpCommands
         System.out.println("Loading: " + fullClassName);
     }
 
-    private static RobotContainer robotContainer; // should this be final?
     private static Drivetrain drivetrain;
     private static LEDs leds;
-    private static Notifier notifier; // background timer
+    // private static Notifier notifier; // background timer
     private static volatile boolean currentlyBlinking = false;
-    private static Command selectedCommand = null;
+    // private static Command selectedCommand = null;
 
     // tolerance for wheel angle to be considered "forward" (degrees)
     private static final double TOLERANCE_DEGREES = 5.0;
@@ -64,11 +62,11 @@ public final class StartUpCommands
         // run an immediate check and then a periodic notifier until aligned
         checkAndUpdate();
 
-        notifier = new Notifier(StartUpCommands::checkAndUpdate);
-        notifier.startPeriodic(PERIOD_S);
+        // notifier = new Notifier(StartUpCommands::checkAndUpdate);
+        // notifier.startPeriodic(PERIOD_S);
     }
 
-    private static void checkAndUpdate()
+    public static void checkAndUpdate()
     {        
         // Check battery voltage first. If battery is low, force LEDs to yellow and skip other
         // startup logic so the low-battery state is clearly visible.
@@ -101,7 +99,7 @@ public final class StartUpCommands
             //     {
             //         leds.setColorSolidCommand(100, Color.kYellow);
             //     }
-            // }
+            // }4
 
             // if(leds != null)
             // {
@@ -142,7 +140,7 @@ public final class StartUpCommands
                 // used to find angle of misalignment but not needed
                 // double moduleAngleDeg = Math.toDegrees(angleD);
                 // double degFromForward = Math.toDegrees(angleToNearestPi);
-                System.out.println(("StartUpCommands: module " + i));
+                // System.out.println(("StartUpCommands: module " + i));
             }
         }
 

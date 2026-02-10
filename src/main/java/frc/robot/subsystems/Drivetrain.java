@@ -51,19 +51,16 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean m_hasAppliedOperatorPerspective = false;
 
+
     //Drive Speed
     public static double MaxDriveSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 270 degrees per second is the maximum angular velocity
+    
+
     //Driving the Robot
     private static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxDriveSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 5% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-
-    //Lock the wheels of the robot
-    public static final SwerveRequest.SwerveDriveBrake lock = new SwerveRequest.SwerveDriveBrake();
-
-    //Point the wheels of the robot without moving
-    public static final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     //TODO still needs tuning
     private static final SwerveRequest.FieldCentricFacingAngle angleLockDrive = new SwerveRequest.FieldCentricFacingAngle()
@@ -72,6 +69,25 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
             .withMaxAbsRotationalRate(7)
             .withHeadingPID(7, 0, 0); //Maximum rotational rate
+
+    private static final SwerveRequest.RobotCentric driveRobotCentric = new SwerveRequest.RobotCentric()
+            .withDeadband(MaxDriveSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05)
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
+    private static final SwerveRequest.RobotCentricFacingAngle angleLockDriveRobotCentric = new SwerveRequest.RobotCentricFacingAngle()
+            .withDeadband(MaxDriveSpeed * 0.05)
+            .withRotationalDeadband(0.1) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+            .withMaxAbsRotationalRate(7)
+            .withHeadingPID(7, 0, 0); //Maximum rotational rate
+
+
+    //Lock the wheels of the robot
+    public static final SwerveRequest.SwerveDriveBrake lock = new SwerveRequest.SwerveDriveBrake();
+
+
+    //Point the wheels of the robot without moving
+    public static final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
 
     /* Swerve requests to apply during SysId characterization */
@@ -290,13 +306,16 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
         );
     }
 
+    
+    // *** FIELD CENTRIC DRIVE COMMANDS ***
+
     /**
-     * Returns a command that will drive the robot
+     * Returns a command that will drive the robot in a field-centric manner
      * @param leftYAxis the left Y axis of the controller
      * @param leftXAxis the left X axis of the controller
      * @param rightXAxis the right X axis of the controller
      * @param setScaleFactor decimal number that reduces drive speed
-     * @return Command to Drive
+     * @return Command to drvie field centric
      * @author Matthew Fontecchio
      */
     public Command driveCommand(DoubleSupplier leftYAxis, DoubleSupplier leftXAxis, DoubleSupplier rightXAxis, DoubleSupplier setScaleFactor)
@@ -328,6 +347,48 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
         );   
     }
 
+    
+    // *** ROBOT CENTRIC DRIVE COMMANDS ***
+
+    /**
+     * Returns a command that will drive the robot in a robot-centric manner
+     * @param leftYAxis the left Y axis of the controller
+     * @param leftXAxis the left X axis of the controller
+     * @param rightXAxis the right X axis of the controller
+     * @param setScaleFactor decimal number that reduces drive speed
+     * @return Command to drive robot centric
+     * @author Matthew Fontecchio
+     */
+    public Command driveRobotCentricCommand(DoubleSupplier leftYAxis, DoubleSupplier leftXAxis, DoubleSupplier rightXAxis, DoubleSupplier setScaleFactor)
+    {
+        return applyRequest(
+            () -> driveRobotCentric
+                .withVelocityX(leftYAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
+                .withVelocityY(leftXAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
+                .withRotationalRate(rightXAxis.getAsDouble() * (MaxAngularRate * (setScaleFactor.getAsDouble() >= 1.0? 1.0:setScaleFactor.getAsDouble()) ) )
+        );
+    }
+
+    /**
+     * Returns a command that will drive the robot in a robotCentric manner while keeping it locked at a specific angle
+     * @param leftYAxis the left Y axis of the controller
+     * @param leftXAxis left X axis of the controller
+     * @param setScaleFactor decimal number that reduces drive speed
+     * @param lockAngle angle to lock the robot's rotation (robotRelative) at in radians
+     * @author Matthew Fontecchio 
+     */
+    public Command angleLockDriveRobotCentricCommand(DoubleSupplier leftYAxis, DoubleSupplier leftXAxis, DoubleSupplier setScaleFactor, DoubleSupplier lockAngleRadians)
+    {
+        return applyRequest(
+            () -> angleLockDriveRobotCentric
+                .withVelocityX(leftYAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
+                .withVelocityY(leftXAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
+                .withTargetDirection(new Rotation2d(lockAngleRadians.getAsDouble()))
+                .withTargetRateFeedforward(0)
+        );
+    }
+
+
     /**
      * Runs the SysId Quasistatic test in the given direction for the routine
      * specified by {@link #m_sysIdRoutineToApply}.
@@ -350,6 +411,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
         return m_sysIdRoutineToApply.dynamic(direction);
     }
 
+
     public BooleanSupplier isRedAllianceSupplier()
     {
         return () ->
@@ -357,13 +419,13 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             var alliance = DriverStation.getAlliance();
             if (alliance.isPresent())
             {
-                System.out.println("Alliance = " + alliance.get());
                 return alliance.get() == DriverStation.Alliance.Red;
             }
             DriverStation.reportError("No alliance is avaliable, assuming Blue", false);
             return false;
         };
     }
+
 
     @Override
     public void periodic() {
@@ -386,6 +448,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
         }
     }
 
+
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
@@ -401,6 +464,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
 
+
     /**
      * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
      * while still accounting for measurement noise.
@@ -412,6 +476,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
+
 
     /**
      * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
@@ -435,6 +500,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
+    
     /**
      * Return the pose at a given timestamp, if the buffer is not empty.
      *

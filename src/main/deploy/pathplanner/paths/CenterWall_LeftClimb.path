@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.520787172185064,
-        "y": 3.4508170822174673
+        "x": 1.4617111857034795,
+        "y": 4.635482282999243
       },
       "isLocked": false,
       "linkedName": "Center Wall"
@@ -20,8 +20,8 @@
         "y": 4.662893710660144
       },
       "prevControl": {
-        "x": 2.6782946496927207,
-        "y": 4.762909169219764
+        "x": 2.086635129065809,
+        "y": 4.463157857413011
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +29,21 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.7,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {

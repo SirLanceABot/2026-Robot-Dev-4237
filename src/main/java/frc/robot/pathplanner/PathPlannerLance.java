@@ -100,7 +100,7 @@ public class PathPlannerLance
 
     }
 
-    private static void initializePose(String autoName)
+    public static void initializePose(String autoName)
     {
         try 
         {
