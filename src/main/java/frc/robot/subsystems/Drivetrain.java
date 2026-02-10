@@ -181,7 +181,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
 
-        // configAutoBuilder();
+        configAutoBuilder();
     }
 
     /**
@@ -207,7 +207,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
 
-        // configAutoBuilder();
+        configAutoBuilder();
     }
 
     /**
@@ -241,7 +241,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
         
-        // configAutoBuilder();
+        configAutoBuilder();
     }
 
     private void configAutoBuilder()

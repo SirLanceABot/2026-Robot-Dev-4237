@@ -241,7 +241,7 @@ public class ScoringCommands
         
     }
 
-    //TODO finish
+    // Have tested going to a set point with pathplanner on the fly and that works -> have not implemented climb or dynamic end poses
     public static Command autoClimbCommand(Drivetrain drivetrain, PoseEstimator poseEstimator, Climb climb, BooleanSupplier isLeft)
     {
         if(drivetrain != null && poseEstimator != null && climb != null)
@@ -270,14 +270,12 @@ public class ScoringCommands
                 }
             }
 
-            targetClimbPose = new Pose2d(4.35, 6.458, new Rotation2d());
-
             return
-            // Commands.parallel(
-            //     climb.extendToL1Command(),
-                GeneralCommands.driveToPositionCommand(targetClimbPose, drivetrain.getState().Pose);//)
-            // .andThen(
-            //     climb.retractFromL1Command());
+            Commands.parallel(
+                climb.extendToL1Command(),
+                GeneralCommands.driveToPositionCommand(targetClimbPose, drivetrain.getState().Pose))
+            .andThen(
+                climb.retractFromL1Command());
         }
         else
         {

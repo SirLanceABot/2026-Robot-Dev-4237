@@ -117,7 +117,7 @@ public class Robot extends TimedRobot
         if(isPreMatch)
         {
             autonomousCommand = PathPlannerLance.getAutonomousCommand();
-            path = PathPlannerLance.buildAutoPath();
+            // path = PathPlannerLance.buildAutoPath(); // this made stuff not work.  may need to bring back in later if it works less good than not good
 
             autonomousCommand = PathPlannerLance.getAutonomousCommand();
             // autoName = autonomousCommand.getName();
@@ -142,7 +142,7 @@ public class Robot extends TimedRobot
             {
                 autonomousCommand = selectedCommand;
                 autoName = autonomousCommand.getName();
-                System.out.println("Auto name: " + autonomousCommand.getName());
+                
                 if(AutoBuilder.isConfigured())
                 {
                     path = AutoBuilder.buildAuto(autoName);
