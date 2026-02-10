@@ -142,7 +142,7 @@ public final class StartUpCommands
                 // used to find angle of misalignment but not needed
                 // double moduleAngleDeg = Math.toDegrees(angleD);
                 // double degFromForward = Math.toDegrees(angleToNearestPi);
-                System.out.println(("StartUpCommands: module " + i));
+                // System.out.println(("StartUpCommands: module " + i));
             }
         }
 

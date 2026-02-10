@@ -419,7 +419,6 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             var alliance = DriverStation.getAlliance();
             if (alliance.isPresent())
             {
-                System.out.println("Alliance = " + alliance.get());
                 return alliance.get() == DriverStation.Alliance.Red;
             }
             DriverStation.reportError("No alliance is avaliable, assuming Blue", false);
