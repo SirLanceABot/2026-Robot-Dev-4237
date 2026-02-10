@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.Joystick;
-// import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake;
 
 @SuppressWarnings("unused")
 public class NiyatiPTest implements Test
@@ -34,7 +34,7 @@ public class NiyatiPTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
-    // private Intake intake = null;
+    private Intake intake = null;
     private LEDs leds = null;
     private final CommandXboxController controller = new CommandXboxController(0);
     // private final Joystick joystick = new Joystick(0);
@@ -54,16 +54,16 @@ public class NiyatiPTest implements Test
         this.robotContainer = robotContainer;
         // INTAKE STUFF
         // Prefer the Intake from RobotContainer if available
-        // if (robotContainer != null && robotContainer.getIntake() != null)
-        // {
-            // intake = robotContainer.getIntake();
-        //     System.out.println("good intake :)");
-        // }
-        // else
-        // {
-        //     System.out.println("no intake :(");
-        //     intake = new Intake();
-        // }
+        if (robotContainer != null && robotContainer.getIntake() != null)
+        {
+            intake = robotContainer.getIntake();
+            System.out.println("good intake :)");
+        }
+        else
+        {
+            System.out.println("no intake :(");
+            intake = new Intake();
+        }
 
         //LEDS STUFF
         leds = robotContainer.getLEDs();
@@ -86,14 +86,14 @@ public class NiyatiPTest implements Test
     public void init()
     {
         // INTAKE STUFF
-        // // X to pickup
-        // controller.x().onTrue(intake.pickupFuelCommand()).debounce(0.1);
+        // X to pickup
+        controller.x().onTrue(intake.pickupFuelCommand()).debounce(0.1);
 
-        // // A to eject
-        // controller.a().onTrue(intake.ejectFuelCommand()).debounce(0.1);
+        // A to eject
+        controller.a().onTrue(intake.ejectFuelCommand()).debounce(0.1);
 
-        // // B to stop
-        // controller.b().onTrue(intake.stopCommand()).debounce(0.1);
+        // B to stop
+        controller.b().onTrue(intake.stopCommand()).debounce(0.1);
     }
 
     /**
@@ -104,10 +104,10 @@ public class NiyatiPTest implements Test
         // controller.x().onTrue(leds.setColorSolidCommand(20, Color.kRed));
         // controller.a().onTrue(leds.setMovingRainbowCommand()); //is there no way to add a .schedule?
 
-        if(controller.x().getAsBoolean())
-        {
-            leds.setColorBlinkCommand(Color.kRed).schedule();
-        }
+        // if(controller.x().getAsBoolean())
+        // {
+        //     leds.setColorBlinkCommand(Color.kRed).schedule();
+        // }
 
         // if(joystick.getRawButton(1))
         // {
@@ -125,10 +125,10 @@ public class NiyatiPTest implements Test
      */
     public void exit()
     {
-        // if (intake != null)
-        // {
-        //     intake.stop();
-        //     System.out.println("intake stopped in exit()");
-        // }
+        if (intake != null)
+        {
+            intake.stop();
+            System.out.println("intake stopped in exit()");
+        }
     } 
 }

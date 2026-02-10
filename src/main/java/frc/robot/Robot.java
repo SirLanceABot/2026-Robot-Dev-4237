@@ -15,6 +15,7 @@ import frc.robot.commands.StartUpCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
 import frc.robot.pathplanner.PathPlannerLance;
+import edu.wpi.first.wpilibj.Notifier;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -37,6 +38,7 @@ public class Robot extends TimedRobot
     private Command autonomousCommand = null;
     private boolean isPreMatch = true;
     private TestMode testMode = null;
+    private Notifier startupNotifier;
 
     private Command selectedCommand = null; 
     private Command path = Commands.none();
@@ -77,6 +79,8 @@ public class Robot extends TimedRobot
 
         // start the startup monitor (checks swerve alignment and controls LEDs)
         StartUpCommands.startMonitor(robotContainer);
+        startupNotifier = new Notifier(StartUpCommands::checkAndUpdate);
+        startupNotifier.startPeriodic(0.5);
     }
 
     /**
@@ -100,11 +104,10 @@ public class Robot extends TimedRobot
     @Override
     public void disabledInit() 
     {
-        // moved to StartUpCommands
-        // if(leds != null)
-        // {
-        //     leds.setColorSolidCommand(100, Color.kRed);
-        // }
+        if (startupNotifier != null)
+        {
+            startupNotifier.startPeriodic(0.5);
+        }
 
         // Put code to run here before the match starts, but not between auto and teleop
         if(isPreMatch)
@@ -168,7 +171,12 @@ public class Robot extends TimedRobot
     /** This function is called once each time the robot exits Disabled mode. */
     @Override
     public void disabledExit() 
-    {}
+    {
+        if (startupNotifier != null)
+        {
+            startupNotifier.stop();
+        }
+    }
 
     // public void initializePose()
     // {
