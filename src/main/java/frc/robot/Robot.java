@@ -6,6 +6,10 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -42,7 +46,7 @@ public class Robot extends TimedRobot
 
     private Command selectedCommand = null; 
     private Command path = Commands.none();
-    // private String autoName = "Right";
+    private String autoName = "Left2Cycle";
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -115,14 +119,14 @@ public class Robot extends TimedRobot
             autonomousCommand = PathPlannerLance.getAutonomousCommand();
             path = PathPlannerLance.buildAutoPath();
 
-            // autonomousCommand = PathPlannerLance.getAutonomousCommand();
+            autonomousCommand = PathPlannerLance.getAutonomousCommand();
             // autoName = autonomousCommand.getName();
 
-            // if(AutoBuilder.isConfigured())
-            // {
-            //     path = AutoBuilder.buildAuto(autoName);
-            //     initializePose();
-            // }
+            if(AutoBuilder.isConfigured())
+            {
+                path = AutoBuilder.buildAuto(autoName);
+                PathPlannerLance.initializePose(autoName);
+            }
         }
     }
 
@@ -136,17 +140,14 @@ public class Robot extends TimedRobot
             selectedCommand = PathPlannerLance.getAutonomousCommand();
             if(!selectedCommand.getName().equalsIgnoreCase(autonomousCommand.getName()))
             {
-                autonomousCommand = PathPlannerLance.getAutonomousCommand();
-                path = PathPlannerLance.buildAutoPath();
-
-                // autonomousCommand = selectedCommand;
-                // autoName = autonomousCommand.getName();
-                // System.out.println("Auto name: " + autonomousCommand.getName());
-                // if(AutoBuilder.isConfigured())
-                // {
-                //     path = AutoBuilder.buildAuto(autoName);
-                //     initializePose();
-                // }
+                autonomousCommand = selectedCommand;
+                autoName = autonomousCommand.getName();
+                System.out.println("Auto name: " + autonomousCommand.getName());
+                if(AutoBuilder.isConfigured())
+                {
+                    path = AutoBuilder.buildAuto(autoName);
+                    PathPlannerLance.initializePose(autoName);
+                }
             }
 
             // moved to StartUpCommands
