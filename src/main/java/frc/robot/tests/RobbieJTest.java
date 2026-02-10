@@ -101,6 +101,7 @@ public class RobbieJTest implements Test
      */
     public void periodic()
     {
+        System.err.println("isYellow:" + hopperCamera.isHoppperFullSupplier().getAsBoolean());
         // System.out.println(climb.getForwardHardLimit());
     }
     

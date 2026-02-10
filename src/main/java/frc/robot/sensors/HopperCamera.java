@@ -2,6 +2,7 @@ package frc.robot.sensors;
 
 import java.io.OutputStream;
 import java.lang.invoke.MethodHandles;
+import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -9,6 +10,7 @@ import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -38,8 +40,11 @@ public class HopperCamera
 
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    int width = 640;
-    int height = 480;
+    int width = 640/4;
+    int height = 480/4;
+    Timer timer = new Timer();
+    private volatile boolean isHopperFull = false;
+    
     private final GripPipeline pipeline = new GripPipeline();
     
     // *** CLASS CONSTRUCTORS ***
@@ -53,6 +58,8 @@ public class HopperCamera
         
 
         System.out.println("  Constructor Started:  " + fullClassName);
+
+        timer.reset();
 
         Thread m_visionThread = new Thread(
             () -> {
@@ -72,7 +79,10 @@ public class HopperCamera
             
                 // Mats are very memory expensive. Lets reuse this Mat.
                 Mat mat = new Mat();
-            
+                Scalar avg;
+                //Needs to be tuned 
+                double threshold =1;
+
                 // This cannot be 'true'. The program will never exit if it is. This
                 // lets the robot stop this thread when restarting robot code or
                 // deploying.
@@ -90,7 +100,27 @@ public class HopperCamera
 // Imgproc.rectangle(
 //                     mat, new Point(0, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
                 // Give the output stream a new image to display
-                outputStream.putFrame(pipeline.cvErodeOutput());
+                outputStream.putFrame(pipeline.cvRectangleOutput());
+           
+                avg = Core.mean(pipeline.cvRectangleOutput());
+                if(avg.val[0] >= threshold)
+                {
+                    if (timer.get() == 0)
+                    {
+                        timer.start();
+                    }
+                    else if(timer.get() >= 0.5)
+                    {
+                        // System.err.println("YELLOW");
+                        isHopperFull = true;
+                    }
+                }
+                else
+                {
+                    timer.reset();
+                    // System.err.println("NOT YELLOW");
+                    isHopperFull = false;
+                }
                 }   
             
                 });
@@ -101,48 +131,10 @@ public class HopperCamera
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
-
-    // *** CLASS METHODS & INSTANCE METHODS ***
-    // Put all class methods and instance methods here
-    public Mat FilterToYellowBGR(Mat src)
+    public BooleanSupplier isHoppperFullSupplier()
     {
-        Mat dst = new Mat();
-        Scalar low = new Scalar(0, 150, 150);   // B, G, R
-        Scalar high = new Scalar(100, 255, 255);
-        Core.inRange(src, low, high, dst);
-        // HighGui.imshow("Original", src);
-        // HighGui.imshow("Filtered", dst);
-        // HighGui.waitKey();
-
-
-        return dst;
+        return (() -> isHopperFull);
     }
-
-
-    public Mat FilterToYellowHSV(Mat src)
-    {
-        Mat dst = new Mat();
-        Imgproc.cvtColor(src, src,40); //           COLOR_BGR2HSV = 40,
-        Scalar high = new Scalar(60, 100, 100);   // Hue, Saturation, Value
-        Scalar low = new Scalar(60, 50, 34);
-        Core.inRange(src, low, high, dst);
-        // HighGui.imshow("Original", src);
-        // HighGui.imshow("Filtered", dst);
-        // HighGui.waitKey();
-
-
-        return dst;
-    }
-
-
-
-
-
-    /**
-     * Returns the value of the sensor
-    * @return The value of periodData.sensorValue
-    */
-
 
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here

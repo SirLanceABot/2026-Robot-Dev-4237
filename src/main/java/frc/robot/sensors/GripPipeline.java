@@ -27,9 +27,10 @@ public class GripPipeline {
 
 	//Outputs
 	private Mat hsvThresholdOutput = new Mat();
+	private Point newPoint0Output = new Point();
+	private Point newPoint1Output = new Point();
 	private Mat cvErodeOutput = new Mat();
-	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
-	private Point newPointOutput = new Point();
+	private Mat cvRectangleOutput = new Mat();
 
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -46,6 +47,16 @@ public class GripPipeline {
 		double[] hsvThresholdValue = {103.9568283360639, 255.0};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
+		// Step New_Point0:
+		double newPoint0X = -1.0;
+		double newPoint0Y = 60.0;
+		newPoint(newPoint0X, newPoint0Y, newPoint0Output);
+
+		// Step New_Point1:
+		double newPoint1X = 640.0;
+		double newPoint1Y = 480.0;
+		newPoint(newPoint1X, newPoint1Y, newPoint1Output);
+
 		// Step CV_erode0:
 		Mat cvErodeSrc = hsvThresholdOutput;
 		Mat cvErodeKernel = new Mat();
@@ -55,15 +66,15 @@ public class GripPipeline {
 		Scalar cvErodeBordervalue = new Scalar(-1);
 		cvErode(cvErodeSrc, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBordertype, cvErodeBordervalue, cvErodeOutput);
 
-		// Step Find_Contours0:
-		Mat findContoursInput = cvErodeOutput;
-		boolean findContoursExternalOnly = false;
-		findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
-
-		// Step New_Point0:
-		double newPointX = -1;
-		double newPointY = -1;
-		newPoint(newPointX, newPointY, newPointOutput);
+		// Step CV_rectangle0:
+		Mat cvRectangleSrc = cvErodeOutput;
+		Point cvRectanglePt1 = newPoint0Output;
+		Point cvRectanglePt2 = newPoint1Output;
+		Scalar cvRectangleColor = new Scalar(0.0, 0.0, 0.0, 0.0);
+		double cvRectangleThickness = -1.0;
+		int cvRectangleLinetype = 4;
+		double cvRectangleShift = 0;
+		cvRectangle(cvRectangleSrc, cvRectanglePt1, cvRectanglePt2, cvRectangleColor, cvRectangleThickness, cvRectangleLinetype, cvRectangleShift, cvRectangleOutput);
 
 	}
 
@@ -76,6 +87,22 @@ public class GripPipeline {
 	}
 
 	/**
+	 * This method is a generated getter for the output of a New_Point.
+	 * @return Point output from New_Point.
+	 */
+	public Point newPoint0Output() {
+		return newPoint0Output;
+	}
+
+	/**
+	 * This method is a generated getter for the output of a New_Point.
+	 * @return Point output from New_Point.
+	 */
+	public Point newPoint1Output() {
+		return newPoint1Output;
+	}
+
+	/**
 	 * This method is a generated getter for the output of a CV_erode.
 	 * @return Mat output from CV_erode.
 	 */
@@ -84,19 +111,11 @@ public class GripPipeline {
 	}
 
 	/**
-	 * This method is a generated getter for the output of a Find_Contours.
-	 * @return ArrayList<MatOfPoint> output from Find_Contours.
+	 * This method is a generated getter for the output of a CV_rectangle.
+	 * @return Mat output from CV_rectangle.
 	 */
-	public ArrayList<MatOfPoint> findContoursOutput() {
-		return findContoursOutput;
-	}
-
-	/**
-	 * This method is a generated getter for the output of a New_Point.
-	 * @return Point output from New_Point.
-	 */
-	public Point newPointOutput() {
-		return newPointOutput;
+	public Mat cvRectangleOutput() {
+		return cvRectangleOutput;
 	}
 
 
@@ -114,6 +133,17 @@ public class GripPipeline {
 		Imgproc.cvtColor(input, out, Imgproc.COLOR_BGR2HSV);
 		Core.inRange(out, new Scalar(hue[0], sat[0], val[0]),
 			new Scalar(hue[1], sat[1], val[1]), out);
+	}
+
+	/**
+	 * Fills a point with given x and y values.
+	 * @param x the x value to put in the point
+	 * @param y the y value to put in the point
+	 * @param point the point to fill
+	 */
+	private void newPoint(double x, double y, Point point) {
+		point.x = x;
+		point.y = y;
 	}
 
 	/**
@@ -141,36 +171,23 @@ public class GripPipeline {
 	}
 
 	/**
-	 * Sets the values of pixels in a binary image to their distance to the nearest black pixel.
-	 * @param input The image on which to perform the Distance Transform.
-	 * @param type The Transform.
-	 * @param maskSize the size of the mask.
-	 * @param output The image in which to store the output.
+	 * Draws a rectangle on an image.
+	 * @param src Image to draw rectangle on.
+	 * @param pt1 one corner of the rectangle.
+	 * @param pt2 opposite corner of the rectangle.
+	 * @param color Scalar indicating color to make the rectangle.
+	 * @param thickness Thickness of the lines of the rectangle.
+	 * @param lineType Type of line for the rectangle.
+	 * @param shift Number of decimal places in the points.
+	 * @param dst output image.
 	 */
-	private void findContours(Mat input, boolean externalOnly,
-		List<MatOfPoint> contours) {
-		Mat hierarchy = new Mat();
-		contours.clear();
-		int mode;
-		if (externalOnly) {
-			mode = Imgproc.RETR_EXTERNAL;
+	private void cvRectangle(Mat src, Point pt1, Point pt2, Scalar color,
+		double thickness, int lineType, double shift, Mat dst) {
+		src.copyTo(dst);
+		if (color == null) {
+			color = Scalar.all(1.0);
 		}
-		else {
-			mode = Imgproc.RETR_LIST;
-		}
-		int method = Imgproc.CHAIN_APPROX_SIMPLE;
-		Imgproc.findContours(input, contours, hierarchy, mode, method);
-	}
-
-	/**
-	 * Fills a point with given x and y values.
-	 * @param x the x value to put in the point
-	 * @param y the y value to put in the point
-	 * @param point the point to fill
-	 */
-	private void newPoint(double x, double y, Point point) {
-		point.x = x;
-		point.y = y;
+		Imgproc.rectangle(dst, pt1, pt2, color, (int)thickness, lineType, (int)shift);
 	}
 
 
