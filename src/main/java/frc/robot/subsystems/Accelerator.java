@@ -35,14 +35,12 @@ public class Accelerator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance leadMotor = new SparkMaxLance(MOTOR, MOTOR_CAN_BUS, "Lead Motor"); // Neo550
-    // private final TalonFXLance followerMotor1 = new TalonFXLance(1, MOTOR_CAN_BUS, "Follower Motor 1"); // Kracken
-    // private final TalonFXLance followerMotor2 = new TalonFXLance(2, MOTOR_CAN_BUS, "Follower Motor 2"); // Kracken
-
+    private final SparkMaxLance motor = new SparkMaxLance(1, MOTOR_CAN_BUS, "Accelerator Motor"); // Neo550
+    
     private final double ACCELERATOR_DIAMETER = 0.1875;
     // Neo 550:
     private final double GEAR_RATIO = 12.0 / 1.0;
-    private final double LEAD_MOTOR_VELOCITY_CONVERSION_FACTOR = ((Math.PI * ACCELERATOR_DIAMETER) / GEAR_RATIO) / 60; // rev/m to ft/s using gear ratio
+    private final double VELOCITY_CONVERSION_FACTOR = ((Math.PI * ACCELERATOR_DIAMETER) / GEAR_RATIO) / 60; // rev/m to ft/s using gear ratio
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -66,13 +64,17 @@ public class Accelerator extends SubsystemBase
 
     private void configMotors()
     {
-        leadMotor.setupFactoryDefaults();
-        leadMotor.setupInverted(false); // isn't inverted on current shooter
-        // leadMotor.setupVelocityConversionFactor(LEAD_MOTOR_VELOCITY_CONVERSION_FACTOR); // rev/m to ft/s
+        motor.setupFactoryDefaults();
+        motor.setupInverted(false); // isn't inverted on current shooter
+        motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR); // rev/m to ft/s
 
-        leadMotor.setSafetyEnabled(false);
+        motor.setSafetyEnabled(false);
 
-        leadMotor.setPosition(0);
+        motor.setPosition(0);
+
+        // motor.setupPIDController(0, 0.09, 0.0005, 0);
+        motor.setupPIDController(0, 0.1, 0.0005, 0.00001);
+
 
         // motor.setupForwardHardLimitSwitch(false, true);
         // motor.setupReverseHardLimitSwitch(false, true);
@@ -87,27 +89,20 @@ public class Accelerator extends SubsystemBase
         //Current Threshold depends on speed sent to motor
 
         // both value sets of values currently work (not tuned) on rev/sec - NOT TESTED with the conversion factor
-        leadMotor.setupPIDController(0, 0.00002, 0.0, 0.0, 0.00103);
-        // leadMotor.setupPIDController(0, 0.00003, 0.0, 0, 0.15 , 0.001, 0.0); // kI used to be 0.0000002
+        // motor.setupPIDController(0, 0.00002, 0.0, 0.0, 0.00103);
+        // motor.setupPIDController(0, 0.00003, 0.0, 0, 0.15 , 0.001, 0.0); // kI used to be 0.0000002
         
-        
-        leadMotor.setupCoastMode();
-        // motor.setupBrakeMode();
-
-        // followerMotor.setupFactoryDefaults();
-        // followerMotor.setupBrakeMode();
-
-        // followerMotor.setupFollower(MOTOR, false);
+        motor.setupCoastMode();
     }
 
     public double getPosition() 
     {
-        return leadMotor.getPosition();
+        return motor.getPosition();
     }
 
     public double getVelocity() 
     {
-        return leadMotor.getVelocity();
+        return motor.getVelocity();
     }
 
     /**
@@ -116,17 +111,17 @@ public class Accelerator extends SubsystemBase
      */
     private void set(double speed)
     {
-        leadMotor.set(speed);
+        motor.set(speed);
     }
 
     private void setControlVelocity(double velocity)
     {
-        leadMotor.setControlVelocity(velocity);
+        motor.setControlVelocity(velocity);
     }
 
     private void setControlPosition(double position)
     {
-        leadMotor.setControlPosition(position);
+        motor.setControlPosition(position);
     }
 
     public void stop()
@@ -137,7 +132,7 @@ public class Accelerator extends SubsystemBase
     public Command onCommand()
     {
         // return run( () -> set(0.25) );
-        return run( () -> set(.2) );
+        return run( () -> set(0.2) );
     }
 
     public Command reverseCommand()
