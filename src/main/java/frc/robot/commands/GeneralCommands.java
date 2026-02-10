@@ -133,6 +133,25 @@ public class GeneralCommands
         }
     }
 
+    // idk if we need this
+    // may be necessary if to keep the hopper extended while not intaking the intake pivot must remain out
+    // public static Command stopIntakeCommand()
+    // {
+    //     if(intake != null && agitator != null)
+    //     {
+    //         return
+    //         Commands.parallel(
+    //             intake.stopCommand(),
+    //             agitator.stopCommand())
+    //         .withName("Intake and Agitator Rollers Stopped (Pivot Still Extended)");
+    //     }
+    //     else
+    //     {
+    //         return Commands.none();
+    //     }
+    // }
+
+    
     // tested
     /**
      * @author Robbie Frank
