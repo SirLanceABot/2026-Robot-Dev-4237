@@ -247,6 +247,7 @@ public class ScoringCommands
         if(drivetrain != null && poseEstimator != null && climb != null)
         {
             Pose2d targetClimbPose;
+            
             if(drivetrain.isRedAllianceSupplier().getAsBoolean())
             {
                 if(isLeft.getAsBoolean())
@@ -269,6 +270,8 @@ public class ScoringCommands
                     targetClimbPose = new Pose2d( new Translation2d(0.634, 2.835), new Rotation2d(180));
                 }
             }
+
+            // targetClimbPose = new Pose2d(4.847, 6.67, new Rotation2d());
 
             return
             Commands.parallel(
