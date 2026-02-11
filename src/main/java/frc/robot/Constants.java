@@ -102,6 +102,12 @@ public final class Constants
         public static final String MOTOR_CAN_BUS            = CANbus.ROBORIO;
     }   
 
+    public static class LaserCan
+    {
+        public static final int ID                       = 0;
+    }
+
+
     public static class LEDs
     {
         public static final int LED_LENGTH = 120;
