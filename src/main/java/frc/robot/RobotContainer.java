@@ -56,7 +56,7 @@ public class RobotContainer
     private boolean useDriverController         = false;
     private boolean useOperatorController       = false;
 
-    private boolean useLaserCAN                 = false;
+    private boolean useLaserCAN                 = true;
 
     private boolean useHopperCamera             = false;
     private boolean useShooterCamera            = false;
@@ -210,6 +210,11 @@ public class RobotContainer
     public CommandXboxController getOperatorController()
     {
         return operatorController;
+    }
+
+    public LaserCanSensor getLaserCanSensor()
+    {
+        return laserCanSensor;
     }
 
     public boolean useFullRobot()

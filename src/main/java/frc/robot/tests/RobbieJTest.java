@@ -2,16 +2,19 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ScoringCommands;
 import frc.robot.sensors.HopperCamera;
+import frc.robot.sensors.LaserCanSensor;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.sensors.LaserCanSensor;
 
 @SuppressWarnings("unused")
 public class RobbieJTest implements Test
@@ -42,6 +45,7 @@ public class RobbieJTest implements Test
     private Accelerator accelerator;
     private Flywheel flywheel; 
     private HopperCamera hopperCamera;
+    private LaserCanSensor laserCan;
     
     private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -67,6 +71,7 @@ public class RobbieJTest implements Test
         flywheel = robotContainer.getFlywheel();
         hopperCamera = robotContainer.getHopperCamera();
         climb = robotContainer.getClimb();
+        laserCan = robotContainer.getLaserCanSensor();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -101,7 +106,8 @@ public class RobbieJTest implements Test
      */
     public void periodic()
     {
-        System.err.println("isYellow:" + hopperCamera.isHoppperFullSupplier().getAsBoolean());
+        // System.err.println("isYellow:" + hopperCamera.isHoppperFullSupplier().getAsBoolean());
+        // System.out.println("Distance: "+ LaserCanSensor.d);
         // System.out.println(climb.getForwardHardLimit());
     }
     
