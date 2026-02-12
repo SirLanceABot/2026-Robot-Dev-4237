@@ -113,13 +113,14 @@ public class Robot extends TimedRobot
         // Put code to run here before the match starts, but not between auto and teleop
         if(isPreMatch)
         {
-            autonomousCommand = PathPlannerLance.getAutonomousCommand();
-            // path = PathPlannerLance.buildAutoPath(); // this made stuff not work.  may need to bring back in later if it works less good than not good
-
             StartUpCommands.enableMonitor(robotContainer);
             // StartUpNotifier.startPeriodic(0.5);
+
+            // autonomousCommand = PathPlannerLance.getAutonomousCommand();
+            // path = PathPlannerLance.buildAutoPath(); // this made stuff not work.  may need to bring back in later if it works less good than not good
+
             autonomousCommand = PathPlannerLance.getAutonomousCommand();
-            // autoName = autonomousCommand.getName();
+            autoName = autonomousCommand.getName();
 
             if(AutoBuilder.isConfigured())
             {
