@@ -18,11 +18,11 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.commands.ScoringCommands;
 import frc.robot.subsystems.Accelerator;
-import frc.robot.subsystems.Agitator;
+// import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PoseEstimator;
 
@@ -44,11 +44,11 @@ public final class OperatorBindings {
     private static CommandXboxController controller;
 
     private static Accelerator accelerator;
-    private static Agitator agitator;
+    // private static Agitator agitator;
     private static Climb climb;
     private static Drivetrain drivetrain;
     private static Flywheel flywheel;
-    private static Indexer indexer;
+    private static Indexigator indexigator;
     private static Intake intake;
     private static PoseEstimator poseEstimator;
 
@@ -69,11 +69,11 @@ public final class OperatorBindings {
     {
         controller = robotContainer.getOperatorController();
         accelerator = robotContainer.getAccelerator();
-        agitator = robotContainer.getAgitator();
+        // agitator = robotContainer.getAgitator();
         climb = robotContainer.getClimb();
         drivetrain = robotContainer.getDrivetrain();
         flywheel = robotContainer.getFlywheel();
-        indexer = robotContainer.getIndexer();
+        indexigator = robotContainer.getIndexigator();
         intake = robotContainer.getIntake();
         poseEstimator = robotContainer.getPoseEstimator();
 
@@ -119,7 +119,7 @@ public final class OperatorBindings {
         Trigger aButton = controller.a();
 
         // A ~ shoot on the move
-        // aButton.onTrue(ScoringCommands.shootOnTheMoveCommand(drivetrain, agitator, indexer, accelerator, flywheel, poseEstimator));
+        // aButton.onTrue(ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
     }
 
 
@@ -164,7 +164,7 @@ public final class OperatorBindings {
         Trigger rightBumper = controller.rightBumper();
 
         // Right bumper ~ stop intake without retracting (stop motors)
-        // rightBumper.onTrue(ScoringCommands.stopIntakeAndShooterCommand(intake, agitator, indexer, accelerator, flywheel));
+        // rightBumper.onTrue(ScoringCommands.stopIntakeAndShooterCommand(intake, indexigator, accelerator, flywheel));
     }
 
 

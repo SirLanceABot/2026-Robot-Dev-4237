@@ -19,11 +19,11 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.commands.ScoringCommands;
 import frc.robot.subsystems.Accelerator;
-import frc.robot.subsystems.Agitator;
+// import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.PoseEstimator;
@@ -46,11 +46,11 @@ public final class DriverBindings {
     private static CommandXboxController controller;
 
     private static Accelerator accelerator;
-    private static Agitator agitator;
+    // private static Agitator agitator;
     private static Climb climb;
     private static Drivetrain drivetrain;
     private static Flywheel flywheel;
-    private static Indexer indexer;
+    private static Indexigator indexigator;
     private static Intake intake;
     private static LEDs leds;
     private static PoseEstimator poseEstimator;
@@ -78,11 +78,11 @@ public final class DriverBindings {
     {
         controller = robotContainer.getDriverController();
         accelerator = robotContainer.getAccelerator();
-        agitator = robotContainer.getAgitator();
+        // agitator = robotContainer.getAgitator();
         climb = robotContainer.getClimb();
         drivetrain = robotContainer.getDrivetrain();
         flywheel = robotContainer.getFlywheel();
-        indexer = robotContainer.getIndexer();
+        indexigator = robotContainer.getIndexigator();
         intake = robotContainer.getIntake();
         poseEstimator = robotContainer.getPoseEstimator();
 
@@ -146,7 +146,7 @@ public final class DriverBindings {
         .whileTrue(
             Commands.parallel(
                 drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getRotationToCalculatedTarget().getAsDouble())), // Tested this command in 25 repo, works there
-                ScoringCommands.shootOnTheMoveCommand(drivetrain, agitator, indexer, accelerator, flywheel, poseEstimator)));
+                ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator)));
             
         aButton.onFalse(GeneralCommands.stopShootingCommand()); // TODO test this line
     }
@@ -169,7 +169,7 @@ public final class DriverBindings {
         .whileTrue(
             Commands.parallel(
                 drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> poseEstimator.pureLeadingAngle(poseEstimator.getAllianceHubPose()).getAsDouble()),
-                ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, agitator, indexer, accelerator, flywheel)));
+                ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, indexigator, accelerator, flywheel)));
 
         xButton.onFalse(GeneralCommands.stopShootingCommand());
     }

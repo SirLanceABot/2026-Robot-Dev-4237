@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ScoringCommands;
 import frc.robot.subsystems.Accelerator;
-import frc.robot.subsystems.Agitator;
+// import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexigator;
 
 @SuppressWarnings("unused")
 public class LoganBTest implements Test
@@ -35,8 +35,8 @@ public class LoganBTest implements Test
     private final CommandXboxController controller = new CommandXboxController(0);
     private final Flywheel flywheel;
     private final Accelerator acceleartor;
-    private final Agitator agitator;
-    private final Indexer indexer;
+    // private final Agitator agitator;
+    private final Indexigator indexigator;
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -54,8 +54,8 @@ public class LoganBTest implements Test
         this.robotContainer = robotContainer;
         this.flywheel = robotContainer.getFlywheel();
         this.acceleartor = robotContainer.getAccelerator();
-        this.agitator = robotContainer.getAgitator();
-        this.indexer = robotContainer.getIndexer();
+        // this.agitator = robotContainer.getAgitator();
+        this.indexigator = robotContainer.getIndexigator();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }

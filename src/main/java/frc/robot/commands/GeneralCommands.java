@@ -18,11 +18,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Accelerator;
-import frc.robot.subsystems.Agitator;
+// import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.LEDs.ColorPattern;
@@ -44,8 +44,8 @@ public class GeneralCommands
   // *** CLASS VARIABLES & INSTANCE VARIABLES ***
   // Put all class variables and instance variables here
     private static Intake intake; 
-    private static Agitator agitator;
-    private static Indexer indexer;
+    // private static Agitator agitator;
+    private static Indexigator indexigator;
     private static Accelerator accelerator;
     private static Flywheel flywheel;
     private static Drivetrain drivetrain;
@@ -59,8 +59,8 @@ public class GeneralCommands
         System.out.println("  Constructor Started:  " + fullClassName);
 
         intake = robotContainer.getIntake();
-        agitator = robotContainer.getAgitator();
-        indexer = robotContainer.getIndexer();
+        // agitator = robotContainer.getAgitator();
+        indexigator = robotContainer.getIndexigator();
         accelerator = robotContainer.getAccelerator();
         flywheel = robotContainer.getFlywheel();
         drivetrain = robotContainer.getDrivetrain();
@@ -118,13 +118,13 @@ public class GeneralCommands
      */
     public static Command intakeCommand()
     {
-        if(intake != null && agitator != null)
+        if(intake != null && indexigator != null)
         {
             return 
             Commands.parallel(
                 setLEDCommand(ColorPattern.kSolid, Color.kYellow),
                 intake.pickupFuelCommand(),
-                agitator.forwardCommand()
+                indexigator.setForwardCommand()
             .withName("Intaking Fuel"));
         }
         else
@@ -159,12 +159,12 @@ public class GeneralCommands
      */
     public static Command resetIntakeCommand()
     {
-        if(intake != null && agitator != null)
+        if(intake != null && indexigator != null)
         {
             return 
             Commands.parallel(
                 intake.retractIntakeCommand(),
-                agitator.stopCommand())
+                indexigator.stopCommand())
             .andThen(setLEDCommand(ColorPattern.kBlink, Color.kYellow)).withTimeout(0.5)
             .andThen(defaultLEDCommand())
             .withName("Intake Reset Into Robot");
@@ -182,7 +182,7 @@ public class GeneralCommands
      */
     public static Command ejectFuelInIntakeCommand()
     {
-        if(intake != null && agitator != null)
+        if(intake != null && indexigator != null)
         {
             return Commands.parallel(
                 setLEDCommand(ColorPattern.kSolid, Color.kOrange),
@@ -203,7 +203,7 @@ public class GeneralCommands
      */
     public static Command stopEjectingFuelInIntakeCommand()
     {
-        if(intake != null && agitator != null)
+        if(intake != null && indexigator != null)
         {
             return intake.retractIntakeCommand()
             .andThen(defaultLEDCommand())
@@ -221,12 +221,12 @@ public class GeneralCommands
      */
     public static Command stopShootingCommand()
     {
-        if(flywheel != null && agitator != null && accelerator != null)
+        if(flywheel != null && indexigator != null && accelerator != null)
         {
             return
             Commands.parallel(
                 flywheel.stopCommand(),
-                agitator.stopCommand(),
+                indexigator.stopCommand(),
                 accelerator.stopCommand()
             );
         }
@@ -243,7 +243,7 @@ public class GeneralCommands
      */
     public static Command ejectAllFuelSlowlyCommand()
     {
-        if(agitator != null && indexer != null && accelerator != null && flywheel != null)
+        if(indexigator != null && accelerator != null && flywheel != null)
         {
             return 
             Commands.parallel(
@@ -251,9 +251,8 @@ public class GeneralCommands
             flywheel.burpFuelCommand().until(flywheel.isAtSetSpeed(10.0, 1.0))) // velocity that can slowy eject fuel
             .andThen(
                 Commands.parallel(
-                    indexer.setForwardCommand(() -> 0.2),
-                    accelerator.feedToShooterCommand(() -> 0.2),
-                    agitator.forwardCommand()))
+                    indexigator.setForwardCommand(() -> 0.2),
+                    accelerator.feedToShooterCommand(() -> 0.2)))
             .withName("Ejecting All Fuel Slowly");
         }
         else
@@ -269,14 +268,13 @@ public class GeneralCommands
      */
     public static Command stopEjectingAllFuelCommand()
     {
-        if(agitator != null && indexer != null && accelerator != null && flywheel != null)
+        if(indexigator != null && accelerator != null && flywheel != null)
         {
             return
             Commands.parallel(
                 flywheel.stopCommand(),
-                indexer.stopCommand(),
-                accelerator.stopCommand(),
-                agitator.stopCommand())
+                indexigator.stopCommand(),
+                accelerator.stopCommand())
             .andThen(defaultLEDCommand())
             .withName("Stopped Ejecting All Fuel");
         }
@@ -442,6 +440,8 @@ public class GeneralCommands
 
     
     // maybe L3?
+
+    // ask Grant
 
 
 

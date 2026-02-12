@@ -1,23 +1,19 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Indexer.*;
+import static frc.robot.Constants.Indexigator.*;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 
-// import com.ctre.phoenix6.hardware.TalonFXS;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.motors.SparkMaxLance;
 import frc.robot.motors.TalonFXLance;
-import frc.robot.motors.TalonFXSLance;
 
 /**
- * Indexer
+ * Indexigator
  */
-public class Indexer extends SubsystemBase
+public class Indexigator extends SubsystemBase
 {
     // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -37,7 +33,7 @@ public class Indexer extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance motor = new TalonFXLance(MOTOR, MOTOR_CAN_BUS, "Indexer Motor");
+    private final TalonFXLance motor = new TalonFXLance(MOTOR, MOTOR_CAN_BUS, "Indexigator Motor");
     // private final TalonFXSLance motor = new TalonFXSLance(MOTOR, MOTOR_CAN_BUS, "Indexer Motor");
 
     private final double kP = 0.000075;
@@ -45,9 +41,9 @@ public class Indexer extends SubsystemBase
     private final double kD = 0.0;
     private final double kF = 0.000085;     // use for SparkMaxLance
 
-    private final double INDEXER_DIAMETER_FEET = 4237.0;
+    private final double INDEXIGATOR_DIAMETER_FEET = 4237.0;
     private final double GEAR_RATIO = 1.0 / 1.0;
-    private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INDEXER_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
+    private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INDEXIGATOR_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
     
     // test for TalonFXSLance
     // private final double kS = 0.0121;    // small number
@@ -59,11 +55,11 @@ public class Indexer extends SubsystemBase
     // Put all class constructors here
 
     /** 
-     * Creates a new Indexer. 
+     * Creates a new Indexigator. 
      */
-    public Indexer()
+    public Indexigator()
     {
-        super("Indexer");
+        super("Indexigator");
         System.out.println("  Constructor Started:  " + fullClassName);
 
         configMotors();
@@ -124,6 +120,11 @@ public class Indexer extends SubsystemBase
     public Command setForwardCommand(DoubleSupplier speed)
     {
         return run( () -> set(MathUtil.clamp(speed.getAsDouble(), 0.0, 0.5)) );
+    }
+
+    public Command setForwardCommand()
+    {
+        return run( () -> set(MathUtil.clamp(50.0, 0.0, 50.0)) );
     }
 
     public Command setBackwardCommand(DoubleSupplier speed)

@@ -10,12 +10,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.sensors.Camera;
 import frc.robot.subsystems.Accelerator;
-import frc.robot.subsystems.Agitator;
+// import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.LEDs;
@@ -44,8 +44,8 @@ public class RobotContainer
     private boolean useFullRobot                = false;
 
     private boolean useExampleSubsystem         = false;
-    private boolean useAgitator                 = false;
-    private boolean useIndexer                  = false;
+    // private boolean useAgitator                 = false;
+    private boolean useIndexigator              = false;
     private boolean useFlywheel                 = false;
     private boolean useIntake                   = false;
     private boolean useAccelerator              = false;
@@ -64,8 +64,8 @@ public class RobotContainer
 
     // Robot components
     private ExampleSubsystem exampleSubsystem = null;
-    private Agitator agitator = null;
-    private Indexer indexer = null;
+    // private Agitator agitator = null;
+    private Indexigator indexigator = null;
     private Flywheel flywheel = null;
     private Intake intake = null;
     private Accelerator accelerator;
@@ -91,11 +91,11 @@ public class RobotContainer
         if(useFullRobot || useDrivetrain)
             drivetrain = TunerConstants.createDrivetrain();
 
-        if(useFullRobot || useAgitator)
-            agitator = new Agitator(); 
+        // if(useFullRobot || useAgitator)
+        //     agitator = new Agitator(); 
 
-        if(useFullRobot || useIndexer)
-            indexer = new Indexer();
+        if(useFullRobot || useIndexigator)
+            indexigator = new Indexigator();
 
         if(useFullRobot || useFlywheel)
             flywheel = new Flywheel();
@@ -142,14 +142,14 @@ public class RobotContainer
         return exampleSubsystem;
     }
 
-    public Agitator getAgitator()
-    {
-        return agitator;
-    }
+    // public Agitator getAgitator()
+    // {
+    //     return agitator;
+    // }
 
-    public Indexer getIndexer()
+    public Indexigator getIndexigator()
     {
-        return indexer;
+        return indexigator;
     }
 
     public Flywheel getFlywheel()

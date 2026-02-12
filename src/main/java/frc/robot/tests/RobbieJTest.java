@@ -9,10 +9,10 @@ import frc.robot.commands.ScoringCommands;
 import frc.robot.sensors.HopperCamera;
 import frc.robot.sensors.LaserCanSensor;
 import frc.robot.subsystems.Accelerator;
-import frc.robot.subsystems.Agitator;
+// import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Intake;
 import frc.robot.sensors.LaserCanSensor;
 
@@ -38,10 +38,10 @@ public class RobbieJTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
-    private Agitator agitator;
+    // private Agitator agitator;
     private Climb climb;
     private Intake intake;
-    private Indexer indexer;
+    private Indexigator indexigator;
     private Accelerator accelerator;
     private Flywheel flywheel; 
     private HopperCamera hopperCamera;
@@ -64,9 +64,9 @@ public class RobbieJTest implements Test
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.robotContainer = robotContainer;
-        agitator = robotContainer.getAgitator();
+        // agitator = robotContainer.getAgitator();
         intake = robotContainer.getIntake();
-        indexer = robotContainer.getIndexer();
+        indexigator = robotContainer.getIndexigator();
         accelerator = robotContainer.getAccelerator();
         flywheel = robotContainer.getFlywheel();
         hopperCamera = robotContainer.getHopperCamera();

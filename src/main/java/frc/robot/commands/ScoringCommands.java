@@ -23,11 +23,11 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Accelerator;
-import frc.robot.subsystems.Agitator;
+// import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PoseEstimator;
 
@@ -46,8 +46,8 @@ public class ScoringCommands
   // *** CLASS VARIABLES & INSTANCE VARIABLES ***
   // Put all class variables and instance variables here
     private static Intake intake; 
-    private static Agitator agitator;
-    private static Indexer indexer;
+    // private static Agitator agitator;
+    private static Indexigator indexigator;
     private static Accelerator accelerator;
     private static Flywheel flywheel;
     private static Drivetrain drivetrain;
@@ -59,8 +59,8 @@ public class ScoringCommands
         System.out.println("  Constructor Started:  " + fullClassName);
 
         intake = robotContainer.getIntake();
-        agitator = robotContainer.getAgitator();
-        indexer = robotContainer.getIndexer();
+        // agitator = robotContainer.getAgitator();
+        indexigator = robotContainer.getIndexigator();
         accelerator = robotContainer.getAccelerator();
         flywheel = robotContainer.getFlywheel();
         drivetrain = robotContainer.getDrivetrain();
@@ -69,16 +69,15 @@ public class ScoringCommands
 
     }
 
-    public static Command IntakeAndScoreCommand(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    public static Command IntakeAndScoreCommand(Intake intake, Indexigator indexigator, Accelerator accelerator, Flywheel flywheel)
     {
 
         
-        if(intake != null && agitator != null && indexer != null  && accelerator != null  && flywheel != null )
+        if(intake != null && indexigator != null  && accelerator != null  && flywheel != null )
         {
             return  Commands.parallel(
                 (intake.pickupFuelCommand()),
-                (agitator.forwardCommand()),
-                (indexer.onCommand()),
+                (indexigator.onCommand()),
                 (accelerator.feedToShooterCommand(()-> 0.25)),
                 (flywheel.setControlVelocityCommand(() -> 10.0)));
         }
@@ -88,19 +87,18 @@ public class ScoringCommands
         }
     } 
 
-    public static Command IntakeAndScoreCommandTheSequal(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    public static Command IntakeAndScoreCommandTheSequal(Intake intake, Indexigator indexigator, Accelerator accelerator, Flywheel flywheel)
     {
 
         
-        if(intake != null && agitator != null && indexer != null  && accelerator != null  && flywheel != null )
+        if(intake != null && indexigator != null  && accelerator != null  && flywheel != null )
         {
             return  Commands.parallel( (accelerator.feedToShooterCommand(() -> 0.25)),
                     (flywheel.setControlVelocityCommand(() -> 75.7))).until(flywheel.isAtSetSpeed(100, 5))
                     .andThen
                     // .commands.parallel(
                 (intake.pickupFuelCommand()).andThen
-                (agitator.forwardCommand()).andThen 
-                (indexer.onCommand());
+                (indexigator.onCommand());
 
         }
         else
@@ -110,14 +108,13 @@ public class ScoringCommands
     } 
 
 
-    public static Command stopIntakeAndShooterCommand(Intake intake, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    public static Command stopIntakeAndShooterCommand(Intake intake, Indexigator indexigator, Accelerator accelerator, Flywheel flywheel)
     {
-        if(intake != null && agitator != null && indexer != null  && accelerator != null  && flywheel != null )
+        if(intake != null  && indexigator != null  && accelerator != null  && flywheel != null )
         {
             return  Commands.parallel(
                 (intake.stopCommand()),
-                (agitator.stopCommand()),
-                (indexer.stopCommand()),
+                (indexigator.stopCommand()),
                 (accelerator.stopCommand()),
                 (flywheel.stopCommand()));
         }
@@ -130,9 +127,9 @@ public class ScoringCommands
     // TODO implement with shooter speeds
     // alignment to hub works and flywheel/agitator/accelerator parts work seperately, test together with full robot
     // have NOT tested implementeation with varying powers/distances
-    public static Command shootFromStandstillCommand(Drivetrain drivetrain, Agitator agitator, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
+    public static Command shootFromStandstillCommand(Drivetrain drivetrain, Indexigator indexigator, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
     {
-        if(drivetrain != null && agitator != null  && accelerator != null && flywheel != null && poseEstimator != null)
+        if(drivetrain != null && indexigator != null  && accelerator != null && flywheel != null && poseEstimator != null)
         {
             return
             drivetrain.lockWheelsCommand().withTimeout(0.1)
@@ -143,7 +140,7 @@ public class ScoringCommands
                     .until(() -> flywheel.isAtSetSpeed(flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble() * 3.281), 5).getAsBoolean())) // within 2 feet per second
             .andThen(
                 Commands.parallel(
-                    agitator.forwardCommand(), // rpm
+                    indexigator.setForwardCommand(), // rpm
                     accelerator.feedToShooterCommand(() -> 0.1)));
         }
         else
@@ -155,17 +152,16 @@ public class ScoringCommands
     /**
      * shoots fuel with constantly updating power values for flywheel while moving
      * @param drivetrain
-     * @param agitator
-     * @param indexer
+     * @param indexigator
      * @param accelerator
      * @param flywheel
      * @param poseEstimator
      * @return
      * @author Logan Bellinger
      */
-    public static Command shootOnTheMoveCommand(Drivetrain drivetrain, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
+    public static Command shootOnTheMoveCommand(Drivetrain drivetrain, Indexigator indexigator, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
     {
-        if(drivetrain != null && agitator != null && indexer != null && accelerator != null && flywheel != null && poseEstimator != null)
+        if(drivetrain != null && indexigator != null && accelerator != null && flywheel != null && poseEstimator != null)
         {
             Pose2d robotPose = drivetrain.getState().Pose;
             ChassisSpeeds velocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.getRotation());
@@ -182,7 +178,7 @@ public class ScoringCommands
             flywheel.setControlVelocityCommand(() -> shooterPower).until(flywheel.isAtSetSpeed(shooterPower, 5))     // TODO tune tolerance
             .andThen(
                 Commands.parallel(
-                    agitator.forwardCommand(), // rpm
+                    indexigator.setForwardCommand(), // rpm
                     accelerator.feedToShooterCommand(() -> 0.1)));
         }
         else
@@ -197,16 +193,15 @@ public class ScoringCommands
      * BUT uses purely calculations to determine shooterVelocity
      * @param drivetrain
      * @param poseEstimator
-     * @param agitator
-     * @param indexer
+     * @param indexigator
      * @param accelerator
      * @param flywheel
      * @return shooterVelocity to shoot on the move
      * @author Matthew
      */
-    public static Command physicsShootOnTheMove(Drivetrain drivetrain, PoseEstimator poseEstimator, Agitator agitator, Indexer indexer, Accelerator accelerator, Flywheel flywheel)
+    public static Command physicsShootOnTheMove(Drivetrain drivetrain, PoseEstimator poseEstimator, Indexigator indexigator, Accelerator accelerator, Flywheel flywheel)
     {
-        if(drivetrain != null && poseEstimator != null && agitator != null && indexer != null && accelerator != null && flywheel != null)
+        if(drivetrain != null && poseEstimator != null && indexigator != null && accelerator != null && flywheel != null)
         {
             double shooterVelocity = poseEstimator.pureShooterVelocity(poseEstimator.getAllianceHubPose()).getAsDouble();
 
@@ -214,7 +209,7 @@ public class ScoringCommands
             flywheel.setControlVelocityCommand(() -> shooterVelocity).until(flywheel.isAtSetSpeed(shooterVelocity, 5))   //TODO also tun this tolerance
             .andThen(
                 Commands.parallel(
-                    agitator.forwardCommand(),
+                    indexigator.setForwardCommand(),
                     accelerator.feedToShooterCommand(() -> 0.1)));
         }
         else
@@ -223,15 +218,15 @@ public class ScoringCommands
         }
     }
 
-    public static Command passCommand(Agitator agitator, Accelerator accelerator, Flywheel flywheel)
+    public static Command passCommand(Indexigator indexigator, Accelerator accelerator, Flywheel flywheel)
     {
-        if(agitator != null && accelerator != null && flywheel != null)
+        if(indexigator != null && accelerator != null && flywheel != null)
         {
             return
             flywheel.setControlVelocityCommand(() -> 10.0).until(flywheel.isAtSetSpeed(10.0, 5))   // test value
             .andThen(
             Commands.parallel(
-                (agitator.forwardCommand()), //rpm
+                (indexigator.setForwardCommand()), //rpm
                 (accelerator.feedToShooterCommand(() -> 0.1))));
         }
         else

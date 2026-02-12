@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Accelerator;
-import frc.robot.subsystems.Agitator;
+// import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.PoseEstimator;
 
 /** 
@@ -36,11 +36,11 @@ public class CommandsManager extends Command
 
     // *** CLASS AND INSTANCE VARIABLES ***
     private static Drivetrain drivetrain;
-    private static Agitator agitator;
+    // private static Agitator agitator;
     private static Accelerator accelerator;
     private static Flywheel flywheel;
     private static PoseEstimator poseEstimator;
-    private static Indexer indexer;
+    private static Indexigator indexigator;
 
     /**
      * Creates a new Commands Manager
@@ -56,11 +56,11 @@ public class CommandsManager extends Command
         ScoringCommands.createCommands(robotContainer);
 
         drivetrain = robotContainer.getDrivetrain();
-        agitator = robotContainer.getAgitator();
+        // agitator = robotContainer.getAgitator();
         accelerator = robotContainer.getAccelerator();
         flywheel = robotContainer.getFlywheel();
         poseEstimator = robotContainer.getPoseEstimator();
-        indexer = robotContainer.getIndexer();
+        indexigator = robotContainer.getIndexigator();
 
 
         createNamedCommands();
@@ -81,10 +81,10 @@ public class CommandsManager extends Command
         NamedCommands.registerCommand("Stop Ejecting All Fuel Slowly Command", GeneralCommands.stopEjectingAllFuelCommand());
 
         // Scoring Commands
-        NamedCommands.registerCommand("Shoot From Standstill Command", ScoringCommands.shootFromStandstillCommand(drivetrain, agitator, accelerator, flywheel, poseEstimator));
-        NamedCommands.registerCommand("Shoot on the Move", ScoringCommands.shootOnTheMoveCommand(drivetrain, agitator, indexer, accelerator, flywheel, poseEstimator));
-        NamedCommands.registerCommand("Physics Shoot on the Move", ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, agitator, indexer, accelerator, flywheel));
-        NamedCommands.registerCommand("Pass Command", ScoringCommands.passCommand(agitator, accelerator, flywheel));
+        NamedCommands.registerCommand("Shoot From Standstill Command", ScoringCommands.shootFromStandstillCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
+        NamedCommands.registerCommand("Shoot on the Move", ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
+        NamedCommands.registerCommand("Physics Shoot on the Move", ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, indexigator, accelerator, flywheel));
+        NamedCommands.registerCommand("Pass Command", ScoringCommands.passCommand(indexigator, accelerator, flywheel));
 
         // Climbing Commands
         NamedCommands.registerCommand("Climb to L1 Command", GeneralCommands.climbToL1Command());

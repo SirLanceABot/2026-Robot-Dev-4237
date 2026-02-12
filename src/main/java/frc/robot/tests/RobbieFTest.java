@@ -6,7 +6,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Accelerator;
-import frc.robot.subsystems.Agitator;
+// import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.LEDs;
@@ -39,7 +39,7 @@ public class RobbieFTest implements Test
     private final CommandXboxController controller = new CommandXboxController(0);
     
     private final Flywheel flywheel;
-    private final Agitator agitator;
+    // private final Agitator agitator;
     private final LEDs leds;
     private final Climb climb;
     private final Accelerator accelerator;
@@ -61,7 +61,7 @@ public class RobbieFTest implements Test
         this.robotContainer = robotContainer;
 
         flywheel = robotContainer.getFlywheel();
-        agitator = robotContainer.getAgitator();
+        // agitator = robotContainer.getAgitator();
         leds = robotContainer.getLEDs();
         climb = robotContainer.getClimb();
         accelerator = robotContainer.getAccelerator();

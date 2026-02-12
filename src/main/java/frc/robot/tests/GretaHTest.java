@@ -5,10 +5,10 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Agitator;
+// import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.commands.ScoringCommands;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Accelerator;
 
 @SuppressWarnings("unused")
@@ -33,9 +33,9 @@ public class GretaHTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
-    private final Indexer indexer;
+    private final Indexigator indexigator;
     private final Accelerator accelerator;
-    private final Agitator agitator;
+    // private final Agitator agitator;
     private final Flywheel flywheel;
     private final CommandXboxController controller = new CommandXboxController(1);
 
@@ -53,9 +53,9 @@ public class GretaHTest implements Test
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.robotContainer = robotContainer;
-        this.indexer = robotContainer.getIndexer();
+        this.indexigator = robotContainer.getIndexigator();
         this.accelerator = robotContainer.getAccelerator();
-        this.agitator = robotContainer.getAgitator();
+        // this.agitator = robotContainer.getAgitator();
         this.flywheel = robotContainer.getFlywheel();
 
         System.out.println("  Constructor Finished: " + fullClassName);
