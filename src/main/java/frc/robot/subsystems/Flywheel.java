@@ -48,15 +48,15 @@ public class Flywheel extends SubsystemBase
     private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
 
     // PID constants
-    private final double kP = 0.4;
+    private final double kP = 0.975;
     private final double kI = 0.0;
     private final double kD = 0.00;
-    private final double kS = 0.19;
+    private final double kS = 0.015;
     private final double kV = 0.13;
     private final double kA = 0.00;
 
-    private final double FLYWHEEL_DIAMETER_FEET  = 4.25 / 12.0; // 4.25 in
-    private final double GEAR_RATIO = 16.0 / 30.0;
+    private final double FLYWHEEL_DIAMETER_FEET  = (4.0 / 12.0); // 4.25 in
+    private final double GEAR_RATIO = (16.0 / 30.0);
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * FLYWHEEL_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
     
     // Motion Magic Constants
@@ -154,6 +154,11 @@ public class Flywheel extends SubsystemBase
     {
         dist = Math.max(4.0, Math.min(20.0, dist));
         return distToVeloMap.get(dist);
+    }
+
+    public double getDutyCycle()
+    {
+        return leadMotor.get();
     }
 
     // public double getPassPower(double dist)

@@ -91,17 +91,17 @@ public class RobbieFTest implements Test
     public void periodic()
     {
         controller.a().onTrue(
-            accelerator.onCommand()
+            flywheel.setControlVelocityCommand(() -> 10.0)
         );
         controller.x().onTrue(
-            flywheel.setControlVelocityCommand(() -> 45.0)
+            flywheel.setControlVelocityCommand(() -> 30.0)
         );
         controller.y().onTrue(
-            flywheel.onCommand()
+            flywheel.setControlVelocityCommand(() -> 70.0)
         );
-        controller.b().onTrue(
-            accelerator.stopCommand()
-        );
+        // controller.b().onTrue(
+        //     accelerator.stopCommand()
+        // );
         controller.start().onTrue(
             flywheel.stopCommand()
         );
@@ -118,7 +118,7 @@ public class RobbieFTest implements Test
         //     accelerator.stopCommand()
         // );
 
-        System.out.println("flywheel Velocity = " + flywheel.getVelocity());
+        System.out.println("flywheel Velocity = " + flywheel.getVelocity() + "cycle=" + flywheel.getDutyCycle());
     }
     
     /**
