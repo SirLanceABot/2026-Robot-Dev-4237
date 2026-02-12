@@ -37,7 +37,7 @@ public class GretaHTest implements Test
     private final Accelerator accelerator;
     // private final Agitator agitator;
     private final Flywheel flywheel;
-    private final CommandXboxController controller = new CommandXboxController(1);
+    private final CommandXboxController controller = new CommandXboxController(0);
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -75,12 +75,12 @@ public class GretaHTest implements Test
      */
     public void init()
     {
-        // controller.a().onTrue(indexer.setVelocityForwardCommand(() -> 300));
-        // controller.b().onTrue(indexer.stopCommand());
-        // controller.a().onTrue(indexer.setForwardCommand(() -> 0.2));
-        // controller.x().onTrue(indexer.setBackwardCommand(() -> 0.2));
-        // controller.x().onTrue(indexer.setVelocityBackwardCommand(() -> 300));
-        // controller.x().onTrue(indexer.setVelocityCommand(() -> 0.7));
+        // controller.a().onTrue(indexigator.setVelocityForwardCommand(() -> 180.0));
+        // controller.b().onTrue(indexigator.stopCommand());
+        // // controller.a().onTrue(indexigator.setForwardCommand(() -> 0.2));
+        // // controller.x().onTrue(indexigator.setBackwardCommand(() -> 0.2));
+        // controller.x().onTrue(indexigator.setVelocityBackwardCommand(() -> 180.0));
+        // controller.y().onTrue(indexigator.setVelocityForwardCommand(() -> 0.7));
 
         // controller.a().onTrue(ScoringCommands.passCommand(agitator, accelerator, flywheel));
     }
