@@ -72,9 +72,7 @@ public class Accelerator extends SubsystemBase
 
         motor.setPosition(0);
 
-        // motor.setupPIDController(0, 0.09, 0.0005, 0);
         motor.setupPIDController(0, 0.1, 0.0005, 0.00001);
-
 
         // motor.setupForwardHardLimitSwitch(false, true);
         // motor.setupReverseHardLimitSwitch(false, true);
@@ -91,7 +89,7 @@ public class Accelerator extends SubsystemBase
         // both value sets of values currently work (not tuned) on rev/sec - NOT TESTED with the conversion factor
         // motor.setupPIDController(0, 0.00002, 0.0, 0.0, 0.00103);
         // motor.setupPIDController(0, 0.00003, 0.0, 0, 0.15 , 0.001, 0.0); // kI used to be 0.0000002
-        
+
         motor.setupCoastMode();
     }
 
@@ -132,13 +130,13 @@ public class Accelerator extends SubsystemBase
     public Command onCommand()
     {
         // return run( () -> set(0.25) );
-        return run( () -> set(0.2) );
+        return run( () -> set(0.1) );
     }
 
     public Command reverseCommand()
     {
         // return run( () -> set(-0.25) );
-        return run( () -> set(-0.10) );
+        return run( () -> set(-0.1) );
     }
 
     public Command feedToShooterCommand(DoubleSupplier speed)

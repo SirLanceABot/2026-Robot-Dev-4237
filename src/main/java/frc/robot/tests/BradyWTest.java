@@ -72,8 +72,8 @@ public class BradyWTest implements Test
         controller.x().onTrue(accelerator.reverseCommand());
         controller.b().onTrue(accelerator.stopCommand());
         
-        controller.start().onTrue(accelerator.setPositionCommand(200.0));
-        controller.back().onTrue(accelerator.setPositionCommand(-200.0));
+        controller.start().onTrue(accelerator.setVelocityCommand(2.0));
+        controller.back().onTrue(accelerator.setVelocityCommand(-2.0));
     }
     
 
