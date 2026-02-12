@@ -60,7 +60,7 @@ public class PathPlannerLance
 
         configAutoChooser();
         // getAutonomousCommand();
-        configAutoBuilder();
+        // configAutoBuilder();
 
         FollowPathCommand.warmupCommand().schedule();
         PathfindingCommand.warmupCommand().schedule();

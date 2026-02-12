@@ -35,7 +35,7 @@ public class Accelerator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance motor = new SparkMaxLance(1, MOTOR_CAN_BUS, "Accelerator Motor"); // Neo550
+    private final SparkMaxLance motor = new SparkMaxLance(3, MOTOR_CAN_BUS, "Accelerator Motor"); // Neo550
     
     private final double ACCELERATOR_DIAMETER = 0.1875;
     // Neo 550:
@@ -130,7 +130,7 @@ public class Accelerator extends SubsystemBase
     public Command onCommand()
     {
         // return run( () -> set(0.25) );
-        return run( () -> set(0.1) );
+        return run( () -> set(1) );
     }
 
     public Command reverseCommand()
