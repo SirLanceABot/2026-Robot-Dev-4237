@@ -33,8 +33,11 @@ public final class StartUpCommands
 
     private static Drivetrain drivetrain;
     private static LEDs leds;
-    // private static Notifier notifier; // background timer
-    private static volatile boolean currentlyBlinking = false;
+    private static Notifier notifier; // background timer
+
+    private static boolean currentlyBlinking = false;
+    private static boolean monitorEnabled = false;
+
     // private static Command selectedCommand = null;
 
     // tolerance for wheel angle to be considered "forward" (degrees)
@@ -45,31 +48,61 @@ public final class StartUpCommands
     private StartUpCommands() 
     {}
 
-    /** This function starts the startup monitor that checks wheel alignment and updates LEDs.
-     * @param robotContainer
+    /** 
+     * This method enables the monitoring (starts notifier)
      */
-    public static void startMonitor(RobotContainer robotContainer)
+    public static void enableMonitor(RobotContainer robotContainer)
     {
         drivetrain = robotContainer.getDrivetrain();
         leds = robotContainer.getLEDs();
+        // if (drivetrain == null || leds == null)
+        // {
+        //     System.out.println("StartUpCommands: drivetrain or leds null, not starting monitor");
+        //     return;
+        // }
 
-        if (drivetrain == null || leds == null)
+        if (notifier == null)
         {
-            System.out.println("StartUpCommands: drivetrain or leds null, not starting monitor");
-            return;
+            notifier = new Notifier(StartUpCommands::checkAndUpdate);
+            notifier.startPeriodic(PERIOD_S);
+            System.out.println("StartUpCommands - notifier started");
         }
 
-        // run an immediate check and then a periodic notifier until aligned
-        checkAndUpdate();
+        monitorEnabled = true;
+        System.out.println("StartUpCommands - monitor enabled");
+    }
 
-        // notifier = new Notifier(StartUpCommands::checkAndUpdate);
-        // notifier.startPeriodic(PERIOD_S);
+    /**
+     * This method will disable the monitor
+     */
+    public static void disableMonitor()
+    {
+        monitorEnabled = false;
+
+        if (notifier != null)
+        {
+            notifier.stop();
+            notifier = null;
+            System.out.println("StartUpCommands - notifier stopped");
+        }
     }
 
     public static void checkAndUpdate()
-    {        
-        // Check battery voltage first. If battery is low, force LEDs to yellow and skip other
-        // startup logic so the low-battery state is clearly visible.
+    {    
+        if (!monitorEnabled)
+            return;
+
+        if (isLowVoltage())
+            return;
+
+        isSwerveAligned();
+    }
+
+    /** 
+     * Check bettery volatge and set LEDs to yellow if below theshold, and return true is battery handled 
+     */
+    private static boolean isLowVoltage()
+    {
         double voltage = RobotController.getBatteryVoltage();
         if (leds != null && voltage < Constants.Power.BATTERY_THRESHOLD_VOLTS)
         {
@@ -79,41 +112,27 @@ public final class StartUpCommands
             if (yellow != null)
                 yellow.ignoringDisable(true).schedule();
 
-            return; // don't override battery warning with other states
+            return true;
         }
+        
+        return false;
+    }
 
-        // Only should run checks while the robot is disabled so we continuously watch during disabled mode
-        if (!DriverStation.isDisabled())
+    /**
+     * Check swerve module angles and set leds to red is not aligned and green is aligned
+     */
+    private static boolean isSwerveAligned()
+    {
+        if (drivetrain == null)
         {
-            // if(leds != null)
-            // {
-            //     if(!robotContainer.useFullRobot())
-            //     {
-            //         leds.setColorSolidCommand(100, Color.kYellow);
-            //     }
-            //     else if(selectedCommand != null)
-            //     {
-            //         leds.setColorSolidCommand(100, Color.kGreen);
-            //     }
-            //     else
-            //     {
-            //         leds.setColorSolidCommand(100, Color.kYellow);
-            //     }
-            // }4
-
-            // if(leds != null)
-            // {
-            //     leds.setColorSolidCommand(100, Color.kRed);
-            // }
-
-            return;
+            return false;
         }
 
         // each swerve module contains wheel distance travelled and wheel angle (rotation2d)
         SwerveModulePosition[] modules = drivetrain.getModuleStates();
         if (modules == null || modules.length == 0)
         {
-            return;
+            return false;
         }
 
         boolean anyMisaligned = false;
@@ -144,35 +163,47 @@ public final class StartUpCommands
             }
         }
 
-        if (anyMisaligned)
+        if (anyMisaligned && !currentlyBlinking)
         {
             if (!currentlyBlinking)
             {
                 currentlyBlinking = true;
                 System.out.println("StartUpCommands: wheels misaligned = making LEDs blink");
-                Command blink = leds.setColorSolidCommand(100, Color.kRed); // red = swerve not lined up
-                
-                // if not already blinking
-                if (blink != null) 
-                    blink.ignoringDisable(true).schedule();
-            }
-        }
-        else // all wheels aligned
-        {
-            // if blinking
-            if (currentlyBlinking)
-            {
-                currentlyBlinking = false;
-                System.out.println("StartUpCommands: wheels aligned = making LEDs green");
-                Command solid = leds.setColorSolidCommand(100, Color.kGreen);
-                if (solid != null) 
-                    solid.ignoringDisable(true).schedule();
+                Command red = leds.setColorSolidCommand(100, Color.kRed); // red = swerve not lined up
 
-                // keep notifier running so we continue monitoring while disabled
-                // if (notifier != null) 
-                //     notifier.stop();
+                // if not already blinking
+                if (red != null) 
+                {
+                    red.ignoringDisable(true).schedule();
+                }
             }
         }
+        else if (!anyMisaligned && currentlyBlinking)
+        {
+            currentlyBlinking = false;
+            Command green = leds.setColorSolidCommand(100, Color.kGreen);
+            if (green != null)
+                green.ignoringDisable(true).schedule();
+        }
+
+        return !anyMisaligned;
+        // else // all wheels aligned
+        // {
+        //     // if blinking
+        //     if (currentlyBlinking)
+        //     {
+        //         currentlyBlinking = false;
+        //         System.out.println("StartUpCommands: wheels aligned = making LEDs green");
+
+        //         Command solid = leds.setColorSolidCommand(100, Color.kGreen);
+        //         if (solid != null) 
+        //             solid.ignoringDisable(true).schedule();
+
+        //         // keep notifier running so we continue monitoring while disabled
+        //         // if (notifier != null) 
+        //         //     notifier.stop();
+        //     }
+        // }
 
         // leds.offCommand();
     }

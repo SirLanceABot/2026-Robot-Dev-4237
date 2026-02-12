@@ -145,7 +145,7 @@ public class Intake extends SubsystemBase
      */
     public void pickUpFuel()
     {
-        setVelocity(20.0);
+        setVelocity(0.20);
         PivotMotor.setControlPosition(intakingPosition);
     }
 
@@ -154,14 +154,15 @@ public class Intake extends SubsystemBase
      */
     public void ejectFuel()
     {
-        setVelocity(-20.0);
+        // setVelocity(-0.20);
         PivotMotor.setControlPosition(intakingPosition);
+        setVelocity(-0.20);
     }
 
     public void retractIntake()
     {
         PivotMotor.setControlPosition(retractedPosition);
-        setVelocity(0.0);
+        setVelocity(0.20);
     }
 
     public BooleanSupplier isAtPosition(double desiredPosition)

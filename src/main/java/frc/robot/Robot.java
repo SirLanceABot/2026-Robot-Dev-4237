@@ -19,7 +19,6 @@ import frc.robot.commands.StartUpCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
 import frc.robot.pathplanner.PathPlannerLance;
-import edu.wpi.first.wpilibj.Notifier;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -42,7 +41,7 @@ public class Robot extends TimedRobot
     private Command autonomousCommand = null;
     private boolean isPreMatch = true;
     private TestMode testMode = null;
-    private Notifier startupNotifier;
+    
 
     private Command selectedCommand = null; 
     private Command path = Commands.none();
@@ -82,9 +81,12 @@ public class Robot extends TimedRobot
         // PathfindingCommand.warmupCommand().schedule();
 
         // start the startup monitor (checks swerve alignment and controls LEDs)
-        StartUpCommands.startMonitor(robotContainer);
-        startupNotifier = new Notifier(StartUpCommands::checkAndUpdate);
-        startupNotifier.startPeriodic(0.5);
+        StartUpCommands.enableMonitor(robotContainer);
+        // if(robotContainer.getDrivetrain() != null && robotContainer.getLEDs() != null)
+        // {
+        //     startupNotifier = new Notifier(StartUpCommands::checkAndUpdate);
+        //     startupNotifier.startPeriodic(0.5);
+        // }
     }
 
     /**
@@ -108,17 +110,14 @@ public class Robot extends TimedRobot
     @Override
     public void disabledInit() 
     {
-        if (startupNotifier != null)
-        {
-            startupNotifier.startPeriodic(0.5);
-        }
-
         // Put code to run here before the match starts, but not between auto and teleop
         if(isPreMatch)
         {
             autonomousCommand = PathPlannerLance.getAutonomousCommand();
             // path = PathPlannerLance.buildAutoPath(); // this made stuff not work.  may need to bring back in later if it works less good than not good
 
+            StartUpCommands.enableMonitor(robotContainer);
+            // StartUpNotifier.startPeriodic(0.5);
             autonomousCommand = PathPlannerLance.getAutonomousCommand();
             // autoName = autonomousCommand.getName();
 
@@ -173,10 +172,12 @@ public class Robot extends TimedRobot
     @Override
     public void disabledExit() 
     {
-        if (startupNotifier != null)
-        {
-            startupNotifier.stop();
-        }
+        // if prematch = end notifier
+        StartUpCommands.disableMonitor();
+        // if (startupNotifier != null)
+        // {
+        //     startupNotifier.stop();
+        // }
     }
 
     // public void initializePose()
