@@ -51,7 +51,8 @@ public class LaserCanSensor
         try
         {
             laserCAN.setRangingMode(LaserCan.RangingMode.SHORT);
-            laserCAN.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+            // about width of 3.5 inches in each direction at 30in at widest ROI Would have to mount at angle
+            laserCAN.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 2, 16, 4));
             laserCAN.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         } 
         catch (ConfigurationFailedException e)
