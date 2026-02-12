@@ -225,6 +225,12 @@ public class PoseEstimator extends SubsystemBase
     Pose2d redHubPose = new Pose2d(new Translation2d(11.92, 4.030), new Rotation2d(0));
     Pose2d blueHubPose = new Pose2d(new Translation2d(4.62, 4.030), new Rotation2d(0));
 
+    // Pose2d redLeftPassLocation = new Pose2d(new Translation2d(4237.0, 4237.0), new Rotation2d(4237.0,4237.0));
+    // Pose2d redRightPassLocation = new Pose2d(new Translation2d(4237.0, 4237.0), new Rotation2d(4237.0,4237.0));
+    // Pose2d blueLeftPassLocation = new Pose2d(new Translation2d(4237.0, 4237.0), new Rotation2d(4237.0,4237.0));
+    // Pose2d blueRightPassLocation = new Pose2d(new Translation2d(4237.0, 4237.0), new Rotation2d(4237.0,4237.0));
+
+
     public Pose2d getRedHubPose()
     {
         return redHubPose;
@@ -234,6 +240,23 @@ public class PoseEstimator extends SubsystemBase
     {
         return blueHubPose;
     }
+
+    // public Pose2d getRedPassLocation(boolean isRightSide)
+    // {
+    //     if(isRightSide)
+    //         return redRightPassLocation;
+    //     else
+    //         return redLeftPassLocation;
+    // }
+
+
+    // public Pose2d getBluePassLocation(boolean isRightSide)
+    // {
+    //     if(isRightSide)
+    //         return blueRightPassLocation;
+    //     else
+    //         return blueLeftPassLocation;
+    // }
 
     /**
      * gets the pose of the hub of your alliance (ideally)
@@ -404,6 +427,14 @@ public class PoseEstimator extends SubsystemBase
             return targetHeading;
         }
     }
+
+    // public DoubleSupplier getRotationToCalculatedPassLocation()
+    // {
+    //     Pose2d robotPose = drivetrain.getState().Pose;
+    //     ChassisSpeeds velocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.getRotation());
+
+    //     Pose2d calcualtedTarget = getCalcualtedTargetPose()
+    // }
 
 
     /**

@@ -66,6 +66,7 @@ public class Flywheel extends SubsystemBase
 
 
     InterpolatingDoubleTreeMap distToVeloMap = new InterpolatingDoubleTreeMap();
+    // InterpolatingDoubleTreeMap distToPassVeloMap = new InterpolatingDoubleTreeMap();
 
     // private final PIDController flywheelPID = new PIDController(0, 0, 0);
 
@@ -137,6 +138,14 @@ public class Flywheel extends SubsystemBase
         distToVeloMap.put(20.0, 4237.0);
     }
 
+    // private void configPassMap()
+    // {
+    //     distToPassVeloMap.put(20.0, 4237.0);
+    //     distToPassVeloMap.put(30.0, 4237.0);
+    // }
+
+
+
     /**
      * @param dist from alliance hub
      * @return corrected distance from hub
@@ -146,6 +155,12 @@ public class Flywheel extends SubsystemBase
         dist = Math.max(4.0, Math.min(20.0, dist));
         return distToVeloMap.get(dist);
     }
+
+    // public double getPassPower(double dist)
+    // {
+    //     dist = Math.max(10.0, Math.min(50.0, dist));
+    //     return distToPassVeloMap.get(dist);
+    // }
 
     /**
      * This sets the speed of the motors.

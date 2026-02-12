@@ -3,15 +3,22 @@ package frc.robot.pathplanner;
 import java.lang.invoke.MethodHandles;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -53,9 +60,11 @@ public class PathPlannerLance
 
         configAutoChooser();
         // getAutonomousCommand();
+        configAutoBuilder();
 
         FollowPathCommand.warmupCommand().schedule();
         PathfindingCommand.warmupCommand().schedule();
+
     }
 
     private static BooleanSupplier shouldFlipPath()
@@ -130,6 +139,40 @@ public class PathPlannerLance
         {
             System.out.println("Invalid Auto Selection");
             return Commands.none();
+        }
+    }
+
+     private static SwerveRequest.ApplyRobotSpeeds pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
+
+    public static void configAutoBuilder()
+    {
+        try
+        {
+            RobotConfig config = RobotConfig.fromGUISettings();
+
+            // Supplier<Pose2d> poseSupplier = () -> drivetrain.getState().Pose;
+            // Supplier<ChassisSpeeds> stateSupplier = () -> drivetrain.getState().Speeds;
+            
+            AutoBuilder.configure
+            (
+                () -> drivetrain.getState().Pose,
+                (pose) -> drivetrain.resetPose(pose),
+                () -> drivetrain.getState().Speeds,
+                (speeds, feedforwards) -> drivetrain.setControl(pathApplyRobotSpeeds.withSpeeds(speeds)
+                                            .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                                            .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
+                new PPHolonomicDriveController(
+                    new PIDConstants(9, 0, 0),
+                    new PIDConstants(8.5, 0, 0) // used to be 7
+                ),
+                config,
+                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                drivetrain
+            );
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
         }
     }
 }

@@ -64,7 +64,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
 
     //Driving the Robot
     private static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxDriveSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 5% deadband
+            .withDeadband(MaxDriveSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 5% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
     //TODO still needs tuning
@@ -181,7 +181,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
 
-        configAutoBuilder();
+        // configAutoBuilder();
     }
 
     /**
@@ -207,7 +207,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
 
-        configAutoBuilder();
+        // configAutoBuilder();
     }
 
     /**
@@ -241,7 +241,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             startSimThread();
         }
         
-        configAutoBuilder();
+        // configAutoBuilder();
     }
 
     private void configAutoBuilder()
