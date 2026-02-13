@@ -81,7 +81,9 @@ public class RangerDistanceSensor
 
     public double getDistanceMM()
     {
-        return distance_in * 25.4;
+        double voltage = swyftDistanceSensor.getVoltage();
+        double distance = (voltage * k15DegreeFOVVoltageToDistanceConversionFactor)-2.695384202;
+        return distance * 25.4;
     }
 
     public boolean isObjectDetected()
@@ -95,8 +97,8 @@ public class RangerDistanceSensor
     */
     
 
-    // *** OVERRIDEN METHODS ***
-    // Put all methods that are Overridden here
+    
+
     @Override
     public String toString()
     {

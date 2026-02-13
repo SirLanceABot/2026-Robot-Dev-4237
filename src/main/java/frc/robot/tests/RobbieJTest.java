@@ -2,10 +2,13 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import com.ctre.phoenix6.hardware.CANrange;
+
 import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ScoringCommands;
+import frc.robot.sensors.CANRange;
 import frc.robot.sensors.HopperCamera;
 import frc.robot.sensors.LaserCanSensor;
 import frc.robot.sensors.RangerDistanceSensor;
@@ -48,6 +51,7 @@ public class RobbieJTest implements Test
     private HopperCamera hopperCamera;
     private LaserCanSensor laserCan;
     private RangerDistanceSensor rangerDistanceSensor;
+    private CANRange canrange;
     private final CommandXboxController controller = new CommandXboxController(0);
 
     double distance;
@@ -74,6 +78,7 @@ public class RobbieJTest implements Test
         climb = robotContainer.getClimb();
         laserCan = robotContainer.getLaserCanSensor();
         rangerDistanceSensor = robotContainer.getRangerDistanceSensor();
+        canrange = robotContainer.getCANrange(); 
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -109,8 +114,8 @@ public class RobbieJTest implements Test
     public void periodic()
     {
         // System.err.println("isYellow:" + hopperCamera.isHoppperFullSupplier().getAsBoolean());
-        rangerDistanceSensor.getDistanceInches15DegreeFOV(distance);
-        System.out.println("Distance: "+ (distance));
+
+        System.out.println("Meters: " + canrange.getDistanceMeters());
         // System.out.println(climb.getForwardHardLimit());
     }
     
