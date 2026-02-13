@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
@@ -42,6 +38,8 @@ public final class StartUpCommands
 
     // tolerance for wheel angle to be considered "forward" (degrees)
     private static final double TOLERANCE_DEGREES = 5.0;
+    // tolerance for gyro
+    private static final double GYRO_TOLERANCE_DEGREES = 5.0;
     // check period in seconds
     private static final double PERIOD_S = 0.5;
 
@@ -60,6 +58,12 @@ public final class StartUpCommands
         //     System.out.println("StartUpCommands: drivetrain or leds null, not starting monitor");
         //     return;
         // }
+
+        if (drivetrain != null && drivetrain.getPigeon2() != null)
+        {
+            drivetrain.getPigeon2().setYaw(0.0);
+            System.out.println("StartUpCommands - Pigeon zeroed");
+        }
 
         if (notifier == null)
         {
@@ -95,6 +99,9 @@ public final class StartUpCommands
         if (isLowVoltage())
             return;
 
+        if (isGyroMoved())
+            return;
+
         isSwerveAligned();
     }
 
@@ -107,7 +114,7 @@ public final class StartUpCommands
         if (leds != null && voltage < Constants.Power.BATTERY_THRESHOLD_VOLTS)
         {
             System.out.println("StartUpCommands: battery low (" + voltage + " V) - setting LEDs yellow");
-            Command yellow = leds.setColorSolidCommand(100, Color.kYellow);
+            Command yellow = leds.setColorBlinkCommand(Color.kYellow);
             
             if (yellow != null)
                 yellow.ignoringDisable(true).schedule();
@@ -169,7 +176,7 @@ public final class StartUpCommands
             {
                 currentlyBlinking = true;
                 System.out.println("StartUpCommands: wheels misaligned = making LEDs blink");
-                Command red = leds.setColorSolidCommand(100, Color.kRed); // red = swerve not lined up
+                Command red = leds.setColorBlinkCommand(Color.kRed); // red = swerve not lined up
 
                 // if not already blinking
                 if (red != null) 
@@ -183,7 +190,9 @@ public final class StartUpCommands
             currentlyBlinking = false;
             Command green = leds.setColorSolidCommand(100, Color.kGreen);
             if (green != null)
+            {
                 green.ignoringDisable(true).schedule();
+            }
         }
 
         return !anyMisaligned;
@@ -206,5 +215,34 @@ public final class StartUpCommands
         // }
 
         // leds.offCommand();
+    }
+
+    /** 
+     * This method will check gyro rotation from zero and turns leds orange if past tolerance
+     */
+    private static boolean isGyroMoved()
+    {
+        if (drivetrain == null || drivetrain.getPigeon2() == null || leds == null)
+        {
+            return false;
+        }
+
+        double yawDegrees = drivetrain.getPigeon2().getYaw().getValueAsDouble();
+        double absYaw = Math.abs(yawDegrees);
+
+        if (absYaw > GYRO_TOLERANCE_DEGREES)
+        {
+            System.out.println("StartUpCommands: gyro moved (" + yawDegrees + " deg) - Setting LEDs orange");
+
+            Command orange = leds.setColorBlinkCommand(Color.kOrange);
+            if (orange != null)
+            {
+                orange.ignoringDisable(true).schedule();
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
