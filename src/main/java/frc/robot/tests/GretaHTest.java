@@ -75,14 +75,10 @@ public class GretaHTest implements Test
      */
     public void init()
     {
-        // controller.a().onTrue(indexigator.setVelocityForwardCommand(() -> 180.0));
+        // controller.a().onTrue(indexigator.setForwardCommand());
+        // controller.x().onTrue(indexigator.setBackwardCommand());
         // controller.b().onTrue(indexigator.stopCommand());
-        // // controller.a().onTrue(indexigator.setForwardCommand(() -> 0.2));
-        // // controller.x().onTrue(indexigator.setBackwardCommand(() -> 0.2));
-        // controller.x().onTrue(indexigator.setVelocityBackwardCommand(() -> 180.0));
-        // controller.y().onTrue(indexigator.setVelocityForwardCommand(() -> 0.7));
 
-        // controller.a().onTrue(ScoringCommands.passCommand(agitator, accelerator, flywheel));
     }
 
     /**
@@ -91,6 +87,7 @@ public class GretaHTest implements Test
     public void periodic()
     {
         // System.out.println(indexer.getVelocity());
+        
     }
     
     /**
