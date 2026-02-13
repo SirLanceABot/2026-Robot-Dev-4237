@@ -37,7 +37,7 @@ public class NiyatiPTest implements Test
     private Intake intake = null;
     private LEDs leds = null;
     private final CommandXboxController controller = new CommandXboxController(0);
-    // private final Joystick joystick = new Joystick(0);
+    private final Joystick joystick = new Joystick(0);
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -86,14 +86,14 @@ public class NiyatiPTest implements Test
     public void init()
     {
         // INTAKE STUFF
-        // X to pickup
-        controller.x().onTrue(intake.pickupFuelCommand()).debounce(0.1);
+        // // X to pickup
+        // controller.x().onTrue(intake.pickupFuelCommand()).debounce(0.1);
 
-        // A to eject
-        controller.a().onTrue(intake.ejectFuelCommand()).debounce(0.1);
+        // // A to eject
+        // controller.a().onTrue(intake.ejectFuelCommand()).debounce(0.1);
 
-        // B to stop
-        controller.b().onTrue(intake.stopCommand()).debounce(0.1);
+        // // B to stop
+        // controller.b().onTrue(intake.stopCommand()).debounce(0.1);
     }
 
     /**
@@ -108,16 +108,20 @@ public class NiyatiPTest implements Test
         // {
         //     leds.setColorBlinkCommand(Color.kRed).schedule();
         // }
+        // if(controller.a().getAsBoolean())
+        // {
+        //     leds.setColorSolidCommand(70, Color.kBlue).schedule();
+        // }
 
-        // if(joystick.getRawButton(1))
-        // {
-        //     leds.setColorSolidCommand(60, Color.kBlue).schedule();
-        // }
-        // else if (joystick.getRawButton(2))
-        // {
-        //     // leds.setColorRainbowCommand();
-        //     leds.setColorSolidCommand(60, Color.kRed).schedule();
-        // }
+        if(joystick.getRawButton(1))
+        {
+            leds.setColorBlinkCommand(Color.kBlue).schedule();
+        }
+        else if (joystick.getRawButton(2))
+        {
+            // leds.setColorRainbowCommand();
+            leds.setColorSolidCommand(60, Color.kRed).schedule();
+        }
     }
     
     /**

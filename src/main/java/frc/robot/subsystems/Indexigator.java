@@ -5,9 +5,12 @@ import static frc.robot.Constants.Indexigator.*;
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+// import frc.robot.motors.SparkMaxLance;
 import frc.robot.motors.TalonFXLance;
 
 /**
@@ -124,7 +127,7 @@ public class Indexigator extends SubsystemBase
 
     public Command setForwardCommand()
     {
-        return run( () -> set(MathUtil.clamp(50.0, 0.0, 50.0)) );
+        return run( () -> set(0.2));
     }
 
     public Command setBackwardCommand(DoubleSupplier speed)
@@ -132,21 +135,26 @@ public class Indexigator extends SubsystemBase
         return run( () -> set(MathUtil.clamp(-speed.getAsDouble(), -0.5, 0.0)));
     }
 
-    public Command setVelocityForwardCommand(DoubleSupplier speed)
+    public Command setBackwardCommand()
     {
-        return run( () -> setVelocity(speed.getAsDouble()));
+        return run( () -> set(-0.2));
     }
 
-    public Command setVelocityBackwardCommand(DoubleSupplier speed)
-    {
-        return run( () -> setVelocity(-speed.getAsDouble()));
-    }
+    // public Command setVelocityForwardCommand(DoubleSupplier speed)
+    // {
+    //     return run( () -> setVelocity(speed.getAsDouble()));
+    // }
+
+    // public Command setVelocityBackwardCommand(DoubleSupplier speed)
+    // {
+    //     return run( () -> setVelocity(-speed.getAsDouble()));
+    // }
 
     // Use a method reference instead of this method
     public Command stopCommand()
     {
-        // return run( () -> stop() );
-        return run(this::stop);
+        return run( () -> stop() );
+        // return run(this::stop);
     }
 
 

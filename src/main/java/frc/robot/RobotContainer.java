@@ -6,8 +6,11 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import com.ctre.phoenix6.hardware.CANrange;
+
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
+import frc.robot.sensors.CANRange;
 import frc.robot.sensors.Camera;
 import frc.robot.subsystems.Accelerator;
 // import frc.robot.subsystems.Agitator;
@@ -21,6 +24,7 @@ import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.LEDs;
 import frc.robot.sensors.HopperCamera;
 import frc.robot.sensors.LaserCanSensor;
+import frc.robot.sensors.RangerDistanceSensor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -57,6 +61,8 @@ public class RobotContainer
     private boolean useOperatorController       = false;
 
     private boolean useLaserCAN                 = false;
+    private boolean useCANrange                 = false;
+    private boolean useRangerDistanceSensor     = false;
 
     private boolean useHopperCamera             = false;
     private boolean useShooterCamera            = false;
@@ -75,6 +81,8 @@ public class RobotContainer
     private HopperCamera hopperCamera = null;
     private LEDs leds = null;
     private LaserCanSensor laserCanSensor = null;
+    private RangerDistanceSensor rangerDistanceSensor = null;
+    private CANRange canrange = null;
 
     private CommandXboxController driverController = null;
     private CommandXboxController operatorController = null;
@@ -121,6 +129,12 @@ public class RobotContainer
 
         if(useFullRobot || useLaserCAN)
             laserCanSensor = new LaserCanSensor();
+
+        if(useFullRobot || useCANrange)
+            canrange = new CANRange(0,3);
+
+        if(useFullRobot || useRangerDistanceSensor)
+            rangerDistanceSensor = new RangerDistanceSensor();
 
         if(useFullRobot || useHopperCamera)
             hopperCamera = new HopperCamera(); 
@@ -215,6 +229,16 @@ public class RobotContainer
     public LaserCanSensor getLaserCanSensor()
     {
         return laserCanSensor;
+    }
+
+    public CANRange getCANrange()
+    {
+        return canrange;
+    }
+
+    public RangerDistanceSensor getRangerDistanceSensor()
+    {
+        return rangerDistanceSensor;
     }
 
     public boolean useFullRobot()
