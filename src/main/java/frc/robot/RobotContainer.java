@@ -6,8 +6,11 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import com.ctre.phoenix6.hardware.CANrange;
+
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
+import frc.robot.sensors.CANRange;
 import frc.robot.sensors.Camera;
 import frc.robot.subsystems.Accelerator;
 // import frc.robot.subsystems.Agitator;
@@ -58,6 +61,7 @@ public class RobotContainer
     private boolean useOperatorController       = false;
 
     private boolean useLaserCAN                 = false;
+    private boolean useCANrange                 = false;
     private boolean useRangerDistanceSensor     = false;
 
     private boolean useHopperCamera             = false;
@@ -78,6 +82,7 @@ public class RobotContainer
     private LEDs leds = null;
     private LaserCanSensor laserCanSensor = null;
     private RangerDistanceSensor rangerDistanceSensor = null;
+    private CANRange canrange = null;
 
     private CommandXboxController driverController = null;
     private CommandXboxController operatorController = null;
@@ -124,6 +129,9 @@ public class RobotContainer
 
         if(useFullRobot || useLaserCAN)
             laserCanSensor = new LaserCanSensor();
+
+        if(useFullRobot || useCANrange)
+            canrange = new CANRange(0,3);
 
         if(useFullRobot || useRangerDistanceSensor)
             rangerDistanceSensor = new RangerDistanceSensor();
@@ -221,6 +229,11 @@ public class RobotContainer
     public LaserCanSensor getLaserCanSensor()
     {
         return laserCanSensor;
+    }
+
+    public CANRange getCANrange()
+    {
+        return canrange;
     }
 
     public RangerDistanceSensor getRangerDistanceSensor()

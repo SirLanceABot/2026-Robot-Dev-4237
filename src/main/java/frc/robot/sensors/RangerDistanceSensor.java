@@ -93,22 +93,6 @@ public class RangerDistanceSensor
      * Returns the value of the Ranger Distance Sensore
     * @return The value of periodData.sensorValue
     */
-    public void periodic()
-    {
-        getDistanceInches15DegreeFOV(distance_in);
-        // getDistanceInches20DegreeFOV(distance_in);
-        // getDistanceInches27DegreeFOV(distance_in);
-
-        System.out.println("The target is " + getDistanceMM() + "mm away");
-        // if(isObjectDetected() != false)
-        // {
-        //     System.out.println("Detected");
-        // }        
-        // else
-        // {
-        //     System.out.println("Target out of range");
-        // }
-    }
     
 
     // *** OVERRIDEN METHODS ***

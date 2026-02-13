@@ -8,6 +8,7 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.ScoringCommands;
 import frc.robot.sensors.HopperCamera;
 import frc.robot.sensors.LaserCanSensor;
+import frc.robot.sensors.RangerDistanceSensor;
 import frc.robot.subsystems.Accelerator;
 // import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
@@ -46,10 +47,10 @@ public class RobbieJTest implements Test
     private Flywheel flywheel; 
     private HopperCamera hopperCamera;
     private LaserCanSensor laserCan;
-    
+    private RangerDistanceSensor rangerDistanceSensor;
     private final CommandXboxController controller = new CommandXboxController(0);
 
-
+    double distance;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -72,6 +73,7 @@ public class RobbieJTest implements Test
         hopperCamera = robotContainer.getHopperCamera();
         climb = robotContainer.getClimb();
         laserCan = robotContainer.getLaserCanSensor();
+        rangerDistanceSensor = robotContainer.getRangerDistanceSensor();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -107,7 +109,8 @@ public class RobbieJTest implements Test
     public void periodic()
     {
         // System.err.println("isYellow:" + hopperCamera.isHoppperFullSupplier().getAsBoolean());
-        System.out.println("Distance: "+ laserCan.getDistance());
+        rangerDistanceSensor.getDistanceInches15DegreeFOV(distance);
+        System.out.println("Distance: "+ (distance));
         // System.out.println(climb.getForwardHardLimit());
     }
     
