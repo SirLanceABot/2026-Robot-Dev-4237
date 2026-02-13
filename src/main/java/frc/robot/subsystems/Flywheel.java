@@ -48,7 +48,7 @@ public class Flywheel extends SubsystemBase
     private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
 
     // PID constants
-    private final double kP = 0.975;
+    private final double kP = 1.00;
     private final double kI = 0.0;
     private final double kD = 0.00;
     private final double kS = 0.015;

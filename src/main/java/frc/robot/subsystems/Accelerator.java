@@ -37,7 +37,7 @@ public class Accelerator extends SubsystemBase
     // Put all class variables and instance variables here
     private final SparkMaxLance motor = new SparkMaxLance(3, MOTOR_CAN_BUS, "Accelerator Motor"); // Neo550
     
-    private final double ACCELERATOR_DIAMETER = 0.1875;
+    private final double ACCELERATOR_DIAMETER = 0.1875; // ft
     // Neo 550:
     private final double GEAR_RATIO = 12.0 / 1.0;
     private final double VELOCITY_CONVERSION_FACTOR = ((Math.PI * ACCELERATOR_DIAMETER) / GEAR_RATIO) / 60; // rev/m to ft/s using gear ratio
@@ -130,7 +130,7 @@ public class Accelerator extends SubsystemBase
     public Command onCommand()
     {
         // return run( () -> set(0.25) );
-        return run( () -> set(1) );
+        return run( () -> set(1.0) );
     }
 
     public Command reverseCommand()
