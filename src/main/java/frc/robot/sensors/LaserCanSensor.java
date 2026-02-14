@@ -33,7 +33,7 @@ public class LaserCanSensor
     // Put all class constructors here
 
     /** 
-     * Creates a new ExampleSubsystem. 
+     * Creates a new LaserCanSensor
      */
     public LaserCanSensor()
     {   

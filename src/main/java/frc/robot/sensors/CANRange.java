@@ -4,15 +4,12 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.AnalogInput;
-import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.configs.FovParamsConfigs;
 import com.ctre.phoenix6.hardware.core.CoreCANrange;
 import com.ctre.phoenix6.signals.UpdateModeValue;
 
-import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.units.measure.Distance;
 
 public class CANRange 
 {
@@ -76,7 +73,7 @@ public class CANRange
         FovParamsConfigs fov = new FovParamsConfigs();
         fov.FOVCenterX = 0; // Center of FOV in X direction in degrees (value must be within -11 and 11)
         fov.FOVCenterY = 0; // Center of FOV in Y direction in degrees (value must be within -11 and 11)
-        fov.FOVRangeX = 7; // Range of FOV in X direction in degrees (value must be within 7 and 27)
+        fov.FOVRangeX = 27; // Range of FOV in X direction in degrees (value must be within 7 and 27)
         fov.FOVRangeY = 7; // Range of FOV in Y direction in degrees (value must be within 7 and 27)
         config = config.withFovParams(fov);
 
@@ -93,6 +90,7 @@ public class CANRange
     */
     public double getDistanceMeters()
     {
+        distance = canRange.getDistance().getValue();
         return distance.magnitude();
     }
 
@@ -106,6 +104,7 @@ public class CANRange
      */
     public boolean isCANRangeDetecting()
     {
+        isDetected = canRange.getIsDetected().getValue();
         return isDetected;
     }
 
@@ -120,6 +119,7 @@ public class CANRange
      */
     public double getSignalStrength()
     {
+        signalStrength = canRange.getSignalStrength().getValue();
         return signalStrength;
     }
 

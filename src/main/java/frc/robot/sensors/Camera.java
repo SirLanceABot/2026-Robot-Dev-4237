@@ -168,8 +168,11 @@ public class Camera extends SubsystemBase
         //     poseEntry.set(poseArray);
         // }
 
+        if(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cameraName) != null)
+        {
+            cameraPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cameraName).pose;
+        }
         
-        cameraPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cameraName).pose;
         if(cameraPose != null)
         {
             cameraEntry.set(cameraPose);
