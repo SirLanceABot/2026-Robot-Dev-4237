@@ -66,6 +66,8 @@ public final class Constants
         public static final int LEADMOTOR          = 4237;
         public static final int FOLLOWMOTOR        = 4237;
 
+        public static final int SERVOMOTOR         = 1;
+
         public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;    
     }
 

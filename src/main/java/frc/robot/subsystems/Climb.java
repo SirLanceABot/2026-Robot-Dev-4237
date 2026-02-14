@@ -7,6 +7,7 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.motors.LinearServo;
 import frc.robot.motors.TalonFXLance;
 
 
@@ -42,6 +43,8 @@ public class Climb extends SubsystemBase
     private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Lead Climb Motor ");
     // private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Follower Climb Motor");
     
+    private final LinearServo servo = new LinearServo(SERVOMOTOR, 50, 32);
+
     private final double tolerance = 0.2;
 
     private static final double kPUP = 9.9;
@@ -137,6 +140,11 @@ public class Climb extends SubsystemBase
         leadMotor.setPosition(0.0);
     }
 
+    public void setServoPosition(double position)
+    {
+        servo.setPosition(position);
+    }
+
     /**
      * 
      * Returns a command to stop climb
@@ -178,6 +186,11 @@ public class Climb extends SubsystemBase
         return run ( () -> resetPosition());
     }
 
+    public Command setServoPositionCommand(double position)
+    {
+        return run( ()-> setServoPosition(position));
+    }
+
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
 
@@ -187,6 +200,8 @@ public class Climb extends SubsystemBase
         // This method will be called once per scheduler run
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
+
+        servo.updateCurPos();
     }
 
     @Override

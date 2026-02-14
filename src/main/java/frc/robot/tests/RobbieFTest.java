@@ -13,6 +13,7 @@ import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.LEDs.ColorPattern;
 import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
+import frc.robot.motors.LinearServo;
 
 @SuppressWarnings("unused")
 public class RobbieFTest implements Test
@@ -90,20 +91,34 @@ public class RobbieFTest implements Test
      */
     public void periodic()
     {
+        // controller.a().onTrue(
+        //     flywheel.setControlVelocityCommand(() -> 45.0)
+        // );
+        // controller.x().onTrue(
+        //     flywheel.setControlVelocityCommand(() -> 48.0)
+        // );
+        // controller.y().onTrue(
+        //     flywheel.setControlVelocityCommand(() -> 70.0)
+        // );
+        // controller.b().onTrue(
+        //     accelerator.onCommand()
+        // );
+        // controller.start().onTrue(
+        //     flywheel.stopCommand()
+        // );
+
+        // controller.a().onTrue(
+        //     servo.setPosition(5.0) 
+        // );
+        // controller.b().onTrue(
+        //     servo.setPosition(0.0)
+        // );
+
         controller.a().onTrue(
-            flywheel.setControlVelocityCommand(() -> 45.0)
-        );
-        controller.x().onTrue(
-            flywheel.setControlVelocityCommand(() -> 48.0)
-        );
-        controller.y().onTrue(
-            flywheel.setControlVelocityCommand(() -> 70.0)
+            climb.setServoPositionCommand(10.0)
         );
         controller.b().onTrue(
-            accelerator.onCommand()
-        );
-        controller.start().onTrue(
-            flywheel.stopCommand()
+            climb.setServoPositionCommand(30.0)
         );
 
         
@@ -118,7 +133,7 @@ public class RobbieFTest implements Test
         //     accelerator.stopCommand()
         // );
 
-        System.out.println("flywheel Velocity = " + flywheel.getVelocity() + "cycle=" + flywheel.getDutyCycle());
+        // System.out.println("flywheel Velocity = " + flywheel.getVelocity() + "cycle=" + flywheel.getDutyCycle());
     }
     
     /**
