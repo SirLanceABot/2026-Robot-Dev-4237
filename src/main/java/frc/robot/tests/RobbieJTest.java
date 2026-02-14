@@ -106,6 +106,8 @@ public class RobbieJTest implements Test
         // controller.x().onTrue(climb.extendToL1Command());
         // controller.a().onTrue(climb.retractFromL1Command());
         // controller.b().onTrue(climb.stopCommand());
+        // System.out.println(canrange.toString());
+
     }
 
     /**
@@ -115,7 +117,7 @@ public class RobbieJTest implements Test
     {
         // System.err.println("isYellow:" + hopperCamera.isHoppperFullSupplier().getAsBoolean());
 
-        System.out.println("Meters: " + canrange.getDistanceMeters());
+        System.out.println(canrange.getDistanceMeters());
         // System.out.println(climb.getForwardHardLimit());
     }
     

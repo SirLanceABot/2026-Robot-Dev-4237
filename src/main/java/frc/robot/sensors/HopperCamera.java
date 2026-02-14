@@ -1,23 +1,17 @@
 package frc.robot.sensors;
 
-import java.io.OutputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 
 import org.opencv.core.Core;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
 
 
 public class HopperCamera
@@ -81,7 +75,7 @@ public class HopperCamera
                 Mat mat = new Mat();
                 Scalar avg;
                 //Needs to be tuned 
-                double threshold =1;
+                double threshold = 1;
 
                 // This cannot be 'true'. The program will never exit if it is. This
                 // lets the robot stop this thread when restarting robot code or
