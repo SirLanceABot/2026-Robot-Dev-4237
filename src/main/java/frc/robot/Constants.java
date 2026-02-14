@@ -97,7 +97,8 @@ public final class Constants
 
     public static class Intake
     {
-        public static final int ROLLER_MOTOR               = 4;
+        public static final int ROLLER_MOTOR_LEADER               = 4;
+        public static final int ROLLER_MOTOR_FOLLOWER      = 1;
         public static final int PIVOT_MOTOR_LEADER          = 3;
         public static final int PIVOT_MOTOR_FOLLOWER        = 12;
 

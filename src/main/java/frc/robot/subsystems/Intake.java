@@ -34,11 +34,14 @@ public class Intake extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance RollersMotor = new TalonFXLance(ROLLER_MOTOR, MOTOR_CAN_BUS, "Roller Motor");
+    private final TalonFXLance RollersMotor = new TalonFXLance(ROLLER_MOTOR_LEADER, MOTOR_CAN_BUS, "Roller Motor");
+    private final TalonFXLance RollersFollower = new TalonFXLance(ROLLER_MOTOR_FOLLOWER, MOTOR_CAN_BUS, "Follow Roller Motor");
     private final TalonFXLance PivotMotor = new TalonFXLance(PIVOT_MOTOR_LEADER, MOTOR_CAN_BUS, "Lead Pivot Motor");
     private final TalonFXLance PivotFollower = new TalonFXLance(PIVOT_MOTOR_FOLLOWER, MOTOR_CAN_BUS, "Follow Pivot Motor");
 
-    private final double PivotkP = 0.7;
+    
+
+    private final double PivotkP = 0.3;
     private final double PivotkI = 0.0;
     private final double PivotkD = 0.0;
     private final double PivotkS = 0.19;
@@ -55,7 +58,7 @@ public class Intake extends SubsystemBase
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INTAKE_ROLLER_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
 
     private final double retractedPosition = 0.0;
-    private final double intakingPosition = 10.0; // TEST FOR TRUE VALUE ON ROBOT
+    private final double intakingPosition = -11.0; // TEST FOR TRUE VALUE ON ROBOT
     // private final double theshold = 4.0;
 
     // *** CLASS CONSTRUCTORS ***
@@ -81,6 +84,7 @@ public class Intake extends SubsystemBase
     {
         // Factory Default all motors
         RollersMotor.setupFactoryDefaults();
+        RollersFollower.setupFactoryDefaults();
         PivotMotor.setupFactoryDefaults();
         PivotFollower.setupFactoryDefaults();
 
@@ -90,25 +94,30 @@ public class Intake extends SubsystemBase
 
         // Sets up Coast Mode
         RollersMotor.setupCoastMode();
+        RollersFollower.setupCoastMode();
         PivotMotor.setupCoastMode();
         PivotFollower.setupCoastMode();
 
         // Sets up position
+        RollersMotor.setPosition(0.0);
         RollersMotor.setPosition(0.0);
         PivotMotor.setPosition(0.0);
         PivotFollower.setPosition(0.0);
 
         // Set up Safety
         RollersMotor.setSafetyEnabled(false);
+        RollersMotor.setSafetyEnabled(false);
         PivotMotor.setSafetyEnabled(false);
         PivotFollower.setSafetyEnabled(false);
 
         // Set up PID Controllers
-        RollersMotor.setupPIDController(0, RollerkP, RollerkI, RollerkD, RollerkS, RollerkV, 0);
+        // RollersMotor.setupPIDController(0, RollerkP, RollerkI, RollerkD, RollerkS, RollerkV, 0);
         PivotMotor.setupPIDController(0, PivotkP, PivotkI, PivotkD, PivotkS, PivotkV, 0);
         // PivotFollower.setupPIDController(0, kP, kI, kD, kS, kV, 0);
 
         // Configure the follower last so configurables above are not overwritten
+
+        RollersFollower.setupFollower(ROLLER_MOTOR_LEADER, true);
         PivotFollower.setupFollower(PIVOT_MOTOR_LEADER, true);
 
         // Configure Velocity Conversion Factor (rev/s to ft/s)
@@ -145,8 +154,9 @@ public class Intake extends SubsystemBase
      */
     public void pickUpFuel()
     {
-        setVelocity(0.20);
-        PivotMotor.setControlPosition(intakingPosition);
+        RollersMotor.set(1.0);
+        // setVelocity(20.0);
+        // PivotMotor.setControlPosition(intakingPosition);
     }
 
     /** 
@@ -154,15 +164,15 @@ public class Intake extends SubsystemBase
      */
     public void ejectFuel()
     {
-        // setVelocity(-0.20);
+        setVelocity(-10.0);
         PivotMotor.setControlPosition(intakingPosition);
-        setVelocity(-0.20);
+        // setVelocity(-0.20);
     }
 
     public void retractIntake()
     {
         PivotMotor.setControlPosition(retractedPosition);
-        setVelocity(0.20);
+        setVelocity(10.0);
     }
 
     public BooleanSupplier isAtPosition(double desiredPosition)
@@ -218,6 +228,9 @@ public class Intake extends SubsystemBase
     @Override
     public void periodic()
     {
+        // if (RollersMotor.getCurrentAmps() > 20.0)
+            System.out.println("RollerMotor amps: " + RollersMotor.getCurrentAmps() + " FollowerRoller Amps: " + RollersFollower.getCurrentAmps());
+
         // This method will be called once per scheduler run
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
