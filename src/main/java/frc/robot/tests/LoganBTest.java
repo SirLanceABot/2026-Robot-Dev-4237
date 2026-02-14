@@ -34,7 +34,7 @@ public class LoganBTest implements Test
     private final RobotContainer robotContainer;
     private final CommandXboxController controller = new CommandXboxController(0);
     private final Flywheel flywheel;
-    private final Accelerator acceleartor;
+    private final Accelerator accelerator;
     // private final Agitator agitator;
     private final Indexigator indexigator;
 
@@ -53,7 +53,7 @@ public class LoganBTest implements Test
 
         this.robotContainer = robotContainer;
         this.flywheel = robotContainer.getFlywheel();
-        this.acceleartor = robotContainer.getAccelerator();
+        this.accelerator = robotContainer.getAccelerator();
         // this.agitator = robotContainer.getAgitator();
         this.indexigator = robotContainer.getIndexigator();
 
@@ -84,6 +84,22 @@ public class LoganBTest implements Test
         // controller.a().onTrue(
         //     ScoringCommands.shootFromStandstillCommand(agitator, acceleartor, flywheel)
         // );
+
+        controller.a().onTrue(
+            flywheel.setControlVelocityCommand(() -> 41.0)
+        );
+        controller.x().onTrue(
+            flywheel.setControlVelocityCommand(() -> 39.0)
+        );
+        controller.y().onTrue(
+            flywheel.setControlVelocityCommand(() -> 70.0)
+        );
+        controller.b().onTrue(
+            accelerator.onCommand()
+        );
+        controller.start().onTrue(
+            flywheel.stopCommand()
+        );
     }
     
     /**
