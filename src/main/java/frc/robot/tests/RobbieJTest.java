@@ -1,10 +1,14 @@
 package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
+import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.hardware.CANrange;
 
 import au.grapplerobotics.LaserCan;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ScoringCommands;
@@ -52,7 +56,9 @@ public class RobbieJTest implements Test
     private LaserCanSensor laserCan;
     private RangerDistanceSensor rangerDistanceSensor;
     private CANRange canrange;
+    private CANRange canrange1 = new CANRange(1, 3);
     private final CommandXboxController controller = new CommandXboxController(0);
+    private Debouncer debouncer = new Debouncer(0.5);
 
     double distance;
 
@@ -87,6 +93,30 @@ public class RobbieJTest implements Test
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
 
+    private BooleanSupplier isHopperFullSupplier()
+    {
+        return () -> (canrange.isBallDetected() && canrange1.isBallDetected());
+    }
+
+    //     private BooleanSupplier isHopperFullSupplier()
+    // {
+    //     if((canrange.isBallDetected(24.0)) && (canrange1.isBallDetected(24.0)))
+    //             {
+    //                 if (timer.get() == 0)
+    //                 {
+    //                     timer.start();
+    //                 }
+    //                 else if(timer.get() >= 0.5)
+    //                 {
+    //                     return ()-> true;
+    //                 }
+    //             }
+    //             else
+    //             {
+    //                 timer.reset();
+    //                 return () -> false;
+    //             }
+    // }
         
 
     // *** OVERRIDDEN METHODS ***
@@ -116,8 +146,12 @@ public class RobbieJTest implements Test
     public void periodic()
     {
         // System.err.println("isYellow:" + hopperCamera.isHoppperFullSupplier().getAsBoolean());
+        // SmartDashboard.putNumber("Short End sensor", canrange.getDistanceMeters());
+        // SmartDashboard.putNumber("Long End sensor", canrange1.getDistanceMeters());
 
-        System.out.println(canrange.getDistanceMeters());
+        // System.out.println(isHopperFullSupplier());
+        System.out.println(debouncer.calculate(isHopperFullSupplier().getAsBoolean()));
+        // System.out.println(canrange.getDistanceMeters());
         // System.out.println(climb.getForwardHardLimit());
     }
     

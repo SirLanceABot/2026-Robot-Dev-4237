@@ -72,7 +72,7 @@ public class CANRange
         
         FovParamsConfigs fov = new FovParamsConfigs();
         fov.FOVCenterX = 0; // Center of FOV in X direction in degrees (value must be within -11 and 11)
-        fov.FOVCenterY = 0; // Center of FOV in Y direction in degrees (value must be within -11 and 11)
+        fov.FOVCenterY = 3.5; // Center of FOV in Y direction in degrees (value must be within -11 and 11)
         fov.FOVRangeX = 27; // Range of FOV in X direction in degrees (value must be within 7 and 27)
         fov.FOVRangeY = 7; // Range of FOV in Y direction in degrees (value must be within 7 and 27)
         config = config.withFovParams(fov);
@@ -90,8 +90,7 @@ public class CANRange
     */
     public double getDistanceMeters()
     {
-        distance = canRange.getDistance().getValue();
-        return distance.magnitude();
+        return canRange.getDistance().getValue().magnitude();
     }
 
     public DoubleSupplier getDistanceSupplier()
@@ -99,13 +98,22 @@ public class CANRange
         return () -> getDistanceMeters();
     }
 
+    public boolean isBallDetected()
+    {
+        return getDistanceMeters() * 39.3701 < 24.0; // Meters to inches
+    }
+    
+    public BooleanSupplier isBallDetectedSupplier()
+    {
+        return () -> isBallDetected();
+    }
+
     /*
      * Is the CANRange giving you a valid measurement
      */
     public boolean isCANRangeDetecting()
     {
-        isDetected = canRange.getIsDetected().getValue();
-        return isDetected;
+        return canRange.getIsDetected().getValue();
     }
 
     public BooleanSupplier getIsDetected()
@@ -119,8 +127,7 @@ public class CANRange
      */
     public double getSignalStrength()
     {
-        signalStrength = canRange.getSignalStrength().getValue();
-        return signalStrength;
+        return canRange.getSignalStrength().getValue();
     }
 
     public DoubleSupplier getSignalStrenght()

@@ -2,7 +2,9 @@ package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix6.hardware.CANrange;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.IdealStartingState;
@@ -10,6 +12,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -17,6 +20,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
+import frc.robot.sensors.CANRange;
 import frc.robot.subsystems.Accelerator;
 // import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
@@ -52,7 +56,9 @@ public class GeneralCommands
     private static PoseEstimator poseEstimator;
     private static Climb climb;
     private static LEDs leds;
-
+    private static CANRange canrange1;
+    private static CANRange canrange2;
+    private static Debouncer debouncer;
 
     public static void createCommands(RobotContainer robotContainer)
     {        
@@ -67,6 +73,9 @@ public class GeneralCommands
         climb = robotContainer.getClimb();
         poseEstimator = robotContainer.getPoseEstimator();
         leds = robotContainer.getLEDs();
+        canrange1 = robotContainer.getCANrange();
+        canrange2 = new CANRange(1, 3);
+        debouncer = new Debouncer(0.5);
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -126,6 +135,33 @@ public class GeneralCommands
                 intake.pickupFuelCommand(),
                 indexigator.setForwardCommand()
             .withName("Intaking Fuel"));
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    private BooleanSupplier isHopperFullSupplier()
+    {
+        return () -> (canrange1.isBallDetected() && canrange2.isBallDetected());
+    }
+    /**
+     * @author Brady W
+     * @author Robbie J
+     * @return Intake until the hopper is full
+     */
+    public static Command intakeUntilFullCommand()
+    {
+        if(intake != null && canrange1 != null && canrange2 != null && indexigator != null)
+        {
+            return
+            Commands.parallel(intake.pickupFuelCommand(),
+            indexigator.setForwardCommand()
+            .until( () -> (canrange1.isBallDetected() && canrange2.isBallDetected()))
+            .andThen(intake.stopCommand(),
+            indexigator.stopCommand())
+            .withName("Intake Until Full"));
         }
         else
         {
