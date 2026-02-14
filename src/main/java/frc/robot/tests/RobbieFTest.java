@@ -114,15 +114,15 @@ public class RobbieFTest implements Test
         //     servo.setPosition(0.0)
         // );
 
-        controller.a().onTrue(
-            climb.fullyExtendServoCommand()
-        );
-        controller.b().onTrue(
-            climb.fullyRestractServoCommand()
-        );
-        controller.y().onTrue(
-            climb.setServoPositionCommand(50.0)
-        );
+        // controller.a().onTrue(
+        //     climb.fullyExtendServoCommand()
+        // );
+        // controller.b().onTrue(
+        //     climb.fullyRestractServoCommand()
+        // );
+        // controller.y().onTrue(
+        //     climb.setServoPositionCommand(50.0)
+        // );
 
         
 

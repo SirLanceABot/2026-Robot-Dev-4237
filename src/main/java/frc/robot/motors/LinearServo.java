@@ -10,6 +10,8 @@ public class LinearServo extends Servo
     double m_length;
     double setPos;
     double curPos;
+    double maxExtension;
+    double minExtension;
     /**
     * Parameters for L16-R Actuonix Linear Actuators
     *
@@ -17,12 +19,14 @@ public class LinearServo extends Servo
     * @param length max length of the servo [mm]
     * @param speed max speed of the servo [mm/second]
     */
-    public LinearServo(int channel, int length, int speed) 
+    public LinearServo(int channel, int length, int speed, double maxExtension, double minExtension) 
     {
         super(channel);
         setBoundsMicroseconds(2000, 1550, 1500, 1450, 1000);
         m_length = length;
         m_speed = speed;
+        this.maxExtension = maxExtension;
+        this.minExtension = minExtension;
     }
 
     /**
@@ -76,6 +80,18 @@ public class LinearServo extends Servo
     // {
     //     setPosition(1.0);
     // }
+
+    // extends the servo to maxExtension
+    public void extend()
+    {
+        setPosition(maxExtension);
+    }
+
+    // 
+    public void retract()
+    {   
+        setPosition(minExtension);
+    }
 
     /**
      * Checks if the servo is at its target position, must be calling {@link #updateCurPos() updateCurPos()} periodically

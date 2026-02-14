@@ -10,6 +10,7 @@ import frc.robot.subsystems.Flywheel;
 import frc.robot.commands.ScoringCommands;
 import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Accelerator;
+import frc.robot.subsystems.Climb;
 
 @SuppressWarnings("unused")
 public class GretaHTest implements Test
@@ -35,6 +36,7 @@ public class GretaHTest implements Test
     private final RobotContainer robotContainer;
     private final Indexigator indexigator;
     private final Accelerator accelerator;
+    private final Climb climb;
     // private final Agitator agitator;
     private final Flywheel flywheel;
     private final CommandXboxController controller = new CommandXboxController(0);
@@ -55,6 +57,7 @@ public class GretaHTest implements Test
         this.robotContainer = robotContainer;
         this.indexigator = robotContainer.getIndexigator();
         this.accelerator = robotContainer.getAccelerator();
+        this.climb = robotContainer.getClimb();
         // this.agitator = robotContainer.getAgitator();
         this.flywheel = robotContainer.getFlywheel();
 
@@ -78,6 +81,10 @@ public class GretaHTest implements Test
         // controller.a().onTrue(indexigator.setForwardCommand());
         // controller.x().onTrue(indexigator.setBackwardCommand());
         // controller.b().onTrue(indexigator.stopCommand());
+        controller.a().onTrue(climb.extendServoCommand());
+        controller.b().onTrue(climb.restractServoCommand());
+        controller.x().onTrue(climb.setServoPositionCommand(48));
+        controller.y().onTrue(climb.setServoPositionCommand(0.0));
 
     }
 

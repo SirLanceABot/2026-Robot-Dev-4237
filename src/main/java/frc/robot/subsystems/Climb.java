@@ -40,10 +40,13 @@ public class Climb extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
+    private static final double MAX_SERVO_LENGTH = 38.634;      // needs to be tested on actual bot
+    private static final double MIN_SERVO_LENGTH = 10.449;      // needs to be tested on actual bot
+
     private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Lead Climb Motor ");
     // private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Follower Climb Motor");
     
-    private final LinearServo servo = new LinearServo(SERVOMOTOR, 50, 32);
+    private final LinearServo servo = new LinearServo(SERVOMOTOR, 50, 32, MAX_SERVO_LENGTH, MIN_SERVO_LENGTH);
 
     private final double tolerance = 0.2;
 
@@ -150,14 +153,14 @@ public class Climb extends SubsystemBase
         return servo.getPosition();
     }
 
-    public void fullyExtendServo()
+    public void extendServo()
     {
-        servo.fullyExtend();
+        servo.extend();
     }
 
-    public void fullyRetractServo()
+    public void retractServo()
     {
-        servo.fullyRetract();
+        servo.retract();
     }
 
     /**
@@ -206,14 +209,14 @@ public class Climb extends SubsystemBase
         return run( ()-> setServoPosition(position));
     }
 
-    public Command fullyExtendServoCommand()
+    public Command extendServoCommand()
     {
-        return run( ()-> fullyExtendServo());
+        return run( ()-> extendServo());
     }
 
-    public Command fullyRestractServoCommand()
+    public Command restractServoCommand()
     {
-        return run( ()-> fullyRetractServo());
+        return run( ()-> retractServo());
     }
 
     // *** OVERRIDEN METHODS ***
@@ -226,7 +229,7 @@ public class Climb extends SubsystemBase
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
 
-        servo.updateCurPos();
+        // servo.updateCurPos();
     }
 
     @Override
