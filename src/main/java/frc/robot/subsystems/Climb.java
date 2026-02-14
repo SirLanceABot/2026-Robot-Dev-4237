@@ -145,6 +145,21 @@ public class Climb extends SubsystemBase
         servo.setPosition(position);
     }
 
+    public double getServoPosition()
+    {
+        return servo.getPosition();
+    }
+
+    public void fullyExtendServo()
+    {
+        servo.fullyExtend();
+    }
+
+    public void fullyRetractServo()
+    {
+        servo.fullyRetract();
+    }
+
     /**
      * 
      * Returns a command to stop climb
@@ -189,6 +204,16 @@ public class Climb extends SubsystemBase
     public Command setServoPositionCommand(double position)
     {
         return run( ()-> setServoPosition(position));
+    }
+
+    public Command fullyExtendServoCommand()
+    {
+        return run( ()-> fullyExtendServo());
+    }
+
+    public Command fullyRestractServoCommand()
+    {
+        return run( ()-> fullyRetractServo());
     }
 
     // *** OVERRIDEN METHODS ***

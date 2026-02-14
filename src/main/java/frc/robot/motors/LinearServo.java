@@ -20,7 +20,7 @@ public class LinearServo extends Servo
     public LinearServo(int channel, int length, int speed) 
     {
         super(channel);
-        setBoundsMicroseconds( 2000, 1800, 1500, 1200, 1000);
+        setBoundsMicroseconds(2000, 1550, 1500, 1450, 1000);
         m_length = length;
         m_speed = speed;
     }
@@ -35,10 +35,10 @@ public class LinearServo extends Servo
         setSpeed( (setPos/m_length *2)-1);
     }
     double lastTime = 0;
+   
     /**
      * Run this method in any periodic function to update the position estimation of your servo
     */
-
     public void updateCurPos()
     {
         double dt = Timer.getFPGATimestamp() - lastTime;
@@ -64,6 +64,18 @@ public class LinearServo extends Servo
     {
         return curPos;
     }
+
+    // these methods need to use the PWM setPosition so comment out the
+    // LinearServo setPosition() if you intend to use
+    // public void fullyExtend()
+    // {
+    //     setPosition(0.8);
+    // }
+
+    // public void fullyRetract()
+    // {
+    //     setPosition(1.0);
+    // }
 
     /**
      * Checks if the servo is at its target position, must be calling {@link #updateCurPos() updateCurPos()} periodically

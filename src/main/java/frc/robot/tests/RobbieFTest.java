@@ -115,10 +115,13 @@ public class RobbieFTest implements Test
         // );
 
         controller.a().onTrue(
-            climb.setServoPositionCommand(10.0)
+            climb.fullyExtendServoCommand()
         );
         controller.b().onTrue(
-            climb.setServoPositionCommand(30.0)
+            climb.fullyRestractServoCommand()
+        );
+        controller.y().onTrue(
+            climb.setServoPositionCommand(50.0)
         );
 
         
@@ -134,6 +137,8 @@ public class RobbieFTest implements Test
         // );
 
         // System.out.println("flywheel Velocity = " + flywheel.getVelocity() + "cycle=" + flywheel.getDutyCycle());
+
+        System.out.println("Servo Position = " + climb.getServoPosition());
     }
     
     /**
