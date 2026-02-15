@@ -124,8 +124,11 @@ public class Robot extends TimedRobot
 
             if(AutoBuilder.isConfigured())
             {
-                path = AutoBuilder.buildAuto(autoName);
-                PathPlannerLance.initializePose(autoName);
+                if(!autoName.equalsIgnoreCase("InstantCommand"))
+                {
+                    path = AutoBuilder.buildAuto(autoName);
+                    PathPlannerLance.initializePose(autoName);
+                }
             }
         }
     }
@@ -145,8 +148,11 @@ public class Robot extends TimedRobot
                 
                 if(AutoBuilder.isConfigured())
                 {
-                    path = AutoBuilder.buildAuto(autoName);
-                    PathPlannerLance.initializePose(autoName);
+                    if(!autoName.equalsIgnoreCase("InstantCommand"))
+                    {
+                        path = AutoBuilder.buildAuto(autoName);
+                        PathPlannerLance.initializePose(autoName);
+                    }
                 }
             }
 
@@ -244,7 +250,7 @@ public class Robot extends TimedRobot
             autonomousCommand = null;
         }
 
-        isPreMatch = false;
+        isPreMatch = false; 
     }
 
     /** This function is called periodically during Teleop mode. */
@@ -259,7 +265,7 @@ public class Robot extends TimedRobot
         // MotorControllerLance.logAllStickyFaults();
         // DataLogManager.stop();
 
-        isPreMatch = true;
+        // isPreMatch = true;
     }
 
     /** This function is called once each time the robot enters Test mode. */
