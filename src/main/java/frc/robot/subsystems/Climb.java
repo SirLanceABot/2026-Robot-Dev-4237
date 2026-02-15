@@ -5,6 +5,7 @@ import static frc.robot.Constants.Climb.*;
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.motors.LinearServo;
@@ -46,7 +47,7 @@ public class Climb extends SubsystemBase
     private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Lead Climb Motor ");
     // private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Follower Climb Motor");
     
-    private final LinearServo servo = new LinearServo(SERVOMOTOR, 50, 32, MAX_SERVO_LENGTH, MIN_SERVO_LENGTH);
+    private final LinearServo servo = new LinearServo(1, 50, 32, MAX_SERVO_LENGTH, MIN_SERVO_LENGTH);
 
     private final double tolerance = 0.2;
 
@@ -153,14 +154,19 @@ public class Climb extends SubsystemBase
         return servo.getPosition();
     }
 
-    public void extendServo()
-    {
-        servo.extend();
-    }
+    // public void extendServo()
+    // {
+    //     servo.extend();
+    // }
 
-    public void retractServo()
+    // public void retractServo()
+    // {
+    //     servo.retract();
+    // }
+
+    public void setServoPWM(int pulse)
     {
-        servo.retract();
+        servo.setPulseTimeMicroseconds(pulse);
     }
 
     /**
@@ -209,14 +215,19 @@ public class Climb extends SubsystemBase
         return run( ()-> setServoPosition(position));
     }
 
-    public Command extendServoCommand()
-    {
-        return run( ()-> extendServo());
-    }
+    // public Command extendServoCommand()
+    // {
+        // return run( ()-> extendServo());
+    // }
 
-    public Command restractServoCommand()
+    // public Command retractServoCommand()
+    // {
+        // return run( ()-> retractServo());
+    // }
+
+    public Command setServoPWMCommand(int pulse)
     {
-        return run( ()-> retractServo());
+        return run( ()-> {setServoPWM(pulse); System.out.println("******servo pulse = " + pulse);} );
     }
 
     // *** OVERRIDEN METHODS ***

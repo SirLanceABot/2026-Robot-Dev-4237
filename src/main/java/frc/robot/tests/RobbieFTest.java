@@ -91,38 +91,20 @@ public class RobbieFTest implements Test
      */
     public void periodic()
     {
-        // controller.a().onTrue(
-        //     flywheel.setControlVelocityCommand(() -> 45.0)
-        // );
-        // controller.x().onTrue(
-        //     flywheel.setControlVelocityCommand(() -> 48.0)
-        // );
-        // controller.y().onTrue(
-        //     flywheel.setControlVelocityCommand(() -> 70.0)
-        // );
-        // controller.b().onTrue(
-        //     accelerator.onCommand()
-        // );
-        // controller.start().onTrue(
-        //     flywheel.stopCommand()
-        // );
+        controller.a().onTrue(
+            climb.setServoPWMCommand(1800)
+        );
+        controller.b().onTrue(
+            climb.setServoPWMCommand(2100)
+        );
+        controller.y().onTrue(
+            climb.setServoPWMCommand(1900)
+        );
+        controller.x().onTrue(
+            climb.setServoPWMCommand(1450)
+        );
 
-        // controller.a().onTrue(
-        //     servo.setPosition(5.0) 
-        // );
-        // controller.b().onTrue(
-        //     servo.setPosition(0.0)
-        // );
-
-        // controller.a().onTrue(
-        //     climb.fullyExtendServoCommand()
-        // );
-        // controller.b().onTrue(
-        //     climb.fullyRestractServoCommand()
-        // );
-        // controller.y().onTrue(
-        //     climb.setServoPositionCommand(50.0)
-        // );
+        // System.out.println("Servo Pulse Microseconds = " + climb.getServoPWM());
 
         
 

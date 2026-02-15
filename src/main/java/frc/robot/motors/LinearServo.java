@@ -27,6 +27,8 @@ public class LinearServo extends Servo
         m_speed = speed;
         this.maxExtension = maxExtension;
         this.minExtension = minExtension;
+
+        setPeriodMultiplier(PeriodMultiplier.k1X);
     }
 
     /**
