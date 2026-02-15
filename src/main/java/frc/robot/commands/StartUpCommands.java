@@ -51,9 +51,9 @@ public final class StartUpCommands
     // private static Command selectedCommand = null;
 
     // tolerance for wheel angle to be considered "forward" (degrees)
-    private static final double SWERVE_TOLERANCE_DEGREES = 5.0;
+    private static final double SWERVE_TOLERANCE_DEGREES = 3.0;
     // tolerance for gyro
-    private static final double GYRO_TOLERANCE_DEGREES = 5.0;
+    private static final double GYRO_TOLERANCE_DEGREES = 3.0;
     // check period in seconds
     private static final double PERIOD_S = 0.5;
 
@@ -110,7 +110,7 @@ public final class StartUpCommands
                 break;
 
             case gyro_not_zeroed:
-                command = leds.setColorBlinkCommand(Color.kOrange);
+                command = leds.setColorBlinkCommand(Color.kOrangeRed);
                 break;
 
             case swerve_misaligned:
@@ -145,7 +145,7 @@ public final class StartUpCommands
 
         if (drivetrain != null && drivetrain.getPigeon2() != null)
         {
-            drivetrain.getPigeon2().setYaw(0.0);
+            // drivetrain.getPigeon2().setYaw(0.0);
             System.out.println("StartUpCommands - Pigeon zeroed");
         }
 
