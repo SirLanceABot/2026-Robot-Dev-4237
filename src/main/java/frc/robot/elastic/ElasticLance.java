@@ -30,6 +30,8 @@ public class ElasticLance
     private static Color validAutoColor = new Color();
 
     private static Color LEDColor = new Color();
+    private static Color hubTagColor = new Color();
+    private static Color climbTagColor = new Color();
 
     static
     {
@@ -78,7 +80,7 @@ public class ElasticLance
         SmartDashboard.putNumber("Gyro Rotation", drivetrain.getPigeon2().getYaw().getValueAsDouble());
 
         // updateValidAutoBox();
-        // updateAllianceColorBox();
+        updateAllianceColorBox();
         // updateLEDColorBox();
 
         if(!useFullRobot && DriverStation.isDisabled())
@@ -94,6 +96,58 @@ public class ElasticLance
 
     //     }
     // }
+    
+    public static void updateHubTagBox()
+    {
+        int tagID = 0;
+
+        if(shooterCamera != null)
+        {
+            tagID = (int) shooterCamera.getTagId();
+        }
+
+        if(shooterCamera == null)
+        {
+            hubTagColor = Color.kGray;
+        }
+        else if((tagID >= 8 && tagID <= 11) || (tagID >= 24 && tagID <= 27))
+        {
+            hubTagColor = Color.kGreen;
+        }
+        else 
+        {
+            hubTagColor = Color.kRed;
+        }
+
+        SmartDashboard.putString("Is hub tag", hubTagColor.toHexString());
+
+    }
+
+    public static void updateClimbTagBox()
+    {
+        int tagID = 0;
+
+        if(shooterCamera != null)
+        {
+            tagID = (int) shooterCamera.getTagId();
+        }
+
+        if(shooterCamera == null)
+        {
+            climbTagColor = Color.kGray;
+        }
+        else if(tagID == 16 || tagID == 15 || tagID == 31 || tagID == 32)
+        {
+            climbTagColor = Color.kGreen;
+        }
+        else 
+        {
+            climbTagColor = Color.kRed;
+        }
+
+        SmartDashboard.putString("Is climb tag", climbTagColor.toHexString());
+
+    }
 
     public static void updateAllianceColorBox()
     {
