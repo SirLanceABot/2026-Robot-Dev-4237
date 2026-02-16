@@ -129,24 +129,15 @@ public class PoseEstimator extends SubsystemBase
     {
         // time of flight map, where the first value is distance to hub in feet, second is time fuel is in the air
         // TODO test time values once we have robot
-        timeOfFlightMap.put(3.0, 0.70);
-        timeOfFlightMap.put(4.0, 0.75);
-        timeOfFlightMap.put(5.0, 0.775);
-        timeOfFlightMap.put(6.0, 0.80);
-        timeOfFlightMap.put(7.0, 0.825);
-        timeOfFlightMap.put(8.0, 0.85);
-        timeOfFlightMap.put(9.0, 0.875);
-        timeOfFlightMap.put(10.0, 0.90);
-        timeOfFlightMap.put(11.0, 0.925);
-        timeOfFlightMap.put(12.0, 0.95);
-        timeOfFlightMap.put(13.0, 0.975);
-        timeOfFlightMap.put(14.0, 1.0);
-        timeOfFlightMap.put(15.0, 1.025);
-        timeOfFlightMap.put(16.0, 1.05);
-        timeOfFlightMap.put(17.0, 1.075);
-        timeOfFlightMap.put(18.0, 1.10);
-        timeOfFlightMap.put(19.0, 1.125);
-        timeOfFlightMap.put(20.0, 1.15);
+        timeOfFlightMap.put(6.0, 0.85);
+        timeOfFlightMap.put(7.0, 0.94);
+        timeOfFlightMap.put(8.0, 0.96);
+        timeOfFlightMap.put(9.0, 1.0);
+        timeOfFlightMap.put(10.0, 1.04);
+        timeOfFlightMap.put(11.0, 1.11);
+        timeOfFlightMap.put(12.0, 1.22);
+        timeOfFlightMap.put(13.0, 1.29);
+        timeOfFlightMap.put(14.0, 1.39);
     }
 
     public double getTOF(double dist)

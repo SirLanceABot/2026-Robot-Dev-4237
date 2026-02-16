@@ -48,7 +48,7 @@ public class Flywheel extends SubsystemBase
     private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
 
     // PID constants
-    private final double kP = 1.00;
+    private final double kP = 0.96;
     private final double kI = 0.0;
     private final double kD = 0.00;
     private final double kS = 0.015;
@@ -118,24 +118,15 @@ public class Flywheel extends SubsystemBase
     {
         // first value is distance (ft) from the hub (in alliance zone), second is flywheel velo (currently ft/s)
         // TODO test values once we have robot
-        distToVeloMap.put(3.0, 4237.0);
-        distToVeloMap.put(4.0, 4237.0);
-        distToVeloMap.put(5.0, 4237.0);
-        distToVeloMap.put(6.0, 4237.0);
-        distToVeloMap.put(7.0, 4237.0);
-        distToVeloMap.put(8.0, 4237.0);
-        distToVeloMap.put(9.0, 4237.0);
-        distToVeloMap.put(10.0, 4237.0);
-        distToVeloMap.put(11.0, 4237.0);
-        distToVeloMap.put(12.0, 4237.0);
-        distToVeloMap.put(13.0, 4237.0);
-        distToVeloMap.put(14.0, 4237.0);
-        distToVeloMap.put(15.0, 4237.0);
-        distToVeloMap.put(16.0, 4237.0);
-        distToVeloMap.put(17.0, 4237.0);
-        distToVeloMap.put(18.0, 4237.0);
-        distToVeloMap.put(19.0, 4237.0);
-        distToVeloMap.put(20.0, 4237.0);
+        distToVeloMap.put(6.0, 41.5);
+        distToVeloMap.put(7.0, 41.75);
+        distToVeloMap.put(8.0, 42.5);
+        distToVeloMap.put(9.0, 45.5);
+        distToVeloMap.put(10.0, 47.25);
+        distToVeloMap.put(11.0, 49.0);
+        distToVeloMap.put(12.0, 51.75);
+        distToVeloMap.put(13.0, 53.75);
+        distToVeloMap.put(14.0, 59.0);
     }
 
     // private void configPassMap()

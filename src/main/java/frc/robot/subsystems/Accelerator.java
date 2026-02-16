@@ -37,10 +37,10 @@ public class Accelerator extends SubsystemBase
     // Put all class variables and instance variables here
     private final TalonFXLance motor = new TalonFXLance(3, MOTOR_CAN_BUS, "Accelerator Motor"); // Kraken x44
     
-    private final double ACCELERATOR_DIAMETER = 0.1875; // ft
+    private final double ACCELERATOR_DIAMETER = (2.25 / 12.0); // ft
     // Neo 550:
-    private final double GEAR_RATIO = 12.0 / 1.0;
-    private final double VELOCITY_CONVERSION_FACTOR = ((Math.PI * ACCELERATOR_DIAMETER) / GEAR_RATIO) / 60; // rev/m to ft/s using gear ratio
+    private final double GEAR_RATIO = (1.0 / 12.0);
+    private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * ACCELERATOR_DIAMETER) / GEAR_RATIO; // rev/m to ft/s using gear ratio
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -66,13 +66,13 @@ public class Accelerator extends SubsystemBase
     {
         motor.setupFactoryDefaults();
         motor.setupInverted(false); // isn't inverted on current shooter
-        motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR); // rev/m to ft/s
+        motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR); // rev/s to ft/s
 
         motor.setSafetyEnabled(false);
 
         motor.setPosition(0);
 
-        motor.setupPIDController(0, 0.1, 0.0005, 0.00001);
+        motor.setupPIDController(0, 2.2, 0, 0);
 
         // motor.setupForwardHardLimitSwitch(false, true);
         // motor.setupReverseHardLimitSwitch(false, true);
@@ -130,7 +130,7 @@ public class Accelerator extends SubsystemBase
     public Command onCommand()
     {
         // return run( () -> set(0.25) );
-        return run( () -> set(0.67) );
+        return run( () -> set(0.5) );
     }
 
     public Command reverseCommand()
