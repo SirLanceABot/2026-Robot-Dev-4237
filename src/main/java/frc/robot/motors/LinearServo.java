@@ -4,6 +4,10 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.MathUtil;
 
+
+// DO NOT USE
+// use Servo class instead
+
 public class LinearServo extends Servo
 {
     double m_speed;

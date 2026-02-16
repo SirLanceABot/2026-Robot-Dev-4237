@@ -289,7 +289,7 @@ public class GeneralCommands
                 Commands.parallel(
                     indexigator.setForwardCommand(() -> 0.2),
                     accelerator.feedToShooterCommand(() -> 0.2)))
-            .withName("Ejecting All Fuel Slowly");
+            .withName("ejecting all fuel slowly");
         }
         else
         {
@@ -312,7 +312,7 @@ public class GeneralCommands
                 indexigator.stopCommand(),
                 accelerator.stopCommand())
             .andThen(defaultLEDCommand())
-            .withName("Stopped Ejecting All Fuel");
+            .withName("stopped ejecting all fuel");
         }
         else
         {
@@ -329,10 +329,12 @@ public class GeneralCommands
     {
         if(climb != null)
         {
-            return setLEDCommand(ColorPattern.kRainbow)
+            return 
+            setLEDCommand(ColorPattern.kRainbow)
             .andThen(climb.extendToL1Command())
-            .until(climb.isAtPosition(climbPosition.kEXTENDL1))
-            .withName("Climb Extended To L1 Position");       
+                .until(climb.isClimbMotorAtPosition(climbPosition.kEXTENDL1))
+            .andThen(climb.setServoToExtendedPositionCommand())
+            .withName("climb extended to L1 position");       
         }
         else
         {
@@ -349,8 +351,8 @@ public class GeneralCommands
         if(climb != null)
         {
             return climb.retractFromL1Command()
-            .until(climb.isAtPosition(climbPosition.kRETRACTL1))
-            .withName("Climb Mounted L1");
+            .until(climb.isClimbMotorAtPosition(climbPosition.kRETRACTL1))
+            .withName("climb mounted L1");
         }
         else
         {
@@ -367,9 +369,9 @@ public class GeneralCommands
         if(climb != null)
         {
             return climb.extendToL1Command()
-            .until(climb.isAtPosition(climbPosition.kEXTENDL1))
+                .until(climb.isClimbMotorAtPosition(climbPosition.kEXTENDL1))
             // .andThen( () -> drivetrain.resetForFieldCentric())
-            .withName("Climb Unmounted L1");
+            .withName("climb unmounted L1 (servo still extended)");
         } 
         else
         {
@@ -385,9 +387,12 @@ public class GeneralCommands
     {
         if(climb != null)
         {
-            return climb.resetToStartCommand()
-            .until(climb.isAtPosition(climbPosition.kSTART))
-            .withName("climb reset to inside robot");
+            return 
+            climb.setServoToRetractedPositionCommand()
+                // .until(climb.isServoAtPosition(0.77))
+            .andThen(climb.resetToStartCommand())
+                .until(climb.isClimbMotorAtPosition(climbPosition.kSTART))
+            .withName("climb reset to inside robot (servo reset)");
         }
         else
         {
@@ -395,44 +400,59 @@ public class GeneralCommands
         }
     }
 
-    // not tested
-    /**
-     * @author Robbie F
-     * @return command to climb to L1
-     */
-    public static Command climbToL1Command()
-    {
-        if(climb != null)
-        {
-            return extendClimbToL1Command()
-            .andThen(ascendFromL1Command())
-            .withName("did the climb thing");
-        }
-        else
-        { 
-            return Commands.none();
-        }
-    }
+    // // not tested
+    // /**
+    //  * @author Robbie F
+    //  * @return command to climb to L1
+    //  */
+    // public static Command climbToL1Command()
+    // {
+    //     if(climb != null)
+    //     {
+    //         return extendClimbToL1Command()
+    //         .andThen(ascendFromL1Command())
+    //         .withName("did the climb thing");
+    //     }
+    //     else
+    //     { 
+    //         return Commands.none();
+    //     }
+    // }
 
-    //not tested
-    /**
-     * @author Robbie F
-     * @return command to retract from L1
-     */
-    public static Command retractFromL1Command()
-    {
-        if(climb != null)
-        {
-            return descendFromL1Command()
-            .andThen(resetClimbToStartCommand())
-            .andThen(defaultLEDCommand())
-            .withName("reset climbing mechanism from L1");
-        }
-        else
-        {
-            return Commands.none();
-        }
-    }
+    // //not tested
+    // /**
+    //  * @author Robbie F
+    //  * @return command to retract from L1
+    //  */
+    // public static Command retractFromL1Command()
+    // {
+    //     if(climb != null)
+    //     {
+    //         return descendFromL1Command()
+    //         .andThen(resetClimbToStartCommand())
+    //         .andThen(defaultLEDCommand())
+    //         .withName("reset climbing mechanism from L1");
+    //     }
+    //     else
+    //     {
+    //         return Commands.none();
+    //     }
+    // }
+
+
+    //CURRENT climb sequence
+
+    // GeneralCommands.extendClimbToL1Command()
+    //      extends climb and servo, ready to drive to traversal and lock in to climb
+    // GeneralCommands.ascendFromL1Command()
+    //      retracts climb to ascend traversal, servo remains out
+    // GeneralCommands.descendFromL1Command()
+    //      extends climb to descend traversal, servo remains out
+    // GeneralCommands.resetClimbToStartCommand()
+    //      resets climb to start position, retracts servo (must have driven away from traversal)
+
+
+
     
     /**
      * Drives autonomously from the given pose to the target pose

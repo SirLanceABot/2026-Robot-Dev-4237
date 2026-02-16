@@ -83,8 +83,8 @@ public class GretaHTest implements Test
         // controller.b().onTrue(indexigator.stopCommand());
         // controller.a().onTrue(climb.extendServoCommand());
         // controller.b().onTrue(climb.retractServoCommand());
-        controller.x().onTrue(climb.setServoPositionCommand(48));
-        controller.y().onTrue(climb.setServoPositionCommand(0.0));
+        // controller.x().onTrue(climb.setServoPositionCommand(48));
+        // controller.y().onTrue(climb.setServoPositionCommand(0.0));
 
     }
 

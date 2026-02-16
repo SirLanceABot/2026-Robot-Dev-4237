@@ -14,6 +14,7 @@ import frc.robot.subsystems.LEDs.ColorPattern;
 import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.motors.LinearServo;
+import frc.robot.subsystems.Climb.climbPosition;
 
 @SuppressWarnings("unused")
 public class RobbieFTest implements Test
@@ -84,54 +85,31 @@ public class RobbieFTest implements Test
      * This method runs one time before the periodic() method.
      */
     public void init()
-    {}
+    {
+        controller.a().onTrue(
+            GeneralCommands.extendClimbToL1Command()
+        );
+        controller.x().onTrue(
+            GeneralCommands.ascendFromL1Command()
+        );
+        controller.y().onTrue(
+            GeneralCommands.descendFromL1Command()
+        );
+        controller.b().onTrue(
+            GeneralCommands.resetClimbToStartCommand()
+        );
+
+        controller.start().onTrue(
+            climb.setServoPWMCommand(1000)
+        );
+
+    }
 
     /**
      * This method runs periodically (every 20ms).
      */
     public void periodic()
-    {
-        // controller.a().onTrue(
-        //     climb.setServoPWMCommand(1800)
-        // );
-        // controller.b().onTrue(
-        //     climb.setServoPWMCommand(2100)
-        // );
-        // controller.y().onTrue(
-        //     climb.setServoPWMCommand(1900)
-        // );
-        // controller.x().onTrue(
-        //     climb.setServoPWMCommand(1450)
-        // );
-
-        // System.out.println("Servo Pulse Microseconds = " + climb.getServoPWM());
-
-        
-
-        controller.a().onTrue(
-            accelerator.setVelocityCommand(0.0)
-        );
-        controller.x().onTrue(
-            accelerator.setVelocityCommand(12.)
-        );
-        controller.b().onTrue(
-            flywheel.setControlVelocityCommand(() -> 59)
-        );
-        controller.y().onTrue(
-            flywheel.setControlVelocityCommand(() -> 0.0)
-        );
-
-        // controller.a().onTrue(
-        //     flywheel.setControlVelocityCommand(() -> 20)
-        // );
-        // controller.b().onTrue(
-        //     flywheel.stopCommand()
-        // );
-
-        System.out.println("flywheel Velocity = " + flywheel.getVelocity() +"duty = " + flywheel.getDutyCycle());
-
-        // System.out.println("accelerator velocity: " + accelerator.getVelocity());
-    }
+    {}
     
     /**
      * This method runs one time after the periodic() method.

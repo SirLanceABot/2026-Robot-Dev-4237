@@ -87,8 +87,8 @@ public class CommandsManager extends Command
         NamedCommands.registerCommand("Pass Command", ScoringCommands.passCommand(indexigator, accelerator, flywheel));
 
         // Climbing Commands
-        NamedCommands.registerCommand("Climb to L1 Command", GeneralCommands.climbToL1Command());
-        NamedCommands.registerCommand("Retract from L1 Command", GeneralCommands.retractFromL1Command());
+        // NamedCommands.registerCommand("Climb to L1 Command", GeneralCommands.climbToL1Command());
+        // NamedCommands.registerCommand("Retract from L1 Command", GeneralCommands.retractFromL1Command());
 
         
         SmartDashboard.putData(CommandScheduler.getInstance());

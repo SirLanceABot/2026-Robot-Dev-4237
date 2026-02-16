@@ -3,10 +3,12 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.Climb.*;
 
 import java.lang.invoke.MethodHandles;
+import java.net.PortUnreachableException;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.motors.LinearServo;
 import frc.robot.motors.TalonFXLance;
@@ -47,12 +49,14 @@ public class Climb extends SubsystemBase
     private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Lead Climb Motor ");
     // private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Follower Climb Motor");
     
-    private final LinearServo servo = new LinearServo(1, 50, 32, MAX_SERVO_LENGTH, MIN_SERVO_LENGTH);
+    // private final LinearServo servo = new LinearServo(1, 50, 32, MAX_SERVO_LENGTH, MIN_SERVO_LENGTH);
+    private final Servo servo = new Servo(1);
 
     private final double tolerance = 0.2;
+    private final double servoTolerance = 0.05;
 
-    private static final double kPUP = 9.9;
-    private static final double kPDOWN = 9.9;
+    private static final double kPUP = 5.0; //9.9;
+    private static final double kPDOWN = 5.0; //9.9;
     private static final double kI = 0;
     private static final double kD = 0.0;
 
@@ -115,13 +119,18 @@ public class Climb extends SubsystemBase
     }
 
 
-    public BooleanSupplier isAtPosition(climbPosition position)
+    public BooleanSupplier isClimbMotorAtPosition(climbPosition position)
     {
         return () -> Math.abs(leadMotor.getPosition() - position.value) < tolerance;
         // return () -> false;
     }
 
-    private void stop()
+    public BooleanSupplier isServoAtPosition(double position)
+    {
+        return () -> Math.abs(leadMotor.getPosition() - position) < servoTolerance;
+    }
+
+    private void stopMotor()
     {
         leadMotor.set(0.0);
     }
@@ -154,16 +163,6 @@ public class Climb extends SubsystemBase
         return servo.getPosition();
     }
 
-    // public void extendServo()
-    // {
-    //     servo.extend();
-    // }
-
-    // public void retractServo()
-    // {
-    //     servo.retract();
-    // }
-
     public void setServoPWM(int pulse)
     {
         servo.setPulseTimeMicroseconds(pulse);
@@ -174,19 +173,20 @@ public class Climb extends SubsystemBase
      * Returns a command to stop climb
      * @return stop climb method
      */
-    public Command stopCommand()
+    public Command stopMotorCommand()
     {
-        return run( () -> stop());
+        return run( () -> stopMotor());
     }
 
     /**
      * @author Robbie J
-     * @return move to position L1, until at position or hard limit hit; then stops 
+     * @return move to position L1, until at position or hard limit hit; then stops
+     * use this when climbing down (doesn't require servo)
      */
     public Command extendToL1Command()
     {
-        return run( () -> moveToPosition(climbPosition.kEXTENDL1)).until(() -> (isAtPosition(climbPosition.kEXTENDL1).getAsBoolean() || (leadMotor.getForwardHardLimit())))
-                .andThen(stopCommand());
+        return run( () -> moveToPosition(climbPosition.kEXTENDL1)).until(() -> (isClimbMotorAtPosition(climbPosition.kEXTENDL1).getAsBoolean() || (leadMotor.getForwardHardLimit())))
+                .andThen(stopMotorCommand());
     }
 
     /**
@@ -195,14 +195,18 @@ public class Climb extends SubsystemBase
      */
     public Command retractFromL1Command()
     {
-        return run( () -> moveToPosition(climbPosition.kRETRACTL1)).until(() -> (isAtPosition(climbPosition.kRETRACTL1).getAsBoolean() || (leadMotor.getReverseHardLimit())))
-            .andThen(stopCommand());
+        return run( () -> moveToPosition(climbPosition.kRETRACTL1)).until(() -> (isClimbMotorAtPosition(climbPosition.kRETRACTL1).getAsBoolean() || (leadMotor.getReverseHardLimit())))
+            .andThen(stopMotorCommand());
     }
 
+    /**
+     * @author Robbie
+     * @return moves climb motor to start position
+     */
     public Command resetToStartCommand()
     {
-        return run( () -> moveToPosition(climbPosition.kSTART)).until(() -> (isAtPosition(climbPosition.kSTART).getAsBoolean() || (leadMotor.getReverseHardLimit())))
-            .andThen(stopCommand());
+        return run( () -> moveToPosition(climbPosition.kSTART)).until(() -> (isClimbMotorAtPosition(climbPosition.kSTART).getAsBoolean() || (leadMotor.getReverseHardLimit())))
+            .andThen(stopMotorCommand());
     }
 
     public Command resetPositionCommand()
@@ -210,25 +214,24 @@ public class Climb extends SubsystemBase
         return run ( () -> resetPosition());
     }
 
-    public Command setServoPositionCommand(double position)
-    {
-        return run( ()-> setServoPosition(position));
-    }
-
-    // public Command extendServoCommand()
-    // {
-        // return run( ()-> extendServo());
-    // }
-
-    // public Command retractServoCommand()
-    // {
-        // return run( ()-> retractServo());
-    // }
-
     public Command setServoPWMCommand(int pulse)
     {
-        return run( ()-> {setServoPWM(pulse); System.out.println("******servo pulse = " + pulse);} );
+        return run( ()-> {setServoPWM(pulse); System.out.println("Servo Pulse = " + pulse);} );
     }
+
+    // use this for actual climb
+    public Command setServoToExtendedPositionCommand()
+    {
+        return runOnce( ()-> setServoPWM((int) ((MAX_SERVO_LENGTH / 50.0) * 1000) + 1000));
+    }
+
+    // use this for actual climb
+    public Command setServoToRetractedPositionCommand()
+    {
+        return runOnce( ()-> setServoPWM((int) ((MIN_SERVO_LENGTH / 50.0) * 1000) + 1000));
+    }
+
+    
 
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
