@@ -323,7 +323,7 @@ public class GeneralCommands
     // not tested
     /**
      * @author Robbie F
-     * @return extend climb so ready climb
+     * @return stage 1 of climb
      */
     public static Command extendClimbToL1Command()
     {
@@ -344,7 +344,7 @@ public class GeneralCommands
 
     /**
      * @author Robbie F
-     * @return command to retract climb after locking in to L1
+     * @return stage 2 of climb
      */
     public static Command ascendFromL1Command()
     {
@@ -362,7 +362,7 @@ public class GeneralCommands
 
     /**
      * @author Robbie F
-     * @return yay climb
+     * @return stage 3 of climb
      */
     public static Command descendFromL1Command()
     {
@@ -381,7 +381,7 @@ public class GeneralCommands
     
     /**
      * @author Robbie F
-     * @return command to reset climb to the starting position
+     * @return stage 4 of climb
      */
     public static Command resetClimbToStartCommand()
     {
@@ -402,13 +402,13 @@ public class GeneralCommands
 
     //CURRENT climb sequence
 
-    // GeneralCommands.extendClimbToL1Command()
+    // 1. GeneralCommands.extendClimbToL1Command()
     //      extends climb and servo, ready to drive to traversal and lock in to climb
-    // GeneralCommands.ascendFromL1Command()
+    // 2. GeneralCommands.ascendFromL1Command()
     //      retracts climb to ascend traversal, servo remains out
-    // GeneralCommands.descendFromL1Command()
+    // 3. .descendFromL1Command()
     //      extends climb to descend traversal, servo remains out
-    // GeneralCommands.resetClimbToStartCommand()
+    // 4. GeneralCommands.resetClimbToStartCommand()
     //      resets climb to start position, retracts servo (must have driven away from traversal)
     
     /**

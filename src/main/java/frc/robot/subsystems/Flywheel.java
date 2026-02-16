@@ -57,7 +57,7 @@ public class Flywheel extends SubsystemBase
 
     private final double FLYWHEEL_DIAMETER_FEET  = (4.0 / 12.0); // 4.25 in
     private final double GEAR_RATIO = (16.0 / 30.0);
-    private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * FLYWHEEL_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
+    private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * FLYWHEEL_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // checked
     
     // Motion Magic Constants
     // private final double MOTIONMAGICCRUISEVELOCITY = 100.0; // target cruise velocity

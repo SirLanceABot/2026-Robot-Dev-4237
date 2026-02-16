@@ -325,6 +325,7 @@ public class ScoringCommands
 
             return
             GeneralCommands.descendFromL1Command()
+            .andThen( ()-> drivetrain.resetForFieldCentric())
             .andThen(GeneralCommands.driveToPositionCommand(targetPose, drivetrain.getState().Pose))
             .andThen(GeneralCommands.resetClimbToStartCommand());
         }
