@@ -154,7 +154,7 @@ public class Intake extends SubsystemBase
      */
     public void pickUpFuel()
     {
-        RollersMotor.set(1.0);
+        RollersMotor.set(0.9);
         // setVelocity(20.0);
         // PivotMotor.setControlPosition(intakingPosition);
     }
@@ -228,7 +228,7 @@ public class Intake extends SubsystemBase
     @Override
     public void periodic()
     {
-        // if (RollersMotor.getCurrentAmps() > 20.0)
+        if (RollersMotor.getCurrentAmps() > 10.0)
             System.out.println("RollerMotor amps: " + RollersMotor.getCurrentAmps() + " FollowerRoller Amps: " + RollersFollower.getCurrentAmps());
 
         // This method will be called once per scheduler run

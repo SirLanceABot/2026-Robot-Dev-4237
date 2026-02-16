@@ -36,7 +36,7 @@ public final class StartUpCommands
 
     private enum StartUpState
     {
-        low_voltage, gyro_not_zeroed, swerve_misaligned, ready
+        LOW_VOLTAGE, GYRO_NOT_ZEROED, CAMERAS_OFF, SWERVE_MISALIGNED, READY
     }
 
     private static Drivetrain drivetrain;
@@ -88,7 +88,7 @@ public final class StartUpCommands
             return result;
         }
 
-        return StartUpState.ready;
+        return StartUpState.READY;
     }
 
     /**
@@ -105,19 +105,23 @@ public final class StartUpCommands
 
         switch (State)
         {
-            case low_voltage:
+            case LOW_VOLTAGE:
                 command = leds.setColorBlinkCommand(Color.kYellow);
                 break;
 
-            case gyro_not_zeroed:
+            case GYRO_NOT_ZEROED:
                 command = leds.setColorBlinkCommand(Color.kOrangeRed);
                 break;
 
-            case swerve_misaligned:
+            case SWERVE_MISALIGNED:
                 command = leds.setColorBlinkCommand(Color.kRed);
                 break;
 
-            case ready:
+            case CAMERAS_OFF:
+                command = leds.setColorBlinkCommand(Color.kBlue);
+                break;
+
+            case READY:
                 command = leds.setColorSolidCommand(100, Color.kGreen);
                 break;
         }
@@ -154,36 +158,7 @@ public final class StartUpCommands
 
         System.out.println("StartUpCommands - StartUp checks running");
     }
-    // public static void enableMonitor(RobotContainer robotContainer)
-    // {
-    //     drivetrain = robotContainer.getDrivetrain();
-    //     leds = robotContainer.getLEDs();
-    //     // if (drivetrain == null || leds == null)
-    //     // {
-    //     //     System.out.println("StartUpCommands: drivetrain or leds null, not starting monitor");
-    //     //     return;
-    //     // }
 
-    //     if (drivetrain != null && drivetrain.getPigeon2() != null)
-    //     {
-    //         drivetrain.getPigeon2().setYaw(0.0);
-    //         System.out.println("StartUpCommands - Pigeon zeroed");
-    //     }
-
-    //     if (notifier == null)
-    //     {
-    //         notifier = new Notifier(StartUpCommands::checkAndUpdate);
-    //         notifier.startPeriodic(PERIOD_S);
-    //         System.out.println("StartUpCommands - notifier started");
-    //     }
-
-    //     monitorEnabled = true;
-    //     System.out.println("StartUpCommands - monitor enabled");
-    // }
-
-    // /**
-    //  * This method will disable the monitor
-    //  */
     public static void disableMonitor()
     {
         if (!running)
@@ -200,17 +175,6 @@ public final class StartUpCommands
             System.out.println("StartUpCommands - StartUp checks stopped");
         }
     }
-    // public static void disableMonitor()
-    // {
-    //     monitorEnabled = false;
-
-    //     if (notifier != null)
-    //     {
-    //         notifier.stop();
-    //         notifier = null;
-    //         System.out.println("StartUpCommands - notifier stopped");
-    //     }
-    // }
 
     public static void checkAndUpdate()
     {    
@@ -228,23 +192,16 @@ public final class StartUpCommands
      * Check bettery volatge and set LEDs to yellow if below theshold, and return true is battery handled 
      */
     private static StartUpState checkBattery()
-    // private static boolean isLowVoltage()
     {
         double voltage = RobotController.getBatteryVoltage();
 
         if (leds != null && voltage < Constants.Power.BATTERY_THRESHOLD_VOLTS)
         {
             System.out.println("StartUpCommands: battery low (" + voltage + " V) - setting LEDs yellow");
-            // Command yellow = leds.setColorBlinkCommand(Color.kYellow);
-            
-            // if (yellow != null)
-            //     yellow.ignoringDisable(true).schedule();
 
-            // return true;
-            return StartUpState.low_voltage;
+            return StartUpState.LOW_VOLTAGE;
         }
         
-        // return false;
         return null;
     }
 
@@ -252,30 +209,24 @@ public final class StartUpCommands
      * Check swerve module angles and set leds to red is not aligned and green is aligned
      */
     private static StartUpState checkSwerve()
-    // private static boolean isSwerveAligned()
     {
         if (drivetrain == null)
         {
-            // return true;
             return null;
         }
         // each swerve module contains wheel distance travelled and wheel angle (rotation2d)
         SwerveModulePosition[] modules = drivetrain.getModuleStates();
         if (modules == null || modules.length == 0)
         {
-            // return false;
             return null;
         }
 
-        // boolean anyMisaligned = false;
         double tolRad = Math.toRadians(SWERVE_TOLERANCE_DEGREES); // converting tolerance to radians for WPILab angles
 
         // Report all misaligned modules with index and angles for easier debugging
         for (int i = 0; i < modules.length; i++)
         {
-            // SwerveModulePosition m = modules[i];
-            // Rotation2d angle = m.angle;
-            // double angleD = angle.getRadians();
+
             Rotation2d angle = modules[i].angle;
             double angleRad = angle.getRadians();
 
@@ -289,59 +240,12 @@ public final class StartUpCommands
             // checking against tolerance
             if (angleToNearestPi > tolRad)
             {
-                // anyMisaligned = true;
                 System.out.println("StartUpCommands - Swerve misaligned (module " + i + ")");
-                return StartUpState.swerve_misaligned;
+                return StartUpState.SWERVE_MISALIGNED;
             }
         }
 
         return null;
-
-        // if (anyMisaligned && !currentlyBlinking)
-        // {
-        //     if (!currentlyBlinking)
-        //     {
-        //         currentlyBlinking = true;
-        //         System.out.println("StartUpCommands: wheels misaligned = making LEDs blink");
-        //         Command red = leds.setColorBlinkCommand(Color.kRed); // red = swerve not lined up
-
-        //         // if not already blinking
-        //         if (red != null) 
-        //         {
-        //             red.ignoringDisable(true).schedule();
-        //         }
-        //     }
-        // }
-        // else if (!anyMisaligned && currentlyBlinking)
-        // {
-        //     currentlyBlinking = false;
-        //     Command green = leds.setColorSolidCommand(100, Color.kGreen);
-        //     if (green != null)
-        //     {
-        //         green.ignoringDisable(true).schedule();
-        //     }
-        // }
-
-        // // return !anyMisaligned;
-        // // else // all wheels aligned
-        // // {
-        // //     // if blinking
-        // //     if (currentlyBlinking)
-        // //     {
-        // //         currentlyBlinking = false;
-        // //         System.out.println("StartUpCommands: wheels aligned = making LEDs green");
-
-        // //         Command solid = leds.setColorSolidCommand(100, Color.kGreen);
-        // //         if (solid != null) 
-        // //             solid.ignoringDisable(true).schedule();
-
-        // //         // keep notifier running so we continue monitoring while disabled
-        // //         // if (notifier != null) 
-        // //         //     notifier.stop();
-        // //     }
-        // // }
-
-        // // leds.offCommand();
     }
 
 
@@ -349,7 +253,6 @@ public final class StartUpCommands
      * This method will check gyro rotation from zero and turns leds orange if past tolerance
      */
     private static StartUpState checkGyro()
-    // private static boolean isGyroMoved()
     {
         if (drivetrain == null || drivetrain.getPigeon2() == null)
         {
@@ -363,17 +266,22 @@ public final class StartUpCommands
         {
             System.out.println("StartUpCommands: gyro moved (" + yawDegrees + " deg) - Setting LEDs orange");
 
-            // Command orange = leds.setColorBlinkCommand(Color.kOrange);
-            // if (orange != null)
-            // {
-            //     orange.ignoringDisable(true).schedule();
-            // }
-
-            // return true;
-            return StartUpState.gyro_not_zeroed;
+            return StartUpState.GYRO_NOT_ZEROED;
         }
 
-        // return false;
         return null;
     }
+
+    /**
+     * This method will check if all cameras are on and seeing things
+     */
+    // private static StartUpState checkCameras()
+    // {
+    //     if (drivetrain == null || drivetrain.getPigeon2() == null)
+    //     {
+    //         return null;
+    //     }
+
+
+    // }
 }
