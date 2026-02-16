@@ -88,6 +88,8 @@ public class Robot extends TimedRobot
         //     startupNotifier = new Notifier(StartUpCommands::checkAndUpdate);
         //     startupNotifier.startPeriodic(0.5);
         // }
+
+        ElasticLance.configElastic(robotContainer);
     }
 
     /**
