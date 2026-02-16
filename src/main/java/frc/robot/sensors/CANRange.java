@@ -72,7 +72,7 @@ public class CANRange
         
         FovParamsConfigs fov = new FovParamsConfigs();
         fov.FOVCenterX = 0; // Center of FOV in X direction in degrees (value must be within -11 and 11)
-        fov.FOVCenterY = 3.5; // Center of FOV in Y direction in degrees (value must be within -11 and 11)
+        fov.FOVCenterY = -3.5; // Center of FOV in Y direction in degrees (value must be within -11 and 11)
         fov.FOVRangeX = 27; // Range of FOV in X direction in degrees (value must be within 7 and 27)
         fov.FOVRangeY = 7; // Range of FOV in Y direction in degrees (value must be within 7 and 27)
         config = config.withFovParams(fov);
@@ -98,14 +98,14 @@ public class CANRange
         return () -> getDistanceMeters();
     }
 
-    public boolean isBallDetected()
+    public boolean isBallDetected(double distance)
     {
-        return getDistanceMeters() * 39.3701 < 24.0; // Meters to inches
+        return getDistanceMeters() * 39.3701 < distance; // Meters to inches
     }
     
-    public BooleanSupplier isBallDetectedSupplier()
+    public BooleanSupplier isBallDetectedSupplier(double distance)
     {
-        return () -> isBallDetected();
+        return () -> isBallDetected(distance);
     }
 
     /*

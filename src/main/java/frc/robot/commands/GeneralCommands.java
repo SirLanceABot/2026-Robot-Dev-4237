@@ -144,7 +144,7 @@ public class GeneralCommands
 
     private BooleanSupplier isHopperFullSupplier()
     {
-        return () -> (canrange1.isBallDetected() && canrange2.isBallDetected());
+        return () -> (canrange1.isBallDetected(24.0) && canrange2.isBallDetected(24.0));
     }
     /**
      * @author Brady W
@@ -153,15 +153,15 @@ public class GeneralCommands
      */
     public static Command intakeUntilFullCommand()
     {
-        if(intake != null && canrange1 != null && canrange2 != null && indexigator != null)
+        if(intake != null && indexigator != null && canrange1 != null && canrange2 != null)
         {
             return
             Commands.parallel(intake.pickupFuelCommand(),
-            indexigator.setForwardCommand()
-            .until( () -> (canrange1.isBallDetected() && canrange2.isBallDetected()))
-            .andThen(intake.stopCommand(),
-            indexigator.stopCommand())
-            .withName("Intake Until Full"));
+            indexigator.setForwardCommand())
+            .until( () -> debouncer.calculate(canrange1.isBallDetected(29.5) && canrange2.isBallDetected(29.5)))
+            .andThen(Commands.parallel(intake.stopCommand(),
+            indexigator.stopCommand()))
+            .withName("Intake Until Full");
         }
         else
         {

@@ -11,6 +11,7 @@ import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
+import frc.robot.commands.GeneralCommands;
 import frc.robot.commands.ScoringCommands;
 import frc.robot.sensors.CANRange;
 import frc.robot.sensors.HopperCamera;
@@ -95,7 +96,7 @@ public class RobbieJTest implements Test
 
     private BooleanSupplier isHopperFullSupplier()
     {
-        return () -> (canrange.isBallDetected() && canrange1.isBallDetected());
+        return () -> (canrange.isBallDetected(29.5) && canrange1.isBallDetected(29.5));
     }
 
     //     private BooleanSupplier isHopperFullSupplier()
@@ -137,7 +138,9 @@ public class RobbieJTest implements Test
         // controller.a().onTrue(climb.retractFromL1Command());
         // controller.b().onTrue(climb.stopCommand());
         // System.out.println(canrange.toString());
-
+        controller.x().onTrue(GeneralCommands.intakeUntilFullCommand());
+        controller.b().onTrue(intake.stopCommand());
+        controller.a().onTrue(indexigator.stopCommand());
     }
 
     /**
