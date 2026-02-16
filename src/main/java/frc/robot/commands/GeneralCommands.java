@@ -456,8 +456,17 @@ public class GeneralCommands
 
     // ask Grant
 
+    // delete once pathplanner is fixed
+    public static Command climbToL1Command()
+    {
+        return Commands.none();
+    }
 
-
+    // delete once pathplanner is fixed
+    public static Command retractFromL1Command()
+    {
+         return Commands.none();
+    }
 
 
 

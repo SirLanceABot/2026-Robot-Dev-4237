@@ -13,15 +13,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Accelerator;
+import frc.robot.subsystems.Climb;
 // import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.PoseEstimator;
 
-/** 
- * An example command that uses an example subsystem. 
- */
 public class CommandsManager extends Command 
 {
     // This string gets the full name of the class, including the package name
@@ -41,6 +39,7 @@ public class CommandsManager extends Command
     private static Flywheel flywheel;
     private static PoseEstimator poseEstimator;
     private static Indexigator indexigator;
+    private static Climb climb;
 
     /**
      * Creates a new Commands Manager
@@ -61,6 +60,7 @@ public class CommandsManager extends Command
         flywheel = robotContainer.getFlywheel();
         poseEstimator = robotContainer.getPoseEstimator();
         indexigator = robotContainer.getIndexigator();
+        climb = robotContainer.getClimb();
 
 
         createNamedCommands();
@@ -87,8 +87,10 @@ public class CommandsManager extends Command
         NamedCommands.registerCommand("Pass Command", ScoringCommands.passCommand(indexigator, accelerator, flywheel));
 
         // Climbing Commands
-        // NamedCommands.registerCommand("Climb to L1 Command", GeneralCommands.climbToL1Command());
-        // NamedCommands.registerCommand("Retract from L1 Command", GeneralCommands.retractFromL1Command());
+        NamedCommands.registerCommand("Climb to L1 Command", GeneralCommands.climbToL1Command());
+        NamedCommands.registerCommand("Retract from L1 Command", GeneralCommands.retractFromL1Command());
+        NamedCommands.registerCommand("Left Auto Climb L1 Command", ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, ()-> true));
+        NamedCommands.registerCommand("Right Auto Climb L1 Command", ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, ()-> false));
 
         
         SmartDashboard.putData(CommandScheduler.getInstance());
