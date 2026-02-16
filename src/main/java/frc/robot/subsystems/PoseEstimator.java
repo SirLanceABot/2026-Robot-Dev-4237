@@ -142,7 +142,7 @@ public class PoseEstimator extends SubsystemBase
 
     public double getTOF(double dist)
     {
-        dist = Math.max(4.0, Math.min(20.0, dist));
+        dist = Math.max(6.0, Math.min(.0, dist));
         return timeOfFlightMap.get(dist);
     }
 

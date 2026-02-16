@@ -146,7 +146,7 @@ public final class DriverBindings {
         .whileTrue(
             Commands.parallel(
                 drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getRotationToCalculatedTarget().getAsDouble())), // Tested this command in 25 repo, works there
-                ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator)));
+                new DeferredCommand(() -> ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator), Set.of())));
             
         aButton.onFalse(GeneralCommands.stopShootingCommand()); // TODO test this line
     }
@@ -156,7 +156,7 @@ public final class DriverBindings {
     {
         Trigger bButton = controller.b();
 
-        // bButton.onTrue(ScoringCommands.shootFromStandstillCommand(drivetrain, agitator, accelerator, flywheel, poseEstimator));
+        bButton.onTrue(ScoringCommands.shootFromStandstillCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
 
     }
 

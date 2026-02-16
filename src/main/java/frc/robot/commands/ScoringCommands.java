@@ -3,6 +3,8 @@ package frc.robot.commands;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
@@ -129,19 +131,21 @@ public class ScoringCommands
     // have NOT tested implementeation with varying powers/distances
     public static Command shootFromStandstillCommand(Drivetrain drivetrain, Indexigator indexigator, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
     {
-        if(drivetrain != null && indexigator != null  && accelerator != null && flywheel != null && poseEstimator != null)
+        if(drivetrain != null && indexigator != null && accelerator != null && flywheel != null && poseEstimator != null)
         {
+            DoubleSupplier distance = () -> (poseEstimator.getDistanceToTarget(drivetrain.getState().Pose, poseEstimator.getAllianceHubPose()).getAsDouble());
+            DoubleSupplier shooterPower = () -> (flywheel.getShotPower(distance.getAsDouble() * 3.281));
             return
             drivetrain.lockWheelsCommand().withTimeout(0.1)
             .andThen(
                 drivetrain.angleLockDriveCommand(() -> 0, () -> 0, () -> 0.05, () -> (poseEstimator.getAngleToAllianceHub().getAsDouble())).withTimeout(0.75))
             .andThen(
-                flywheel.setControlVelocityCommand(() -> (flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble() * 3.281))) // meters -> feet
-                    .until(() -> flywheel.isAtSetSpeed(flywheel.getShotPower(poseEstimator.getDistanceToAllianceHub().getAsDouble() * 3.281), 5).getAsBoolean())) // within 2 feet per second
+                flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble()))) // meters -> feet
+                    .until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10).getAsBoolean()) // within 2 feet per second
             .andThen(
                 Commands.parallel(
                     indexigator.setForwardCommand(), // rpm
-                    accelerator.feedToShooterCommand(() -> 0.1)));
+                    accelerator.setVelocityCommand(12.0)));
         }
         else
         {
@@ -163,23 +167,23 @@ public class ScoringCommands
     {
         if(drivetrain != null && indexigator != null && accelerator != null && flywheel != null && poseEstimator != null)
         {
-            Pose2d robotPose = drivetrain.getState().Pose;
-            ChassisSpeeds velocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.getRotation());
+            Supplier<Pose2d> robotPose =  () -> drivetrain.getState().Pose;
+            Supplier<ChassisSpeeds> velocity = () -> ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.get().getRotation());
 
-            Pose2d calculatedTarget = poseEstimator.getCalculatedTargetPose( // Pose of our caluclated target, adjusting for robot velo
+            Supplier<Pose2d> calculatedTarget = () -> poseEstimator.getCalculatedTargetPose( // Pose of our caluclated target, adjusting for robot velo
                 poseEstimator.getAllianceHubPose(), 
-                robotPose, 
-                velocity);
+                robotPose.get(), 
+                velocity.get());
 
-            double distance = poseEstimator.getDistanceToTarget(robotPose, calculatedTarget).getAsDouble();
-            double shooterPower = flywheel.getShotPower(distance * 3.281); // meters -> feet
+            DoubleSupplier distance = () -> (poseEstimator.getDistanceToTarget(robotPose.get(), calculatedTarget.get()).getAsDouble());
+            DoubleSupplier shooterPower = () -> (flywheel.getShotPower(distance.getAsDouble() * 3.281)); // meters -> feet
 
             return
-            flywheel.setControlVelocityCommand(() -> shooterPower).until(flywheel.isAtSetSpeed(shooterPower, 5))     // TODO tune tolerance
+            flywheel.setControlVelocityCommand(() -> shooterPower.getAsDouble()).until(flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10))     // TODO tune tolerance
             .andThen(
                 Commands.parallel(
                     indexigator.setForwardCommand(), // rpm
-                    accelerator.feedToShooterCommand(() -> 0.1)));
+                    accelerator.setVelocityCommand(12.0)));
         }
         else
         {

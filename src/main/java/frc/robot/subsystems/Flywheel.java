@@ -113,7 +113,7 @@ public class Flywheel extends SubsystemBase
 
         followMotor.setupFollower(LEADMOTOR, false);
     }
-
+ 
     private void configShotMap()
     {
         // first value is distance (ft) from the hub (in alliance zone), second is flywheel velo (currently ft/s)
@@ -127,6 +127,9 @@ public class Flywheel extends SubsystemBase
         distToVeloMap.put(12.0, 51.75);
         distToVeloMap.put(13.0, 53.75);
         distToVeloMap.put(14.0, 59.0);
+        distToVeloMap.put(15.0, 60.0);
+        distToVeloMap.put(16.0, 60.0);
+        distToVeloMap.put(17.0, 60.0);
     }
 
     // private void configPassMap()
@@ -143,7 +146,7 @@ public class Flywheel extends SubsystemBase
      */
     public double getShotPower(double dist)
     {
-        dist = Math.max(4.0, Math.min(20.0, dist));
+        dist = Math.max(6.0, Math.min(17.0, dist));
         return distToVeloMap.get(dist);
     }
 
