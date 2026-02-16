@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -83,6 +84,11 @@ public class Robot extends TimedRobot
 
         // start the startup monitor (checks swerve alignment and controls LEDs)
         StartUpCommands.enableMonitor(robotContainer);
+
+        //this should typically be false in order to limit .hoot file loggging
+        //if this is set to true, there should be a USB drive connected to the roboRIO so that the rio's storage isn't overloaded
+        SignalLogger.enableAutoLogging(false);
+
         // if(robotContainer.getDrivetrain() != null && robotContainer.getLEDs() != null)
         // {
         //     startupNotifier = new Notifier(StartUpCommands::checkAndUpdate);

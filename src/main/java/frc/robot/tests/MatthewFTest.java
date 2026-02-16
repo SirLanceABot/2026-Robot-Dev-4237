@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -83,16 +84,8 @@ public class MatthewFTest implements Test
     public void periodic()
     {
         //angleLock drive in test
-        if(joystick.getRawButton(1))
-        {
-            drivetrain.angleLockDriveCommand(() -> -joystick.getRawAxis(1), () -> -joystick.getRawAxis(0), () -> 0.1, end).schedule();
-
-        }
-        else
-        {
-            drivetrain.angleLockDriveCommand(() -> -joystick.getRawAxis(1), () -> -joystick.getRawAxis(0), () -> 0.1, start).schedule();
-        }
-        System.out.println("Angle: " + drivetrain.getPigeon2().getRotation2d().getRadians());
+        drivetrain.sysIdDynamic(Direction.kForward).schedule();
+        // drivetrain.driveCommand(() -> -joystick.getRawAxis(1), () -> -joystick.getRawAxis(0), () -> -joystick.getRawAxis(4), () -> 0.1).schedule();
 
         //TODO for angleLock drive based on gyro
         // if(joystick.getRawButton(1))

@@ -25,6 +25,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.units.VoltageUnit;
+import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -100,7 +102,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
-    /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
+    /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */    
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
             null,        // Use default ramp rate (1 V/s)
@@ -403,7 +405,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
     {
         return applyRequest(
             () -> driveRobotCentric
-                .withVelocityX(leftYAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
+                .withVelocityX(leftYAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) ) //Comment out this line for tank drive
                 .withVelocityY(leftXAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
                 .withRotationalRate(rightXAxis.getAsDouble() * (MaxAngularRate * (setScaleFactor.getAsDouble() >= 1.0? 1.0:setScaleFactor.getAsDouble()) ) )
         );
