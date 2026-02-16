@@ -81,6 +81,8 @@ public class ElasticLance
 
         // updateValidAutoBox();
         updateAllianceColorBox();
+        updateHubTagBox();
+        updateClimbTagBox();
         // updateLEDColorBox();
 
         if(!useFullRobot && DriverStation.isDisabled())

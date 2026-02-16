@@ -18,6 +18,7 @@ import frc.robot.commands.CommandsManager;
 import frc.robot.commands.StartUpCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
+import frc.robot.elastic.ElasticLance;
 import frc.robot.pathplanner.PathPlannerLance;
 
 /**
@@ -104,6 +105,7 @@ public class Robot extends TimedRobot
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        ElasticLance.sendDataToSmartDashboard();
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
