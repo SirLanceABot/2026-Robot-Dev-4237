@@ -400,46 +400,6 @@ public class GeneralCommands
         }
     }
 
-    // // not tested
-    // /**
-    //  * @author Robbie F
-    //  * @return command to climb to L1
-    //  */
-    // public static Command climbToL1Command()
-    // {
-    //     if(climb != null)
-    //     {
-    //         return extendClimbToL1Command()
-    //         .andThen(ascendFromL1Command())
-    //         .withName("did the climb thing");
-    //     }
-    //     else
-    //     { 
-    //         return Commands.none();
-    //     }
-    // }
-
-    // //not tested
-    // /**
-    //  * @author Robbie F
-    //  * @return command to retract from L1
-    //  */
-    // public static Command retractFromL1Command()
-    // {
-    //     if(climb != null)
-    //     {
-    //         return descendFromL1Command()
-    //         .andThen(resetClimbToStartCommand())
-    //         .andThen(defaultLEDCommand())
-    //         .withName("reset climbing mechanism from L1");
-    //     }
-    //     else
-    //     {
-    //         return Commands.none();
-    //     }
-    // }
-
-
     //CURRENT climb sequence
 
     // GeneralCommands.extendClimbToL1Command()
@@ -450,9 +410,6 @@ public class GeneralCommands
     //      extends climb to descend traversal, servo remains out
     // GeneralCommands.resetClimbToStartCommand()
     //      resets climb to start position, retracts servo (must have driven away from traversal)
-
-
-
     
     /**
      * Drives autonomously from the given pose to the target pose

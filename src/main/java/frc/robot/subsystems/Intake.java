@@ -175,6 +175,11 @@ public class Intake extends SubsystemBase
         setVelocity(10.0);
     }
 
+    public double getPivotPosition()
+    {
+        return PivotMotor.getPosition();
+    }
+
     public BooleanSupplier isAtPosition(double desiredPosition)
     {
         return () -> (Math.abs(PivotMotor.getPosition() - desiredPosition) <= 1.0);
@@ -219,6 +224,16 @@ public class Intake extends SubsystemBase
     public Command stopCommand()
     {
         return runOnce(() -> stop()).withName("Stop Intake");
+    }
+
+    /**
+     * @author Robbie F
+     * @return if intake is outside the robot or not (mainly for climb)
+     */
+    public BooleanSupplier isExtended()
+    {
+        //probably want to make this the value where the intake extends beyond the robot perimeter
+        return ()-> getPivotPosition() > 1.0;
     }
 
 
