@@ -16,6 +16,8 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.Constants;
+import frc.robot.sensors.Camera;
+import frc.robot.sensors.HopperCamera;
 
 /**
  * This class checks the swerves at startup and blinks leds red until tehy are aligned.
@@ -41,6 +43,10 @@ public final class StartUpCommands
 
     private static Drivetrain drivetrain;
     private static LEDs leds;
+    // private static Camera intakeCamera;
+    private static Camera shooterCamera;
+    private static HopperCamera hopperCamera;
+
     private static Notifier notifier; // background timer
 
     // private static boolean currentlyBlinking = false;
@@ -81,7 +87,14 @@ public final class StartUpCommands
             return result;
         }
 
-        // Third - Swerve alignment
+        // Thrid - Cameras check
+        result = checkCameras();
+        if (result != null)
+        {
+            return result;
+        }
+
+        // Fourth - Swerve alignment
         result = checkSwerve();
         if (result != null)
         {
@@ -146,6 +159,8 @@ public final class StartUpCommands
 
         drivetrain = robotContainer.getDrivetrain();
         leds = robotContainer.getLEDs();
+        shooterCamera = robotContainer.getShooterCamera();
+        hopperCamera = robotContainer.getHopperCamera();
 
         if (drivetrain != null && drivetrain.getPigeon2() != null)
         {
@@ -275,13 +290,13 @@ public final class StartUpCommands
     /**
      * This method will check if all cameras are on and seeing things
      */
-    // private static StartUpState checkCameras()
-    // {
-    //     if (drivetrain == null || drivetrain.getPigeon2() == null)
-    //     {
-    //         return null;
-    //     }
+    private static StartUpState checkCameras()
+    {
+        if (drivetrain == null || drivetrain.getPigeon2() == null)
+        {
+            return null;
+        }
 
-
-    // }
+        return null;
+    }
 }
