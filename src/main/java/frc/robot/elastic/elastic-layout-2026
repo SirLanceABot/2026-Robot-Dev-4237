@@ -118,20 +118,7 @@
     {
       "name": "Teleop",
       "grid_layout": {
-        "layouts": [
-          {
-            "title": "List Layout",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 400.0,
-            "height": 320.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": []
-          }
-        ],
+        "layouts": [],
         "containers": [
           {
             "title": "Alerts",
@@ -210,6 +197,32 @@
               "robot_color": 4294198070,
               "trajectory_color": 4294967295,
               "show_robot_outside_widget": true
+            }
+          },
+          {
+            "title": "Is hub tag",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 200.0,
+            "height": 320.0,
+            "type": "Single Color View",
+            "properties": {
+              "topic": "/SmartDashboard/Is hub tag",
+              "period": 0.06,
+              "data_type": "string"
+            }
+          },
+          {
+            "title": "Is climb tag",
+            "x": 200.0,
+            "y": 0.0,
+            "width": 200.0,
+            "height": 320.0,
+            "type": "Single Color View",
+            "properties": {
+              "topic": "/SmartDashboard/Is climb tag",
+              "period": 0.06,
+              "data_type": "string"
             }
           }
         ]

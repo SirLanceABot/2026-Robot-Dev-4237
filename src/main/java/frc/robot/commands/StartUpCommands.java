@@ -131,7 +131,7 @@ public final class StartUpCommands
                 break;
 
             case CAMERAS_OFF:
-                command = leds.setColorBlinkCommand(Color.kBlue);
+                command = leds.setColorBlinkCommand(Color.kPurple);
                 break;
 
             case READY:
@@ -292,9 +292,22 @@ public final class StartUpCommands
      */
     private static StartUpState checkCameras()
     {
-        if (drivetrain == null || drivetrain.getPigeon2() == null)
+        // Limelight-based cameras
+        // Shooter Camera
+        if (shooterCamera != null)
         {
-            return null;
+            if (shooterCamera.getTimestamp() < 0)
+            {
+                System.out.println("StartUpCommands - Shooter camera not updating");
+                return StartUpState.CAMERAS_OFF;
+            }
+        }
+
+        // Hopper USB camera
+        if (hopperCamera == null)
+        {
+            System.out.println("StartUpCommands - Hopper camera missing");
+            return StartUpState.CAMERAS_OFF;
         }
 
         return null;
