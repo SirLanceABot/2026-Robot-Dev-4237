@@ -90,7 +90,7 @@ public final class Constants
     
     public static class Indexigator
     {
-        public static final int MOTOR                   = 2;
+        public static final int MOTOR                   = 7;
 
         public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
     }

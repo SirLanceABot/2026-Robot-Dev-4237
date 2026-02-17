@@ -276,6 +276,11 @@ public class Flywheel extends SubsystemBase
         return runOnce(this::stop);
     }
 
+    public Command setCommand()
+    {
+        return run(() -> set(0.1));
+    }
+
     public Command runMtorUsingVoltageCommand(double voltage)
     {
         return run( () -> setVoltage(voltage));

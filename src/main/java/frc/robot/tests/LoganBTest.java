@@ -85,20 +85,39 @@ public class LoganBTest implements Test
         //     ScoringCommands.shootFromStandstillCommand(agitator, acceleartor, flywheel)
         // );
 
+        // controller.a().onTrue(
+        //     flywheel.setControlVelocityCommand(() -> 41.0)
+        // );
+        // controller.x().onTrue(
+        //     flywheel.setControlVelocityCommand(() -> 39.0)
+        // );
+        // controller.y().onTrue(
+        //     flywheel.setControlVelocityCommand(() -> 70.0)
+        // );
+        // controller.b().onTrue(
+        //     accelerator.onCommand()
+        // );
+        // controller.start().onTrue(
+        //     flywheel.stopCommand()
+        // );
+
         controller.a().onTrue(
-            flywheel.setControlVelocityCommand(() -> 41.0)
-        );
-        controller.x().onTrue(
-            flywheel.setControlVelocityCommand(() -> 39.0)
-        );
-        controller.y().onTrue(
-            flywheel.setControlVelocityCommand(() -> 70.0)
+            indexigator.setForwardCommand()
         );
         controller.b().onTrue(
-            accelerator.onCommand()
+            indexigator.stopCommand()
+        );
+        controller.x().onTrue(
+            accelerator.setVelocityCommand(12.0)
+        );
+        controller.y().onTrue(
+            flywheel.setControlVelocityCommand(() -> 25)
         );
         controller.start().onTrue(
             flywheel.stopCommand()
+        );
+        controller.back().onTrue(
+            accelerator.stopCommand()
         );
     }
     
