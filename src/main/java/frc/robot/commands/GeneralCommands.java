@@ -3,6 +3,8 @@ package frc.robot.commands;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix6.hardware.CANrange;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -15,6 +17,7 @@ import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -450,6 +453,45 @@ public class GeneralCommands
 
         return AutoBuilder.followPath(path);
     }
+
+    // /**
+    //  * @author Robbie F
+    //  * @param drivetrain
+    //  * @param indexigator
+    //  * @param accelerator
+    //  * @param flywheel
+    //  * @param poseEstimator
+    //  * @param isRight
+    //  * @return pass on the move?
+    //  */
+    // public static Command passOnTheMoveCommand(Drivetrain drivetrain, Indexigator indexigator, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator, BooleanSupplier isRight)
+    // {
+    //     if(drivetrain != null && indexigator != null && accelerator != null && flywheel != null && poseEstimator != null)
+    //     {
+    //         Supplier<Pose2d> robotPose =  () -> drivetrain.getState().Pose;
+    //         Supplier<ChassisSpeeds> velocity = () -> ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.get().getRotation());
+
+    //         Supplier<Pose2d> calculatedTarget = () -> poseEstimator.getCalculatedTargetPose( // Pose of our caluclated target, adjusting for robot velo
+    //             poseEstimator.getAlliancePassingLocationPose(isRight.getAsBoolean()), 
+    //             robotPose.get(), 
+    //             velocity.get());
+
+    //         DoubleSupplier distance = () -> (poseEstimator.getDistanceToTarget(robotPose.get(), calculatedTarget.get()).getAsDouble());
+    //         DoubleSupplier shooterPower = () -> (flywheel.getPassPower(distance.getAsDouble() * 3.281)); // meters -> feet
+
+    //         return
+    //         flywheel.setControlVelocityCommand(() -> shooterPower.getAsDouble()).until(flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10))     // TODO tune tolerance
+    //         .andThen(
+    //             Commands.parallel(
+    //                 indexigator.setForwardCommand(), // rpm
+    //                 accelerator.setVelocityCommand(12.0)));
+    //     }
+    //     else
+    //     {
+    //         return Commands.none();
+    //     }
+    // }
+
 
     
     // maybe L3?

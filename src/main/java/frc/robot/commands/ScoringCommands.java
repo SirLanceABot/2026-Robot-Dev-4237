@@ -90,9 +90,7 @@ public class ScoringCommands
     } 
 
     public static Command IntakeAndScoreCommandTheSequal(Intake intake, Indexigator indexigator, Accelerator accelerator, Flywheel flywheel)
-    {
-
-        
+    {        
         if(intake != null && indexigator != null  && accelerator != null  && flywheel != null )
         {
             return  Commands.parallel( (accelerator.feedToShooterCommand(() -> 0.25)),
