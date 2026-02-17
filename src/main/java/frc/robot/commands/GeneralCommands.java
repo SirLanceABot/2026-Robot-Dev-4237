@@ -73,8 +73,8 @@ public class GeneralCommands
         climb = robotContainer.getClimb();
         poseEstimator = robotContainer.getPoseEstimator();
         leds = robotContainer.getLEDs();
-        canrange1 = robotContainer.getCANrange();
-        canrange2 = new CANRange(1, 3);
+        canrange1 = robotContainer.getCANrange(0);
+        canrange2 = robotContainer.getCANrange(1);
         debouncer = new Debouncer(0.5);
 
         System.out.println("  Constructor Finished: " + fullClassName);

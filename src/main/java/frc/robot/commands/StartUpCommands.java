@@ -17,7 +17,8 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.Constants;
 import frc.robot.sensors.Camera;
-import frc.robot.sensors.HopperCamera;
+import frc.robot.sensors.CANRange;
+// import frc.robot.sensors.HopperCamera;
 
 /**
  * This class checks the swerves at startup and blinks leds red until tehy are aligned.
@@ -38,14 +39,16 @@ public final class StartUpCommands
 
     private enum StartUpState
     {
-        LOW_VOLTAGE, GYRO_NOT_ZEROED, CAMERAS_OFF, SWERVE_MISALIGNED, READY
+        LOW_VOLTAGE, GYRO_NOT_ZEROED, CANRANGE_OFF, CAMERAS_OFF, SWERVE_MISALIGNED, READY
     }
 
     private static Drivetrain drivetrain;
     private static LEDs leds;
     // private static Camera intakeCamera;
     private static Camera shooterCamera;
-    private static HopperCamera hopperCamera;
+    // private static HopperCamera hopperCamera;
+    private static CANRange CANRange0;
+    private static CANRange CANRange1;
 
     private static Notifier notifier; // background timer
 
@@ -87,14 +90,21 @@ public final class StartUpCommands
             return result;
         }
 
-        // Thrid - Cameras check
+        // Third - CAN Range check
+        result = checkCANRanges();
+        if (result != null)
+        {
+            return result;
+        }
+
+        // Fourth - Cameras check
         result = checkCameras();
         if (result != null)
         {
             return result;
         }
 
-        // Fourth - Swerve alignment
+        // Fifth - Swerve alignment
         result = checkSwerve();
         if (result != null)
         {
@@ -126,12 +136,16 @@ public final class StartUpCommands
                 command = leds.setColorBlinkCommand(Color.kOrangeRed);
                 break;
 
-            case SWERVE_MISALIGNED:
-                command = leds.setColorBlinkCommand(Color.kRed);
+            case CANRANGE_OFF:
+                command = leds.setColorBlinkCommand(Color.kDodgerBlue);
                 break;
-
+            
             case CAMERAS_OFF:
                 command = leds.setColorBlinkCommand(Color.kPurple);
+                break;
+
+            case SWERVE_MISALIGNED:
+                command = leds.setColorBlinkCommand(Color.kRed);
                 break;
 
             case READY:
@@ -160,7 +174,11 @@ public final class StartUpCommands
         drivetrain = robotContainer.getDrivetrain();
         leds = robotContainer.getLEDs();
         shooterCamera = robotContainer.getShooterCamera();
-        hopperCamera = robotContainer.getHopperCamera();
+        // hopperCamera = robotContainer.getHopperCamera();
+        CANRange0 = robotContainer.getCANrange(0);
+        CANRange1 = robotContainer.getCANrange(1);
+
+
 
         if (drivetrain != null && drivetrain.getPigeon2() != null)
         {
@@ -303,11 +321,27 @@ public final class StartUpCommands
             }
         }
 
-        // Hopper USB camera
-        if (hopperCamera == null)
+        return null;
+    }
+
+    /**
+     * This method will check if the CANRanges is returning ____
+     */
+    private static StartUpState checkCANRanges()
+    {
+        if (CANRange0 != null && CANRange1 != null)
         {
-            System.out.println("StartUpCommands - Hopper camera missing");
-            return StartUpState.CAMERAS_OFF;
+            if (CANRange0 == null) // What else does this return dawg
+            {
+                System.out.println("StartUpCommands - CANRange0 is not working");
+                return StartUpState.CANRANGE_OFF;
+            }
+
+            if (CANRange0 == null)
+            {
+                System.out.println("StartUpCommands - CANRange1 is not working");
+                return StartUpState.CANRANGE_OFF;
+            }
         }
 
         return null;

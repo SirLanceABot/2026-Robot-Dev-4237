@@ -120,6 +120,9 @@ public class Intake extends SubsystemBase
         RollersFollower.setupFollower(ROLLER_MOTOR_LEADER, true);
         PivotFollower.setupFollower(PIVOT_MOTOR_LEADER, true);
 
+        PivotMotor.setupForwardHardLimitSwitch(true, true, 8);
+        PivotMotor.setupReverseHardLimitSwitch(true, false, 9);
+
         // Configure Velocity Conversion Factor (rev/s to ft/s)
         // intakeRollersMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
     }

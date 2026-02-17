@@ -82,7 +82,8 @@ public class RobotContainer
     private LEDs leds = null;
     private LaserCanSensor laserCanSensor = null;
     private RangerDistanceSensor rangerDistanceSensor = null;
-    private CANRange canrange = null;
+    private CANRange canrange0 = null;
+    private CANRange canrange1 = null;
 
     private CommandXboxController driverController = null;
     private CommandXboxController operatorController = null;
@@ -131,7 +132,8 @@ public class RobotContainer
             laserCanSensor = new LaserCanSensor();
 
         if(useFullRobot || useCANrange)
-            canrange = new CANRange(0,3);
+            canrange0 = new CANRange(0,3);
+            canrange1 = new CANRange(1, 3);
 
         if(useFullRobot || useRangerDistanceSensor)
             rangerDistanceSensor = new RangerDistanceSensor();
@@ -231,9 +233,14 @@ public class RobotContainer
         return laserCanSensor;
     }
 
-    public CANRange getCANrange()
+    public CANRange getCANrange(int ID)
     {
-        return canrange;
+        if (ID == 0)
+            return canrange0;
+        if (ID == 1)
+            return canrange1;
+
+        return null;
     }
 
     public RangerDistanceSensor getRangerDistanceSensor()

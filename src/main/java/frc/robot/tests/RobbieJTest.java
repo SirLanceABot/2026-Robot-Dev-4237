@@ -57,7 +57,7 @@ public class RobbieJTest implements Test
     private LaserCanSensor laserCan;
     private RangerDistanceSensor rangerDistanceSensor;
     private CANRange canrange;
-    private CANRange canrange1 = new CANRange(1, 3);
+    private CANRange canrange1;
     private final CommandXboxController controller = new CommandXboxController(0);
     private Debouncer debouncer = new Debouncer(0.5);
 
@@ -85,7 +85,9 @@ public class RobbieJTest implements Test
         climb = robotContainer.getClimb();
         laserCan = robotContainer.getLaserCanSensor();
         rangerDistanceSensor = robotContainer.getRangerDistanceSensor();
-        canrange = robotContainer.getCANrange(); 
+        canrange = robotContainer.getCANrange(0); 
+        canrange = robotContainer.getCANrange(1); 
+
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
