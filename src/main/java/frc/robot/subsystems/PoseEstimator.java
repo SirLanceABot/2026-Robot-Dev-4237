@@ -541,12 +541,18 @@ public class PoseEstimator extends SubsystemBase
                     Pose2d visionPose = camera.getPose();
                     double robotVelo = Math.hypot(drivetrain.getState().Speeds.vxMetersPerSecond, drivetrain.getState().Speeds.vyMetersPerSecond);
                     double robotRotation = Math.toDegrees(drivetrain.getState().Speeds.omegaRadiansPerSecond);
+                    double distToTag = camera.avgTagDistance();
                     boolean rejectUpdate = false;
 
                     if(isFirstTagSight && visionPose != null)
                     {
                         isFirstTagSight = false;
                         drivetrain.resetPose(visionPose);
+                    }
+
+                    if(distToTag >= 3.5)
+                    {
+                        rejectUpdate = true;
                     }
 
                     if(visionPose == null)

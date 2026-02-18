@@ -261,8 +261,8 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
                                             .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
                                             .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
                 new PPHolonomicDriveController(
-                    new PIDConstants(9, 0, 0),
-                    new PIDConstants(8.5, 0, 0) // used to be 7
+                    new PIDConstants(3.8, 0, 0),
+                    new PIDConstants(5.5, 0, 0) // used to be 7
                 ),
                 config,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
