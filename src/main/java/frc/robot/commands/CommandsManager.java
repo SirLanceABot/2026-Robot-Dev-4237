@@ -87,8 +87,8 @@ public class CommandsManager extends Command
         NamedCommands.registerCommand("Pass Command", ScoringCommands.passCommand(indexigator, accelerator, flywheel));
 
         // Climbing Commands
-        NamedCommands.registerCommand("Climb to L1 Command", GeneralCommands.climbToL1Command());
-        NamedCommands.registerCommand("Retract from L1 Command", GeneralCommands.retractFromL1Command());
+        // NamedCommands.registerCommand("Climb to L1 Command", GeneralCommands.climbToL1Command());
+        // NamedCommands.registerCommand("Retract from L1 Command", GeneralCommands.retractFromL1Command());
         NamedCommands.registerCommand("Left Auto Climb L1 Command", ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, ()-> true));
         NamedCommands.registerCommand("Right Auto Climb L1 Command", ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, ()-> false));
 
