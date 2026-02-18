@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 import frc.robot.RobotContainer;
+import frc.robot.pathplanner.PathPlannerLance;
 import frc.robot.sensors.Camera;
 import frc.robot.sensors.HopperCamera;
 import frc.robot.subsystems.Drivetrain;
@@ -55,7 +56,7 @@ public class ElasticLance
 
     // private static Alert autoAlert = new Alert("Invalid Auto", AlertType.kWarning);
     private static Alert useFullRobotAlert = new Alert("NOT using Full Robot!", AlertType.kError);
-
+    private static Alert autoAlert = new Alert("INVALID AUTO", AlertType.kWarning);
     // private static boolean useFullRobot;
 
     private ElasticLance()
@@ -85,21 +86,32 @@ public class ElasticLance
         updateAllianceColorBox();
         updateHubTagBox();
         updateClimbTagBox();
-        // updateLEDColorBox();
+        updateLEDColorBox();
 
         if(!useFullRobot && DriverStation.isDisabled())
         {
             useFullRobotAlert.set(true);
-            leds.setColorSolidCommand(100, Color.kRed).ignoringDisable(true).schedule();        }
+            leds.setColorSolidCommand(100, Color.kRed).ignoringDisable(true).schedule();        
+        }
     }
 
-    // public static void updateValidAutoBox()
-    // {
-    //     if(DriverStation.isDisabled())
-    //     {
-
-    //     }
-    // }
+    public static void updateValidAutoBox()
+    {
+        if(DriverStation.isDisabled())
+        {
+            if(PathPlannerLance.getAutonomousCommand().getName().equalsIgnoreCase("InstantCommand"))
+            {
+                validAutoColor = Color.kRed;
+                autoAlert.set(true);
+            }
+            else
+            {
+                validAutoColor = Color.kGreen;
+                autoAlert.set(false);
+            }
+        }
+        SmartDashboard.putString("Is Auto Valid", validAutoColor.toHexString());
+    }
     
     public static void updateHubTagBox()
     {
@@ -167,13 +179,15 @@ public class ElasticLance
         {
             allianceColor = Color.kGray;
         }
+
+        SmartDashboard.putString("Alliance Color", allianceColor.toHexString());
     }
 
     public static void updateLEDColorBox()
     {
         LEDColor = LEDs.getColor();
-    }
 
-    // figure out a way to get the current color from the led class
+        SmartDashboard.putString("LED Color", LEDColor.toHexString());
+    }
 
 }
