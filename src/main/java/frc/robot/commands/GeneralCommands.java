@@ -395,6 +395,7 @@ public class GeneralCommands
                 // .until(climb.isServoAtPosition(0.77))
             .andThen(climb.resetToStartCommand())
                 .until(climb.isClimbMotorAtPosition(climbPosition.kSTART))
+            .andThen(climb.disableServoCommand())
             .withName("climb reset to inside robot (servo reset)");
         }
         else

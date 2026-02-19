@@ -1,16 +1,14 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Climb.*;
+import static frc.robot.Constants.Climb.LEADMOTOR;
+import static frc.robot.Constants.Climb.MOTOR_CAN_BUS;
 
 import java.lang.invoke.MethodHandles;
-import java.net.PortUnreachableException;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.motors.LinearServo;
 import frc.robot.motors.TalonFXLance;
 
 
@@ -229,6 +227,11 @@ public class Climb extends SubsystemBase
     public Command setServoToRetractedPositionCommand()
     {
         return runOnce( ()-> setServoPWM((int) ((MIN_SERVO_LENGTH / 50.0) * 1000) + 1000));
+    }
+
+    public Command disableServoCommand()
+    {
+        return runOnce(()-> servo.setDisabled());
     }
 
     

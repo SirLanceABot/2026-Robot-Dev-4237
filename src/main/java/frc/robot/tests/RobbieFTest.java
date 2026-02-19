@@ -87,22 +87,21 @@ public class RobbieFTest implements Test
     public void init()
     {
         controller.a().onTrue(
-            GeneralCommands.extendClimbToL1Command()
+            climb.setServoPWMCommand(1500)
         );
         controller.x().onTrue(
-            GeneralCommands.ascendFromL1Command()
-        );
-        controller.y().onTrue(
             GeneralCommands.descendFromL1Command()
         );
         controller.b().onTrue(
             GeneralCommands.resetClimbToStartCommand()
         );
+        controller.y().onTrue(
+            climb.disableServoCommand()
+        );
 
         controller.start().onTrue(
             climb.setServoPWMCommand(1000)
         );
-
     }
 
     /**
