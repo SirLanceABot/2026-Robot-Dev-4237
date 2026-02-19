@@ -225,11 +225,11 @@ public class ScoringCommands
         if(indexigator != null && accelerator != null && flywheel != null)
         {
             return
-            flywheel.setControlVelocityCommand(() -> 10.0).until(flywheel.isAtSetSpeed(10.0, 5))   // test value
+            flywheel.setControlVelocityCommand(() -> 60.0).until(flywheel.isAtSetSpeed(60.0, 10))   // test value
             .andThen(
             Commands.parallel(
-                (indexigator.setForwardCommand()), //rpm
-                (accelerator.feedToShooterCommand(() -> 0.1))));
+                indexigator.setForwardCommand(), //rpm
+                accelerator.setVelocityCommand(12.0)));
         }
         else
         {

@@ -165,21 +165,21 @@ public final class DriverBindings {
     {
         Trigger xButton = controller.x();
     
-        xButton
-        .whileTrue(
-            Commands.parallel(
-                drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> poseEstimator.pureLeadingAngle(poseEstimator.getAllianceHubPose()).getAsDouble()),
-                ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, indexigator, accelerator, flywheel)));
+        // xButton
+        // .whileTrue(
+        //     Commands.parallel(
+        //         drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> poseEstimator.pureLeadingAngle(poseEstimator.getAllianceHubPose()).getAsDouble()),
+        //         ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, indexigator, accelerator, flywheel)));
 
-        xButton.onFalse(GeneralCommands.stopShootingCommand());
+        // xButton.onFalse(GeneralCommands.stopShootingCommand());
     }
 
     // pass
     private static void configYButton()
     {
         Trigger yButton = controller.y();
-        // yButton.onTrue(ScoringCommands.passCommand(drivetrain, agitator, accelerator, flywheel, poseEstimator));
-        //Pass Command
+
+        yButton.whileTrue(ScoringCommands.passCommand(indexigator, accelerator, flywheel));
 
         // Auto climb testing
         // yButton.whileTrue(

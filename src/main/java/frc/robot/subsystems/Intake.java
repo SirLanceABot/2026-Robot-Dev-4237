@@ -57,8 +57,8 @@ public class Intake extends SubsystemBase
     private final double GEAR_RATIO = 1.0 / 1.0;
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INTAKE_ROLLER_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
 
-    private final double retractedPosition = 0.0;
-    private final double intakingPosition = -11.0; // TEST FOR TRUE VALUE ON ROBOT
+    private final double retractedPosition = 10.0; // TEST
+    private final double intakingPosition = 0.0; 
     // private final double theshold = 4.0;
 
     // *** CLASS CONSTRUCTORS ***
@@ -159,7 +159,7 @@ public class Intake extends SubsystemBase
     {
         RollersMotor.set(0.9);
         // setVelocity(20.0);
-        // PivotMotor.setControlPosition(intakingPosition);
+        PivotMotor.setControlPosition(intakingPosition);
     }
 
     /** 
@@ -175,7 +175,7 @@ public class Intake extends SubsystemBase
     public void retractIntake()
     {
         PivotMotor.setControlPosition(retractedPosition);
-        setVelocity(10.0);
+        setVelocity(0.0);
     }
 
     public double getPivotPosition()
