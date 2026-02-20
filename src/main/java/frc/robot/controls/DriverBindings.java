@@ -286,9 +286,10 @@ public final class DriverBindings {
             drivetrain.setDefaultCommand(drivetrain.driveCommand(leftYAxis, leftXAxis, rightXAxis, scaleFactorSupplier));     
         }
 
-        if(leds != null)
-        {
-            leds.setDefaultCommand(GeneralCommands.defaultLEDCommand());
-        }
+        //TODO this should be tested, it might cause our LEDs to immediately turn back to red 
+        // if(leds != null)
+        // {
+        //     leds.setDefaultCommand(GeneralCommands.defaultLEDCommand());
+        // }
     }    
 }

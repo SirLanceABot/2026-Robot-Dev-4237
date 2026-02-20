@@ -96,7 +96,7 @@ public class GeneralCommands
         if(leds != null)
         {
             switch(pattern)
-            {
+            { 
                 case kSolid:
                     return colors != null ? leds.setColorSolidCommand(100, colors[0]) : Commands.none();
                 case kBlink:
@@ -121,7 +121,6 @@ public class GeneralCommands
     public static Command defaultLEDCommand()
     {
         //TODO add an if statement that makes the default color blinking yellow when the hopper is full
-        //In theory this command could be sent a BooleanSupplier that tells you which color to assign the leds
         return setLEDCommand(ColorPattern.kSolid, Color.kRed).withName("Set LED to default (red)");
     }
 
@@ -261,6 +260,7 @@ public class GeneralCommands
         {
             return
             Commands.parallel(
+                defaultLEDCommand(),
                 flywheel.stopCommand(),
                 indexigator.stopCommand(),
                 accelerator.stopCommand()
