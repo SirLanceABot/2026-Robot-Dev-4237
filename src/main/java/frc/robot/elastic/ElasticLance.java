@@ -201,7 +201,46 @@ public class ElasticLance
 
     public static void updateStartupAlerts()
     {
-        
+        StartUpState state = StartUpCommands.getCurrentState();
+
+        lowVoltageAlert.set(false);
+        gyroAlert.set(false);
+        canRangeAlert.set(false);
+        cameraAlert.set(false);
+        swerveAlert.set(false);
+
+        if(state != null)
+        {
+            switch (state)
+            {
+                case LOW_VOLTAGE:
+                    lowVoltageAlert.set(true);
+                    break;
+
+                case GYRO_NOT_ZEROED:
+                    gyroAlert.set(true);
+                    break;
+
+                case CANRANGE_OFF:
+                    canRangeAlert.set(true);
+                    break;
+                
+                case CAMERAS_OFF:
+                    cameraAlert.set(true);
+                    break;
+
+                case SWERVE_MISALIGNED:
+                    swerveAlert.set(true);
+                    break;
+
+                case READY:
+                    break;
+                
+                default:
+                    break;
+            }
+        }
+
     }
 
 }
