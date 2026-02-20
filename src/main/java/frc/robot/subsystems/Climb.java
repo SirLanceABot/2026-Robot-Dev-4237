@@ -6,6 +6,7 @@ import static frc.robot.Constants.Climb.MOTOR_CAN_BUS;
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -47,8 +48,11 @@ public class Climb extends SubsystemBase
     private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Lead Climb Motor ");
     // private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Follower Climb Motor");
     
-    // private final LinearServo servo = new LinearServo(1, 50, 32, MAX_SERVO_LENGTH, MIN_SERVO_LENGTH);
     private final Servo servo = new Servo(1);
+
+    private final DigitalInput climbSensor = new DigitalInput(4);
+
+    
 
     private final double tolerance = 0.2;
     private final double servoTolerance = 0.05;
@@ -90,14 +94,16 @@ public class Climb extends SubsystemBase
         leadMotor.setPosition(0.0);
         // followMotor.setPosition(0.0);
 
-        // leadMotor.setupForwardSoftLimit(16, true);
+        leadMotor.setSafetyEnabled(false);
+
+        leadMotor.setupForwardSoftLimit(32.0, true);
         // followMotor.setupForwardSoftLimit(0, false);
 
-        // leadMotor.setupReverseSoftLimit(0.0, true);
-        // followMotor.setupReverseSoftLimit(0, false);
+        leadMotor.setupReverseSoftLimit(0.0, true);
+        // followMotor.setupReverseSoftLimit(0.0, false);
 
-        leadMotor.setupForwardHardLimitSwitch(true, true, 0);
-        leadMotor.setupReverseHardLimitSwitch(true, true, 1);
+        // leadMotor.setupForwardHardLimitSwitch(true, true, 0);
+        // leadMotor.setupReverseHardLimitSwitch(true, true, 1);
 
         // followMotor.setupFollower(LEADMOTOR, true);
 
@@ -114,6 +120,11 @@ public class Climb extends SubsystemBase
     public double getPosition()
     {
         return leadMotor.getPosition();
+    }
+
+    public void runClimb()
+    {
+        leadMotor.set(0.3);
     }
 
 
@@ -166,6 +177,30 @@ public class Climb extends SubsystemBase
         servo.setPulseTimeMicroseconds(pulse);
     }
 
+    public boolean getClimbSensor()
+    {
+        return climbSensor.get();
+    }
+
+    public boolean getClimbSensorAfterDistance(double distance, boolean isForward)
+    {
+        if(isForward)
+        {
+            if(getPosition() > distance)
+                return climbSensor.get();
+        
+            return false;
+        }
+        else
+        {
+            if(getPosition() < distance)
+                return climbSensor.get();
+            
+            return false;
+        }
+        
+    }
+
     /**
      * 
      * Returns a command to stop climb
@@ -176,34 +211,28 @@ public class Climb extends SubsystemBase
         return run( () -> stopMotor());
     }
 
-    /**
-     * @author Robbie J
-     * @return move to position L1, until at position or hard limit hit; then stops
-     * use this when climbing down (doesn't require servo)
-     */
-    public Command extendToL1Command()
+    
+    public Command extendToL1FromStartCommand()
     {
-        return run( () -> moveToPosition(climbPosition.kEXTENDL1)).until(() -> (isClimbMotorAtPosition(climbPosition.kEXTENDL1).getAsBoolean() || (leadMotor.getForwardHardLimit())))
+        return run( () -> moveToPosition(climbPosition.kEXTENDL1)).until(()-> (isClimbMotorAtPosition(climbPosition.kEXTENDL1).getAsBoolean() || isDetectedAfterDistanceSupplier(climbPosition.kSTART.value + 1.0, true).getAsBoolean()))
                 .andThen(stopMotorCommand());
     }
 
-    /**
-     * @author Robbie J
-     * @return move to position start, until at position or hard limit hit; then stops 
-     */
-    public Command retractFromL1Command()
+    public Command extendToL1FromRetractedCommand()
     {
-        return run( () -> moveToPosition(climbPosition.kRETRACTL1)).until(() -> (isClimbMotorAtPosition(climbPosition.kRETRACTL1).getAsBoolean() || (leadMotor.getReverseHardLimit())))
+        return run( () -> moveToPosition(climbPosition.kEXTENDL1)).until(()-> (isClimbMotorAtPosition(climbPosition.kEXTENDL1).getAsBoolean() || isDetectedAfterDistanceSupplier(climbPosition.kRETRACTL1.value + 1.0, true).getAsBoolean()))
+                .andThen(stopMotorCommand());
+    }
+
+    public Command retractFromExtendL1Command()
+    {
+        return run( () -> moveToPosition(climbPosition.kRETRACTL1)).until(() -> (isClimbMotorAtPosition(climbPosition.kRETRACTL1).getAsBoolean() || isDetectedAfterDistanceSupplier(climbPosition.kEXTENDL1.value - 1.0, false).getAsBoolean()))
             .andThen(stopMotorCommand());
     }
 
-    /**
-     * @author Robbie
-     * @return moves climb motor to start position
-     */
-    public Command resetToStartCommand()
+    public Command resetToStartFromExtendedCommand()
     {
-        return run( () -> moveToPosition(climbPosition.kSTART)).until(() -> (isClimbMotorAtPosition(climbPosition.kSTART).getAsBoolean() || (leadMotor.getReverseHardLimit())))
+        return run( () -> moveToPosition(climbPosition.kSTART)).until(() -> (isClimbMotorAtPosition(climbPosition.kSTART).getAsBoolean() || isDetectedAfterDistanceSupplier(climbPosition.kEXTENDL1.value - 1.0, false).getAsBoolean()))
             .andThen(stopMotorCommand());
     }
 
@@ -229,14 +258,31 @@ public class Climb extends SubsystemBase
         return runOnce( ()-> setServoPWM((int) ((MIN_SERVO_LENGTH / 50.0) * 1000) + 1000));
     }
 
+    public Command runClimbCommand()
+    {
+        return run( ()-> runClimb());
+    }
+
     public Command disableServoCommand()
     {
         return runOnce(()-> servo.setDisabled());
     }
 
+    public BooleanSupplier isDetected()
+    {
+        return ()-> !getClimbSensor();
+    }
+
+    public BooleanSupplier isDetectedAfterDistanceSupplier(double distance, boolean isForward)
+    {
+        return ()-> getClimbSensorAfterDistance(distance, isForward);
+    }
+
+
+
     
 
-    // *** OVERRIDEN METHODS ***
+    // *** OVERRIDEN METHODS ***!
     // Put all methods that are Overridden here
 
     @Override

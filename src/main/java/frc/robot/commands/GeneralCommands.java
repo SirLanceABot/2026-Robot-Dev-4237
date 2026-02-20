@@ -331,7 +331,7 @@ public class GeneralCommands
         {
             return 
             setLEDCommand(ColorPattern.kRainbow)
-            .andThen(climb.extendToL1Command())
+            .andThen(climb.extendToL1FromStartCommand())
                 .until(climb.isClimbMotorAtPosition(climbPosition.kEXTENDL1))
             .andThen(climb.setServoToExtendedPositionCommand())
             .withName("climb extended to L1 position");       
@@ -350,7 +350,7 @@ public class GeneralCommands
     {
         if(climb != null)
         {
-            return climb.retractFromL1Command()
+            return climb.retractFromExtendL1Command()
             .until(climb.isClimbMotorAtPosition(climbPosition.kRETRACTL1))
             .withName("climb mounted L1");
         }
@@ -368,7 +368,7 @@ public class GeneralCommands
     {
         if(climb != null)
         {
-            return climb.extendToL1Command()
+            return climb.extendToL1FromRetractedCommand()
                 .until(climb.isClimbMotorAtPosition(climbPosition.kEXTENDL1))
             // .andThen( () -> drivetrain.resetForFieldCentric())
             .withName("climb unmounted L1 (servo still extended)");
@@ -390,7 +390,7 @@ public class GeneralCommands
             return 
             climb.setServoToRetractedPositionCommand()
                 // .until(climb.isServoAtPosition(0.77))
-            .andThen(climb.resetToStartCommand())
+            .andThen(climb.resetToStartFromExtendedCommand())
                 .until(climb.isClimbMotorAtPosition(climbPosition.kSTART))
             .andThen(climb.disableServoCommand())
             .withName("climb reset to inside robot (servo reset)");

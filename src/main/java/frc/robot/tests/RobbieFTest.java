@@ -87,28 +87,51 @@ public class RobbieFTest implements Test
     public void init()
     {
         controller.a().onTrue(
-            climb.setServoPWMCommand(1500)
+            climb.runClimbCommand().until(climb.isDetectedAfterDistanceSupplier(50.0, true))
+                .andThen(climb.stopMotorCommand())
+            // GeneralCommands.extendClimbToL1Command()
         );
         controller.x().onTrue(
+            GeneralCommands.ascendFromL1Command()
+        );
+         controller.b().onTrue(
             GeneralCommands.descendFromL1Command()
         );
-        controller.b().onTrue(
-            GeneralCommands.resetClimbToStartCommand()
-        );
         controller.y().onTrue(
-            climb.disableServoCommand()
+           GeneralCommands.resetClimbToStartCommand()
         );
 
-        controller.start().onTrue(
-            climb.setServoPWMCommand(1000)
-        );
+
+        // 1. GeneralCommands.extendClimbToL1Command()
+        //      extends climb and servo, ready to drive to traversal and lock in to climb
+        // 2. GeneralCommands.ascendFromL1Command()
+        //      retracts climb to ascend traversal, servo remains out
+        // 3. GeneralCommands.descendFromL1Command()
+        //      extends climb to descend traversal, servo remains out
+        // 4. GeneralCommands.resetClimbToStartCommand()
+
+
+        // controller.b().onTrue(
+        //     GeneralCommands.resetClimbToStartCommand()
+        // );
+        // controller.y().onTrue(
+        //     climb.disableServoCommand()
+        // );
+
+        // controller.start().onTrue(
+        //     climb.setServoPWMCommand(1000)
+        // );
     }
 
     /**
      * This method runs periodically (every 20ms).
      */
     public void periodic()
-    {}
+    {
+        // System.out.println(climb.isDetectedAfterDistanceSupplier(50.0, true).getAsBoolean());
+        // System.out.println(climb.isDetected().getAsBoolean());
+        // System.out.println("Climb Position = " + climb.getPosition());
+    }
     
     /**
      * This method runs one time after the periodic() method.
