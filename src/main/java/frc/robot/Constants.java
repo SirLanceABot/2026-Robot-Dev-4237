@@ -97,10 +97,10 @@ public final class Constants
 
     public static class Intake
     {
-        public static final int ROLLER_MOTOR_LEADER               = 4;
-        public static final int ROLLER_MOTOR_FOLLOWER      = 1;
-        public static final int PIVOT_MOTOR_LEADER          = 3;
-        public static final int PIVOT_MOTOR_FOLLOWER        = 12;
+        public static final int ROLLER_MOTOR_LEADER     = 4;
+        public static final int ROLLER_MOTOR_FOLLOWER   = 1;
+        public static final int PIVOT_MOTOR_LEADER      = 3;
+        public static final int PIVOT_MOTOR_FOLLOWER    = 12;
 
         public static final String MOTOR_CAN_BUS            = CANbus.ROBORIO;
     }   
@@ -110,6 +110,16 @@ public final class Constants
         public static final int ID                       = 0;
     }
 
+    public static class Hopper
+    {
+        public static final int CAN_RANGE_RIGHT           = 0;
+        public static final int CAN_RANGE_LEFT            = 1;
+        public static final int LIMIT_SWITCH_RIGHT        = 0;
+        public static final int LIMIT_SWITCH_LEFT         = 1;
+
+        public static final double HOPPER_RETRACTED_LENGTH= 19.3; // Inches
+        public static final double HOPPER_EXTENDED_LENGTH = 31;   // Inches
+    }
 
     public static class LEDs
     {

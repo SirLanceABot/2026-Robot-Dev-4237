@@ -86,7 +86,7 @@ public class RobbieJTest implements Test
         laserCan = robotContainer.getLaserCanSensor();
         rangerDistanceSensor = robotContainer.getRangerDistanceSensor();
         canrange = robotContainer.getCANrange(0); 
-        canrange = robotContainer.getCANrange(1); 
+        canrange1 = robotContainer.getCANrange(1); 
 
 
         System.out.println("  Constructor Finished: " + fullClassName);

@@ -145,10 +145,6 @@ public class GeneralCommands
         }
     }
 
-    private BooleanSupplier isHopperFullSupplier()
-    {
-        return () -> (canrange1.isBallDetected(24.0) && canrange2.isBallDetected(24.0));
-    }
     /**
      * @author Brady W
      * @author Robbie J
