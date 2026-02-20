@@ -224,7 +224,7 @@ public final class OperatorBindings {
         dpadUp.onTrue(
             Commands.parallel(
                 GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
-                climb.extendToL1Command()));
+                GeneralCommands.extendClimbToL1Command()));
     }
 
 
@@ -235,7 +235,7 @@ public final class OperatorBindings {
         dpadDown.onTrue(
             Commands.parallel(
                 GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
-                climb.retractFromL1Command()));
+                GeneralCommands.retractFromL1Command()));
     }
 
     private static void configDpadLeft()
