@@ -7,6 +7,7 @@ package frc.robot;
 import java.lang.invoke.MethodHandles;
 
 import com.ctre.phoenix6.hardware.CANrange;
+import com.ctre.phoenix6.signals.RobotEnableValue;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
@@ -25,6 +26,7 @@ import frc.robot.subsystems.LEDs;
 import frc.robot.sensors.HopperCamera;
 import frc.robot.sensors.LaserCanSensor;
 import frc.robot.sensors.RangerDistanceSensor;
+import frc.robot.sensors.Hopper;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -61,8 +63,9 @@ public class RobotContainer
     private boolean useOperatorController       = false;
 
     private boolean useLaserCAN                 = false;
-    private boolean useCANrange                 = false;
+    private boolean useCANrange                 = true;
     private boolean useRangerDistanceSensor     = false;
+    private boolean useHopper                   = true;
 
     private boolean useHopperCamera             = false;
     private boolean useShooterCamera            = false;
@@ -84,6 +87,7 @@ public class RobotContainer
     private RangerDistanceSensor rangerDistanceSensor = null;
     private CANRange canrange0 = null;
     private CANRange canrange1 = null;
+    private Hopper hopper = null;
 
     private CommandXboxController driverController = null;
     private CommandXboxController operatorController = null;
@@ -134,6 +138,9 @@ public class RobotContainer
         if(useFullRobot || useCANrange)
             canrange0 = new CANRange(0,3);
             canrange1 = new CANRange(1, 3);
+        
+        if(useFullRobot || (useHopper && useCANrange))
+            hopper = new Hopper(canrange0,canrange1);
 
         if(useFullRobot || useRangerDistanceSensor)
             rangerDistanceSensor = new RangerDistanceSensor();
@@ -241,6 +248,11 @@ public class RobotContainer
             return canrange1;
 
         return null;
+    }
+
+    public Hopper getHopper()
+    {
+        return hopper;
     }
 
     public RangerDistanceSensor getRangerDistanceSensor()

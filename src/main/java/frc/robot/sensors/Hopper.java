@@ -31,9 +31,9 @@ public class Hopper
 
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private RobotContainer robotContainer;
-    private CANRange canRangeRight = robotContainer.getCANrange(CAN_RANGE_RIGHT);
-    private CANRange canRangeLeft = robotContainer.getCANrange(CAN_RANGE_LEFT);
+
+    private CANRange canRangeRight;
+    private CANRange canRangeLeft;
     private final DigitalInput limitSwitchRight = new DigitalInput(LIMIT_SWITCH_RIGHT);
     private final DigitalInput limitSwitchLeft = new DigitalInput(LIMIT_SWITCH_LEFT);
     private Debouncer debouncer = new Debouncer(0.5);
@@ -44,10 +44,12 @@ public class Hopper
     /** 
      * Creates a new ExampleSubsystem. 
      */
-    public Hopper()
+    public Hopper(CANRange canRangeRight, CANRange canRangeLeft)
     {   
         System.out.println("  Constructor Started:  " + fullClassName);
 
+        this.canRangeRight = canRangeRight;
+        this.canRangeLeft = canRangeLeft;
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }

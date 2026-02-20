@@ -14,6 +14,7 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.commands.ScoringCommands;
 import frc.robot.sensors.CANRange;
+import frc.robot.sensors.Hopper;
 import frc.robot.sensors.HopperCamera;
 import frc.robot.sensors.LaserCanSensor;
 import frc.robot.sensors.RangerDistanceSensor;
@@ -58,6 +59,7 @@ public class RobbieJTest implements Test
     private RangerDistanceSensor rangerDistanceSensor;
     private CANRange canrange;
     private CANRange canrange1;
+    private Hopper hopper;
     private final CommandXboxController controller = new CommandXboxController(0);
     private Debouncer debouncer = new Debouncer(0.5);
 
@@ -85,8 +87,9 @@ public class RobbieJTest implements Test
         climb = robotContainer.getClimb();
         laserCan = robotContainer.getLaserCanSensor();
         rangerDistanceSensor = robotContainer.getRangerDistanceSensor();
-        canrange = robotContainer.getCANrange(0); 
-        canrange1 = robotContainer.getCANrange(1); 
+        // canrange = robotContainer.getCANrange(0); 
+        // canrange1 = robotContainer.getCANrange(1); 
+        hopper = robotContainer.getHopper();
 
 
         System.out.println("  Constructor Finished: " + fullClassName);
@@ -140,9 +143,9 @@ public class RobbieJTest implements Test
         // controller.a().onTrue(climb.retractFromL1Command());
         // controller.b().onTrue(climb.stopCommand());
         // System.out.println(canrange.toString());
-        controller.x().onTrue(GeneralCommands.intakeUntilFullCommand());
-        controller.b().onTrue(intake.stopCommand());
-        controller.a().onTrue(indexigator.stopCommand());
+        // controller.x().onTrue(GeneralCommands.intakeUntilFullCommand());
+        // controller.b().onTrue(intake.stopCommand());
+        // controller.a().onTrue(indexigator.stopCommand());
     }
 
     /**
@@ -154,8 +157,11 @@ public class RobbieJTest implements Test
         // SmartDashboard.putNumber("Short End sensor", canrange.getDistanceMeters());
         // SmartDashboard.putNumber("Long End sensor", canrange1.getDistanceMeters());
 
+        System.out.println( "is Hopper close: " + hopper.isHopperClosed().getAsBoolean());
+        // System.out.println( "is Hopper full: " + hopper.isHopperFullSupplier().getAsBoolean());
+
         // System.out.println(isHopperFullSupplier());
-        System.out.println(debouncer.calculate(isHopperFullSupplier().getAsBoolean()));
+        // System.out.println(debouncer.calculate(isHopperFullSupplier().getAsBoolean()));
         // System.out.println(canrange.getDistanceMeters());
         // System.out.println(climb.getForwardHardLimit());
     }
