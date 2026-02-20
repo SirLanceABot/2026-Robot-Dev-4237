@@ -120,6 +120,8 @@ public class GeneralCommands
     // color and pattern for LEDS to default to during a match
     public static Command defaultLEDCommand()
     {
+        //TODO add an if statement that makes the default color blinking yellow when the hopper is full
+        //In theory this command could be sent a BooleanSupplier that tells you which color to assign the leds
         return setLEDCommand(ColorPattern.kSolid, Color.kRed).withName("Set LED to default (red)");
     }
 
@@ -136,8 +138,8 @@ public class GeneralCommands
             Commands.parallel(
                 setLEDCommand(ColorPattern.kSolid, Color.kYellow),
                 intake.pickupFuelCommand(),
-                indexigator.setForwardCommand()
-            .withName("Intaking Fuel"));
+                indexigator.setForwardCommand())
+            .withName("Intaking Fuel");
         }
         else
         {
@@ -199,9 +201,8 @@ public class GeneralCommands
             return 
             Commands.parallel(
                 intake.retractIntakeCommand(),
-                indexigator.stopCommand())
-            .andThen(setLEDCommand(ColorPattern.kBlink, Color.kYellow)).withTimeout(0.5)
-            .andThen(defaultLEDCommand())
+                indexigator.stopCommand(),
+                setLEDCommand(ColorPattern.kSolid, Color.kGreen))
             .withName("Intake Reset Into Robot");
         }
         else
@@ -283,11 +284,11 @@ public class GeneralCommands
             return 
             Commands.parallel(
             setLEDCommand(ColorPattern.kSolid, Color.kOrange),
-            flywheel.burpFuelCommand().until(flywheel.isAtSetSpeed(25.0, 5.0))) // velocity that can slowy eject fuel
+            flywheel.burpFuelCommand().until(flywheel.isAtSetSpeed(25.0, 5.0)) // velocity that can slowy eject fuel
             .andThen(
                 Commands.parallel(
                     indexigator.setForwardCommand(() -> 0.2),
-                    accelerator.feedToShooterCommand(() -> 0.2)))
+                    accelerator.feedToShooterCommand(() -> 0.2))))
             .withName("ejecting all fuel slowly");
         }
         else

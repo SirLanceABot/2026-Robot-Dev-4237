@@ -24,6 +24,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs.ColorPattern;
 import frc.robot.subsystems.PoseEstimator;
 
 public final class OperatorBindings {
@@ -212,7 +213,10 @@ public final class OperatorBindings {
     {
         Trigger dpadUp = controller.povUp();
 
-        dpadUp.onTrue(climb.extendToL1Command());
+        dpadUp.onTrue(
+            Commands.parallel(
+                GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
+                climb.extendToL1Command()));
     }
 
 
@@ -220,7 +224,10 @@ public final class OperatorBindings {
     {
         Trigger dpadDown = controller.povDown();
 
-        dpadDown.onTrue(climb.retractFromL1Command());
+        dpadDown.onTrue(
+            Commands.parallel(
+                GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
+                climb.retractFromL1Command()));
     }
 
     private static void configDpadLeft()

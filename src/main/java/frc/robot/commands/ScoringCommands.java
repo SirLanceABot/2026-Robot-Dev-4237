@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -31,6 +32,8 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.LEDs.ColorPattern;
 import frc.robot.subsystems.PoseEstimator;
 
 public class ScoringCommands
@@ -75,7 +78,7 @@ public class ScoringCommands
     {
 
         
-        if(intake != null && indexigator != null  && accelerator != null  && flywheel != null )
+        if(intake != null && indexigator != null  && accelerator != null  && flywheel != null)
         {
             return  Commands.parallel(
                 (intake.pickupFuelCommand()),
@@ -136,12 +139,13 @@ public class ScoringCommands
             return
             drivetrain.lockWheelsCommand().withTimeout(0.1)
             .andThen(
-                drivetrain.angleLockDriveCommand(() -> 0, () -> 0, () -> 0.05, () -> (poseEstimator.getAngleToAllianceHub().getAsDouble())).withTimeout(0.75))
-            .andThen(
-                flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble()))) // meters -> feet
-                    .until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10).getAsBoolean()) // within 2 feet per second
+                Commands.parallel(
+                    drivetrain.angleLockDriveCommand(() -> 0, () -> 0, () -> 0.05, () -> (poseEstimator.getAngleToAllianceHub().getAsDouble())).withTimeout(0.75),
+                    flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10).getAsBoolean()), // within 2 feet per second
+                    GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue)))
             .andThen(
                 Commands.parallel(
+                    GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kPurple),
                     indexigator.setForwardCommand(), // rpm
                     accelerator.setVelocityCommand(12.0)));
         }
@@ -177,9 +181,12 @@ public class ScoringCommands
             DoubleSupplier shooterPower = () -> (flywheel.getShotPower(distance.getAsDouble() * 3.281)); // meters -> feet
 
             return
-            flywheel.setControlVelocityCommand(() -> shooterPower.getAsDouble()).until(flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10))     // TODO tune tolerance
+            Commands.parallel(
+                flywheel.setControlVelocityCommand(() -> shooterPower.getAsDouble()).until(flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10)), // TODO tune tolerance
+                GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue))    
             .andThen(
                 Commands.parallel(
+                    GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
                     indexigator.setForwardCommand(), // rpm
                     accelerator.setVelocityCommand(12.0)));
         }
@@ -225,9 +232,12 @@ public class ScoringCommands
         if(indexigator != null && accelerator != null && flywheel != null)
         {
             return
-            flywheel.setControlVelocityCommand(() -> 60.0).until(flywheel.isAtSetSpeed(60.0, 10))   // test value
+            Commands.parallel(
+                flywheel.setControlVelocityCommand(() -> 60.0).until(flywheel.isAtSetSpeed(60.0, 10)),     // test value
+                GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue))
             .andThen(
             Commands.parallel(
+                GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kWhite),
                 indexigator.setForwardCommand(), //rpm
                 accelerator.setVelocityCommand(12.0)));
         }
@@ -275,10 +285,13 @@ public class ScoringCommands
             {
                 return
                 Commands.parallel(
-                    GeneralCommands.extendClimbToL1Command(),
-                    GeneralCommands.driveToPositionCommand(targetClimbPose, drivetrain.getState().Pose))
-                .andThen(
-                    GeneralCommands.ascendFromL1Command());
+                    GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
+                    Commands.parallel(
+                        GeneralCommands.extendClimbToL1Command(),
+                        GeneralCommands.driveToPositionCommand(targetClimbPose, drivetrain.getState().Pose))
+                    .andThen(
+                        GeneralCommands.ascendFromL1Command()));
+
             }
             else
             {

@@ -158,6 +158,7 @@ public final class DriverBindings {
 
         bButton.onTrue(ScoringCommands.shootFromStandstillCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
 
+        bButton.onFalse(GeneralCommands.stopShootingCommand());
     }
 
 
@@ -180,6 +181,8 @@ public final class DriverBindings {
         Trigger yButton = controller.y();
 
         yButton.whileTrue(ScoringCommands.passCommand(indexigator, accelerator, flywheel));
+
+        yButton.onFalse(GeneralCommands.stopShootingCommand());
 
         // Auto climb testing
         // yButton.whileTrue(
@@ -283,9 +286,9 @@ public final class DriverBindings {
             drivetrain.setDefaultCommand(drivetrain.driveCommand(leftYAxis, leftXAxis, rightXAxis, scaleFactorSupplier));     
         }
 
-        // if(leds != null)
-        // {
-        //     leds.setDefaultCommand(leds.setColorSolidCommand(100, Color.kRed));
-        // }
+        if(leds != null)
+        {
+            leds.setDefaultCommand(GeneralCommands.defaultLEDCommand());
+        }
     }    
 }
