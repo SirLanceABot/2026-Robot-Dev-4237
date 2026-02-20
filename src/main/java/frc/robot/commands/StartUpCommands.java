@@ -37,7 +37,7 @@ public final class StartUpCommands
     //     initialize, interrupt, finish, execute
     // }
 
-    private enum StartUpState
+    public enum StartUpState
     {
         LOW_VOLTAGE, GYRO_NOT_ZEROED, CANRANGE_OFF, CAMERAS_OFF, SWERVE_MISALIGNED, READY
     }
@@ -54,7 +54,7 @@ public final class StartUpCommands
 
     // private static boolean currentlyBlinking = false;
     // private static boolean monitorEnabled = false;
-    private static StartUpState currentState = null;
+    public static StartUpState currentState = null;
     private static boolean running = false;
 
     // private static Command selectedCommand = null;
@@ -68,6 +68,11 @@ public final class StartUpCommands
 
     private StartUpCommands() 
     {}
+
+    public static StartUpState getCurrentState()
+    {
+        return currentState;
+    }
 
     /**
      * This method will determind what state the robot shoudl be in 
@@ -149,7 +154,7 @@ public final class StartUpCommands
                 break;
 
             case READY:
-                command = leds.setColorSolidCommand(100, Color.kGreen);
+                command = leds.setColorRainbowCommand();
                 break;
         }
 
@@ -337,7 +342,7 @@ public final class StartUpCommands
                 return StartUpState.CANRANGE_OFF;
             }
 
-            if (CANRange0 == null)
+            if (CANRange1 == null)
             {
                 System.out.println("StartUpCommands - CANRange1 is not working");
                 return StartUpState.CANRANGE_OFF;

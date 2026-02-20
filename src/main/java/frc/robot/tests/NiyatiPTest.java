@@ -68,7 +68,7 @@ public class NiyatiPTest implements Test
         }
 
         //LEDS STUFF
-        // leds = robotContainer.getLEDs();
+        leds = robotContainer.getLEDs();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -107,18 +107,14 @@ public class NiyatiPTest implements Test
      */
     public void periodic()
     {
-        if(joystick.getRawButton(1))
-        {
-            intake.pickupFuelCommand().schedule();
-        }
-        // else if(joystick.getRawButton(2))
+        // if(joystick.getRawButton(1))
         // {
-            // intake.ejectFuelCommand().schedule();
+        //     intake.pickupFuelCommand().schedule();
         // }
-        else
-        {
-            intake.stopCommand().schedule();
-        }
+        // else
+        // {
+        //     intake.stopCommand().schedule();
+        // }
         // controller.x().onTrue(leds.setColorSolidCommand(20, Color.kRed));
         // controller.a().onTrue(leds.setMovingRainbowCommand()); //is there no way to add a .schedule?
 
@@ -131,15 +127,15 @@ public class NiyatiPTest implements Test
         //     leds.setColorSolidCommand(70, Color.kBlue).schedule();
         // }
 
-        // if(joystick.getRawButton(1))
-        // {
-        //     leds.setColorBlinkCommand(Color.kBlue).schedule();
-        // }
-        // else if (joystick.getRawButton(2))
-        // {
-        //     // leds.setColorRainbowCommand();
-        //     leds.setColorSolidCommand(60, Color.kRed).schedule();
-        // }
+        if(joystick.getRawButton(1))
+        {
+            leds.setColorBlinkCommand(Color.kBlue).schedule();
+        }
+        else if (joystick.getRawButton(2))
+        {
+            // leds.setColorRainbowCommand();
+            leds.setColorSolidCommand(60, Color.kRed);
+        }
     }
     
     /**

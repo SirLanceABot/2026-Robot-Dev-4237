@@ -18,6 +18,8 @@ import frc.robot.sensors.HopperCamera;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 
+import frc.robot.commands.StartUpCommands;
+import frc.robot.commands.StartUpCommands.StartUpState;
 
 public class ElasticLance 
 {
@@ -58,6 +60,13 @@ public class ElasticLance
     private static Alert useFullRobotAlert = new Alert("NOT using Full Robot!", AlertType.kError);
     private static Alert autoAlert = new Alert("INVALID AUTO", AlertType.kWarning);
     // private static boolean useFullRobot;
+
+    // StartUp Alerts 
+    private static final Alert lowVoltageAlert = new Alert("Battery voltage is LOW", AlertType.kError);
+    private static final Alert gyroAlert = new Alert("Gyro is NOT zeroed", AlertType.kWarning);
+    private static final Alert canRangeAlert = new Alert("CANRange sensor offline", AlertType.kError);
+    private static final Alert cameraAlert = new Alert("Camera not responding", AlertType.kWarning);
+    private static final Alert swerveAlert = new Alert("Swerve modules misaligned", AlertType.kWarning);
 
     private ElasticLance()
     {}
@@ -188,6 +197,11 @@ public class ElasticLance
         LEDColor = LEDs.getColor();
 
         SmartDashboard.putString("LED Color", LEDColor.toHexString());
+    }
+
+    public static void updateStartupAlerts()
+    {
+        
     }
 
 }
