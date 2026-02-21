@@ -225,9 +225,9 @@ public class ElasticLance
                     canRangeAlert.set(true);
                     break;
                 
-                case CAMERAS_OFF:
-                    cameraAlert.set(true);
-                    break;
+                // case CAMERAS_OFF:
+                //     cameraAlert.set(true);
+                //     break;
 
                 case SWERVE_MISALIGNED:
                     swerveAlert.set(true);
