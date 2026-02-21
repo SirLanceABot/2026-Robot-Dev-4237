@@ -2,10 +2,9 @@ package frc.robot.sensors;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.RobotContainer;
 import static frc.robot.Constants.Hopper.*;
 
 /**
@@ -32,10 +31,10 @@ public class Hopper
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
 
-    private CANRange canRangeRight;
-    private CANRange canRangeLeft;
-    private final DigitalInput limitSwitchRight = new DigitalInput(LIMIT_SWITCH_RIGHT);
-    private final DigitalInput limitSwitchLeft = new DigitalInput(LIMIT_SWITCH_LEFT);
+    private CANRange canRangeRight = new CANRange(CAN_RANGE_RIGHT, 3.0);
+    private CANRange canRangeLeft = new CANRange(CAN_RANGE_LEFT, 3.0);
+    // private final DigitalInput limitSwitchRight = new DigitalInput(LIMIT_SWITCH_RIGHT);
+    // private final DigitalInput limitSwitchLeft = new DigitalInput(LIMIT_SWITCH_LEFT);
     private Debouncer debouncer = new Debouncer(0.5);
 
     // *** CLASS CONSTRUCTORS ***
@@ -44,12 +43,10 @@ public class Hopper
     /** 
      * Creates a new ExampleSubsystem. 
      */
-    public Hopper(CANRange canRangeRight, CANRange canRangeLeft)
+    public Hopper()
     {   
         System.out.println("  Constructor Started:  " + fullClassName);
 
-        this.canRangeRight = canRangeRight;
-        this.canRangeLeft = canRangeLeft;
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -62,27 +59,44 @@ public class Hopper
      * Returns the value of the sensor
     * @return The value of periodData.sensorValue
     */
-    public BooleanSupplier getLimitSwitch1Supplier()
-    {
-        return () -> limitSwitchRight.get();
-    }
+    // public Boolean getLimitSwitchRight()
+    // {
+    //     return limitSwitchRight.get();
+    // }
     
-    public BooleanSupplier getLimitSwitch2Supplier()
+    // public Boolean getLimitSwitchLeft()
+    // {
+    //     return limitSwitchLeft.get();
+    // }
+
+    // public BooleanSupplier isHopperClosed()
+    // {
+    //     return () -> (getLimitSwitchRight() && getLimitSwitchLeft());
+    // }
+    public DoubleSupplier getRightCanRangeDistance()
     {
-        return () -> limitSwitchLeft.get();
+        return () -> canRangeRight.getDistanceMeters();
+    }
+
+    public DoubleSupplier getLeftCanRangeDistance()
+    {
+        return () -> canRangeLeft.getDistanceMeters();
+    }
+
+    public BooleanSupplier isRightFullSupplier()
+    {
+        return () -> debouncer.calculate(canRangeRight.isBallDetected(HOPPER_EXTENDED_LENGTH));
+    }
+
+    public BooleanSupplier isLeftFullSupplier()
+    {
+        return () -> debouncer.calculate(canRangeLeft.isBallDetected(HOPPER_EXTENDED_LENGTH));
     }
 
     public BooleanSupplier isHopperFullSupplier()
     {
         return () -> debouncer.calculate(canRangeRight.isBallDetected(HOPPER_EXTENDED_LENGTH) && canRangeLeft.isBallDetected(HOPPER_EXTENDED_LENGTH));
     }
-
-    public BooleanSupplier isHopperClosed()
-    {
-        return () -> (getLimitSwitch1Supplier().getAsBoolean() && getLimitSwitch2Supplier().getAsBoolean());
-    }
-
-    
 
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here

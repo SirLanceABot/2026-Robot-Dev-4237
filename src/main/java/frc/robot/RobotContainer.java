@@ -6,13 +6,13 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
-import com.ctre.phoenix6.hardware.CANrange;
-import com.ctre.phoenix6.signals.RobotEnableValue;
-
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
-import frc.robot.sensors.CANRange;
 import frc.robot.sensors.Camera;
+import frc.robot.sensors.Hopper;
+import frc.robot.sensors.HopperCamera;
+import frc.robot.sensors.LaserCanSensor;
+import frc.robot.sensors.RangerDistanceSensor;
 import frc.robot.subsystems.Accelerator;
 // import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
@@ -21,12 +21,8 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.LEDs;
-import frc.robot.sensors.HopperCamera;
-import frc.robot.sensors.LaserCanSensor;
-import frc.robot.sensors.RangerDistanceSensor;
-import frc.robot.sensors.Hopper;
+import frc.robot.subsystems.PoseEstimator;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -63,9 +59,8 @@ public class RobotContainer
     private boolean useOperatorController       = false;
 
     private boolean useLaserCAN                 = false;
-    private boolean useCANrange                 = false;
     private boolean useRangerDistanceSensor     = false;
-    private boolean useHopper                   = false;
+    private boolean useHopper                   = true;
 
     private boolean useHopperCamera             = false;
     private boolean useShooterCamera            = false;
@@ -85,8 +80,6 @@ public class RobotContainer
     private LEDs leds = null;
     private LaserCanSensor laserCanSensor = null;
     private RangerDistanceSensor rangerDistanceSensor = null;
-    private CANRange canrange0 = null;
-    private CANRange canrange1 = null;
     private Hopper hopper = null;
 
     private CommandXboxController driverController = null;
@@ -134,13 +127,9 @@ public class RobotContainer
 
         if(useFullRobot || useLaserCAN)
             laserCanSensor = new LaserCanSensor();
-
-        if(useFullRobot || useCANrange)
-            canrange0 = new CANRange(0,3);
-            canrange1 = new CANRange(1, 3);
         
-        if(useFullRobot || (useHopper && useCANrange))
-            hopper = new Hopper(canrange0,canrange1);
+        if(useFullRobot || (useHopper))
+            hopper = new Hopper();
 
         if(useFullRobot || useRangerDistanceSensor)
             rangerDistanceSensor = new RangerDistanceSensor();
@@ -238,16 +227,6 @@ public class RobotContainer
     public LaserCanSensor getLaserCanSensor()
     {
         return laserCanSensor;
-    }
-
-    public CANRange getCANrange(int ID)
-    {
-        if (ID == 0)
-            return canrange0;
-        if (ID == 1)
-            return canrange1;
-
-        return null;
     }
 
     public Hopper getHopper()

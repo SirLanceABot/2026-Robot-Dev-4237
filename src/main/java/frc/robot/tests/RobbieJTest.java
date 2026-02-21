@@ -157,7 +157,9 @@ public class RobbieJTest implements Test
         // SmartDashboard.putNumber("Short End sensor", canrange.getDistanceMeters());
         // SmartDashboard.putNumber("Long End sensor", canrange1.getDistanceMeters());
 
-        System.out.println( "is Hopper close: " + hopper.isHopperClosed().getAsBoolean());
+        // System.out.println( "is Hopper close: " + hopper.isHopperClosed().getAsBoolean());
+        // System.out.println("Left: " + hopper.getLimitSwitchLeft());
+
         // System.out.println( "is Hopper full: " + hopper.isHopperFullSupplier().getAsBoolean());
 
         // System.out.println(isHopperFullSupplier());
