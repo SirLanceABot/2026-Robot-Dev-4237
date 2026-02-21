@@ -39,6 +39,17 @@ public class Climb extends SubsystemBase
         }
     }
 
+    public enum servoPosition
+    {
+        kSTARt(0), kRETRACTED((int) ((MIN_SERVO_LENGTH / 50.0) * 1000) + 1000), kEXTENDED((int) ((MAX_SERVO_LENGTH / 50.0) * 1000) + 1000);
+
+        public final int value;
+        private servoPosition(int value)
+        {
+            this.value = value;
+        }
+    }
+
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
@@ -172,9 +183,9 @@ public class Climb extends SubsystemBase
         return servo.getPosition();
     }
 
-    public void setServoPWM(int pulse)
+    public void setServoPWM(servoPosition pulse)
     {
-        servo.setPulseTimeMicroseconds(pulse);
+        servo.setPulseTimeMicroseconds(pulse.value);
     }
 
     public boolean getClimbSensor()
@@ -200,6 +211,9 @@ public class Climb extends SubsystemBase
         }
         
     }
+
+
+    // *****climb motor*****
 
     /**
      * 
@@ -241,7 +255,13 @@ public class Climb extends SubsystemBase
         return run ( () -> resetPosition());
     }
 
-    public Command setServoPWMCommand(int pulse)
+    public Command runClimbCommand()
+    {
+        return run( ()-> runClimb());
+    }
+
+    // *****servo*****
+    public Command setServoPositionCommand(servoPosition pulse)
     {
         return run( ()-> {setServoPWM(pulse); System.out.println("Servo Pulse = " + pulse);} );
     }
@@ -249,25 +269,22 @@ public class Climb extends SubsystemBase
     // use this for actual climb
     public Command setServoToExtendedPositionCommand()
     {
-        return runOnce( ()-> setServoPWM((int) ((MAX_SERVO_LENGTH / 50.0) * 1000) + 1000));
+        return runOnce( ()-> setServoPWM(servoPosition.kEXTENDED));
     }
 
     // use this for actual climb
     public Command setServoToRetractedPositionCommand()
     {
-        return runOnce( ()-> setServoPWM((int) ((MIN_SERVO_LENGTH / 50.0) * 1000) + 1000));
+        return runOnce( ()-> setServoPWM(servoPosition.kRETRACTED));
     }
 
-    public Command runClimbCommand()
-    {
-        return run( ()-> runClimb());
-    }
 
     public Command disableServoCommand()
     {
         return runOnce(()-> servo.setDisabled());
     }
 
+    // *****sensor*****
     public BooleanSupplier isDetected()
     {
         return ()-> !getClimbSensor();
@@ -277,9 +294,6 @@ public class Climb extends SubsystemBase
     {
         return ()-> getClimbSensorAfterDistance(distance, isForward);
     }
-
-
-
     
 
     // *** OVERRIDEN METHODS ***!
@@ -298,6 +312,6 @@ public class Climb extends SubsystemBase
     @Override
     public String toString()
     {
-        return "";
+        return "Climb Motor Position = " + getPosition() + ", Servo Position = " + getServoPosition();
     }
 }
