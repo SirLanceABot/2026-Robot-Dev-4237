@@ -87,9 +87,9 @@ public class RobbieFTest implements Test
     public void init()
     {
         controller.a().onTrue(
-            climb.runClimbCommand().until(climb.isDetectedAfterDistanceSupplier(50.0, true))
-                .andThen(climb.stopMotorCommand())
-            // GeneralCommands.extendClimbToL1Command()
+            // climb.runClimbCommand().until(climb.isDetectedAfterDistanceSupplier(50.0, true))
+            //     .andThen(climb.stopMotorCommand())
+            GeneralCommands.extendClimbToL1Command()
         );
         controller.x().onTrue(
             GeneralCommands.ascendFromL1Command()
@@ -99,6 +99,11 @@ public class RobbieFTest implements Test
         );
         controller.y().onTrue(
            GeneralCommands.resetClimbToStartCommand()
+        );
+
+        controller.start().onTrue(
+            climb.disableServoCommand()
+                .andThen(climb.resetPositionCommand())
         );
 
 
@@ -128,9 +133,9 @@ public class RobbieFTest implements Test
      */
     public void periodic()
     {
-        // System.out.println(climb.isDetectedAfterDistanceSupplier(50.0, true).getAsBoolean());
+        System.out.println(climb.isDetectedAfterDistanceSupplier(50.0, true).getAsBoolean());
         // System.out.println(climb.isDetected().getAsBoolean());
-        // System.out.println("Climb Position = " + climb.getPosition());
+        System.out.println("Climb Position = " + climb.getPosition());
     }
     
     /**

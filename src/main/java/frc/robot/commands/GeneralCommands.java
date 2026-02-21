@@ -35,6 +35,7 @@ import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.LEDs.ColorPattern;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Climb.climbPosition;
+import frc.robot.subsystems.Climb.servoPosition;
 
 public class GeneralCommands
 {
@@ -332,8 +333,8 @@ public class GeneralCommands
             return 
             setLEDCommand(ColorPattern.kRainbow)
             .andThen(climb.extendToL1FromStartCommand())
-                .until(climb.isClimbMotorAtPosition(climbPosition.kEXTENDL1))
-            .andThen(climb.setServoToExtendedPositionCommand())
+                // .until(climb.isClimbMotorAtPosition(climbPosition.kEXTENDL1))
+            .andThen(climb.setServoPositionCommand(servoPosition.kEXTENDED))
             .withName("climb extended to L1 position");       
         }
         else
@@ -351,7 +352,7 @@ public class GeneralCommands
         if(climb != null)
         {
             return climb.retractFromExtendL1Command()
-            .until(climb.isClimbMotorAtPosition(climbPosition.kRETRACTL1))
+                // .until(climb.isClimbMotorAtPosition(climbPosition.kRETRACTL1))
             .withName("climb mounted L1");
         }
         else
@@ -369,7 +370,7 @@ public class GeneralCommands
         if(climb != null)
         {
             return climb.extendToL1FromRetractedCommand()
-                .until(climb.isClimbMotorAtPosition(climbPosition.kEXTENDL1))
+                // .until(climb.isClimbMotorAtPosition(climbPosition.kEXTENDL1))
             // .andThen( () -> drivetrain.resetForFieldCentric())
             .withName("climb unmounted L1 (servo still extended)");
         } 
@@ -388,10 +389,10 @@ public class GeneralCommands
         if(climb != null)
         {
             return 
-            climb.setServoToRetractedPositionCommand()
+            climb.setServoPositionCommand(servoPosition.kRETRACTED)
                 // .until(climb.isServoAtPosition(0.77))
             .andThen(climb.resetToStartFromExtendedCommand())
-                .until(climb.isClimbMotorAtPosition(climbPosition.kSTART))
+                // .until(climb.isClimbMotorAtPosition(climbPosition.kSTART))
             .andThen(climb.disableServoCommand())
             .withName("climb reset to inside robot (servo reset)");
         }
@@ -453,7 +454,7 @@ public class GeneralCommands
     }
 
     // /**
-    //  * @author Robbie F
+    //  * @author Robbie F (inspired by Logan)
     //  * @param drivetrain
     //  * @param indexigator
     //  * @param accelerator

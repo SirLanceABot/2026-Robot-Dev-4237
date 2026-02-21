@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.Climb.LEADMOTOR;
 import static frc.robot.Constants.Climb.MOTOR_CAN_BUS;
+import static frc.robot.Constants.Climb.SENSOR_PORT;
+import static frc.robot.Constants.Climb.SERVOMOTOR;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
@@ -30,7 +32,7 @@ public class Climb extends SubsystemBase
     // Put all inner enums and inner classes here
     public enum climbPosition
     {
-        kEXTENDL1(32.0), kRETRACTL1(10.0), kL2(4237), kL3(4237), kSTART(0.0);
+        kEXTENDL1(100.0), kRETRACTL1(30.0), kL2(4237), kL3(4237), kSTART(0.0); // 32.0, 10.0
 
         public final double value;
         private climbPosition(double value)
@@ -59,9 +61,9 @@ public class Climb extends SubsystemBase
     private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Lead Climb Motor ");
     // private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Follower Climb Motor");
     
-    private final Servo servo = new Servo(1);
+    private final Servo servo = new Servo(SERVOMOTOR);
 
-    private final DigitalInput climbSensor = new DigitalInput(4);
+    private final DigitalInput climbSensor = new DigitalInput(SENSOR_PORT);
 
     
 
@@ -107,10 +109,10 @@ public class Climb extends SubsystemBase
 
         leadMotor.setSafetyEnabled(false);
 
-        leadMotor.setupForwardSoftLimit(32.0, true);
+        // leadMotor.setupForwardSoftLimit(32.0, true);
         // followMotor.setupForwardSoftLimit(0, false);
 
-        leadMotor.setupReverseSoftLimit(0.0, true);
+        // leadMotor.setupReverseSoftLimit(0.0, true);
         // followMotor.setupReverseSoftLimit(0.0, false);
 
         // leadMotor.setupForwardHardLimitSwitch(true, true, 0);
@@ -173,6 +175,9 @@ public class Climb extends SubsystemBase
         leadMotor.setPosition(0.0);
     }
 
+    /**
+     * @param position to set the servo to (0.0 - 1.0)
+     */
     public void setServoPosition(double position)
     {
         servo.setPosition(position);
@@ -183,28 +188,40 @@ public class Climb extends SubsystemBase
         return servo.getPosition();
     }
 
+    /**
+     * @param pulse PWM pulse to set the servo to (1000-2000)
+     */
     public void setServoPWM(servoPosition pulse)
     {
         servo.setPulseTimeMicroseconds(pulse.value);
     }
 
+    /**
+     * @return staus of the climb sensor
+     */
     public boolean getClimbSensor()
     {
         return climbSensor.get();
     }
 
-    public boolean getClimbSensorAfterDistance(double distance, boolean isForward)
+    /**
+     * @author Robbie F
+     * @param position that the climb must reach before it starts reading the center
+     * @param isForward is the motor moving forward or backward
+     * @return status of the climb sensor after specified position has elapsed
+     */
+    public boolean getClimbSensorAfterDistance(double position, boolean isForward)
     {
         if(isForward)
         {
-            if(getPosition() > distance)
+            if(getPosition() > position)
                 return climbSensor.get();
         
             return false;
         }
         else
         {
-            if(getPosition() < distance)
+            if(getPosition() < position)
                 return climbSensor.get();
             
             return false;
@@ -222,28 +239,47 @@ public class Climb extends SubsystemBase
      */
     public Command stopMotorCommand()
     {
-        return run( () -> stopMotor());
+        return runOnce( () -> stopMotor());
     }
 
-    
+    /**
+     * @author Robbie
+     * climb motor stage 1
+     * @return the command
+     */
     public Command extendToL1FromStartCommand()
     {
         return run( () -> moveToPosition(climbPosition.kEXTENDL1)).until(()-> (isClimbMotorAtPosition(climbPosition.kEXTENDL1).getAsBoolean() || isDetectedAfterDistanceSupplier(climbPosition.kSTART.value + 1.0, true).getAsBoolean()))
                 .andThen(stopMotorCommand());
     }
 
+    /**
+     * @author Robbie
+     * climb motor stage 2
+     * @return the command
+     */
     public Command extendToL1FromRetractedCommand()
     {
         return run( () -> moveToPosition(climbPosition.kEXTENDL1)).until(()-> (isClimbMotorAtPosition(climbPosition.kEXTENDL1).getAsBoolean() || isDetectedAfterDistanceSupplier(climbPosition.kRETRACTL1.value + 1.0, true).getAsBoolean()))
                 .andThen(stopMotorCommand());
     }
 
+    /**
+     * @author Robbie
+     * climb motor stage 3
+     * @return the command
+     */
     public Command retractFromExtendL1Command()
     {
         return run( () -> moveToPosition(climbPosition.kRETRACTL1)).until(() -> (isClimbMotorAtPosition(climbPosition.kRETRACTL1).getAsBoolean() || isDetectedAfterDistanceSupplier(climbPosition.kEXTENDL1.value - 1.0, false).getAsBoolean()))
             .andThen(stopMotorCommand());
     }
 
+    /**
+     * @author Robbie
+     * climb motor stage 4
+     * @return the command
+     */
     public Command resetToStartFromExtendedCommand()
     {
         return run( () -> moveToPosition(climbPosition.kSTART)).until(() -> (isClimbMotorAtPosition(climbPosition.kSTART).getAsBoolean() || isDetectedAfterDistanceSupplier(climbPosition.kEXTENDL1.value - 1.0, false).getAsBoolean()))
@@ -261,23 +297,22 @@ public class Climb extends SubsystemBase
     }
 
     // *****servo*****
+
+    // use this for climb
     public Command setServoPositionCommand(servoPosition pulse)
     {
-        return run( ()-> {setServoPWM(pulse); System.out.println("Servo Pulse = " + pulse);} );
+        return runOnce( ()-> setServoPWM(pulse));
     }
 
-    // use this for actual climb
-    public Command setServoToExtendedPositionCommand()
-    {
-        return runOnce( ()-> setServoPWM(servoPosition.kEXTENDED));
-    }
+    // public Command setServoToExtendedPositionCommand()
+    // {
+    //     return runOnce( ()-> setServoPWM(servoPosition.kEXTENDED));
+    // }
 
-    // use this for actual climb
-    public Command setServoToRetractedPositionCommand()
-    {
-        return runOnce( ()-> setServoPWM(servoPosition.kRETRACTED));
-    }
-
+    // public Command setServoToRetractedPositionCommand()
+    // {
+    //     return runOnce( ()-> setServoPWM(servoPosition.kRETRACTED));
+    // }
 
     public Command disableServoCommand()
     {
