@@ -16,9 +16,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.Constants;
-import frc.robot.sensors.Camera;
-import frc.robot.sensors.CANRange;
-// import frc.robot.sensors.HopperCamera;
+// import frc.robot.sensors.CANRange;
 
 /**
  * This class checks the swerves at startup and blinks leds red until tehy are aligned.
@@ -32,23 +30,15 @@ public final class StartUpCommands
         System.out.println("Loading: " + fullClassName);
     }
 
-    // public enum CommandStageSelector 
-    // {
-    //     initialize, interrupt, finish, execute
-    // }
-
     public enum StartUpState
     {
-        LOW_VOLTAGE, GYRO_NOT_ZEROED, CANRANGE_OFF, CAMERAS_OFF, SWERVE_MISALIGNED, READY
+        LOW_VOLTAGE, GYRO_NOT_ZEROED, CANRANGE_OFF, SWERVE_MISALIGNED, READY
     }
 
     private static Drivetrain drivetrain;
     private static LEDs leds;
-    // private static Camera intakeCamera;
-    private static Camera shooterCamera;
-    // private static HopperCamera hopperCamera;
-    private static CANRange CANRange0;
-    private static CANRange CANRange1;
+    // private static CANRange CANRange0;
+    // private static CANRange CANRange1;
 
     private static Notifier notifier; // background timer
 
@@ -95,21 +85,14 @@ public final class StartUpCommands
             return result;
         }
 
-        // Third - CAN Range check
-        result = checkCANRanges();
-        if (result != null)
-        {
-            return result;
-        }
+        // // Third - CAN Range check
+        // result = checkCANRanges();
+        // if (result != null)
+        // {
+        //     return result;
+        // }
 
-        // Fourth - Cameras check
-        result = checkCameras();
-        if (result != null)
-        {
-            return result;
-        }
-
-        // Fifth - Swerve alignment
+        // Fourth - Swerve alignment
         result = checkSwerve();
         if (result != null)
         {
@@ -138,23 +121,19 @@ public final class StartUpCommands
                 break;
 
             case GYRO_NOT_ZEROED:
-                command = leds.setColorBlinkCommand(Color.kOrangeRed);
+                command = leds.setColorBlinkCommand(Color.kYellow);
                 break;
 
-            case CANRANGE_OFF:
-                command = leds.setColorBlinkCommand(Color.kDodgerBlue);
-                break;
-            
-            case CAMERAS_OFF:
-                command = leds.setColorBlinkCommand(Color.kPurple);
-                break;
+            // case CANRANGE_OFF:
+            //     command = leds.setColorSolidCommand(80, Color.kDodgerBlue);
+            //     break;
 
             case SWERVE_MISALIGNED:
-                command = leds.setColorBlinkCommand(Color.kRed);
+                command = leds.setColorBlinkCommand(Color.kYellow);
                 break;
 
             case READY:
-                command = leds.setColorRainbowCommand();
+                command = leds.setMovingRainbowCommand();
                 break;
         }
 
@@ -178,16 +157,13 @@ public final class StartUpCommands
 
         drivetrain = robotContainer.getDrivetrain();
         leds = robotContainer.getLEDs();
-        shooterCamera = robotContainer.getShooterCamera();
-        // hopperCamera = robotContainer.getHopperCamera();
-        CANRange0 = robotContainer.getCANrange(0);
-        CANRange1 = robotContainer.getCANrange(1);
+        // CANRange0 = robotContainer.getCANrange(0);
+        // CANRange1 = robotContainer.getCANrange(1);
 
 
 
         if (drivetrain != null && drivetrain.getPigeon2() != null)
         {
-            // drivetrain.getPigeon2().setYaw(0.0);
             System.out.println("StartUpCommands - Pigeon zeroed");
         }
 
@@ -216,11 +192,12 @@ public final class StartUpCommands
 
     public static void checkAndUpdate()
     {    
+        System.out.println("StartUpCommands go");
         StartUpState State = runStartUpChecks();
 
         if (State != currentState)
         {
-            System.out.println("StartUp State changed: " + State);
+            System.out.println("State changed to " + State);
             currentState = State;
             updateLEDsForState(State);
         }
@@ -310,45 +287,26 @@ public final class StartUpCommands
         return null;
     }
 
-    /**
-     * This method will check if all cameras are on and seeing things
-     */
-    private static StartUpState checkCameras()
-    {
-        // Limelight-based cameras
-        // Shooter Camera
-        if (shooterCamera != null)
-        {
-            if (shooterCamera.getTimestamp() < 0)
-            {
-                System.out.println("StartUpCommands - Shooter camera not updating");
-                return StartUpState.CAMERAS_OFF;
-            }
-        }
+    // /**
+    //  * This method will check if the CANRanges is returning anything
+    //  */
+    // private static StartUpState checkCANRanges()
+    // {
+    //     if (CANRange0 != null || CANRange1 != null)
+    //     {
+    //         if (CANRange0 == null) // What else does this return dawg
+    //         {
+    //             System.out.println("StartUpCommands - CANRange0 is not working");
+    //             return StartUpState.CANRANGE_OFF;
+    //         }
 
-        return null;
-    }
+    //         if (CANRange1 == null)
+    //         {
+    //             System.out.println("StartUpCommands - CANRange1 is not working");
+    //             return StartUpState.CANRANGE_OFF;
+    //         }
+    //     }
 
-    /**
-     * This method will check if the CANRanges is returning ____
-     */
-    private static StartUpState checkCANRanges()
-    {
-        if (CANRange0 != null && CANRange1 != null)
-        {
-            if (CANRange0 == null) // What else does this return dawg
-            {
-                System.out.println("StartUpCommands - CANRange0 is not working");
-                return StartUpState.CANRANGE_OFF;
-            }
-
-            if (CANRange1 == null)
-            {
-                System.out.println("StartUpCommands - CANRange1 is not working");
-                return StartUpState.CANRANGE_OFF;
-            }
-        }
-
-        return null;
-    }
+    //     return null;
+    // }
 }

@@ -128,7 +128,7 @@ public class LEDs extends SubsystemBase
     private void setColorBlink(Color... colors)
     {
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
-        blink = base.breathe(Units.Seconds.of(0.5));
+        blink = base.breathe(Units.Seconds.of(1));
         blink.applyTo(ledBuffer);
         this.color = colors[0];
     }
@@ -199,7 +199,7 @@ public class LEDs extends SubsystemBase
 
     public Command setColorSolidCommand(int brightness, Color color)
     {
-        return runOnce(() -> setColorSolid(brightness, color)).withName("Set LED Solid");
+        return run(() -> setColorSolid(brightness, color)).withName("Set LED Solid");
     }
 
     public Command setColorGradientCommand(int brightness, Color ...colors)
@@ -209,7 +209,7 @@ public class LEDs extends SubsystemBase
 
     public Command setColorBlinkCommand(Color ...colors)
     {
-        return runOnce(() -> setColorBlink(colors)).withName("Set LED Blink");
+        return run(() -> setColorBlink(colors)).withName("Set LED Blink");
     }
 
     public Command setColorBreatheCommand(int brightness, Color ...colors)

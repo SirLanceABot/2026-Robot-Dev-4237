@@ -12,6 +12,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -83,7 +84,7 @@ public class Robot extends TimedRobot
         // PathfindingCommand.warmupCommand().schedule();
 
         // start the startup monitor (checks swerve alignment and controls LEDs)
-        StartUpCommands.enableMonitor(robotContainer);
+        // StartUpCommands.enableMonitor(robotContainer);
 
         //this should typically be false in order to limit .hoot file loggging
         //if this is set to true, there should be a USB drive connected to the roboRIO so that the rio's storage isn't overloaded
@@ -147,6 +148,7 @@ public class Robot extends TimedRobot
     @Override
     public void disabledPeriodic() 
     {
+        StartUpCommands.checkAndUpdate();
         // Put code to run here before the match starts, but not between auto and teleop
         if(isPreMatch)
         {
