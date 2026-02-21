@@ -199,7 +199,7 @@ public class LEDs extends SubsystemBase
 
     public Command setColorSolidCommand(int brightness, Color color)
     {
-        return run(() -> setColorSolid(brightness, color)).withName("Set LED Solid");
+        return runOnce(() -> setColorSolid(brightness, color)).withName("Set LED Solid");
     }
 
     public Command setColorGradientCommand(int brightness, Color ...colors)

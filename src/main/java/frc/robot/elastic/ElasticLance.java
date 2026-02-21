@@ -100,7 +100,7 @@ public class ElasticLance
         if(!useFullRobot && DriverStation.isDisabled())
         {
             useFullRobotAlert.set(true);
-            leds.setColorSolidCommand(100, Color.kRed).ignoringDisable(true).schedule();        
+            // leds.setColorSolidCommand(100, Color.kRed).ignoringDisable(true).schedule();
         }
     }
 

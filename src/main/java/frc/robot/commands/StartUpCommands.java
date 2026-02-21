@@ -16,7 +16,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.Constants;
-// import frc.robot.sensors.CANRange;
+import frc.robot.sensors.CANRange;
 
 /**
  * This class checks the swerves at startup and blinks leds red until tehy are aligned.
@@ -37,8 +37,8 @@ public final class StartUpCommands
 
     private static Drivetrain drivetrain;
     private static LEDs leds;
-    // private static CANRange CANRange0;
-    // private static CANRange CANRange1;
+    private static CANRange CANRange0;
+    private static CANRange CANRange1;
 
     private static Notifier notifier; // background timer
 
@@ -85,12 +85,12 @@ public final class StartUpCommands
             return result;
         }
 
-        // // Third - CAN Range check
-        // result = checkCANRanges();
-        // if (result != null)
-        // {
-        //     return result;
-        // }
+        // Third - CAN Range check
+        result = checkCANRanges();
+        if (result != null)
+        {
+            return result;
+        }
 
         // Fourth - Swerve alignment
         result = checkSwerve();
@@ -121,15 +121,15 @@ public final class StartUpCommands
                 break;
 
             case GYRO_NOT_ZEROED:
-                command = leds.setColorBlinkCommand(Color.kYellow);
+                command = leds.setColorBlinkCommand(Color.kOrange);
                 break;
 
-            // case CANRANGE_OFF:
-            //     command = leds.setColorSolidCommand(80, Color.kDodgerBlue);
-            //     break;
+            case CANRANGE_OFF:
+                command = leds.setColorSolidCommand(80, Color.kPurple);
+                break;
 
             case SWERVE_MISALIGNED:
-                command = leds.setColorBlinkCommand(Color.kYellow);
+                command = leds.setColorBlinkCommand(Color.kRed);
                 break;
 
             case READY:
@@ -157,8 +157,8 @@ public final class StartUpCommands
 
         drivetrain = robotContainer.getDrivetrain();
         leds = robotContainer.getLEDs();
-        // CANRange0 = robotContainer.getCANrange(0);
-        // CANRange1 = robotContainer.getCANrange(1);
+        CANRange0 = robotContainer.getCANrange(0);
+        CANRange1 = robotContainer.getCANrange(1);
 
 
 
@@ -290,23 +290,23 @@ public final class StartUpCommands
     // /**
     //  * This method will check if the CANRanges is returning anything
     //  */
-    // private static StartUpState checkCANRanges()
-    // {
-    //     if (CANRange0 != null || CANRange1 != null)
-    //     {
-    //         if (CANRange0 == null) // What else does this return dawg
-    //         {
-    //             System.out.println("StartUpCommands - CANRange0 is not working");
-    //             return StartUpState.CANRANGE_OFF;
-    //         }
+    private static StartUpState checkCANRanges()
+    {
+        if (CANRange0 != null || CANRange1 != null)
+        {
+            if (CANRange0 == null) // What else does this return dawg
+            {
+                System.out.println("StartUpCommands - CANRange0 is not working");
+                return StartUpState.CANRANGE_OFF;
+            }
 
-    //         if (CANRange1 == null)
-    //         {
-    //             System.out.println("StartUpCommands - CANRange1 is not working");
-    //             return StartUpState.CANRANGE_OFF;
-    //         }
-    //     }
+            if (CANRange1 == null)
+            {
+                System.out.println("StartUpCommands - CANRange1 is not working");
+                return StartUpState.CANRANGE_OFF;
+            }
+        }
 
-    //     return null;
-    // }
+        return null;
+    }
 }
