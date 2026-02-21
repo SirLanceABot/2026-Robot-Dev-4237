@@ -86,26 +86,25 @@ public class RobbieFTest implements Test
      */
     public void init()
     {
-        controller.a().onTrue(
-            // climb.runClimbCommand().until(climb.isDetectedAfterDistanceSupplier(50.0, true))
-            //     .andThen(climb.stopMotorCommand())
-            GeneralCommands.extendClimbToL1Command()
-        );
-        controller.x().onTrue(
-            GeneralCommands.ascendFromL1Command()
-        );
-         controller.b().onTrue(
-            GeneralCommands.descendFromL1Command()
-        );
-        controller.y().onTrue(
-           GeneralCommands.resetClimbToStartCommand()
-        );
+        // climb stuff, DO NOT delete
 
-        controller.start().onTrue(
-            climb.disableServoCommand()
-                .andThen(climb.resetPositionCommand())
-        );
+        // controller.a().onTrue(
+        //     GeneralCommands.extendClimbToL1Command()
+        // );
+        // controller.x().onTrue(
+        //     GeneralCommands.ascendFromL1Command()
+        // );
+        //  controller.b().onTrue(
+        //     GeneralCommands.descendFromL1Command()
+        // );
+        // controller.y().onTrue(
+        //    GeneralCommands.resetClimbToStartCommand()
+        // );
 
+        // controller.start().onTrue(
+        //     climb.disableServoCommand()
+        //         .andThen(climb.resetPositionCommand())
+        // );
 
         // 1. GeneralCommands.extendClimbToL1Command()
         //      extends climb and servo, ready to drive to traversal and lock in to climb
@@ -115,17 +114,10 @@ public class RobbieFTest implements Test
         //      extends climb to descend traversal, servo remains out
         // 4. GeneralCommands.resetClimbToStartCommand()
 
-
-        // controller.b().onTrue(
-        //     GeneralCommands.resetClimbToStartCommand()
-        // );
-        // controller.y().onTrue(
-        //     climb.disableServoCommand()
-        // );
-
-        // controller.start().onTrue(
-        //     climb.setServoPWMCommand(1000)
-        // );
+        controller.x().onTrue(
+            GeneralCommands.getFlywheelToSpeedCommand()
+        );
+        
     }
 
     /**
@@ -133,9 +125,9 @@ public class RobbieFTest implements Test
      */
     public void periodic()
     {
-        System.out.println(climb.isDetectedAfterDistanceSupplier(50.0, true).getAsBoolean());
+        // System.out.println(climb.isDetectedAfterDistanceSupplier(50.0, true).getAsBoolean());
         // System.out.println(climb.isDetected().getAsBoolean());
-        System.out.println("Climb Position = " + climb.getPosition());
+        // System.out.println("Climb Position = " + climb.getPosition());
     }
     
     /**

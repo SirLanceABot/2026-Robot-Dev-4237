@@ -154,13 +154,37 @@ public class GeneralCommands
                 setLEDCommand(ColorPattern.kSolid, Color.kYellow),
                 intake.pickupFuelCommand(),
                 indexigator.setForwardCommand())
-            .withName("Intaking Fuel");
+            .withName("intaking fuel");
         }
         else
         {
             return Commands.none();
         }
     }
+
+    /**
+     * @author definetly not Brady Woodard
+     * @return command to stop intaking but leave the hopper out (doesn't retract intake, stops rollers)
+     */
+    //TODO test
+    public static Command stopIntakingCommand()
+    {
+        if(intake != null && indexigator != null)
+        {
+            return
+            Commands.parallel(
+                intake.stopCommand(),
+                indexigator.stopCommand(),
+                defaultLEDCommand())
+            .withName("done intaking");
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+
 
     /**
      * @author Brady W
@@ -342,6 +366,20 @@ public class GeneralCommands
         }
     }
 
+    //TODO test led portion of command and determine tolerance
+    public static Command getFlywheelToSpeedCommand()
+    {
+        if(flywheel != null)
+        {
+            return flywheel.setControlVelocityCommand(() -> 35.0)
+                .andThen(setLEDCommand(ColorPattern.kSolid, Color.kBlue).onlyIf(flywheel.isAtSetSpeed(35.0, 5.0)));
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
     // not tested
     /**
      * @author Robbie F
@@ -354,7 +392,6 @@ public class GeneralCommands
             return 
             setLEDCommand(ColorPattern.kRainbow)
             .andThen(climb.extendToL1FromStartCommand())
-                // .until(climb.isClimbMotorAtPosition(climbPosition.kEXTENDL1))
             .andThen(climb.setServoPositionCommand(servoPosition.kEXTENDED))
             .withName("climb extended to L1 position");       
         }
@@ -373,7 +410,6 @@ public class GeneralCommands
         if(climb != null)
         {
             return climb.retractFromExtendL1Command()
-                // .until(climb.isClimbMotorAtPosition(climbPosition.kRETRACTL1))
             .withName("climb mounted L1");
         }
         else
@@ -391,8 +427,7 @@ public class GeneralCommands
         if(climb != null)
         {
             return climb.extendToL1FromRetractedCommand()
-                // .until(climb.isClimbMotorAtPosition(climbPosition.kEXTENDL1))
-            // .andThen( () -> drivetrain.resetForFieldCentric())
+            // .andThen( () -> drivetrain.resetForFieldCentric())       // included in autoclimb
             .withName("climb unmounted L1 (servo still extended)");
         } 
         else
@@ -411,9 +446,7 @@ public class GeneralCommands
         {
             return 
             climb.setServoPositionCommand(servoPosition.kRETRACTED)
-                // .until(climb.isServoAtPosition(0.77))
             .andThen(climb.resetToStartFromExtendedCommand())
-                // .until(climb.isClimbMotorAtPosition(climbPosition.kSTART))
             .andThen(climb.disableServoCommand())
             .andThen(defaultLEDCommand())
             .withName("climb reset to inside robot (servo reset)");
@@ -519,7 +552,7 @@ public class GeneralCommands
 
     // ask Grant
 
-    // delete once pathplanner is fixed
+   // delete once pathplanner is fixed
     public static Command climbToL1Command()
     {
         return Commands.none();
@@ -530,7 +563,6 @@ public class GeneralCommands
     {
          return Commands.none();
     }
-
 
 
     

@@ -7,11 +7,17 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.StatusSignalCollection;
+import com.ctre.phoenix6.hardware.TalonFX;
+
 // import com.ctre.phoenix6.configs.TalonFXConfiguration;
 // import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 // import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.controls.TakeBackHalfController;
@@ -42,7 +48,7 @@ public class Flywheel extends SubsystemBase
     private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Flywheel Lead Motor"); //X60
     private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Flywheel Follow Motor"); //X60
 
-    // private final TalonFX motor = new TalonFX(1, MOTOR_CAN_BUS);
+    private final TalonFX motor = new TalonFX(1, MOTOR_CAN_BUS);
     
     private final double defaultGain = 1.e-5;
     private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
@@ -112,6 +118,14 @@ public class Flywheel extends SubsystemBase
         followMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
 
         followMotor.setupFollower(LEADMOTOR, false);
+
+        // motor.getSupplyVoltage(true);
+
+        StatusSignal<Voltage> supplyVoltageSignal = motor.getSupplyVoltage();
+
+        // double supplyVoltage = supplyVoltageSignal.getValueAsDouble();
+
+        supplyVoltageSignal.setUpdateFrequency(1000);
     }
  
     private void configShotMap()
@@ -150,16 +164,16 @@ public class Flywheel extends SubsystemBase
         return distToVeloMap.get(dist);
     }
 
-    public double getDutyCycle()
-    {
-        return leadMotor.get();
-    }
-
     // public double getPassPower(double dist)
     // {
     //     dist = Math.max(10.0, Math.min(50.0, dist));
     //     return distToPassVeloMap.get(dist);
     // }
+
+    public double getDutyCycle()
+    {
+        return leadMotor.get();
+    }
 
     /**
      * This sets the speed of the motors.
@@ -185,7 +199,7 @@ public class Flywheel extends SubsystemBase
      */
     private void burpFuel()
     {
-        leadMotor.setControlVelocity(10.0);
+        leadMotor.setControlVelocity(25.0);
     }
 
     /**
@@ -254,7 +268,6 @@ public class Flywheel extends SubsystemBase
     {
         return run( () -> set(0.5) );
     }
-    
 
     /**
      * @param speed to spin flywheel at
@@ -281,7 +294,7 @@ public class Flywheel extends SubsystemBase
         return run(() -> set(0.1));
     }
 
-    public Command runMtorUsingVoltageCommand(double voltage)
+    public Command runMotorUsingVoltageCommand(double voltage)
     {
         return run( () -> setVoltage(voltage));
     }
@@ -290,6 +303,13 @@ public class Flywheel extends SubsystemBase
     {
         return run(() -> useTBH(setpoint));
     }
+
+    // public Command test(double volt)
+    // {
+    //     return run(() -> motor.setVoltage(12.7));
+    // }
+
+    
 
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
