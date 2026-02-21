@@ -102,6 +102,12 @@ public final class OperatorBindings {
             configDpadRight();
             
             configRumble(rumbleTime);
+            configRumble(135);
+            configRumble(110);
+            configRumble(85);
+            configRumble(60);
+            configRumble(35);
+
             configDefaultCommands();
 
             System.out.println("  Constructor Finished: " + fullClassName);

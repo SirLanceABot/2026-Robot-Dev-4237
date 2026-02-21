@@ -111,6 +111,12 @@ public final class DriverBindings {
             configDpadRight();
             
             configRumble(rumbleTime);
+            configRumble(135);
+            configRumble(110);
+            configRumble(85);
+            configRumble(60);
+            configRumble(35);
+
             configDefaultCommands();
 
             System.out.println("  Constructor Finished: " + fullClassName);
@@ -277,7 +283,6 @@ public final class DriverBindings {
         .onTrue( Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 1.0)))
         .onFalse( Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 0.0)));
     }
-
 
     private static void configDefaultCommands()
     {
