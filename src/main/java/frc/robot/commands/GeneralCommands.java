@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
 import frc.robot.sensors.CANRange;
+import frc.robot.sensors.Hopper;
 import frc.robot.subsystems.Accelerator;
 // import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
@@ -63,6 +64,7 @@ public class GeneralCommands
     private static CANRange canrange1;
     private static CANRange canrange2;
     private static Debouncer debouncer;
+    private static Hopper hopper;
 
     public static void createCommands(RobotContainer robotContainer)
     {        
@@ -80,6 +82,7 @@ public class GeneralCommands
         canrange1 = robotContainer.getCANrange(0);
         canrange2 = robotContainer.getCANrange(1);
         debouncer = new Debouncer(0.5);
+        hopper = robotContainer.getHopper();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -121,8 +124,22 @@ public class GeneralCommands
     // color and pattern for LEDS to default to during a match
     public static Command defaultLEDCommand()
     {
-        //TODO add an if statement that makes the default color blinking yellow when the hopper is full
-        return setLEDCommand(ColorPattern.kSolid, Color.kRed).withName("Set LED to default (red)");
+        if(hopper != null)
+        {
+            //TODO should this also check if hopper is closed?
+            if(hopper.isHopperFullSupplier().getAsBoolean())
+            {        
+                return setLEDCommand(ColorPattern.kBlink, Color.kYellow).withName("Set LED to hopper full mode (blinking yellow)");
+            }
+            else
+            {
+                return setLEDCommand(ColorPattern.kSolid, Color.kRed).withName("Set LED to default (red)");
+            }
+        }
+        else
+        {
+            return setLEDCommand(ColorPattern.kSolid, Color.kRed).withName("Set LED to default (red)");
+        }
     }
 
     // tested
