@@ -81,24 +81,24 @@ public final class OperatorBindings {
         {
             System.out.println("  Constructor Started:  " + fullClassName);
 
-            // configSuppliers();
+            configSuppliers();
 
-            // configAButton();
-            // configBButton();
-            // configXButton();
-            // configYButton();
-            // configLeftBumper();
-            // configRightBumper();
-            // configBackButton();
-            // configStartButton();
-            // configLeftTrigger();
-            // configRightTrigger();
-            // configLeftStick();
-            // configRightStick();
-            // configDpadUp();
-            // configDpadDown(); 
-            // configDpadLeft();
-            // configDpadRight();
+            configAButton();
+            configBButton();
+            configXButton();
+            configYButton();
+            configLeftBumper();
+            configRightBumper();
+            configBackButton();
+            configStartButton();
+            configLeftTrigger();
+            configRightTrigger();
+            configLeftStick();
+            configRightStick();
+            configDpadUp();
+            configDpadDown(); 
+            configDpadLeft();
+            configDpadRight();
 
             configRumble(rumbleTime);
             configRumble(135);
