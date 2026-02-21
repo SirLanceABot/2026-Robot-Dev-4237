@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.345452112271335,
-        "y": -0.3244918258087819
+        "x": 8.324638554216868,
+        "y": -0.08474698795180702
       },
       "isLocked": false,
       "linkedName": "Close Right NZ"
@@ -20,8 +20,8 @@
         "y": 2.8347510971376484
       },
       "prevControl": {
-        "x": -0.46013744212681207,
-        "y": 0.17080208333473612
+        "x": -0.30825301204819255,
+        "y": 0.2758674698795187
       },
       "nextControl": null,
       "isLocked": false,
@@ -76,10 +76,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 0.5,
-    "maxAngularVelocity": 180.0,
-    "maxAngularAcceleration": 180.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },

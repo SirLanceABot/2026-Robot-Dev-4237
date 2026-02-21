@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.446486472793204,
-        "y": 8.601558666087975
+        "x": 6.668800683328508,
+        "y": 8.776069940338516
       },
       "isLocked": false,
       "linkedName": "Close Left NZ"
@@ -20,8 +20,8 @@
         "y": 4.662893710660144
       },
       "prevControl": {
-        "x": 0.8234670138811669,
-        "y": 8.05810662615742
+        "x": 0.6533855421650887,
+        "y": 7.24774698795088
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.35376233552631586,
+      "waypointRelativePos": 0.3,
       "rotationDegrees": 90.0
     },
     {
@@ -80,10 +80,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 0.5,
-    "maxAngularVelocity": 180.0,
-    "maxAngularAcceleration": 180.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
