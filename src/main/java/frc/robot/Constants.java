@@ -40,7 +40,7 @@ public final class Constants
      */
     public static class ExampleSubsystem
     {
-        public static final String MOTOR_CAN_BUS = CANbus.ROBORIO;
+        public static final String MOTOR_CAN_BUS = CANbus.CANIVORE;
 
         public static final int MOTOR1 = 1;
         public static final int MOTOR2 = 2;
@@ -48,29 +48,29 @@ public final class Constants
 
     public static class Accelerator
     {
-        public static final int MOTOR                   = 3;
+        public static final int MOTOR                   = 13;
 
-        public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
+        public static final String MOTOR_CAN_BUS        = CANbus.CANIVORE;
     }
 
-    public static class Agitator
-    {
-        public static final int MOTOR                   = 1;
+    // public static class Agitator
+    // {
+    //     public static final int MOTOR                   = 1;
 
-        public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
+    //     public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
 
-    }
+    // }
 
     public static class Climb
     {
-        public static final int LEADMOTOR          = 4237;
-        public static final int FOLLOWMOTOR        = 4237;
+        public static final int LEADMOTOR          = 14;
+        public static final int FOLLOWMOTOR        = 15;
 
         public static final int SERVOMOTOR         = 1;
 
         public static final int SENSOR_PORT        = 4;
 
-        public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;    
+        public static final String MOTOR_CAN_BUS        = CANbus.CANIVORE;    
     }
 
      /**
@@ -84,32 +84,10 @@ public final class Constants
 
     public static class Flywheel
     {
-        public static final int LEADMOTOR               = 1;
-        public static final int FOLLOWMOTOR             = 2;
+        public static final int LEADMOTOR               = 16;
+        public static final int FOLLOWMOTOR             = 17;
 
-        public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
-    }
-    
-    public static class Indexigator
-    {
-        public static final int MOTOR                   = 7;
-
-        public static final String MOTOR_CAN_BUS        = CANbus.ROBORIO;
-    }
-
-    public static class Intake
-    {
-        public static final int ROLLER_MOTOR_LEADER     = 4;
-        public static final int ROLLER_MOTOR_FOLLOWER   = 1;
-        public static final int PIVOT_MOTOR_LEADER      = 3;
-        public static final int PIVOT_MOTOR_FOLLOWER    = 12;
-
-        public static final String MOTOR_CAN_BUS            = CANbus.ROBORIO;
-    }   
-
-    public static class LaserCan
-    {
-        public static final int ID                       = 0;
+        public static final String MOTOR_CAN_BUS        = CANbus.CANIVORE;
     }
 
     public static class Hopper
@@ -121,6 +99,28 @@ public final class Constants
 
         public static final double HOPPER_RETRACTED_LENGTH= 19.3; // Inches
         public static final double HOPPER_EXTENDED_LENGTH = 31;   // Inches
+    }
+    
+    public static class Indexigator
+    {
+        public static final int MOTOR                   = 18;
+
+        public static final String MOTOR_CAN_BUS        = CANbus.CANIVORE;
+    }
+
+    public static class Intake
+    {
+        public static final int ROLLER_MOTOR_LEADER     = 19;
+        public static final int ROLLER_MOTOR_FOLLOWER   = 20;
+        public static final int PIVOT_MOTOR_LEADER      = 21;
+        public static final int PIVOT_MOTOR_FOLLOWER    = 22;
+
+        public static final String MOTOR_CAN_BUS            = CANbus.CANIVORE;
+    }   
+
+    public static class LaserCan
+    {
+        public static final int ID                       = 0;
     }
 
     public static class LEDs

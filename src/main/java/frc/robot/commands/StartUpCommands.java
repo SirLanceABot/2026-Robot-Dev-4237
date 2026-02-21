@@ -192,7 +192,7 @@ public final class StartUpCommands
 
     public static void checkAndUpdate()
     {    
-        System.out.println("StartUpCommands go");
+        // System.out.println("StartUpCommands go");
         StartUpState State = runStartUpChecks();
 
         if (State != currentState)

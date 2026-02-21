@@ -4,11 +4,13 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
+import frc.robot.commands.GeneralCommands;
 import frc.robot.commands.ScoringCommands;
 import frc.robot.subsystems.Accelerator;
 // import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexigator;
+import frc.robot.subsystems.Intake;
 
 @SuppressWarnings("unused")
 public class LoganBTest implements Test
@@ -35,6 +37,7 @@ public class LoganBTest implements Test
     private final CommandXboxController controller = new CommandXboxController(0);
     private final Flywheel flywheel;
     private final Accelerator accelerator;
+    private final Intake intake;
     // private final Agitator agitator;
     private final Indexigator indexigator;
 
@@ -54,6 +57,7 @@ public class LoganBTest implements Test
         this.robotContainer = robotContainer;
         this.flywheel = robotContainer.getFlywheel();
         this.accelerator = robotContainer.getAccelerator();
+        this.intake = robotContainer.getIntake();
         // this.agitator = robotContainer.getAgitator();
         this.indexigator = robotContainer.getIndexigator();
 
@@ -101,26 +105,44 @@ public class LoganBTest implements Test
         //     flywheel.stopCommand()
         // );
 
+        // controller.a().onTrue(
+        //     indexigator.setForwardCommand()
+        // );
+        // controller.b().onTrue(
+        //     indexigator.stopCommand()
+        // );
+        // controller.x().onTrue(
+        //     accelerator.setVelocityCommand(12.0)
+        // );
+        // controller.y().onTrue(
+        //     flywheel.setControlVelocityCommand(() -> 25)
+        // );
+        // controller.start().onTrue(
+        //     flywheel.stopCommand()
+        // );
+        // controller.back().onTrue(
+        //     accelerator.stopCommand()
+        // );
+
         controller.a().onTrue(
-            indexigator.setForwardCommand()
+            GeneralCommands.intakeCommand()
         );
-        controller.b().onTrue(
-            indexigator.stopCommand()
-        );
-        controller.x().onTrue(
-            accelerator.setVelocityCommand(12.0)
-        );
-        controller.y().onTrue(
-            flywheel.setControlVelocityCommand(() -> 25)
-        );
-        controller.start().onTrue(
-            flywheel.stopCommand()
-        );
-        controller.back().onTrue(
-            accelerator.stopCommand()
-        );
+        // controller.b().whileTrue(
+        //     intake.moveIntakeInCommand()
+        // );
+        // controller.b().onFalse(
+        //     intake.stopCommand()
+        // );
+        // controller.a().whileTrue(
+        //     intake.moveIntakeOutCommand()
+        // );
+        // controller.a().onFalse(
+        //     intake.stopCommand()
+        // );
+        System.out.println("pivot pos: " + intake.getPivotPosition());
     }
-    
+    //9.35888671875
+
     /**
      * This method runs one time after the periodic() method.
      */

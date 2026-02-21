@@ -127,7 +127,7 @@ public class Indexigator extends SubsystemBase
 
     public Command setForwardCommand()
     {
-        return run( () -> set(0.5));
+        return run( () -> set(0.2));
     }
 
     public Command setBackwardCommand(DoubleSupplier speed)

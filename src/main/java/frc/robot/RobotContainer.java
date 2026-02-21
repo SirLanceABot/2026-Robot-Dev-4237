@@ -116,7 +116,7 @@ public class RobotContainer
             climb = new Climb();
 
         if(useFullRobot || useShooterCamera)
-            cameraArray[0] = new Camera("limelight-shooter");
+            cameraArray[0] = new Camera("limelight");
         else
             cameraArray[0] = null;
         

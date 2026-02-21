@@ -152,9 +152,9 @@ public class GeneralCommands
             return 
             Commands.parallel(
                 setLEDCommand(ColorPattern.kSolid, Color.kYellow),
-                intake.pickupFuelCommand(),
-                indexigator.setForwardCommand())
-            .withName("intaking fuel");
+                intake.pickupFuelCommand())
+                // indexigator.setForwardCommand())
+            .withName("Intaking Fuel");
         }
         else
         {

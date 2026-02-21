@@ -163,9 +163,7 @@ public final class DriverBindings {
     {
         Trigger bButton = controller.b();
 
-        bButton.onTrue(ScoringCommands.shootFromStandstillCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
-
-        bButton.onFalse(GeneralCommands.stopShootingCommand());
+        
     }
 
 
@@ -180,6 +178,9 @@ public final class DriverBindings {
         //         ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, indexigator, accelerator, flywheel)));
 
         // xButton.onFalse(GeneralCommands.stopShootingCommand());
+        xButton.onTrue(ScoringCommands.shootFromStandstillCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
+
+        xButton.onFalse(GeneralCommands.stopShootingCommand());
     }
 
     // pass

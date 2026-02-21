@@ -41,11 +41,11 @@ public class Intake extends SubsystemBase
 
     
 
-    private final double PivotkP = 0.3;
+    private final double PivotkP = 0.25;
     private final double PivotkI = 0.0;
     private final double PivotkD = 0.0;
-    private final double PivotkS = 0.19;
-    private final double PivotkV = 0.13;
+    private final double PivotkS = 0.023;
+    private final double PivotkV = 0.0;
 
     private final double RollerkP = 0.2;
     private final double RollerkI = 0.0;
@@ -57,8 +57,8 @@ public class Intake extends SubsystemBase
     private final double GEAR_RATIO = 1.0 / 1.0;
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INTAKE_ROLLER_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
 
-    private final double retractedPosition = 10.0; // TEST
-    private final double intakingPosition = 0.0; 
+    private final double retractedPosition = 0.0; // TEST
+    private final double intakingPosition = 10.0; 
     // private final double theshold = 4.0;
 
     // *** CLASS CONSTRUCTORS ***
@@ -90,13 +90,13 @@ public class Intake extends SubsystemBase
 
         // Sets up motors to be inverted or not
         RollersMotor.setupInverted(true);
-        PivotMotor.setupInverted(true);
+        PivotMotor.setupInverted(false);
 
         // Sets up Coast Mode
         RollersMotor.setupCoastMode();
         RollersFollower.setupCoastMode();
-        PivotMotor.setupCoastMode();
-        PivotFollower.setupCoastMode();
+        PivotMotor.setupBrakeMode();
+        PivotFollower.setupBrakeMode();
 
         // Sets up position
         RollersMotor.setPosition(0.0);
@@ -120,8 +120,8 @@ public class Intake extends SubsystemBase
         RollersFollower.setupFollower(ROLLER_MOTOR_LEADER, true);
         PivotFollower.setupFollower(PIVOT_MOTOR_LEADER, true);
 
-        PivotMotor.setupForwardHardLimitSwitch(true, true, 8);
-        PivotMotor.setupReverseHardLimitSwitch(true, false, 9);
+        PivotMotor.setupForwardHardLimitSwitch(true, true, 0);
+        PivotMotor.setupReverseHardLimitSwitch(true, true, 1);
 
         // Configure Velocity Conversion Factor (rev/s to ft/s)
         // intakeRollersMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
@@ -188,12 +188,24 @@ public class Intake extends SubsystemBase
         return () -> (Math.abs(PivotMotor.getPosition() - desiredPosition) <= 1.0);
     }
 
+    public void moveIntakeOut()
+    {
+        PivotMotor.setControlPosition(9);
+        // PivotMotor.set(0.03);
+    }
+    
+    public void moveIntakeIn()
+    {
+        PivotMotor.setControlPosition(0);
+        // PivotMotor.set(-0.03);
+    }
+
     /**
      * This method stops the intake motors
      */
     public void stop()
     {
-        // intakePivotMotor.set(0.0);
+        PivotMotor.set(0.0);
         // intakeRollersMotor.set(0.0);
         setVelocity(0.0);
     }
@@ -223,6 +235,16 @@ public class Intake extends SubsystemBase
         return run( () -> setVelocity(0.25) );
     }
 
+    public Command moveIntakeOutCommand()
+    {
+        return run( () -> moveIntakeOut());
+    }
+
+    public Command moveIntakeInCommand()
+    {
+        return run( () -> moveIntakeIn());
+    }
+
     // Use a method reference instead of this method
     public Command stopCommand()
     {
@@ -249,6 +271,7 @@ public class Intake extends SubsystemBase
         if (RollersMotor.getCurrentAmps() > 10.0)
             System.out.println("RollerMotor amps: " + RollersMotor.getCurrentAmps() + " FollowerRoller Amps: " + RollersFollower.getCurrentAmps());
 
+        // System.out.println(PivotMotor.getForwardHardLimit() + " " + PivotMotor.getReverseHardLimit());
         // This method will be called once per scheduler run
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.

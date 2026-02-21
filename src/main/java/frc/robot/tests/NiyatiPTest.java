@@ -56,16 +56,16 @@ public class NiyatiPTest implements Test
         this.robotContainer = robotContainer;
         // INTAKE STUFF
         // Prefer the Intake from RobotContainer if available
-        if (robotContainer != null && robotContainer.getIntake() != null)
-        {
-            intake = robotContainer.getIntake();
-            System.out.println("good intake :)");
-        }
-        else
-        {
-            System.out.println("no intake :(");
-            intake = new Intake();
-        }
+        // if (robotContainer != null && robotContainer.getIntake() != null)
+        // {
+        //     intake = robotContainer.getIntake();
+        //     System.out.println("good intake :)");
+        // }
+        // else
+        // {
+        //     System.out.println("no intake :(");
+        //     intake = new Intake();
+        // }
 
         //LEDS STUFF
         leds = robotContainer.getLEDs();
@@ -127,15 +127,15 @@ public class NiyatiPTest implements Test
         //     leds.setColorSolidCommand(70, Color.kBlue).schedule();
         // }
 
-        if(joystick.getRawButton(1))
-        {
-            leds.setColorBlinkCommand(Color.kBlue).schedule();
-        }
-        else if (joystick.getRawButton(2))
-        {
-            // leds.setColorRainbowCommand();
-            leds.setColorSolidCommand(60, Color.kRed);
-        }
+        // if(joystick.getRawButton(1))
+        // {
+        //     leds.setColorBlinkCommand(Color.kBlue).schedule();
+        // }
+        // else if (joystick.getRawButton(2))
+        // {
+        //     // leds.setColorRainbowCommand();
+        //     leds.setColorSolidCommand(60, Color.kRed);
+        // }
     }
     
     /**
