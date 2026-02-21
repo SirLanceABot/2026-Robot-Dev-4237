@@ -81,6 +81,7 @@ public class ScoringCommands
         if(intake != null && indexigator != null  && accelerator != null  && flywheel != null)
         {
             return  Commands.parallel(
+                (GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue)),
                 (intake.pickupFuelCommand()),
                 (indexigator.onCommand()),
                 (accelerator.feedToShooterCommand(()-> 0.25)),
@@ -96,12 +97,12 @@ public class ScoringCommands
     {        
         if(intake != null && indexigator != null  && accelerator != null  && flywheel != null )
         {
-            return  Commands.parallel( (accelerator.feedToShooterCommand(() -> 0.25)),
-                    (flywheel.setControlVelocityCommand(() -> 75.7))).until(flywheel.isAtSetSpeed(100, 5))
-                    .andThen
-                    // .commands.parallel(
-                (intake.pickupFuelCommand()).andThen
-                (indexigator.onCommand());
+            return  
+            Commands.parallel( 
+                (accelerator.feedToShooterCommand(() -> 0.25)),
+                (flywheel.setControlVelocityCommand(() -> 75.7))).until(flywheel.isAtSetSpeed(100, 5))
+            .andThen(intake.pickupFuelCommand())
+            .andThen(indexigator.onCommand());
 
         }
         else
@@ -216,9 +217,12 @@ public class ScoringCommands
             double shooterVelocity = poseEstimator.pureShooterVelocity(poseEstimator.getAllianceHubPose()).getAsDouble();
 
             return
-            flywheel.setControlVelocityCommand(() -> shooterVelocity).until(flywheel.isAtSetSpeed(shooterVelocity, 5))   //TODO also tun this tolerance
+            Commands.parallel(
+                GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue),
+                flywheel.setControlVelocityCommand(() -> shooterVelocity).until(flywheel.isAtSetSpeed(shooterVelocity, 5)))   //TODO also tun this tolerance
             .andThen(
                 Commands.parallel(
+                    GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
                     indexigator.setForwardCommand(),
                     accelerator.feedToShooterCommand(() -> 0.1)));
         }
@@ -237,10 +241,10 @@ public class ScoringCommands
                 flywheel.setControlVelocityCommand(() -> 60.0).until(flywheel.isAtSetSpeed(60.0, 10)),     // test value
                 GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue))
             .andThen(
-            Commands.parallel(
-                GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kWhite),
-                indexigator.setForwardCommand(), //rpm
-                accelerator.setVelocityCommand(12.0)));
+                Commands.parallel(
+                    GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kWhite),
+                    indexigator.setForwardCommand(), //rpm
+                    accelerator.setVelocityCommand(12.0)));
         }
         else
         {
@@ -286,12 +290,10 @@ public class ScoringCommands
             {
                 return
                 Commands.parallel(
-                    GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
-                    Commands.parallel(
-                        GeneralCommands.extendClimbToL1Command(),
-                        GeneralCommands.driveToPositionCommand(targetClimbPose, drivetrain.getState().Pose))
-                    .andThen(
-                        GeneralCommands.ascendFromL1Command()));
+                    GeneralCommands.extendClimbToL1Command(),
+                    GeneralCommands.driveToPositionCommand(targetClimbPose, drivetrain.getState().Pose))
+                .andThen(
+                    GeneralCommands.ascendFromL1Command());
 
             }
             else

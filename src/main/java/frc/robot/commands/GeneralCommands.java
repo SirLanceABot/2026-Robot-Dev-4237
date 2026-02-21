@@ -79,8 +79,6 @@ public class GeneralCommands
         climb = robotContainer.getClimb();
         poseEstimator = robotContainer.getPoseEstimator();
         leds = robotContainer.getLEDs();
-        canrange1 = robotContainer.getCANrange(0);
-        canrange2 = robotContainer.getCANrange(1);
         debouncer = new Debouncer(0.5);
         hopper = robotContainer.getHopper();
 
@@ -171,14 +169,16 @@ public class GeneralCommands
      */
     public static Command intakeUntilFullCommand()
     {
-        if(intake != null && indexigator != null && canrange1 != null && canrange2 != null)
+        if(intake != null && indexigator != null && hopper != null)
         {
             return
-            Commands.parallel(intake.pickupFuelCommand(),
-            indexigator.setForwardCommand())
-            .until( () -> debouncer.calculate(canrange1.isBallDetected(29.5) && canrange2.isBallDetected(29.5)))
-            .andThen(Commands.parallel(intake.stopCommand(),
-            indexigator.stopCommand()))
+            Commands.parallel(
+                intake.pickupFuelCommand(),
+                indexigator.setForwardCommand()).until(hopper.isHopperFullSupplier())
+            .andThen(
+                Commands.parallel(
+                    intake.stopCommand(),
+                    indexigator.stopCommand()))
             .withName("Intake Until Full");
         }
         else
@@ -237,10 +237,11 @@ public class GeneralCommands
     {
         if(intake != null && indexigator != null)
         {
-            return Commands.parallel(
+            return 
+            Commands.parallel(
                 setLEDCommand(ColorPattern.kSolid, Color.kOrange),
                 intake.ejectFuelCommand())
-                .withName("Ejecting Fuel In Intake");
+            .withName("Ejecting Fuel In Intake");
         }
         else
         {
@@ -258,7 +259,10 @@ public class GeneralCommands
     {
         if(intake != null && indexigator != null)
         {
-            return intake.retractIntakeCommand()
+            return 
+            Commands.parallel(
+                intake.retractIntakeCommand(),
+                setLEDCommand(ColorPattern.kSolid, Color.kGreen))
             .andThen(defaultLEDCommand())
             .withName("Stopping Ejecting Fuel In Intake");
         }
@@ -411,6 +415,7 @@ public class GeneralCommands
             .andThen(climb.resetToStartFromExtendedCommand())
                 // .until(climb.isClimbMotorAtPosition(climbPosition.kSTART))
             .andThen(climb.disableServoCommand())
+            .andThen(defaultLEDCommand())
             .withName("climb reset to inside robot (servo reset)");
         }
         else
