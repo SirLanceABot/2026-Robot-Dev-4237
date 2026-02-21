@@ -58,8 +58,7 @@ public final class OperatorBindings {
     private static DoubleSupplier rightXAxis;
     private static DoubleSupplier rightYAxis;
 
-    private static int rumbleTime = 0;
-
+    private static int rumbleTime = 3;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -82,25 +81,25 @@ public final class OperatorBindings {
         {
             System.out.println("  Constructor Started:  " + fullClassName);
 
-            configSuppliers();
+            // configSuppliers();
 
-            configAButton();
-            configBButton();
-            configXButton();
-            configYButton();
-            configLeftBumper();
-            configRightBumper();
-            configBackButton();
-            configStartButton();
-            configLeftTrigger();
-            configRightTrigger();
-            configLeftStick();
-            configRightStick();
-            configDpadUp();
-            configDpadDown(); 
-            configDpadLeft();
-            configDpadRight();
-            
+            // configAButton();
+            // configBButton();
+            // configXButton();
+            // configYButton();
+            // configLeftBumper();
+            // configRightBumper();
+            // configBackButton();
+            // configStartButton();
+            // configLeftTrigger();
+            // configRightTrigger();
+            // configLeftStick();
+            // configRightStick();
+            // configDpadUp();
+            // configDpadDown(); 
+            // configDpadLeft();
+            // configDpadRight();
+
             configRumble(rumbleTime);
             configRumble(135);
             configRumble(110);
