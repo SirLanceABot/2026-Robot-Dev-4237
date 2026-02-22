@@ -1,6 +1,9 @@
 package frc.robot.commands;
 
+import static frc.robot.Constants.Hopper.CAN_RANGE_LEFT;
+
 import java.lang.invoke.MethodHandles;
+import java.util.function.BooleanSupplier;
 
 import com.fasterxml.jackson.databind.EnumNamingStrategies.LowerCamelCaseStrategy;
 
@@ -16,7 +19,8 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.Constants;
-// import frc.robot.sensors.CANRange;
+import frc.robot.sensors.Hopper;
+
 
 /**
  * This class checks the swerves at startup and blinks leds red until tehy are aligned.
@@ -32,22 +36,22 @@ public final class StartUpCommands
 
     public enum StartUpState
     {
-        LOW_VOLTAGE, GYRO_NOT_ZEROED, /**CANRANGE_OFF,*/ SWERVE_MISALIGNED, READY
+        LOW_VOLTAGE, GYRO_NOT_ZEROED, CAN_RANGE_OFF, SWERVE_MISALIGNED, READY
     }
 
     private static Drivetrain drivetrain;
     private static LEDs leds;
-    // private static CANRange CANRange0;
-    // private static CANRange CANRange1;
+    // private static Hopper hopper;
 
     private static Notifier notifier; // background timer
 
-    // private static boolean currentlyBlinking = false;
-    // private static boolean monitorEnabled = false;
     public static StartUpState currentState = null;
     private static boolean running = false;
 
-    // private static Command selectedCommand = null;
+    private static boolean canRangeVerified = false;
+    private static BooleanSupplier LeftCam;
+    private static BooleanSupplier RightCam;
+
 
     // tolerance for wheel angle to be considered "forward" (degrees)
     private static final double SWERVE_TOLERANCE_DEGREES = 3.0;
@@ -86,11 +90,11 @@ public final class StartUpCommands
         }
 
         // Third - CAN Range check
-        // result = checkCANRanges();
-        // if (result != null)
-        // {
-        //     return result;
-        // }
+        result = checkCANRanges();
+        if (result != null)
+        {
+            return result;
+        }
 
         // Fourth - Swerve alignment
         result = checkSwerve();
@@ -124,9 +128,9 @@ public final class StartUpCommands
                 command = leds.setColorBlinkCommand(Color.kOrange);
                 break;
 
-            // case CANRANGE_OFF:
-            //     command = leds.setColorSolidCommand(80, Color.kPurple);
-            //     break;
+            case CAN_RANGE_OFF:
+                command = leds.setColorSolidCommand(80, Color.kPurple);
+                break;
 
             case SWERVE_MISALIGNED:
                 command = leds.setColorBlinkCommand(Color.kRed);
@@ -157,10 +161,8 @@ public final class StartUpCommands
 
         drivetrain = robotContainer.getDrivetrain();
         leds = robotContainer.getLEDs();
-        // CANRange0 = robotContainer.getCANrange(0);
-        // CANRange1 = robotContainer.getCANrange(1);
-
-
+        LeftCam = robotContainer.getHopper().isLeftFullSupplier();
+        RightCam = robotContainer.getHopper().isRightFullSupplier();
 
         if (drivetrain != null && drivetrain.getPigeon2() != null)
         {
@@ -287,27 +289,32 @@ public final class StartUpCommands
         return null;
     }
 
-    // /**
-    //  * This method will check if the CANRanges is returning anything
-    //  */
+    /**
+     * This method will check if the CANRanges is returning anything
+     */
     // boolean supplier in hopper
-    // private static StartUpState checkCANRanges()
-    // {
-    //     if (CANRange0 != null || CANRange1 != null)
-    //     {
-    //         if (CANRange0 == null) // What else does this return dawg
-    //         {
-    //             System.out.println("StartUpCommands - CANRange0 is not working");
-    //             return StartUpState.CANRANGE_OFF;
-    //         }
+    private static StartUpState checkCANRanges()
+    {
+        if (drivetrain == null)
+        {
+            return null;
+        }
 
-    //         if (CANRange1 == null)
-    //         {
-    //             System.out.println("StartUpCommands - CANRange1 is not working");
-    //             return StartUpState.CANRANGE_OFF;
-    //         }
-    //     }
+        if (LeftCam != null || RightCam != null)
+        {
+            return StartUpState.CAN_RANGE_OFF;
+        }
 
-    //     return null;
-    // }
+        boolean leftDetected = LeftCam.getAsBoolean();
+        boolean rightDetected = RightCam.getAsBoolean();
+
+        if (!leftDetected || rightDetected)
+        {
+            System.out.println("StartUpCommands - CANRanged verified");
+            canRangeVerified = true; 
+            return null;
+        }
+
+        return StartUpState.CAN_RANGE_OFF;
+    }
 }
