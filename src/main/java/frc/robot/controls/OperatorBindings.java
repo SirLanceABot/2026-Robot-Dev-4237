@@ -101,11 +101,11 @@ public final class OperatorBindings {
             configDpadRight();
 
             configRumble(rumbleTime);
-            configRumble(135);
-            configRumble(110);
-            configRumble(85);
-            configRumble(60);
-            configRumble(35);
+            configRumble(130);
+            configRumble(105);
+            configRumble(80);
+            configRumble(55);
+            configRumble(30);
 
             configDefaultCommands();
 
