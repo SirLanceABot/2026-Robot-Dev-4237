@@ -136,7 +136,7 @@ public final class OperatorBindings {
         bButton.onFalse(GeneralCommands.defaultLEDCommand());
     }
 
-
+    // TESTED, need to retest when we get a better intake
     private static void configXButton()
     {
         Trigger xButton = controller.x();
@@ -168,7 +168,7 @@ public final class OperatorBindings {
         leftBumper.onFalse(GeneralCommands.defaultLEDCommand());
     }
 
-
+    // not tested yet but looks like it shoudl work
     private static void configRightBumper()
     {
         Trigger rightBumper = controller.rightBumper();
@@ -177,7 +177,7 @@ public final class OperatorBindings {
         rightBumper.onTrue(ScoringCommands.stopIntakeAndShooterCommand(intake, indexigator, accelerator, flywheel));
     }
 
-
+    // TESTED and WORKS
     private static void configBackButton()
     {
         Trigger backButton = controller.back();
@@ -189,24 +189,24 @@ public final class OperatorBindings {
 
     private static void configStartButton()
     {
-        Trigger startButton = controller.start();    
+        Trigger startButton = controller.start();      
     }
 
 
-
+    // TESTED and WORKS (need to add climb)
     private static void configLeftTrigger()
     {
         Trigger leftTrigger = controller.leftTrigger();
 
-        leftTrigger.whileTrue(ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> true));
+        leftTrigger.whileTrue(new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> true), Set.of()));    
     }
 
-
+    // TESTED and WORKS (need to add climb)
     private static void configRightTrigger()
     {
         Trigger rightTrigger = controller.rightTrigger();
 
-        rightTrigger.whileTrue(ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> false));
+        rightTrigger.whileTrue(new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> false), Set.of()));
     }
 
 

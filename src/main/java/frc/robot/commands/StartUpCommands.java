@@ -255,7 +255,7 @@ public final class StartUpCommands
             // checking against tolerance
             if (angleToNearestPi > tolRad)
             {
-                System.out.println("StartUpCommands - Swerve misaligned (module " + i + ")");
+                // System.out.println("StartUpCommands - Swerve misaligned (module " + i + ")");
                 return StartUpState.SWERVE_MISALIGNED;
             }
         }

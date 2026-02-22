@@ -47,8 +47,6 @@ public class Flywheel extends SubsystemBase
     // Put all class variables and instance variables here
     private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Flywheel Lead Motor"); //X60
     private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Flywheel Follow Motor"); //X60
-
-    private final TalonFX motor = new TalonFX(1, MOTOR_CAN_BUS);
     
     private final double defaultGain = 1.e-5;
     private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
@@ -112,8 +110,8 @@ public class Flywheel extends SubsystemBase
         leadMotor.setupPIDController(0, kP, kI, kD);
         // leadMotor.setupOpenLoopRampRate(1.5);
 
-        // leadMotor.setupTorqueControl();
-        // followMotor.setupTorqueControl();
+        leadMotor.setupTorqueControl();
+        followMotor.setupTorqueControl();
         
         leadMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
         followMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
@@ -122,11 +120,9 @@ public class Flywheel extends SubsystemBase
 
         // motor.getSupplyVoltage(true);
 
-        StatusSignal<Voltage> supplyVoltageSignal = motor.getSupplyVoltage();
-
         // double supplyVoltage = supplyVoltageSignal.getValueAsDouble();
 
-        supplyVoltageSignal.setUpdateFrequency(1000);
+        // supplyVoltageSignal.setUpdateFrequency(1000);
     }
  
     private void configShotMap()
@@ -135,14 +131,14 @@ public class Flywheel extends SubsystemBase
         // TODO test values once we have robot
         distToVeloMap.put(6.0, 41.5); // 41.5
         distToVeloMap.put(7.0, 42.0); // 41.75
-        distToVeloMap.put(8.0, 43.0); // 42.5
-        distToVeloMap.put(9.0, 44.75); // 45.5
-        distToVeloMap.put(10.0, 46.0); // 47.25
-        distToVeloMap.put(11.0, 48.25); // 49.0
-        distToVeloMap.put(12.0, 49.5); // 51.75
-        distToVeloMap.put(13.0, 51.25); // 53.75
-        distToVeloMap.put(14.0, 53.25); // 59.0
-        distToVeloMap.put(15.0, 56.0); // 60
+        distToVeloMap.put(8.0, 43.5); // 42.5 // added 0.5
+        distToVeloMap.put(9.0, 45.25); // 45.5
+        distToVeloMap.put(10.0, 46.6); // 47.25
+        distToVeloMap.put(11.0, 48.75); // 49.0
+        distToVeloMap.put(12.0, 50.0); // 51.75
+        distToVeloMap.put(13.0, 51.75); // 53.75
+        distToVeloMap.put(14.0, 53.75); // 59.0
+        distToVeloMap.put(15.0, 56.5); // 60 // last 0.5
         distToVeloMap.put(16.0, 60.0); // 60
         distToVeloMap.put(17.0, 60.0); // 60
         

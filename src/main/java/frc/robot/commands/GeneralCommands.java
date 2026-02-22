@@ -477,35 +477,42 @@ public class GeneralCommands
      */
     public static Command driveToPositionCommand(Pose2d targetPose, Pose2d currentPose)
     {
-        PathConstraints constraints = new PathConstraints(0.5, 0.5, Units.degreesToRadians(360), Units.degreesToRadians(360));
+        if(AutoBuilder.isConfigured())
+        {
+            PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(360), Units.degreesToRadians(360));
         
-        Rotation2d pathTangent = new Rotation2d(
-            targetPose.getX() - currentPose.getX(),
-            targetPose.getY() - currentPose.getY()
-        );
-        
-        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-                                    new Pose2d(currentPose.getTranslation(), pathTangent),
-                                    new Pose2d(targetPose.getTranslation(), pathTangent));          
+            Rotation2d pathTangent = new Rotation2d(
+                targetPose.getX() - currentPose.getX(),
+                targetPose.getY() - currentPose.getY()
+            );
+            
+            List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+                                        new Pose2d(currentPose.getTranslation(), pathTangent),
+                                        new Pose2d(targetPose.getTranslation(), pathTangent));          
 
-        double vxMetersPerSecond = drivetrain.getState().Speeds.vxMetersPerSecond;
-        double vyMetersPerSecond = drivetrain.getState().Speeds.vyMetersPerSecond;
+            double vxMetersPerSecond = drivetrain.getState().Speeds.vxMetersPerSecond;
+            double vyMetersPerSecond = drivetrain.getState().Speeds.vyMetersPerSecond;
 
-        double velocity = Math.sqrt(vxMetersPerSecond * vxMetersPerSecond + vyMetersPerSecond * vyMetersPerSecond);
+            double velocity = Math.sqrt(vxMetersPerSecond * vxMetersPerSecond + vyMetersPerSecond * vyMetersPerSecond);
 
-        Rotation2d rotation = drivetrain.getPose().getRotation();
+            Rotation2d rotation = drivetrain.getPose().getRotation();
 
-        IdealStartingState idealStartingState = new IdealStartingState(velocity, rotation);
+            IdealStartingState idealStartingState = new IdealStartingState(velocity, rotation);
 
-        PathPlannerPath path = new PathPlannerPath(
-                                    waypoints,
-                                    constraints,
-                                    idealStartingState, // set this to null if not working
-                                    new GoalEndState(0.0, targetPose.getRotation()));
-        path.preventFlipping = true;
+            PathPlannerPath path = new PathPlannerPath(
+                                        waypoints,
+                                        constraints,
+                                        idealStartingState, // set this to null if not working
+                                        new GoalEndState(0.0, targetPose.getRotation()));
+            path.preventFlipping = true;
 
 
-        return AutoBuilder.followPath(path);
+            return AutoBuilder.followPath(path);
+        }
+        else
+        {
+            return Commands.none();
+        }
     }
 
     // /**

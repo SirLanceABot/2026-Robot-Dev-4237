@@ -258,7 +258,7 @@ public class ScoringCommands
     {
         if(drivetrain != null && poseEstimator != null && climb != null)
         {
-            Pose2d targetClimbPose;
+            Pose2d targetClimbPose, targetMiddlePose;
             
             if(drivetrain.isRedAllianceSupplier().getAsBoolean())
             {
@@ -275,31 +275,30 @@ public class ScoringCommands
             {
                 if(isLeft.getAsBoolean())
                 {
-                    targetClimbPose = new Pose2d( new Translation2d(1.482, 4.633), new Rotation2d(0));
+                    targetClimbPose = new Pose2d( new Translation2d(1.293, 4.539), new Rotation2d());
+                    targetMiddlePose = new Pose2d( new Translation2d(2.00, 4.539), new Rotation2d());
                 }
                 else
                 {
-                    targetClimbPose = new Pose2d( new Translation2d(0.634, 2.835), new Rotation2d(180));
+                    targetClimbPose = new Pose2d( new Translation2d(0.718, 2.708), new Rotation2d(Math.PI));
                 }
             }
 
-            // targetClimbPose = new Pose2d(4.847, 6.67, new Rotation2d());
-
             // need to check if intake is 
-            if(!intake.isExtended().getAsBoolean())
-            {
+            // if(!intake.isExtended().getAsBoolean())
+            // {
                 return
                 Commands.parallel(
-                    GeneralCommands.extendClimbToL1Command(),
-                    GeneralCommands.driveToPositionCommand(targetClimbPose, drivetrain.getState().Pose))
-                .andThen(
-                    GeneralCommands.ascendFromL1Command());
+                    // GeneralCommands.extendClimbToL1Command(),
+                    GeneralCommands.driveToPositionCommand(targetClimbPose, drivetrain.getState().Pose));
+                // .andThen(
+                //     GeneralCommands.ascendFromL1Command());
 
-            }
-            else
-            {
-                return Commands.none();
-            }
+            // }
+            // else
+            // {
+            //     return Commands.none();
+            // }
         }
         else
         {
