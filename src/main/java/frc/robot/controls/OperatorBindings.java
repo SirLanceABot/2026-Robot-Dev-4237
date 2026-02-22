@@ -146,15 +146,15 @@ public final class OperatorBindings {
         xButton.onFalse(GeneralCommands.defaultLEDCommand());
     }
 
-
+    // TESTED and GOOD
     private static void configYButton()
     {
         Trigger yButton = controller.y();
 
         // Y ~ spit out shooter (use the slow eject or something)
-        yButton.onTrue(GeneralCommands.ejectAllFuelSlowlyCommand());
+        yButton.whileTrue(GeneralCommands.ejectAllFuelSlowlyCommand());
 
-        yButton.onFalse(GeneralCommands.defaultLEDCommand());
+        yButton.onFalse(GeneralCommands.stopEjectingAllFuelCommand());
     }
 
 

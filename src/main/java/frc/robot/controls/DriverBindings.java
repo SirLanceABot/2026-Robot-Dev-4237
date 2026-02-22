@@ -133,7 +133,7 @@ public final class DriverBindings {
         lockAngleSupplier = () -> Math.PI / 4.0;
     }
 
-    // shoot on move
+    // TESTED and GOOD
     private static void configAButton()
     {
         Trigger aButton = controller.a();
@@ -166,7 +166,7 @@ public final class DriverBindings {
         
     }
 
-
+    // TESTED and GOOD
     private static void configXButton()
     {
         Trigger xButton = controller.x();
@@ -178,7 +178,7 @@ public final class DriverBindings {
         //         ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, indexigator, accelerator, flywheel)));
 
         // xButton.onFalse(GeneralCommands.stopShootingCommand());
-        xButton.onTrue(ScoringCommands.shootFromStandstillCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
+        xButton.whileTrue(ScoringCommands.shootFromStandstillCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
 
         xButton.onFalse(GeneralCommands.stopShootingCommand());
     }

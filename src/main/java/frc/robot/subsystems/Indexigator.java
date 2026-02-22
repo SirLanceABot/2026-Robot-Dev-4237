@@ -77,7 +77,7 @@ public class Indexigator extends SubsystemBase
     private void configMotors()
     {
         motor.setupFactoryDefaults();
-        motor.setSafetyEnabled(true);
+        motor.setSafetyEnabled(false);
         motor.setupPIDController(0, kP, kI, kD, kF);
         motor.setupCoastMode();
         // motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR); // rev/s to ft/s
@@ -127,7 +127,7 @@ public class Indexigator extends SubsystemBase
 
     public Command setForwardCommand()
     {
-        return run( () -> set(0.2));
+        return run( () -> set(0.4));
     }
 
     public Command setBackwardCommand(DoubleSupplier speed)

@@ -35,7 +35,7 @@ public class Accelerator extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance motor = new TalonFXLance(3, MOTOR_CAN_BUS, "Accelerator Motor"); // Kraken x44
+    private final TalonFXLance motor = new TalonFXLance(MOTOR, MOTOR_CAN_BUS, "Accelerator Motor"); // Kraken x44
     
     private final double ACCELERATOR_DIAMETER = (2.25 / 12.0); // ft
     // Neo 550:

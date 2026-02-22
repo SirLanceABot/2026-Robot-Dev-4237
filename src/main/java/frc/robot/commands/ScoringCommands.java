@@ -184,7 +184,7 @@ public class ScoringCommands
 
             return
             Commands.parallel(
-                flywheel.setControlVelocityCommand(() -> shooterPower.getAsDouble()).until(flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10)), // TODO tune tolerance
+                flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10).getAsBoolean()), // TODO tune tolerance
                 GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue))    
             .andThen(
                 Commands.parallel(

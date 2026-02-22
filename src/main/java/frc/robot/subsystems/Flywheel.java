@@ -54,11 +54,11 @@ public class Flywheel extends SubsystemBase
     private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
 
     // PID constants
-    private final double kP = 0.96;
+    private final double kP = 1.5;
     private final double kI = 0.0;
     private final double kD = 0.00;
-    private final double kS = 0.015;
-    private final double kV = 0.13;
+    private final double kS = 0.016;
+    private final double kV = 0.00;
     private final double kA = 0.00;
 
     private final double FLYWHEEL_DIAMETER_FEET  = (4.0 / 12.0); // 4.25 in
@@ -109,7 +109,8 @@ public class Flywheel extends SubsystemBase
         leadMotor.setupCoastMode();
         followMotor.setupCoastMode();
 
-        leadMotor.setupPIDController(0, kP, kI, kD, kS, kV, kA);
+        leadMotor.setupPIDController(0, kP, kI, kD);
+        // leadMotor.setupOpenLoopRampRate(1.5);
 
         // leadMotor.setupTorqueControl();
         // followMotor.setupTorqueControl();
@@ -132,18 +133,19 @@ public class Flywheel extends SubsystemBase
     {
         // first value is distance (ft) from the hub (in alliance zone), second is flywheel velo (currently ft/s)
         // TODO test values once we have robot
-        distToVeloMap.put(6.0, 41.5);
-        distToVeloMap.put(7.0, 41.75);
-        distToVeloMap.put(8.0, 42.5);
-        distToVeloMap.put(9.0, 45.5);
-        distToVeloMap.put(10.0, 47.25);
-        distToVeloMap.put(11.0, 49.0);
-        distToVeloMap.put(12.0, 51.75);
-        distToVeloMap.put(13.0, 53.75);
-        distToVeloMap.put(14.0, 59.0);
-        distToVeloMap.put(15.0, 60.0);
-        distToVeloMap.put(16.0, 60.0);
-        distToVeloMap.put(17.0, 60.0);
+        distToVeloMap.put(6.0, 41.5); // 41.5
+        distToVeloMap.put(7.0, 42.0); // 41.75
+        distToVeloMap.put(8.0, 43.0); // 42.5
+        distToVeloMap.put(9.0, 44.75); // 45.5
+        distToVeloMap.put(10.0, 46.0); // 47.25
+        distToVeloMap.put(11.0, 48.25); // 49.0
+        distToVeloMap.put(12.0, 49.5); // 51.75
+        distToVeloMap.put(13.0, 51.25); // 53.75
+        distToVeloMap.put(14.0, 53.25); // 59.0
+        distToVeloMap.put(15.0, 56.0); // 60
+        distToVeloMap.put(16.0, 60.0); // 60
+        distToVeloMap.put(17.0, 60.0); // 60
+        
     }
 
     // private void configPassMap()

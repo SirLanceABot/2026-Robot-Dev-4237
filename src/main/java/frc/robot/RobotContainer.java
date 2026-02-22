@@ -60,7 +60,7 @@ public class RobotContainer
 
     private boolean useLaserCAN                 = false;
     private boolean useRangerDistanceSensor     = false;
-    private boolean useHopper                   = true;
+    private boolean useHopper                   = false;
 
     private boolean useHopperCamera             = false;
     private boolean useShooterCamera            = false;

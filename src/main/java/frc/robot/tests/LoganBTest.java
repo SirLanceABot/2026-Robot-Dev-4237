@@ -2,6 +2,7 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
@@ -125,8 +126,27 @@ public class LoganBTest implements Test
         // );
 
         controller.a().onTrue(
-            GeneralCommands.intakeCommand()
+            // GeneralCommands.intakeCommand()
+            flywheel.setControlVelocityCommand(() -> 60)
         );
+        controller.b().onTrue(
+            Commands.parallel(
+                accelerator.setVelocityCommand(12.0),
+                indexigator.setForwardCommand()
+            )
+        );
+        controller.x().onTrue(
+            flywheel.stopCommand()
+        );
+        controller.y().onTrue(
+            Commands.parallel(
+                accelerator.stopCommand(),
+                indexigator.stopCommand()
+            )
+        );
+
+
+
         // controller.b().whileTrue(
         //     intake.moveIntakeInCommand()
         // );
@@ -139,7 +159,7 @@ public class LoganBTest implements Test
         // controller.a().onFalse(
         //     intake.stopCommand()
         // );
-        System.out.println("pivot pos: " + intake.getPivotPosition());
+        System.out.println("flywheel speed: " + flywheel.getVelocity() + " duty " + flywheel.getDutyCycle());
     }
     //9.35888671875
 
