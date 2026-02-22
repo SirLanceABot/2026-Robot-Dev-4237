@@ -147,7 +147,7 @@ public class GeneralCommands
      */
     public static Command intakeCommand()
     {
-        if(intake != null && indexigator != null)
+        if(intake != null)
         {
             return 
             Commands.parallel(
@@ -237,12 +237,12 @@ public class GeneralCommands
      */
     public static Command resetIntakeCommand()
     {
-        if(intake != null && indexigator != null)
+        if(intake != null)
         {
             return 
             Commands.parallel(
                 intake.retractIntakeCommand(),
-                indexigator.stopCommand(),
+                // indexigator.stopCommand(),
                 setLEDCommand(ColorPattern.kSolid, Color.kGreen))
             .withName("Intake Reset Into Robot");
         }

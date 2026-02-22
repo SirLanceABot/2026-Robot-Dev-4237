@@ -6,6 +6,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import org.ejml.equation.Symbol;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.IdealStartingState;
@@ -190,7 +192,7 @@ public class ScoringCommands
                 Commands.parallel(
                     GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
                     indexigator.setForwardCommand(), // rpm
-                    accelerator.setVelocityCommand(12.0)));
+                    accelerator.setVelocityCommand(12.0)).withTimeout(0.05));
         }
         else
         {
@@ -264,11 +266,15 @@ public class ScoringCommands
             {
                 if(isLeft.getAsBoolean())
                 {
-                    targetClimbPose = new Pose2d( new Translation2d(15.085, 3.437), new Rotation2d(180));
+                    // test these values still
+                    targetClimbPose = new Pose2d( new Translation2d(15.085, 3.437), new Rotation2d(Math.PI));
+                    targetMiddlePose = new Pose2d( new Translation2d(14.500, 3.437), new Rotation2d(Math.PI));
                 }
                 else
                 {
-                    targetClimbPose = new Pose2d( new Translation2d(15.906, 5.235), new Rotation2d(0));
+                    // test these values still
+                    targetClimbPose = new Pose2d( new Translation2d(15.906, 5.235), new Rotation2d());
+                    targetMiddlePose = new Pose2d( new Translation2d(16.406, 5.235), new Rotation2d());
                 }
             }
             else
@@ -281,6 +287,7 @@ public class ScoringCommands
                 else
                 {
                     targetClimbPose = new Pose2d( new Translation2d(0.718, 2.708), new Rotation2d(Math.PI));
+                    targetMiddlePose = new Pose2d( new Translation2d(0.218, 2.078), new Rotation2d(Math.PI));
                 }
             }
 
@@ -289,10 +296,12 @@ public class ScoringCommands
             // {
                 return
                 Commands.parallel(
-                    // GeneralCommands.extendClimbToL1Command(),
-                    GeneralCommands.driveToPositionCommand(targetClimbPose, drivetrain.getState().Pose));
-                // .andThen(
-                //     GeneralCommands.ascendFromL1Command());
+                    GeneralCommands.extendClimbToL1Command(),
+                    GeneralCommands.driveToPositionCommand(targetMiddlePose, drivetrain.getState().Pose))
+                .andThen(
+                    GeneralCommands.driveToPositionCommand(targetClimbPose, drivetrain.getState().Pose))
+                .andThen(
+                    GeneralCommands.ascendFromL1Command());
 
             // }
             // else

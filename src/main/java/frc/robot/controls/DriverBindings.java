@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
@@ -154,7 +155,7 @@ public final class DriverBindings {
         .whileTrue(
             Commands.parallel(
                 drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getRotationToCalculatedTarget().getAsDouble())), // Tested this command in 25 repo, works there
-                new DeferredCommand(() -> ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator), Set.of())));
+                ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator).repeatedly()));
             
         aButton.onFalse(GeneralCommands.stopShootingCommand()); // TODO test this line
     }
@@ -163,8 +164,6 @@ public final class DriverBindings {
     private static void configBButton()
     {
         Trigger bButton = controller.b();
-
-        
     }
 
     // TESTED and GOOD
@@ -178,7 +177,6 @@ public final class DriverBindings {
         //         drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> poseEstimator.pureLeadingAngle(poseEstimator.getAllianceHubPose()).getAsDouble()),
         //         ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, indexigator, accelerator, flywheel)));
 
-        // xButton.onFalse(GeneralCommands.stopShootingCommand());
         xButton.whileTrue(ScoringCommands.shootFromStandstillCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
 
         xButton.onFalse(GeneralCommands.stopShootingCommand());

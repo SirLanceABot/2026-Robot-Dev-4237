@@ -281,7 +281,7 @@ public final class StartUpCommands
 
         if (absYaw > GYRO_TOLERANCE_DEGREES)
         {
-            System.out.println("StartUpCommands: gyro moved (" + yawDegrees + " deg) - Setting LEDs orange");
+            // System.out.println("StartUpCommands: gyro moved (" + yawDegrees + " deg) - Setting LEDs orange");
 
             return StartUpState.GYRO_NOT_ZEROED;
         }

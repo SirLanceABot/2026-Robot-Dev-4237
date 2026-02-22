@@ -41,7 +41,7 @@ public class Intake extends SubsystemBase
 
     
 
-    private final double PivotkP = 0.25;
+    private final double PivotkP = 0.50;
     private final double PivotkI = 0.0;
     private final double PivotkD = 0.0;
     private final double PivotkS = 0.023;
@@ -157,7 +157,7 @@ public class Intake extends SubsystemBase
      */
     public void pickUpFuel()
     {
-        RollersMotor.set(0.9);
+        RollersMotor.set(1.0);
         // setVelocity(20.0);
         PivotMotor.setControlPosition(intakingPosition);
     }
