@@ -56,7 +56,6 @@ public class ElasticLance
     private static Drivetrain drivetrain;
     private static boolean useFullRobot;
 
-    // private static Alert autoAlert = new Alert("Invalid Auto", AlertType.kWarning);
     private static Alert useFullRobotAlert = new Alert("NOT using Full Robot!", AlertType.kError);
     private static Alert autoAlert = new Alert("INVALID AUTO", AlertType.kWarning);
     // private static boolean useFullRobot;
@@ -73,12 +72,11 @@ public class ElasticLance
 
     public static void configElastic(RobotContainer robotContainer)
     {
-        // intakeCamera    = robotContainer.getIntakeCamera();
         shooterCamera   = robotContainer.getShooterCamera();
-        // hopperCamera    = robotContainer.getHopperCamera();
         leds            = robotContainer.getLEDs();
         drivetrain      = robotContainer.getDrivetrain();
         useFullRobot    = robotContainer.useFullRobot();
+
     }
 
     public static void sendDataToSmartDashboard()
@@ -91,7 +89,6 @@ public class ElasticLance
         if(drivetrain != null)
             SmartDashboard.putNumber("Gyro Rotation", drivetrain.getPigeon2().getYaw().getValueAsDouble());
 
-        // updateValidAutoBox();
         updateAllianceColorBox();
         updateHubTagBox();
         updateClimbTagBox();
@@ -100,7 +97,6 @@ public class ElasticLance
         if(!useFullRobot && DriverStation.isDisabled())
         {
             useFullRobotAlert.set(true);
-            // leds.setColorSolidCommand(100, Color.kRed).ignoringDisable(true).schedule();
         }
     }
 
@@ -221,9 +217,9 @@ public class ElasticLance
                     gyroAlert.set(true);
                     break;
 
-                // case CANRANGE_OFF:
-                //     canRangeAlert.set(true);
-                //     break;
+                case CAN_RANGE_OFF:
+                    canRangeAlert.set(true);
+                    break;
                 
                 // case CAMERAS_OFF:
                 //     cameraAlert.set(true);
