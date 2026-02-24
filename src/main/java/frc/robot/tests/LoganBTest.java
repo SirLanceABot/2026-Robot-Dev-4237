@@ -1,6 +1,7 @@
 package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -86,35 +87,35 @@ public class LoganBTest implements Test
      */
     public void periodic()
     {
+        DoubleSupplier flywheelSpeed = () -> flywheel.getVelocity();
         // controller.a().onTrue(
         //     ScoringCommands.shootFromStandstillCommand(agitator, acceleartor, flywheel)
         // );
 
         controller.a().whileTrue(
-            flywheel.setControlVelocityCommand(() -> 10.0)
+            Commands.either(
+                    GeneralCommands.rampUpFlywheelCommand(() -> 40).until(() -> flywheel.isAtSetSpeed(40, 5).getAsBoolean()), 
+                    flywheel.setControlVelocityCommand(() -> 40).until(() -> flywheel.isAtSetSpeed(40, 5).getAsBoolean()),
+                    () -> flywheelSpeed.getAsDouble() < 1.0)
         );
         controller.a().onFalse(
             flywheel.stopCommand()
         );
 
         controller.b().whileTrue(
-            flywheel.setControlVelocityCommand(() -> 20.0)
+            Commands.either(
+                    GeneralCommands.rampUpFlywheelCommand(() -> 55).until(() -> flywheel.isAtSetSpeed(55, 5).getAsBoolean()), 
+                    flywheel.setControlVelocityCommand(() -> 55).until(() -> flywheel.isAtSetSpeed(55, 5).getAsBoolean()),
+                    () -> flywheelSpeed.getAsDouble() < 1.0)
         );
         controller.b().onFalse(
             flywheel.stopCommand()
         );
 
         controller.x().whileTrue(
-            flywheel.setControlVelocityCommand(() -> 35.0)
+            flywheel.setControlVelocityCommand(() -> 70)
         );
         controller.x().onFalse(
-            flywheel.stopCommand()
-        );
-
-        controller.y().whileTrue(
-            flywheel.setControlVelocityCommand(() -> 55.0)
-        );
-        controller.y().onFalse(
             flywheel.stopCommand()
         );
 

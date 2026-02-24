@@ -211,6 +211,40 @@ public class GeneralCommands
         }
     }
 
+    public static Command rampUpFlywheelCommand(DoubleSupplier speed)
+    {
+        if(flywheel != null)
+        {
+            return
+            flywheel.setControlVelocityCommand(() -> 10.0)
+                .until(() -> flywheel.isAtSetSpeed(10, 4).getAsBoolean())
+            .andThen(
+                flywheel.setControlVelocityCommand(() -> 15.0)
+                .until(() -> flywheel.isAtSetSpeed(15, 4).getAsBoolean()))
+            .andThen(
+                flywheel.setControlVelocityCommand(() -> 20.0)
+                .until(() -> flywheel.isAtSetSpeed(20, 4).getAsBoolean()))
+            .andThen(
+                flywheel.setControlVelocityCommand(() -> 25.0)
+                .until(() -> flywheel.isAtSetSpeed(25, 4).getAsBoolean()))
+            .andThen(
+                flywheel.setControlVelocityCommand(() -> 30.0)
+                .until(() -> flywheel.isAtSetSpeed(30, 4).getAsBoolean()))
+            .andThen(
+                flywheel.setControlVelocityCommand(() -> 35.0)
+                .until(() -> flywheel.isAtSetSpeed(35, 4).getAsBoolean()))
+            .andThen(
+                flywheel.setControlVelocityCommand(() -> 40.0)
+                .until(() -> flywheel.isAtSetSpeed(40, 4).getAsBoolean()))
+            .andThen(
+                flywheel.setControlVelocityCommand(speed));
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
     // idk if we need this
     // may be necessary if to keep the hopper extended while not intaking the intake pivot must remain out
     // public static Command stopIntakeCommand()

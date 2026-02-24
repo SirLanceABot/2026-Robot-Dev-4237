@@ -109,12 +109,10 @@ public class Flywheel extends SubsystemBase
 
         leadMotor.setupCoastMode();
         followMotor.setupCoastMode();
-        
-        leadMotor.setupClosedLoopRampRate(5.0);
-        followMotor.setupClosedLoopRampRate(5.0);
 
         leadMotor.setupPIDController(0, kP, kI, kD);
-        // leadMotor.setupOpenLoopRampRate(3.0);
+        leadMotor.setupOpenLoopRampRate(10.0);
+        followMotor.setupOpenLoopRampRate(10.0);
 
         leadMotor.setupTorqueControl();
         followMotor.setupTorqueControl();

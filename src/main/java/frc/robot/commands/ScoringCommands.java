@@ -173,6 +173,7 @@ public class ScoringCommands
     {
         if(drivetrain != null && indexigator != null && accelerator != null && flywheel != null && poseEstimator != null)
         {
+            DoubleSupplier flywheelSpeed = () -> flywheel.getVelocity();
             Supplier<Pose2d> robotPose =  () -> drivetrain.getState().Pose;
             Supplier<ChassisSpeeds> velocity = () -> ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.get().getRotation());
 
@@ -186,8 +187,14 @@ public class ScoringCommands
 
             return
             Commands.parallel(
-                flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10).getAsBoolean()), // TODO tune tolerance
-                GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue))    
+
+                Commands.either(
+                    GeneralCommands.rampUpFlywheelCommand(() -> shooterPower.getAsDouble()).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean()), 
+                    flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean()),
+                    () -> flywheelSpeed.getAsDouble() < 1.0),
+
+                GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue)) 
+                   
             .andThen(
                 Commands.parallel(
                     GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
