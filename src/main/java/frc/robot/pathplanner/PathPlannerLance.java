@@ -57,10 +57,10 @@ public class PathPlannerLance
     {
         drivetrain = robotContainer.getDrivetrain();
         poseEstimator = robotContainer.getPoseEstimator();
-
+        
+        configAutoBuilder();
         configAutoChooser();
         // getAutonomousCommand();
-        configAutoBuilder();
 
         FollowPathCommand.warmupCommand().schedule();
         PathfindingCommand.warmupCommand().schedule();
@@ -142,7 +142,7 @@ public class PathPlannerLance
         }
     }
 
-     private static SwerveRequest.ApplyRobotSpeeds pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
+    private static SwerveRequest.ApplyRobotSpeeds pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
     public static void configAutoBuilder()
     {

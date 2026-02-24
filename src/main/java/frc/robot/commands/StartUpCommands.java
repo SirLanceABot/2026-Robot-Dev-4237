@@ -41,7 +41,7 @@ public final class StartUpCommands
 
     private static Drivetrain drivetrain;
     private static LEDs leds;
-    // private static Hopper hopper;
+    private static Hopper hopper;
 
     private static Notifier notifier; // background timer
 
@@ -161,8 +161,14 @@ public final class StartUpCommands
 
         drivetrain = robotContainer.getDrivetrain();
         leds = robotContainer.getLEDs();
-        LeftCam = robotContainer.getHopper().isLeftFullSupplier();
-        RightCam = robotContainer.getHopper().isRightFullSupplier();
+        hopper = robotContainer.getHopper();
+        
+        if(hopper != null)
+        {
+            LeftCam = hopper.isLeftFullSupplier();
+            RightCam = hopper.isRightFullSupplier();
+        }
+        
 
         if (drivetrain != null && drivetrain.getPigeon2() != null)
         {
@@ -300,7 +306,7 @@ public final class StartUpCommands
             return null;
         }
 
-        if (LeftCam != null || RightCam != null)
+        if (LeftCam == null || RightCam == null)
         {
             return StartUpState.CAN_RANGE_OFF;
         }

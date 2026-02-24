@@ -46,7 +46,7 @@ public class Robot extends TimedRobot
     private TestMode testMode = null;
     
 
-    private Command selectedCommand = Commands.none(); 
+    private Command selectedCommand = null;
     private Command path = Commands.none();
     private String autoName = "Left2Cycle";
 
