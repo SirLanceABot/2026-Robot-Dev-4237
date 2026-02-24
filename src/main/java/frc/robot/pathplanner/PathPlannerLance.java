@@ -83,7 +83,7 @@ public class PathPlannerLance
 
     private static void configAutoChooser()
     {
-        if(AutoBuilder.isConfigured())
+        if(AutoBuilder.isConfigured() && drivetrain != null)
         {
             autoChooser = AutoBuilder.buildAutoChooser();
             SmartDashboard.putData("Auto Chooser", autoChooser);
