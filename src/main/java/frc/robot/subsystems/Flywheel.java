@@ -10,6 +10,8 @@ import java.util.function.DoubleSupplier;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.StatusSignalCollection;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 // import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -52,22 +54,23 @@ public class Flywheel extends SubsystemBase
     private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
 
     // PID constants
-    private final double kP = 1.5;
-    private final double kI = 0.0;
-    private final double kD = 0.00;
-    private final double kS = 0.016;
+    private final double kP = 5; // 1.5 // 5
+    private final double kI = 0.4; // 0.4
+    private final double kD = 0.0; // 0.0
+    private final double kS = 0.016; // 0.016
     private final double kV = 0.00;
     private final double kA = 0.00;
 
     private final double FLYWHEEL_DIAMETER_FEET  = (4.0 / 12.0); // 4.25 in
-    private final double GEAR_RATIO = (16.0 / 30.0);
+    private final double GEAR_RATIO = (16.0 / 15.0);
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * FLYWHEEL_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // checked
     
     // Motion Magic Constants
-    // private final double MOTIONMAGICCRUISEVELOCITY = 100.0; // target cruise velocity
-    // private final double MOTIONMAGICACCELERATION = 30.0; // target acceleration
-    // private final double MOTIONMAGICJERK = 100.0; // target jerk
+    private final double MOTIONMAGICCRUISEVELOCITY = 70.0; // target cruise velocity
+    private final double MOTIONMAGICACCELERATION = 25.0; // target acceleration
+    private final double MOTIONMAGICJERK = 3000.0; // target jerk
 
+    // private final DynamicMotionMagicVoltage request = new DynamicMotionMagicVoltage(0, 20, 50).withJerk(4000);
 
     InterpolatingDoubleTreeMap distToVeloMap = new InterpolatingDoubleTreeMap();
     // InterpolatingDoubleTreeMap distToPassVeloMap = new InterpolatingDoubleTreeMap();
@@ -106,9 +109,12 @@ public class Flywheel extends SubsystemBase
 
         leadMotor.setupCoastMode();
         followMotor.setupCoastMode();
+        
+        leadMotor.setupClosedLoopRampRate(5.0);
+        followMotor.setupClosedLoopRampRate(5.0);
 
         leadMotor.setupPIDController(0, kP, kI, kD);
-        // leadMotor.setupOpenLoopRampRate(1.5);
+        // leadMotor.setupOpenLoopRampRate(3.0);
 
         leadMotor.setupTorqueControl();
         followMotor.setupTorqueControl();
@@ -118,11 +124,7 @@ public class Flywheel extends SubsystemBase
 
         followMotor.setupFollower(LEADMOTOR, false);
 
-        // motor.getSupplyVoltage(true);
-
-        // double supplyVoltage = supplyVoltageSignal.getValueAsDouble();
-
-        // supplyVoltageSignal.setUpdateFrequency(1000);
+        // leadMotor.setupMotionMagicControl(MOTIONMAGICCRUISEVELOCITY, MOTIONMAGICACCELERATION, MOTIONMAGICJERK);
     }
  
     private void configShotMap()
@@ -289,7 +291,7 @@ public class Flywheel extends SubsystemBase
 
     public Command setCommand()
     {
-        return run(() -> set(0.1));
+        return run(() -> set(0.5));
     }
 
     public Command runMotorUsingVoltageCommand(double voltage)

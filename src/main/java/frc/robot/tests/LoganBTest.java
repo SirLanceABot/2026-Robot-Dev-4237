@@ -90,6 +90,48 @@ public class LoganBTest implements Test
         //     ScoringCommands.shootFromStandstillCommand(agitator, acceleartor, flywheel)
         // );
 
+        controller.a().whileTrue(
+            flywheel.setControlVelocityCommand(() -> 10.0)
+        );
+        controller.a().onFalse(
+            flywheel.stopCommand()
+        );
+
+        controller.b().whileTrue(
+            flywheel.setControlVelocityCommand(() -> 20.0)
+        );
+        controller.b().onFalse(
+            flywheel.stopCommand()
+        );
+
+        controller.x().whileTrue(
+            flywheel.setControlVelocityCommand(() -> 35.0)
+        );
+        controller.x().onFalse(
+            flywheel.stopCommand()
+        );
+
+        controller.y().whileTrue(
+            flywheel.setControlVelocityCommand(() -> 55.0)
+        );
+        controller.y().onFalse(
+            flywheel.stopCommand()
+        );
+
+        // controller.start().whileTrue(
+        //     Commands.parallel(
+        //         indexigator.setForwardCommand(),
+        //         accelerator.setVelocityCommand(12.0)
+        //     )
+        // );
+        // controller.start().onFalse(
+        //     Commands.parallel(
+        //         indexigator.stopCommand(),
+        //         accelerator.stopCommand()
+        //     )
+        // );
+
+        System.out.println("flywheel speed: " + flywheel.getVelocity());
         // controller.a().onTrue(
         //     flywheel.setControlVelocityCommand(() -> 41.0)
         // );
@@ -147,19 +189,19 @@ public class LoganBTest implements Test
 
 
 
-        controller.a().whileTrue(
-            GeneralCommands.intakeCommand()
-        );
-        controller.a().onFalse(
-            intake.stopCommand()
-        );
-        controller.b().whileTrue(
-            GeneralCommands.resetIntakeCommand()
-        );
-        controller.b().onFalse(
-            intake.stopCommand()
-        );
-        System.out.println("intake pos: " + intake.getPivotPosition());
+        // controller.a().whileTrue(
+        //     GeneralCommands.intakeCommand()
+        // );
+        // controller.a().onFalse(
+        //     intake.stopCommand()
+        // );
+        // controller.b().whileTrue(
+        //     GeneralCommands.resetIntakeCommand()
+        // );
+        // controller.b().onFalse(
+        //     intake.stopCommand()
+        // );
+        // System.out.println("intake pos: " + intake.getPivotPosition());
     }
     //9.35888671875
 

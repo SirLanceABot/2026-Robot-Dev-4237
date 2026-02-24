@@ -41,7 +41,7 @@ public class Intake extends SubsystemBase
 
     
 
-    private final double PivotkP = 0.50;
+    private final double PivotkP = 0.55;
     private final double PivotkI = 0.0;
     private final double PivotkD = 0.0;
     private final double PivotkS = 0.023;
