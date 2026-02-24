@@ -1,29 +1,36 @@
 package frc.robot.commands;
 
-import static frc.robot.Constants.Hopper.CAN_RANGE_LEFT;
-
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 
-import com.fasterxml.jackson.databind.EnumNamingStrategies.LowerCamelCaseStrategy;
-
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.RobotContainer;
+import frc.robot.sensors.Hopper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.Constants;
-import frc.robot.sensors.Hopper;
 
 
 /**
- * This class checks the swerves at startup and blinks leds red until tehy are aligned.
+ * This class essentially runs a robot health check while the robot is disabled before a match.
+ * 
+ * It runs repeatedly in the background and:
+ *      checks hardware stuff
+ *      shows problems using led colors
+ *      stops checking when robot leaves disabled
+ * 
+ * Robot checks in this order:
+ *      Battery voltage
+ *      Gyro zeroed
+ *      CANRange sensors detected once
+ *      Swerve modules aligned forward
+ * 
+ * Only first failing check will be shown on leds 
  */
 public final class StartUpCommands
 {
@@ -34,30 +41,50 @@ public final class StartUpCommands
         System.out.println("Loading: " + fullClassName);
     }
 
+    /**
+     * Robot startup status
+     * used by leds and elastic alerts
+     */
     public enum StartUpState
     {
-        LOW_VOLTAGE, GYRO_NOT_ZEROED, CAN_RANGE_OFF, SWERVE_MISALIGNED, READY
+        LOW_VOLTAGE, 
+        GYRO_NOT_ZEROED, 
+        CAN_RANGE_OFF, 
+        SWERVE_MISALIGNED, 
+        READY
     }
 
     private static Drivetrain drivetrain;
     private static LEDs leds;
+
     private static Hopper hopper;
 
-    private static Notifier notifier; // background timer
+    /** Background loop that runs check every PERIOD_S seconds */
+    private static Notifier notifier;
 
+    /** Current system health state */
     public static StartUpState currentState = null;
+
     private static boolean running = false;
 
+    /** 
+     * Once sensors detect something one time.
+     * we set them verified and stop requiring detection
+     * this is what lets the "hand in front of sensor" test.
+     */
     private static boolean canRangeVerified = false;
+
+    /* Boolean suppliers from Hopper subsystem */
     private static BooleanSupplier LeftCam;
     private static BooleanSupplier RightCam;
 
-
-    // tolerance for wheel angle to be considered "forward" (degrees)
+    /** Wheel must face forward within this tolerance */
     private static final double SWERVE_TOLERANCE_DEGREES = 3.0;
-    // tolerance for gyro
+
+    /** Gyro must be near zero within this tolerance */
     private static final double GYRO_TOLERANCE_DEGREES = 3.0;
-    // check period in seconds
+
+    /** How often checks run (seconds) */
     private static final double PERIOD_S = 0.5;
 
     private StartUpCommands() 
@@ -69,7 +96,10 @@ public final class StartUpCommands
     }
 
     /**
-     * This method will determind what state the robot shoudl be in 
+     * Runs checks in priority order
+     * Returns first failure found
+     * Returns ready is everything passes
+     * @return
      */
     private static StartUpState runStartUpChecks()
     {
@@ -107,7 +137,7 @@ public final class StartUpCommands
     }
 
     /**
-     * This method will update leds for states 
+     * Sets LED pattern based on robot state
      */
     private static void updateLEDsForState(StartUpState State)
     {
@@ -147,9 +177,10 @@ public final class StartUpCommands
         }
     }
 
-    // /** 
-    //  * This method enables the monitoring (starts notifier)
-    //  */
+    /**
+     * Starts background monitoring
+     * Called when robot enters disabled during prematch
+     */
     public static void enableMonitor(RobotContainer robotContainer)
     {
         if (running)
@@ -181,6 +212,9 @@ public final class StartUpCommands
         System.out.println("StartUpCommands - StartUp checks running");
     }
 
+    /**
+     * Stops backgroung monitoring
+     */
     public static void disableMonitor()
     {
         if (!running)
@@ -198,6 +232,9 @@ public final class StartUpCommands
         }
     }
 
+    /**
+     * Runs checks and updates LEDs if state changes
+     */
     public static void checkAndUpdate()
     {    
         // System.out.println("StartUpCommands go");
@@ -212,7 +249,7 @@ public final class StartUpCommands
     }
 
     /** 
-     * Check bettery volatge and set LEDs to yellow if below theshold, and return true is battery handled 
+     * Battery must be above configured threshold
      */
     private static StartUpState checkBattery()
     {
@@ -228,8 +265,64 @@ public final class StartUpCommands
         return null;
     }
 
+    /** 
+     * Gyro must be near zero before match starts
+     */
+    private static StartUpState checkGyro()
+    {
+        if (drivetrain == null || drivetrain.getPigeon2() == null)
+        {
+            return null;
+        }
+
+        double yawDegrees = drivetrain.getPigeon2().getYaw().getValueAsDouble();
+        double absYaw = Math.abs(yawDegrees);
+
+        if (absYaw > GYRO_TOLERANCE_DEGREES)
+        {
+            // System.out.println("StartUpCommands: gyro moved (" + yawDegrees + " deg) - Setting LEDs orange");
+
+            return StartUpState.GYRO_NOT_ZEROED;
+        }
+
+        return null;
+    }
+
     /**
-     * Check swerve module angles and set leds to red is not aligned and green is aligned
+     * CANRange sensor verification logic
+     * 
+     * Robot only needs to detect something one time
+     * After detection, sensors are considered working
+     * 
+     * Allows manual hand test during startup
+     */
+    private static StartUpState checkCANRanges()
+    {
+        if (drivetrain == null)
+        {
+            return null;
+        }
+
+        if (LeftCam == null || RightCam == null)
+        {
+            return StartUpState.CAN_RANGE_OFF;
+        }
+
+        boolean leftDetected = LeftCam.getAsBoolean();
+        boolean rightDetected = RightCam.getAsBoolean();
+
+        if (!leftDetected || rightDetected)
+        {
+            System.out.println("StartUpCommands - CANRanged verified");
+            canRangeVerified = true; 
+            return null;
+        }
+
+        return StartUpState.CAN_RANGE_OFF;
+    }
+
+    /**
+     * All swerve wheels must face forward before match
      */
     private static StartUpState checkSwerve()
     {
@@ -269,58 +362,5 @@ public final class StartUpCommands
         }
 
         return null;
-    }
-
-
-    /** 
-     * This method will check gyro rotation from zero and turns leds orange if past tolerance
-     */
-    private static StartUpState checkGyro()
-    {
-        if (drivetrain == null || drivetrain.getPigeon2() == null)
-        {
-            return null;
-        }
-
-        double yawDegrees = drivetrain.getPigeon2().getYaw().getValueAsDouble();
-        double absYaw = Math.abs(yawDegrees);
-
-        if (absYaw > GYRO_TOLERANCE_DEGREES)
-        {
-            // System.out.println("StartUpCommands: gyro moved (" + yawDegrees + " deg) - Setting LEDs orange");
-
-            return StartUpState.GYRO_NOT_ZEROED;
-        }
-
-        return null;
-    }
-
-    /**
-     * This method will check if the CANRanges is returning anything
-     */
-    // boolean supplier in hopper
-    private static StartUpState checkCANRanges()
-    {
-        if (drivetrain == null)
-        {
-            return null;
-        }
-
-        if (LeftCam == null || RightCam == null)
-        {
-            return StartUpState.CAN_RANGE_OFF;
-        }
-
-        boolean leftDetected = LeftCam.getAsBoolean();
-        boolean rightDetected = RightCam.getAsBoolean();
-
-        if (!leftDetected || rightDetected)
-        {
-            System.out.println("StartUpCommands - CANRanged verified");
-            canRangeVerified = true; 
-            return null;
-        }
-
-        return StartUpState.CAN_RANGE_OFF;
     }
 }
