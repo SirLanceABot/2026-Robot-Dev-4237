@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.filter.Debouncer;
 import static frc.robot.Constants.Hopper.*;
 
@@ -73,21 +74,26 @@ public class Hopper
     // {
     //     return () -> (getLimitSwitchRight() && getLimitSwitchLeft());
     // }
+
+    @Logged
     public DoubleSupplier getRightCanRangeDistance()
     {
         return () -> canRangeRight.getDistanceMeters();
     }
 
+    @Logged
     public DoubleSupplier getLeftCanRangeDistance()
     {
         return () -> canRangeLeft.getDistanceMeters();
     }
 
+    @Logged
     public BooleanSupplier isRightFullSupplier()
     {
         return () -> debouncer.calculate(canRangeRight.isBallDetected(HOPPER_EXTENDED_LENGTH));
     }
 
+    @Logged
     public BooleanSupplier isLeftFullSupplier()
     {
         return () -> debouncer.calculate(canRangeLeft.isBallDetected(HOPPER_EXTENDED_LENGTH));
