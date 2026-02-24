@@ -154,7 +154,7 @@ public final class DriverBindings {
         aButton
         .whileTrue(
             Commands.parallel(
-                drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getRotationToCalculatedTarget().getAsDouble())), // Tested this command in 25 repo, works there
+                drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getRotationToCalculatedTarget(poseEstimator.getAllianceHubPose()).getAsDouble())), // Tested this command in 25 repo, works there
                 ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator).repeatedly()));
             
         aButton.onFalse(GeneralCommands.stopShootingCommand()); // TODO test this line
@@ -187,9 +187,13 @@ public final class DriverBindings {
     {
         Trigger yButton = controller.y();
 
-        yButton.whileTrue(ScoringCommands.passCommand(indexigator, accelerator, flywheel));
+        yButton.whileTrue(
+            Commands.parallel(
+                drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getRotationToCalculatedTarget(poseEstimator.getAlliancePassingLocationPose()).getAsDouble())), 
+                GeneralCommands.passOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator)));
 
         yButton.onFalse(GeneralCommands.stopShootingCommand());
+
 
         // Auto climb testing
         // yButton.whileTrue(

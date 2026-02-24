@@ -525,33 +525,33 @@ public class GeneralCommands
     //  * @param isRight
     //  * @return pass on the move?
     //  */
-    // public static Command passOnTheMoveCommand(Drivetrain drivetrain, Indexigator indexigator, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator, BooleanSupplier isRight)
-    // {
-    //     if(drivetrain != null && indexigator != null && accelerator != null && flywheel != null && poseEstimator != null)
-    //     {
-    //         Supplier<Pose2d> robotPose =  () -> drivetrain.getState().Pose;
-    //         Supplier<ChassisSpeeds> velocity = () -> ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.get().getRotation());
+    public static Command passOnTheMoveCommand(Drivetrain drivetrain, Indexigator indexigator, Accelerator accelerator, Flywheel flywheel, PoseEstimator poseEstimator)
+    {
+        if(drivetrain != null && indexigator != null && accelerator != null && flywheel != null && poseEstimator != null)
+        {
+            Supplier<Pose2d> robotPose =  () -> drivetrain.getState().Pose;
+            Supplier<ChassisSpeeds> velocity = () -> ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.get().getRotation());
 
-    //         Supplier<Pose2d> calculatedTarget = () -> poseEstimator.getCalculatedTargetPose( // Pose of our caluclated target, adjusting for robot velo
-    //             poseEstimator.getAlliancePassingLocationPose(isRight.getAsBoolean()), 
-    //             robotPose.get(), 
-    //             velocity.get());
+            Pose2d calculatedTarget = poseEstimator.getCalculatedTargetPose( // Pose of our caluclated target, adjusting for robot velo
+                poseEstimator.getAlliancePassingLocationPose(), 
+                robotPose.get(), 
+                velocity.get());
 
-    //         DoubleSupplier distance = () -> (poseEstimator.getDistanceToTarget(robotPose.get(), calculatedTarget.get()).getAsDouble());
-    //         DoubleSupplier shooterPower = () -> (flywheel.getPassPower(distance.getAsDouble() * 3.281)); // meters -> feet
+            DoubleSupplier distance = () -> (poseEstimator.getDistanceToTarget(robotPose.get(), calculatedTarget).getAsDouble());
+            DoubleSupplier shooterPower = () -> (flywheel.getShotPower(distance.getAsDouble() * 3.281)); // meters -> feet //TODO Add values to the ShotPower map for passing
 
-    //         return
-    //         flywheel.setControlVelocityCommand(() -> shooterPower.getAsDouble()).until(flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10))     // TODO tune tolerance
-    //         .andThen(
-    //             Commands.parallel(
-    //                 indexigator.setForwardCommand(), // rpm
-    //                 accelerator.setVelocityCommand(12.0)));
-    //     }
-    //     else
-    //     {
-    //         return Commands.none();
-    //     }
-    // }
+            return
+            flywheel.setControlVelocityCommand(() -> shooterPower.getAsDouble()).until(flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10))     // TODO tune tolerance
+            .andThen(
+                Commands.parallel(
+                    indexigator.setForwardCommand(), // rpm
+                    accelerator.setVelocityCommand(12.0)));
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
 
 
     

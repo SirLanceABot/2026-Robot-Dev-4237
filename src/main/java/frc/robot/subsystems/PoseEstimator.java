@@ -66,6 +66,8 @@ public class PoseEstimator extends SubsystemBase
     private final double robotCenterToShooterMeters = 0.1;    //TODO find out this value
 
 
+
+
     // Kalman filter, experiment later
     private Matrix<N3, N1> visionStdDevs;
     private Matrix<N3, N1> stateStdDevs;
@@ -219,10 +221,11 @@ public class PoseEstimator extends SubsystemBase
     Pose2d redHubPose = new Pose2d(new Translation2d(11.92, 4.030), new Rotation2d(0));
     Pose2d blueHubPose = new Pose2d(new Translation2d(4.62, 4.030), new Rotation2d(0));
 
-    Pose2d redLeftPassLocationPose = new Pose2d(new Translation2d(4237.0, 4237.0), new Rotation2d(4237.0,4237.0));
-    Pose2d redRightPassLocationPose = new Pose2d(new Translation2d(4237.0, 4237.0), new Rotation2d(4237.0,4237.0));
-    Pose2d blueLeftPassLocationPose = new Pose2d(new Translation2d(4237.0, 4237.0), new Rotation2d(4237.0,4237.0));
-    Pose2d blueRightPassLocationPose = new Pose2d(new Translation2d(4237.0, 4237.0), new Rotation2d(4237.0,4237.0));
+    Pose2d redLeftPassLocationPose = new Pose2d(new Translation2d(16.236188, 0.3048), new Rotation2d());
+    Pose2d redRightPassLocationPose = new Pose2d(new Translation2d(16.236188, 7.764526), new Rotation2d());
+    
+    Pose2d blueLeftPassLocationPose = new Pose2d(new Translation2d(0.3048, 0.3048), new Rotation2d());
+    Pose2d blueRightPassLocationPose = new Pose2d(new Translation2d(0.3048, 7.764526), new Rotation2d());
 
     public Pose2d getRedHubPose()
     {
@@ -234,14 +237,28 @@ public class PoseEstimator extends SubsystemBase
         return blueHubPose;
     }
 
-    public Pose2d getRedPassLocationPose(boolean isRight)
+    public Pose2d getRedPassLocationPose()
     {
-        return isRight ? redRightPassLocationPose : redLeftPassLocationPose;
+        if(Math.hypot(redLeftPassLocationPose.getY(), redLeftPassLocationPose.getX()) > Math.hypot(redRightPassLocationPose.getY(), redRightPassLocationPose.getX()))
+        {
+            return redRightPassLocationPose;
+        }
+        else
+        {
+            return redLeftPassLocationPose;
+        }
     }
 
-    public Pose2d getBluePassLocationPose(boolean isRight)
+    public Pose2d getBluePassLocationPose()
     {
-        return isRight ? blueRightPassLocationPose : blueLeftPassLocationPose;
+        if(Math.hypot(blueLeftPassLocationPose.getY(), blueLeftPassLocationPose.getX()) > Math.hypot(blueRightPassLocationPose.getY(), blueRightPassLocationPose.getX()))
+        {
+            return blueRightPassLocationPose;
+        }
+        else
+        {
+            return blueLeftPassLocationPose;
+        }
     }
 
     /**
@@ -260,17 +277,17 @@ public class PoseEstimator extends SubsystemBase
         }
     }
 
-    // public Pose2d getAlliancePassingLocationPose(boolean isRight)
-    // {
-    //     if(drivetrain.isRedAllianceSupplier().getAsBoolean())
-    //     {
-    //         return getRedPassLocationPose(isRight);
-    //     }
-    //     else
-    //     {
-    //         return getBluePassLocationPose(isRight);
-    //     }
-    // }
+    public Pose2d getAlliancePassingLocationPose()
+    {
+        if(drivetrain.isRedAllianceSupplier().getAsBoolean())
+        {
+            return getRedPassLocationPose();
+        }
+        else
+        {
+            return getBluePassLocationPose();
+        }
+    }
 
     public DoubleSupplier getDistanceToRedHub()
     {
@@ -404,13 +421,13 @@ public class PoseEstimator extends SubsystemBase
      * @return the target heading, in radians
      * @author biggie cheese
      */
-    public DoubleSupplier getRotationToCalculatedTarget()
+    public DoubleSupplier getRotationToCalculatedTarget(Pose2d target)
     {
         Pose2d robotPose = drivetrain.getState().Pose;
         ChassisSpeeds velocity = ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.getRotation());
 
         Pose2d calculatedTarget = getCalculatedTargetPose(
-            getAllianceHubPose(), 
+            target, 
             robotPose, 
             velocity);
 
