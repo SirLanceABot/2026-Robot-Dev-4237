@@ -3,6 +3,7 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
@@ -93,30 +94,17 @@ public class LoganBTest implements Test
         // );
 
         controller.a().whileTrue(
-            Commands.either(
-                    GeneralCommands.rampUpFlywheelCommand(() -> 40).until(() -> flywheel.isAtSetSpeed(40, 5).getAsBoolean()), 
-                    flywheel.setControlVelocityCommand(() -> 40).until(() -> flywheel.isAtSetSpeed(40, 5).getAsBoolean()),
-                    () -> flywheelSpeed.getAsDouble() < 1.0)
+            GeneralCommands.intakeCommand()
         );
         controller.a().onFalse(
-            flywheel.stopCommand()
+            intake.stopCommand()
         );
 
         controller.b().whileTrue(
-            Commands.either(
-                    GeneralCommands.rampUpFlywheelCommand(() -> 55).until(() -> flywheel.isAtSetSpeed(55, 5).getAsBoolean()), 
-                    flywheel.setControlVelocityCommand(() -> 55).until(() -> flywheel.isAtSetSpeed(55, 5).getAsBoolean()),
-                    () -> flywheelSpeed.getAsDouble() < 1.0)
+            GeneralCommands.resetIntakeCommand()
         );
         controller.b().onFalse(
-            flywheel.stopCommand()
-        );
-
-        controller.x().whileTrue(
-            flywheel.setControlVelocityCommand(() -> 70)
-        );
-        controller.x().onFalse(
-            flywheel.stopCommand()
+            intake.stopCommand()
         );
 
         // controller.start().whileTrue(

@@ -221,7 +221,10 @@ public class Robot extends TimedRobot
 
         isPreMatch = false;
 
-        PathPlannerLance.initializePose(autonomousCommand.getName());
+        if(autonomousCommand.getName() != null)
+        {
+            PathPlannerLance.initializePose(autonomousCommand.getName());
+        }
 
         if(path != null)
         {

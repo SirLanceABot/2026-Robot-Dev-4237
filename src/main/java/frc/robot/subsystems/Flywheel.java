@@ -129,19 +129,26 @@ public class Flywheel extends SubsystemBase
     {
         // first value is distance (ft) from the hub (in alliance zone), second is flywheel velo (currently ft/s)
         // TODO test values once we have robot
-        distToVeloMap.put(6.0, 41.5); // 41.5
-        distToVeloMap.put(7.0, 42.0); // 41.75
-        distToVeloMap.put(8.0, 44.0); // 42.5 // added 0.5
-        distToVeloMap.put(9.0, 45.75); // 45.5
-        distToVeloMap.put(10.0, 47.0); // 47.25
-        distToVeloMap.put(11.0, 49.25); // 49.0
-        distToVeloMap.put(12.0, 50.5); // 51.75
-        distToVeloMap.put(13.0, 52.25); // 53.75
-        distToVeloMap.put(14.0, 54.25); // 59.0
-        distToVeloMap.put(15.0, 57.0); // 60 // last 0.5
-        distToVeloMap.put(16.0, 60.0); // 60
-        distToVeloMap.put(17.0, 60.0); // 60
-        
+        distToVeloMap.put(6.0, 41.0); // 41.5
+        distToVeloMap.put(7.0, 41.0); // 42
+        distToVeloMap.put(8.0, 41.5); // 42.5 // added 0.5
+        distToVeloMap.put(9.0, 43.0); // 45.5
+        distToVeloMap.put(10.0, 44.5); // 47.25
+        distToVeloMap.put(11.0, 46.25); // 49.0
+        distToVeloMap.put(12.0, 48.0); // 51.75
+        distToVeloMap.put(13.0, 51.0); // 53.75
+        distToVeloMap.put(14.0, 53.0); // 59.0
+        distToVeloMap.put(15.0, 53.75); // 60 // last 0.5
+        distToVeloMap.put(16.0, 54.5); // 60
+        distToVeloMap.put(17.0, 56.5); // 60
+        distToVeloMap.put(18.0, 58.5);
+        distToVeloMap.put(19.0, 61.0);
+        distToVeloMap.put(20.0, 63.0);
+        distToVeloMap.put(21.0, 65.0);
+        distToVeloMap.put(22.0, 67.0);
+        distToVeloMap.put(23.0, 70.0);
+        distToVeloMap.put(24.0, 73.0);
+        distToVeloMap.put(25.0, 76.0);
     }
 
     // private void configPassMap()
