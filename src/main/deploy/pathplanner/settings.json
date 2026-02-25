@@ -7,9 +7,12 @@
     "Depot",
     "Left NZ",
     "Left Trench Shot",
+    "Left Trench Starts",
+    "Sweep",
     "Outpost",
     "Right NZ",
-    "Right Trench Shot"
+    "Right Trench Shot",
+    "Right Trench Starts"
   ],
   "autoFolders": [
     "Center Autos",

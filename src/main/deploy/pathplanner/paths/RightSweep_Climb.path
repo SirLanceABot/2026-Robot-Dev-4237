@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.094032552083334,
+        "y": 3.6249341724537034
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.262358376409773,
+        "y": 0.502207295582707
+      },
+      "isLocked": false,
+      "linkedName": "Sweep NZ Right"
+    },
+    {
+      "anchor": {
+        "x": 4.060078864173945,
+        "y": 0.8
+      },
+      "prevControl": {
+        "x": 6.025143033364661,
+        "y": 0.7996568374060156
+      },
+      "nextControl": {
+        "x": 1.5854452805301182,
+        "y": 0.8004321495923844
+      },
+      "isLocked": false,
+      "linkedName": "Right Trench Shot"
+    },
+    {
+      "anchor": {
+        "x": 0.634338971227592,
+        "y": 2.8347510971376484
+      },
+      "prevControl": {
+        "x": -0.01218227208646605,
+        "y": 2.1107151080827076
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Right Climb"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6771518640350873,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 1.0266241776315792,
+      "rotationDegrees": 90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Sweep",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -89.77592017566081
+  },
+  "useDefaultConstraints": true
+}

@@ -8,62 +8,51 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.444594136644834,
-        "y": 0.5588044145742357
+        "x": 6.042259982638889,
+        "y": 0.6791524884259263
       },
       "isLocked": false,
       "linkedName": "Right Trench"
     },
     {
       "anchor": {
-        "x": 7.728158092248908,
-        "y": 2.620705854257642
+        "x": 7.931449652777779,
+        "y": 1.7302988281249996
       },
       "prevControl": {
-        "x": 7.728158092248908,
-        "y": 0.7632743098434944
+        "x": 7.8595868833881175,
+        "y": 1.2536271352260386
+      },
+      "nextControl": {
+        "x": 7.975080656828704,
+        "y": 2.0197068865740744
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.094032552083334,
+        "y": 3.6249341724537034
+      },
+      "prevControl": {
+        "x": 8.085306351273148,
+        "y": 2.6218803530092587
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Close Right NZ"
+      "linkedName": "Sweep NZ Right"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.1545538651315789,
+      "waypointRelativePos": 0.45,
       "rotationDegrees": 90.0
-    },
-    {
-      "waypointRelativePos": 0.7475928591008771,
-      "rotationDegrees": 59.99999999999999
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Intake Command",
-      "waypointRelativePos": 0.5012742312834225,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Intake Command"
-        }
-      }
-    },
-    {
-      "name": "Reset Intake Command",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Reset Intake Command"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.0,
     "maxAcceleration": 1.0,
@@ -74,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -89.77592017566081
   },
   "reversed": false,
   "folder": "Right Trench Starts",
