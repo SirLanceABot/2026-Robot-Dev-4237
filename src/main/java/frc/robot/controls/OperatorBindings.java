@@ -120,39 +120,41 @@ public final class OperatorBindings {
         rightXAxis = () -> -controller.getRawAxis(4);
     }
 
+    // TODO test all bindings
+
     private static void configAButton()
     {
         Trigger aButton = controller.a();
+
+        // a ~ eject intake
+        aButton.onTrue(GeneralCommands.ejectFuelInIntakeCommand());
+
+        aButton.onFalse(GeneralCommands.stopEjectingFuelInIntakeCommand());
     }
 
 
     private static void configBButton()
     {
-        Trigger bButton = controller.b();
+       Trigger bButton = controller.b();
 
-        // B ~ spit out intake (reverse intake)
-        bButton.onTrue(GeneralCommands.ejectFuelInIntakeCommand());
-
-        bButton.onFalse(GeneralCommands.defaultLEDCommand());
+       // B ~ turn off intake
+       bButton.onTrue(GeneralCommands.stopIntakingCommand());
     }
 
-    // TESTED, need to retest when we get a better intake
     private static void configXButton()
     {
         Trigger xButton = controller.x();
 
-        xButton.onTrue(GeneralCommands.intakeCommand());
-
-        xButton.onFalse(GeneralCommands.defaultLEDCommand());
+        // X ~ get flywheel to speed
+        xButton.onTrue(GeneralCommands.getFlywheelToSpeedCommand());
     }
 
-    // TESTED and GOOD
     private static void configYButton()
     {
         Trigger yButton = controller.y();
 
-        // Y ~ spit out shooter (use the slow eject or something)
-        yButton.whileTrue(GeneralCommands.ejectAllFuelSlowlyCommand());
+        // Y ~ eject shooter
+        yButton.onTrue(GeneralCommands.ejectAllFuelSlowlyCommand());
 
         yButton.onFalse(GeneralCommands.stopEjectingAllFuelCommand());
     }
@@ -162,22 +164,18 @@ public final class OperatorBindings {
     {
         Trigger leftBumper = controller.leftBumper();
 
-        // Left bumper: stop intake while retracting intake
-        leftBumper.onTrue(GeneralCommands.resetIntakeCommand());
-
-        leftBumper.onFalse(GeneralCommands.defaultLEDCommand());
+        // Left Bumper ~ extend and turn intake on
+        leftBumper.onTrue(GeneralCommands.intakeCommand());
     }
 
-    // not tested yet but looks like it shoudl work
     private static void configRightBumper()
     {
-        Trigger rightBumper = controller.rightBumper();
+       Trigger rightBumper = controller.rightBumper();
 
-        // Right bumper ~ stop intake without retracting (stop motors)
-        rightBumper.onTrue(ScoringCommands.stopIntakeAndShooterCommand(intake, indexigator, accelerator, flywheel));
+       // Right Bumper ~ retract intake and turn it off
+       rightBumper.onTrue(GeneralCommands.resetIntakeCommand());
     }
 
-    // TESTED and WORKS
     private static void configBackButton()
     {
         Trigger backButton = controller.back();
@@ -198,6 +196,7 @@ public final class OperatorBindings {
     {
         Trigger leftTrigger = controller.leftTrigger();
 
+        // Left Trigger ~ left auto climb
         leftTrigger.whileTrue(new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> true), Set.of()));    
     }
 
@@ -206,6 +205,7 @@ public final class OperatorBindings {
     {
         Trigger rightTrigger = controller.rightTrigger();
 
+        // Right Trigger ~ right auto climb
         rightTrigger.whileTrue(new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> false), Set.of()));
     }
 
@@ -221,26 +221,22 @@ public final class OperatorBindings {
         Trigger rightStick = controller.rightStick();
     }
 
-
+    // TODO test binding and command
     private static void configDpadUp()
     {
         Trigger dpadUp = controller.povUp();
 
-        dpadUp.onTrue(
-            Commands.parallel(
-                GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
-                GeneralCommands.extendClimbToL1Command()));
+        // dpadUp ~ manual extend climb
+        dpadUp.onTrue(climb.manualMoveClimbUpCommand());
     }
 
-
+    // TODO test binding and command
     private static void configDpadDown()
     {
         Trigger dpadDown = controller.povDown();
 
-        dpadDown.onTrue(
-            Commands.parallel(
-                GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
-                GeneralCommands.retractFromL1Command()));
+        // dpad Down ~ mantual retract climb
+        dpadDown.onTrue(climb.manualMoveClimbDownCommand());
     }
 
     private static void configDpadLeft()

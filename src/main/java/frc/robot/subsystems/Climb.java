@@ -140,6 +140,18 @@ public class Climb extends SubsystemBase
         leadMotor.set(0.3);
     }
 
+    // need to play around with speed
+    // figure out if up is positive velo
+    public void manualMoveClimbUp()
+    {
+        leadMotor.set(0.5);
+    }
+
+    public void manualMoveClimbDown()
+    {
+        leadMotor.set(-0.5);
+    }
+
 
     public BooleanSupplier isClimbMotorAtPosition(climbPosition position)
     {
@@ -231,6 +243,16 @@ public class Climb extends SubsystemBase
 
 
     // *****climb motor*****
+
+    public Command manualMoveClimbUpCommand()
+    {
+        return run(() -> manualMoveClimbUp());
+    }
+
+    public Command manualMoveClimbDownCommand()
+    {
+        return run(() -> manualMoveClimbDown());
+    }
 
     /**
      * 
