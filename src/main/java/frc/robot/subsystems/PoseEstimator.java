@@ -570,7 +570,7 @@ public class PoseEstimator extends SubsystemBase
                         drivetrain.resetPose(visionPose);
                     }
 
-                    if(distToTag >= 3.5)
+                    if(distToTag >= 3)
                     {
                         rejectUpdate = true;
                     }

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.078938870408546,
-        "y": 7.481772102230135
+        "x": 4.419,
+        "y": 7.619
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.001637049665625,
-        "y": 7.361377346852334
+        "x": 5.341698179257079,
+        "y": 7.4986052446221985
       },
       "isLocked": false,
       "linkedName": "Left Trench"
@@ -51,24 +51,13 @@
           "name": "Intake Command"
         }
       }
-    },
-    {
-      "name": "Reset Intake Command",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Reset Intake Command"
-        }
-      }
     }
   ],
   "globalConstraints": {
     "maxVelocity": 1.0,
     "maxAcceleration": 1.0,
-    "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 360.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },

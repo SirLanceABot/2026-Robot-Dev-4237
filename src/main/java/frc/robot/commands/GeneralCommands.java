@@ -169,12 +169,11 @@ public class GeneralCommands
     //TODO test
     public static Command stopIntakingCommand()
     {
-        if(intake != null && indexigator != null)
+        if(intake != null)
         {
             return
             Commands.parallel(
                 intake.stopCommand(),
-                indexigator.stopCommand(),
                 defaultLEDCommand())
             .withName("done intaking");
         }

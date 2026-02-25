@@ -73,6 +73,7 @@ public class CommandsManager extends Command
         // Intaking Commands
         NamedCommands.registerCommand("Intake Command", GeneralCommands.intakeCommand());
         NamedCommands.registerCommand("Reset Intake Command", GeneralCommands.resetIntakeCommand());
+        NamedCommands.registerCommand("Stop Intaking Command", GeneralCommands.stopIntakingCommand());
 
         // Ejecting Commands
         NamedCommands.registerCommand("Eject Fuel From Intake Command", GeneralCommands.ejectFuelInIntakeCommand());

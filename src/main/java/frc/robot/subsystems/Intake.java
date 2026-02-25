@@ -104,12 +104,6 @@ public class Intake extends SubsystemBase
         PivotMotor.setPosition(0.0);
         PivotFollower.setPosition(0.0);
 
-        // Set up Safety
-        RollersMotor.setSafetyEnabled(false);
-        RollersMotor.setSafetyEnabled(false);
-        PivotMotor.setSafetyEnabled(false);
-        PivotFollower.setSafetyEnabled(false);
-
         // Set up PID Controllers
         // RollersMotor.setupPIDController(0, RollerkP, RollerkI, RollerkD, RollerkS, RollerkV, 0);
         PivotMotor.setupPIDController(0, PivotkP, PivotkI, PivotkD, PivotkS, PivotkV, 0);
@@ -119,6 +113,12 @@ public class Intake extends SubsystemBase
 
         RollersFollower.setupFollower(ROLLER_MOTOR_LEADER, true);
         PivotFollower.setupFollower(PIVOT_MOTOR_LEADER, true);
+
+        // Set up Safety
+        RollersMotor.setSafetyEnabled(false);
+        RollersMotor.setSafetyEnabled(false);
+        PivotMotor.setSafetyEnabled(false);
+        PivotFollower.setSafetyEnabled(false);
 
         PivotMotor.setupForwardHardLimitSwitch(true, true, 0);
         PivotMotor.setupReverseHardLimitSwitch(true, true, 1);

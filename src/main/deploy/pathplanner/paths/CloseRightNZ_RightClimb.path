@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 8.324638554216868,
-        "y": -0.08474698795180702
+        "y": -0.08474698795180613
       },
       "isLocked": false,
       "linkedName": "Close Right NZ"
@@ -78,8 +78,8 @@
   "globalConstraints": {
     "maxVelocity": 1.0,
     "maxAcceleration": 1.0,
-    "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 360.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },

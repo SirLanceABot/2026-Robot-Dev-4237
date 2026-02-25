@@ -189,7 +189,7 @@ public class Robot extends TimedRobot
 
         isPreMatch = false;
 
-        if(autonomousCommand.getName() != null)
+        if(autonomousCommand != null)
         {
             PathPlannerLance.initializePose(autonomousCommand.getName());
         }
