@@ -49,34 +49,30 @@ public final class StartUpCommands
     {
         LOW_VOLTAGE, 
         GYRO_NOT_ZEROED, 
-        CAN_RANGE_OFF, 
+        LEFT_CAN_RANGE_OFF,
+        RIGHT_CAN_RANGE_OFF, 
         SWERVE_MISALIGNED, 
         READY
     }
 
+    // bringing in subsystems
     private static Drivetrain drivetrain;
     private static LEDs leds;
-
     private static Hopper hopper;
-
-    /** Background loop that runs check every PERIOD_S seconds */
-    private static Notifier notifier;
 
     /** Current system health state */
     public static StartUpState currentState = null;
-
-    private static boolean running = false;
 
     /** 
      * Once sensors detect something one time.
      * we set them verified and stop requiring detection
      * this is what lets the "hand in front of sensor" test.
      */
-    private static boolean canRangeVerified = false;
+    // private static boolean canRangeVerified = false;
 
     /* Boolean suppliers from Hopper subsystem */
-    private static BooleanSupplier LeftCam;
-    private static BooleanSupplier RightCam;
+    private static BooleanSupplier LeftHopperSensor;
+    private static BooleanSupplier RightHopperSensor;
 
     /** Wheel must face forward within this tolerance */
     private static final double SWERVE_TOLERANCE_DEGREES = 3.0;
@@ -90,6 +86,25 @@ public final class StartUpCommands
     private StartUpCommands() 
     {}
 
+    /**
+     * Sets up the StartUp Commands
+     * @param robotContainer
+     */
+    public static void setupStartUp(RobotContainer robotContainer)
+    {
+        drivetrain = robotContainer.getDrivetrain();
+        leds = robotContainer.getLEDs();
+        hopper = robotContainer.getHopper();
+        
+        if(hopper != null)
+        {
+            LeftHopperSensor = hopper.isLeftFullSupplier();
+            RightHopperSensor = hopper.isRightFullSupplier();
+        }
+
+        System.out.println("StartUpCommands - StartUp Setup running");
+    }
+
     public static StartUpState getCurrentState()
     {
         return currentState;
@@ -98,7 +113,7 @@ public final class StartUpCommands
     /**
      * Runs checks in priority order
      * Returns first failure found
-     * Returns ready is everything passes
+     * Returns ready if everything passes
      * @return
      */
     private static StartUpState runStartUpChecks()
@@ -120,9 +135,15 @@ public final class StartUpCommands
         }
 
         // Third - CAN Range check
-        result = checkCANRanges();
+        result = checkLeftCANRange();
         if (result != null)
         {
+            return result;
+        }
+
+        result = checkRightCANRange();
+        if (result != null)
+        {    
             return result;
         }
 
@@ -139,7 +160,7 @@ public final class StartUpCommands
     /**
      * Sets LED pattern based on robot state
      */
-    private static void updateLEDsForState(StartUpState State)
+    private static void updateLEDsForState(StartUpState state)
     {
         if (leds == null)
         {
@@ -148,26 +169,31 @@ public final class StartUpCommands
 
         Command command = null;
 
-        switch (State)
+        switch (state)
         {
             case LOW_VOLTAGE:
-                command = leds.setColorBlinkCommand(Color.kYellow);
+                command = leds.setColorBlinkCommand(80,Color.kYellow);
                 break;
 
             case GYRO_NOT_ZEROED:
-                command = leds.setColorBlinkCommand(Color.kOrange);
+                command = leds.setColorBlinkCommand(80, Color.kOrange);
                 break;
 
-            case CAN_RANGE_OFF:
+            case LEFT_CAN_RANGE_OFF:
                 command = leds.setColorSolidCommand(80, Color.kPurple);
+                break;
+            
+            case RIGHT_CAN_RANGE_OFF:
+                command = leds.setColorSolidCommand(80, Color.kPink);
                 break;
 
             case SWERVE_MISALIGNED:
-                command = leds.setColorBlinkCommand(Color.kRed);
+                command = leds.setColorBlinkCommand(80, Color.kRed);
                 break;
 
             case READY:
                 command = leds.setMovingRainbowCommand();
+                // command = leds.setColorBlinkCommand(80,Color.kGreen);
                 break;
         }
 
@@ -178,73 +204,17 @@ public final class StartUpCommands
     }
 
     /**
-     * Starts background monitoring
-     * Called when robot enters disabled during prematch
-     */
-    public static void enableMonitor(RobotContainer robotContainer)
-    {
-        if (running)
-        {
-            return;
-        }
-
-        running = true;
-
-        drivetrain = robotContainer.getDrivetrain();
-        leds = robotContainer.getLEDs();
-        hopper = robotContainer.getHopper();
-        
-        if(hopper != null)
-        {
-            LeftCam = hopper.isLeftFullSupplier();
-            RightCam = hopper.isRightFullSupplier();
-        }
-        
-
-        if (drivetrain != null && drivetrain.getPigeon2() != null)
-        {
-            System.out.println("StartUpCommands - Pigeon zeroed");
-        }
-
-        notifier = new Notifier(StartUpCommands::checkAndUpdate);
-        notifier.startPeriodic(PERIOD_S);
-
-        System.out.println("StartUpCommands - StartUp checks running");
-    }
-
-    /**
-     * Stops backgroung monitoring
-     */
-    public static void disableMonitor()
-    {
-        if (!running)
-        {
-            return;
-        }
-
-        running = false;
-
-        if (notifier != null)
-        {
-            notifier.stop();
-            notifier = null;
-            System.out.println("StartUpCommands - StartUp checks stopped");
-        }
-    }
-
-    /**
      * Runs checks and updates LEDs if state changes
      */
     public static void checkAndUpdate()
     {    
-        // System.out.println("StartUpCommands go");
-        StartUpState State = runStartUpChecks();
+        StartUpState state = runStartUpChecks();
 
-        if (State != currentState)
+        if (state != currentState)
         {
-            System.out.println("State changed to " + State);
-            currentState = State;
-            updateLEDsForState(State);
+            System.out.println("State changed to " + state);
+            currentState = state;
+            updateLEDsForState(state);
         }
     }
 
@@ -257,8 +227,7 @@ public final class StartUpCommands
 
         if (leds != null && voltage < Constants.Power.BATTERY_THRESHOLD_VOLTS)
         {
-            System.out.println("StartUpCommands: battery low (" + voltage + " V) - setting LEDs yellow");
-
+            // System.out.println("StartUpCommands: battery low (" + voltage + " V) - setting LEDs yellow");
             return StartUpState.LOW_VOLTAGE;
         }
         
@@ -267,10 +236,11 @@ public final class StartUpCommands
 
     /** 
      * Gyro must be near zero before match starts
+     * FIX ME - "near zero" should be replaced with value we want
      */
     private static StartUpState checkGyro()
     {
-        if (drivetrain == null || drivetrain.getPigeon2() == null)
+        if (!(drivetrain != null && drivetrain.getPigeon2() != null))
         {
             return null;
         }
@@ -281,7 +251,6 @@ public final class StartUpCommands
         if (absYaw > GYRO_TOLERANCE_DEGREES)
         {
             // System.out.println("StartUpCommands: gyro moved (" + yawDegrees + " deg) - Setting LEDs orange");
-
             return StartUpState.GYRO_NOT_ZEROED;
         }
 
@@ -291,34 +260,55 @@ public final class StartUpCommands
     /**
      * CANRange sensor verification logic
      * 
+     * Checks both seperately
+     * 
      * Robot only needs to detect something one time
      * After detection, sensors are considered working
      * 
      * Allows manual hand test during startup
      */
-    private static StartUpState checkCANRanges()
+    private static StartUpState checkLeftCANRange()
     {
-        if (drivetrain == null)
+        // if (drivetrain == null)
+        // {
+        //     return null;
+        // }
+
+        if (LeftHopperSensor == null)
         {
+            return StartUpState.LEFT_CAN_RANGE_OFF;
+        }
+
+        boolean leftDetected = LeftHopperSensor.getAsBoolean();
+
+        if (!leftDetected)
+        {
+            System.out.println("StartUpCommands - CANRanges verified");
             return null;
         }
 
-        if (LeftCam == null || RightCam == null)
+        System.out.println("StartUpCommands - CANRanges weird - LEDs");
+        return StartUpState.LEFT_CAN_RANGE_OFF;
+    }
+
+    private static StartUpState checkRightCANRange()
+    {
+        if (RightHopperSensor == null)
         {
-            return StartUpState.CAN_RANGE_OFF;
+            return StartUpState.RIGHT_CAN_RANGE_OFF;
         }
 
-        boolean leftDetected = LeftCam.getAsBoolean();
-        boolean rightDetected = RightCam.getAsBoolean();
+        boolean rightDetected = RightHopperSensor.getAsBoolean();
 
-        if (!leftDetected || rightDetected)
+        if (!rightDetected)
         {
-            System.out.println("StartUpCommands - CANRanged verified");
-            canRangeVerified = true; 
+            System.out.println("StartUpCommands - CANRanges verified");
+            // canRangeVerified = true; 
             return null;
         }
 
-        return StartUpState.CAN_RANGE_OFF;
+        System.out.println("StartUpCommands - CANRanges weird - LEDs");
+        return StartUpState.RIGHT_CAN_RANGE_OFF;
     }
 
     /**
@@ -326,10 +316,6 @@ public final class StartUpCommands
      */
     private static StartUpState checkSwerve()
     {
-        if (drivetrain == null)
-        {
-            return null;
-        }
         // each swerve module contains wheel distance travelled and wheel angle (rotation2d)
         SwerveModulePosition[] modules = drivetrain.getModuleStates();
         if (modules == null || modules.length == 0)

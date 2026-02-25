@@ -84,17 +84,11 @@ public class Robot extends TimedRobot
         // PathfindingCommand.warmupCommand().schedule();
 
         // start the startup monitor (checks swerve alignment and controls LEDs)
-        // StartUpCommands.enableMonitor(robotContainer);
+        StartUpCommands.setupStartUp(robotContainer);
 
         //this should typically be false in order to limit .hoot file loggging
         //if this is set to true, there should be a USB drive connected to the roboRIO so that the rio's storage isn't overloaded
         SignalLogger.enableAutoLogging(false);
-
-        // if(robotContainer.getDrivetrain() != null && robotContainer.getLEDs() != null)
-        // {
-        //     startupNotifier = new Notifier(StartUpCommands::checkAndUpdate);
-        //     startupNotifier.startPeriodic(0.5);
-        // }
 
         ElasticLance.configElastic(robotContainer);
     }
@@ -124,9 +118,6 @@ public class Robot extends TimedRobot
         // Put code to run here before the match starts, but not between auto and teleop
         if(isPreMatch)
         {
-            StartUpCommands.enableMonitor(robotContainer);
-            // StartUpNotifier.startPeriodic(0.5);
-
             // autonomousCommand = PathPlannerLance.getAutonomousCommand();
             // path = PathPlannerLance.buildAutoPath(); // this made stuff not work.  may need to bring back in later if it works less good than not good
 
@@ -148,10 +139,11 @@ public class Robot extends TimedRobot
     @Override
     public void disabledPeriodic() 
     {
-        StartUpCommands.checkAndUpdate();
+        // StartUpCommands.checkAndUpdate(); // put here for testing purposes
         // Put code to run here before the match starts, but not between auto and teleop
         if(isPreMatch)
         {
+            StartUpCommands.checkAndUpdate();
             selectedCommand = PathPlannerLance.getAutonomousCommand();
             if(!selectedCommand.getName().equalsIgnoreCase(autonomousCommand.getName()))
             {
@@ -167,37 +159,13 @@ public class Robot extends TimedRobot
                     }
                 }
             }
-
-            // moved to StartUpCommands
-            // if(leds != null)
-            // {
-            //     if(!robotContainer.useFullRobot())
-            //     {
-            //         leds.setColorSolidCommand(100, Color.kYellow);
-            //     }
-            //     else if(selectedCommand != null)
-            //     {
-            //         leds.setColorSolidCommand(100, Color.kGreen);
-            //     }
-            //     else
-            //     {
-            //         leds.setColorSolidCommand(100, Color.kYellow);
-            //     }
-            // }
         }
     }
 
     /** This function is called once each time the robot exits Disabled mode. */
     @Override
     public void disabledExit() 
-    {
-        // if prematch = end notifier
-        StartUpCommands.disableMonitor();
-        // if (startupNotifier != null)
-        // {
-        //     startupNotifier.stop();
-        // }
-    }
+    {}
 
     // public void initializePose()
     // {

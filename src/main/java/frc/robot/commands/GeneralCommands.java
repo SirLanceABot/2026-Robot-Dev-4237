@@ -102,7 +102,7 @@ public class GeneralCommands
                 case kSolid:
                     return colors != null ? leds.setColorSolidCommand(100, colors[0]) : Commands.none();
                 case kBlink:
-                    return colors != null ? leds.setColorBlinkCommand(colors) : Commands.none();
+                    return colors != null ? leds.setColorBlinkCommand(80, colors[0]) : Commands.none();
                 case kGradient:
                     return colors != null ? leds.setColorGradientCommand(100, colors) : Commands.none();
                 case kRainbow:

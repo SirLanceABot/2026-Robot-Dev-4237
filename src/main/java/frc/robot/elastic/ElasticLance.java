@@ -218,13 +218,13 @@ public class ElasticLance
                     gyroAlert.set(true);
                     break;
 
-                case CAN_RANGE_OFF:
+                case LEFT_CAN_RANGE_OFF:
                     canRangeAlert.set(true);
                     break;
                 
-                // case CAMERAS_OFF:
-                //     cameraAlert.set(true);
-                //     break;
+                case RIGHT_CAN_RANGE_OFF:
+                    canRangeAlert.set(true);
+                    break;
 
                 case SWERVE_MISALIGNED:
                     swerveAlert.set(true);

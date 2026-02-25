@@ -125,12 +125,13 @@ public class LEDs extends SubsystemBase
      * @param color The LED colors
      * @param brightness The LED brightness
      */
-    private void setColorBlink(Color... colors)
+    private void setColorBlink(int brightness, Color color)
     {
-        base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
+        // base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
+        base = LEDPattern.solid(color).atBrightness(Percent.of(brightness));
         blink = base.breathe(Units.Seconds.of(1));
         blink.applyTo(ledBuffer);
-        this.color = colors[0];
+        this.color = color;
     }
     
     /**
@@ -207,9 +208,9 @@ public class LEDs extends SubsystemBase
         return runOnce(() -> setColorGradient(brightness, colors)).withName("Set LED Gradient");
     }
 
-    public Command setColorBlinkCommand(Color ...colors)
+    public Command setColorBlinkCommand(int brightness, Color color)
     {
-        return run(() -> setColorBlink(colors)).withName("Set LED Blink");
+        return run(() -> setColorBlink(brightness, color)).withName("Set LED Blink");
     }
 
     public Command setColorBreatheCommand(int brightness, Color ...colors)
