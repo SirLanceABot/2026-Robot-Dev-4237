@@ -58,10 +58,10 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0.75,
-      "maxWaypointRelativePos": 1.5,
+      "maxWaypointRelativePos": 1.7039296096345522,
       "constraints": {
-        "maxVelocity": 2.75,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -70,13 +70,13 @@
     },
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.5,
+      "minWaypointRelativePos": 1.7009447674418618,
       "maxWaypointRelativePos": 2.0,
       "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
+        "maxAngularVelocity": 360.0,
+        "maxAngularAcceleration": 360.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
@@ -85,7 +85,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Reset Intake Command",
+      "name": "Stop Intaking Command",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
@@ -100,13 +100,19 @@
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": 1.6966881229235877,
       "command": null
+    },
+    {
+      "name": "Reset Intake Command",
+      "waypointRelativePos": 1.7,
+      "endWaypointRelativePos": null,
+      "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 540.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },

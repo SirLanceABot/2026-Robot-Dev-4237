@@ -44,8 +44,8 @@
       "minWaypointRelativePos": 0.35,
       "maxWaypointRelativePos": 0.75,
       "constraints": {
-        "maxVelocity": 2.75,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 2.5,
+        "maxAcceleration": 2.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -54,13 +54,13 @@
     },
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.75,
+      "minWaypointRelativePos": 0.8984375,
       "maxWaypointRelativePos": 1,
       "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
+        "maxAngularVelocity": 360.0,
+        "maxAngularAcceleration": 360.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
@@ -69,17 +69,29 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "Stop Intaking Command",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
       "name": "Shoot on the Move",
       "waypointRelativePos": 0.502621470099668,
       "endWaypointRelativePos": 0.9,
       "command": null
+    },
+    {
+      "name": "Reset Intake Command",
+      "waypointRelativePos": 0.9,
+      "endWaypointRelativePos": null,
+      "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 540.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },

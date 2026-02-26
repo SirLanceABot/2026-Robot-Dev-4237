@@ -54,20 +54,20 @@
       "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 1.4961965460526316,
-      "rotationDegrees": 150.0
+      "waypointRelativePos": 1.65,
+      "rotationDegrees": 155.70362481943735
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.5,
+      "minWaypointRelativePos": 1.65,
       "maxWaypointRelativePos": 2.0,
       "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 1.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
+        "maxAngularVelocity": 360.0,
+        "maxAngularAcceleration": 360.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
@@ -75,10 +75,10 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 1.0,
-      "maxWaypointRelativePos": 1.5,
+      "maxWaypointRelativePos": 1.65,
       "constraints": {
-        "maxVelocity": 2.75,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -89,7 +89,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Reset Intake Command",
+      "name": "Stop Intaking Command",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
@@ -104,13 +104,19 @@
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": 1.7,
       "command": null
+    },
+    {
+      "name": "Reset Intake Command",
+      "waypointRelativePos": 1.65,
+      "endWaypointRelativePos": null,
+      "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 540.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
