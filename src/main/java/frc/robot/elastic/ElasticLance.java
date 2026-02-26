@@ -2,6 +2,8 @@ package frc.robot.elastic;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 // import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -87,13 +89,40 @@ public class ElasticLance
         SmartDashboard.putNumber("CPU Temperature", RobotController.getCPUTemp());
         
         if(drivetrain != null)
+        {
             SmartDashboard.putNumber("Gyro Rotation", drivetrain.getPigeon2().getYaw().getValueAsDouble());
+            SmartDashboard.putNumber("Rotation", drivetrain.getState().Pose.getRotation().getDegrees());
+
+            // SmartDashboard.putData("Swerve Drive", new Sendable() {
+            //     @Override
+            //     public void initSendable(SendableBuilder builder) {
+            //         builder.setSmartDashboardType("SwerveDrive");
+
+            //         builder.addDoubleProperty("Front Right Angle", () -> drivetrain.getModule(12).getCurrentState().angle.getDegrees(), null);
+            //         builder.addDoubleProperty("Front Right Velocity", () -> drivetrain.getModule(10).getCurrentState().speedMetersPerSecond, null);
+
+            //         builder.addDoubleProperty("Front Left Angle", () -> drivetrain.getModule(9).getCurrentState().angle.getDegrees(), null);
+            //         builder.addDoubleProperty("Front Left Velocity", () -> drivetrain.getModule(7).getCurrentState().speedMetersPerSecond, null);
+
+            //         builder.addDoubleProperty("Back Left Angle", () -> drivetrain.getModule(6).getCurrentState().angle.getDegrees(), null);
+            //         builder.addDoubleProperty("Back Left Velocity", () -> drivetrain.getModule(4).getCurrentState().speedMetersPerSecond, null);
+
+            //         builder.addDoubleProperty("Back Right Angle", () -> drivetrain.getModule(3).getCurrentState().angle.getDegrees(), null);
+            //         builder.addDoubleProperty("Back Right Velocity", () -> drivetrain.getModule(1).getCurrentState().speedMetersPerSecond, null);
+
+            //         builder.addDoubleProperty("Robot Angle", () -> drivetrain.getRotation3d().getAngle(), null);
+
+            //     }
+            // });
+        }
 
         updateAllianceColorBox();
         updateHubTagBox();
         updateClimbTagBox();
         updateLEDColorBox();
         updateValidAutoBox();
+
+       
 
         if(!useFullRobot && DriverStation.isDisabled())
         {

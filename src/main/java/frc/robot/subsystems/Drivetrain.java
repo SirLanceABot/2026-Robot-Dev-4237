@@ -25,6 +25,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.units.VoltageUnit;
 import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -469,6 +470,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
     }
 
 
+    private StructPublisher<SwerveDriveState> moduleStates;
     @Override
     public void periodic() {
         /*

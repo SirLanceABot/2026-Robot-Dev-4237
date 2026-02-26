@@ -116,6 +116,7 @@ public class PathPlannerLance
             PathPlannerPath ppPath = PathPlannerPath.fromPathFile(autoName);
             Pose2d initialPose = ppPath.getStartingHolonomicPose().orElse(new Pose2d());
             poseEstimator.resetPose(initialPose);
+            drivetrain.getPigeon2().setYaw(initialPose.getRotation().getDegrees());
         }
         catch (Exception e)
         {

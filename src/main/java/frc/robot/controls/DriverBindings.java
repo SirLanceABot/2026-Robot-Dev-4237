@@ -190,7 +190,7 @@ public final class DriverBindings {
         yButton.whileTrue(
             Commands.parallel(
                 drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getRotationToCalculatedTarget(poseEstimator.getAlliancePassingLocationPose()).getAsDouble())), 
-                GeneralCommands.passOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator)));
+                GeneralCommands.passOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator).repeatedly()));
 
         yButton.onFalse(GeneralCommands.stopShootingCommand());
 
@@ -213,6 +213,9 @@ public final class DriverBindings {
     private static void configRightBumper()
     {
         Trigger rightBumper = controller.rightBumper();
+        //67
+        rightBumper.whileTrue(
+            drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (3 * Math.PI) / 4));
     }
 
 
@@ -242,6 +245,9 @@ public final class DriverBindings {
     private static void configRightTrigger()
     {
         Trigger rightTrigger = controller.rightTrigger();
+
+        rightTrigger.whileTrue(
+            drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (-3 * Math.PI) / 4));
     }
 
 

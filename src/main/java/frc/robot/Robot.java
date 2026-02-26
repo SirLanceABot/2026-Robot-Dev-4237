@@ -154,8 +154,8 @@ public class Robot extends TimedRobot
                 {
                     if(!autoName.equalsIgnoreCase("InstantCommand"))
                     {
-                        path = AutoBuilder.buildAuto(autoName);
                         PathPlannerLance.initializePose(autoName);
+                        path = AutoBuilder.buildAuto(autoName);
                     }
                 }
             }
