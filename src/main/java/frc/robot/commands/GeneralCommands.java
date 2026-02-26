@@ -162,6 +162,21 @@ public class GeneralCommands
         }
     }
 
+    public static Command unjamIntakeCommand()
+    {
+        if(intake != null)
+        {
+            return
+            intake.moveToUnjamPositionCommand().until(intake.isAtPosition(5.0)).withTimeout(1.0)
+            .andThen(
+                GeneralCommands.intakeCommand());
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
     /**
      * @author definetly not Brady Woodard
      * @return command to stop intaking but leave the hopper out (doesn't retract intake, stops rollers)

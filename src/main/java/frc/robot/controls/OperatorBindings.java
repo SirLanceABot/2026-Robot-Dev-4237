@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.logging.Handler;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -188,7 +189,9 @@ public final class OperatorBindings {
 
     private static void configStartButton()
     {
-        Trigger startButton = controller.start();      
+        Trigger startButton = controller.start();     
+        
+        startButton.onTrue(GeneralCommands.unjamIntakeCommand());
     }
 
 

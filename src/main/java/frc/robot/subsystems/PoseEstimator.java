@@ -143,11 +143,19 @@ public class PoseEstimator extends SubsystemBase
         timeOfFlightMap.put(15.0, 1.26);
         timeOfFlightMap.put(16.0, 1.37);
         timeOfFlightMap.put(17.0, 1.37);
+        timeOfFlightMap.put(18.0, 1.47);
+        timeOfFlightMap.put(19.0, 1.57); // 1.0
+        timeOfFlightMap.put(20.0, 1.68); // 1.04
+        timeOfFlightMap.put(21.0, 1.79);
+        timeOfFlightMap.put(22.0, 1.90); // 1.22
+        timeOfFlightMap.put(23.0, 2.01); // 1.29
+        timeOfFlightMap.put(24.0, 2.12); // 1.39
+        timeOfFlightMap.put(25.0, 2.23);
     }
 
     public double getTOF(double dist)
     {
-        dist = Math.max(6.0, Math.min(.0, dist));
+        dist = Math.max(6.0, Math.min(25.0, dist));
         return timeOfFlightMap.get(dist);
     }
 

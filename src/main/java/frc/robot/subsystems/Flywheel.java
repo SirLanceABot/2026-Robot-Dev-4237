@@ -165,7 +165,7 @@ public class Flywheel extends SubsystemBase
      */
     public double getShotPower(double dist)
     {
-        dist = Math.max(6.0, Math.min(17.0, dist));
+        dist = Math.max(6.0, Math.min(25.0, dist));
         return distToVeloMap.get(dist);
     }
 

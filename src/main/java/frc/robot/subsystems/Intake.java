@@ -58,6 +58,7 @@ public class Intake extends SubsystemBase
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INTAKE_ROLLER_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
 
     private final double retractedPosition = 0.0; // TEST
+    private final double unjamPosition = 5.0;
     private final double intakingPosition = 10.0; 
     // private final double theshold = 4.0;
 
@@ -178,6 +179,11 @@ public class Intake extends SubsystemBase
         setVelocity(0.0);
     }
 
+    public void moveToUnjamPosition()
+    {
+        PivotMotor.setControlPosition(unjamPosition);
+    }
+
     public double getPivotPosition()
     {
         return PivotMotor.getPosition();
@@ -228,6 +234,11 @@ public class Intake extends SubsystemBase
     public Command retractIntakeCommand()
     {
         return run(() -> retractIntake()).withName("Retract Intake");
+    }
+
+    public Command moveToUnjamPositionCommand()
+    {
+        return run(() -> moveToUnjamPosition());
     }
 
     public Command onCommand()
