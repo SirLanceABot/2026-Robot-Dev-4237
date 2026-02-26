@@ -15,6 +15,7 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.motors.LinearServo;
 import frc.robot.subsystems.Climb.climbPosition;
+import frc.robot.subsystems.Climb.servoPosition;
 
 @SuppressWarnings("unused")
 public class RobbieFTest implements Test
@@ -114,8 +115,26 @@ public class RobbieFTest implements Test
         //      extends climb to descend traversal, servo remains out
         // 4. GeneralCommands.resetClimbToStartCommand()
 
-        controller.x().onTrue(
-            GeneralCommands.getFlywheelToSpeedCommand()
+        controller.povUp().onTrue(
+            climb.manualMoveClimbUpCommand());
+
+        controller.povUp().onFalse(
+            climb.stopMotorCommand()
+        );
+
+        controller.povDown().onTrue(
+            climb.manualMoveClimbDownCommand());
+
+        controller.povDown().onFalse(
+            climb.stopMotorCommand()
+        );
+
+        controller.povLeft().onTrue(
+            climb.setServoPositionCommand(servoPosition.kRETRACTED)
+        );
+
+        controller.povRight().onTrue(
+            climb.setServoPositionCommand(servoPosition.kEXTENDED)
         );
         
     }

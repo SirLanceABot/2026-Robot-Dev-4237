@@ -26,6 +26,7 @@ import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs.ColorPattern;
 import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.Climb.servoPosition;
 
 public final class OperatorBindings {
 
@@ -226,8 +227,13 @@ public final class OperatorBindings {
     {
         Trigger dpadUp = controller.povUp();
 
-        // dpadUp ~ manual extend climb
-        dpadUp.onTrue(climb.manualMoveClimbUpCommand());
+        if(climb != null)
+        {
+             // dpad Up ~ manual extend climb
+            dpadUp.onTrue(climb.manualMoveClimbUpCommand());
+
+            dpadUp.onFalse(climb.stopMotorCommand());
+        }
     }
 
     // TODO test binding and command
@@ -235,18 +241,35 @@ public final class OperatorBindings {
     {
         Trigger dpadDown = controller.povDown();
 
-        // dpad Down ~ mantual retract climb
-        dpadDown.onTrue(climb.manualMoveClimbDownCommand());
+        if(climb != null)
+        {
+            // dpad Down ~ mantual retract climb
+            dpadDown.onTrue(climb.manualMoveClimbDownCommand());
+
+            dpadDown.onFalse(climb.stopMotorCommand());
+        }
     }
 
     private static void configDpadLeft()
     {
         Trigger dpadLeft = controller.povLeft();
+
+        if(climb != null)
+        {
+            // dpad Left ~ move servo to start position
+            dpadLeft.onTrue(climb.setServoPositionCommand(servoPosition.kRETRACTED));
+        }
     }
 
     private static void configDpadRight()
     {
         Trigger dpadRight = controller.povRight();
+
+        if(climb != null)
+        {
+            // dpad Right ~ move servo to climb position
+            dpadRight.onTrue(climb.setServoPositionCommand(servoPosition.kEXTENDED));
+        }
     }
 
     public static void configRumble(int time)
