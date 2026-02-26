@@ -41,7 +41,7 @@ public class Intake extends SubsystemBase
 
     
 
-    private final double PivotkP = 0.55;
+    private final double PivotkP = 0.65;
     private final double PivotkI = 0.0;
     private final double PivotkD = 0.0;
     private final double PivotkS = 0.023;
@@ -163,6 +163,11 @@ public class Intake extends SubsystemBase
         PivotMotor.setControlPosition(intakingPosition);
     }
 
+    public void turnOnRollers()
+    {
+        RollersMotor.set(1.0);
+    }
+
     /** 
      * This method makes the intake eject fuel
      */
@@ -182,6 +187,7 @@ public class Intake extends SubsystemBase
     public void moveToUnjamPosition()
     {
         PivotMotor.setControlPosition(unjamPosition);
+        RollersMotor.set(1.0);
     }
 
     public double getPivotPosition()
@@ -219,6 +225,11 @@ public class Intake extends SubsystemBase
     public Command setVelocityCommand(DoubleSupplier speed)
     {
         return run( () -> setVelocity(speed.getAsDouble()));
+    }
+
+    public Command turnOnRollersCommand()
+    {
+        return run(() -> turnOnRollers());
     }
 
     public Command pickupFuelCommand()

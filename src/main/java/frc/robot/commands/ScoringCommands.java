@@ -186,18 +186,14 @@ public class ScoringCommands
             DoubleSupplier shooterPower = () -> (flywheel.getShotPower(distance.getAsDouble() * 3.281)); // meters -> feet
 
             return
-            Commands.parallel(
-
-                Commands.either(
-                    GeneralCommands.rampUpFlywheelCommand(() -> shooterPower.getAsDouble()).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean()), 
-                    flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean()),
-                    () -> flywheelSpeed.getAsDouble() < 1.0),
-
-                GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue)) 
+            Commands.either(
+                GeneralCommands.rampUpFlywheelCommand(() -> shooterPower.getAsDouble()).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean()), 
+                flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean()),
+                () -> flywheelSpeed.getAsDouble() < 1.0)
                    
             .andThen(
                 Commands.parallel(
-                    GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
+                    // GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
                     indexigator.setForwardCommand(), // rpm
                     accelerator.setVelocityCommand(12.0)).withTimeout(0.05));
         }
