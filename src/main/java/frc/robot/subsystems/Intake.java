@@ -117,7 +117,7 @@ public class Intake extends SubsystemBase
 
         // Set up Safety
         RollersMotor.setSafetyEnabled(false);
-        RollersMotor.setSafetyEnabled(false);
+        RollersFollower.setSafetyEnabled(false);
         PivotMotor.setSafetyEnabled(false);
         PivotFollower.setSafetyEnabled(false);
 
@@ -279,8 +279,8 @@ public class Intake extends SubsystemBase
     @Override
     public void periodic()
     {
-        if (RollersMotor.getCurrentAmps() > 10.0)
-            System.out.println("RollerMotor amps: " + RollersMotor.getCurrentAmps() + " FollowerRoller Amps: " + RollersFollower.getCurrentAmps());
+        // if (RollersMotor.getCurrentAmps() > 10.0)
+        //     System.out.println("RollerMotor amps: " + RollersMotor.getCurrentAmps() + " FollowerRoller Amps: " + RollersFollower.getCurrentAmps());
 
         // System.out.println(PivotMotor.getForwardHardLimit() + " " + PivotMotor.getReverseHardLimit());
         // This method will be called once per scheduler run

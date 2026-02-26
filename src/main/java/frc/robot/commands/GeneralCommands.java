@@ -169,7 +169,7 @@ public class GeneralCommands
             return
             intake.moveToUnjamPositionCommand().until(intake.isAtPosition(5.0)).withTimeout(1.0)
             .andThen(
-                GeneralCommands.intakeCommand());
+                GeneralCommands.intakeCommand()).withTimeout(1.0);
         }
         else
         {
@@ -289,9 +289,9 @@ public class GeneralCommands
         {
             return 
             Commands.parallel(
-                intake.retractIntakeCommand(),
+                intake.retractIntakeCommand())//,
                 // indexigator.stopCommand(),
-                setLEDCommand(ColorPattern.kSolid, Color.kGreen))
+                // setLEDCommand(ColorPattern.kSolid, Color.kGreen))
             .withName("Intake Reset Into Robot");
         }
         else
