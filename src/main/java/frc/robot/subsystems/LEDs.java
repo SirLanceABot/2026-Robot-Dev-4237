@@ -216,7 +216,7 @@ public class LEDs extends SubsystemBase
 
     public Command setColorBreatheCommand(int brightness, Color ...colors)
     {
-        return Commands.runOnce(() -> setColorBreathe(brightness, colors)).withName("Set LED Breathe");
+        return Commands.run(() -> setColorBreathe(brightness, colors)).withName("Set LED Breathe");
     }
 
     public Command setColorProgressBarCommand(int brightness, Color ...colors)
