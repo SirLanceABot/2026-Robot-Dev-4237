@@ -247,7 +247,7 @@ public class PoseEstimator extends SubsystemBase
 
     public Pose2d getRedPassLocationPose()
     {
-        if(Math.hypot(redLeftPassLocationPose.getY(), redLeftPassLocationPose.getX()) > Math.hypot(redRightPassLocationPose.getY(), redRightPassLocationPose.getX()))
+        if(Math.hypot(Math.abs(redLeftPassLocationPose.getY()) - Math.abs(estimatedPose.getY()), Math.abs(redLeftPassLocationPose.getX()) - Math.abs(estimatedPose.getX())) > Math.hypot(Math.abs(redRightPassLocationPose.getY()) - Math.abs(estimatedPose.getY()), Math.abs(redRightPassLocationPose.getX()) - Math.abs(estimatedPose.getX())))
         {
             return redRightPassLocationPose;
         }
@@ -259,7 +259,7 @@ public class PoseEstimator extends SubsystemBase
 
     public Pose2d getBluePassLocationPose()
     {
-        if(Math.hypot(blueLeftPassLocationPose.getY(), blueLeftPassLocationPose.getX()) > Math.hypot(blueRightPassLocationPose.getY(), blueRightPassLocationPose.getX()))
+        if(Math.hypot(Math.abs(blueLeftPassLocationPose.getY()) - Math.abs(estimatedPose.getY()), Math.abs(blueLeftPassLocationPose.getX()) - Math.abs(estimatedPose.getX())) > Math.hypot(Math.abs(blueRightPassLocationPose.getY()) - Math.abs(estimatedPose.getY()), Math.abs(blueRightPassLocationPose.getX()) - Math.abs(estimatedPose.getX())))
         {
             return blueRightPassLocationPose;
         }
