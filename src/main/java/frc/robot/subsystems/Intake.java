@@ -59,7 +59,7 @@ public class Intake extends SubsystemBase
 
     private final double retractedPosition = 0.0; // TEST
     private final double unjamPosition = 1.0;
-    private final double intakingPosition = 5.5; 
+    private final double intakingPosition = 6.0; 
     // private final double theshold = 4.0;
 
     // *** CLASS CONSTRUCTORS ***
@@ -164,7 +164,7 @@ public class Intake extends SubsystemBase
      */
     public void pickUpFuel()
     {
-        RollersMotor.set(1.0);
+        RollersMotor.set(0.87);
         // setVelocity(20.0);
         PivotMotor.setControlPosition(intakingPosition);
     }

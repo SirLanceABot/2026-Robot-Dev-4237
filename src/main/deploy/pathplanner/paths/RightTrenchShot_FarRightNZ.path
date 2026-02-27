@@ -35,7 +35,7 @@
     },
     {
       "waypointRelativePos": 0.8740834018640353,
-      "rotationDegrees": 68.0
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [],
@@ -59,14 +59,14 @@
       "command": {
         "type": "named",
         "data": {
-          "name": "Reset Intake Command"
+          "name": "Stop Intaking Command"
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 0.5,
+    "maxAcceleration": 0.5,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
