@@ -22,6 +22,7 @@ import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
 import frc.robot.elastic.ElasticLance;
 import frc.robot.pathplanner.PathPlannerLance;
+import frc.robot.subsystems.LEDs;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -49,6 +50,7 @@ public class Robot extends TimedRobot
     private Command selectedCommand = null;
     private Command path = Commands.none();
     private String autoName = "Left2Cycle";
+    private LEDs leds;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -91,6 +93,8 @@ public class Robot extends TimedRobot
         SignalLogger.enableAutoLogging(false);
 
         ElasticLance.configElastic(robotContainer);
+
+        leds = robotContainer.getLEDs();
     }
 
     /**
@@ -109,7 +113,7 @@ public class Robot extends TimedRobot
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
         ElasticLance.sendDataToSmartDashboard();
-        robotContainer.getLEDs().periodic();
+        leds.periodic();
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
