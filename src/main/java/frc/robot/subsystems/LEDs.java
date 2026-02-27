@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -200,42 +201,42 @@ public class LEDs extends SubsystemBase
 
     public Command setColorSolidCommand(int brightness, Color color)
     {
-        return runOnce(() -> setColorSolid(brightness, color)).withName("Set LED Solid");
+        return Commands.runOnce(() -> setColorSolid(brightness, color)).withName("Set LED Solid");
     }
 
     public Command setColorGradientCommand(int brightness, Color ...colors)
     {
-        return runOnce(() -> setColorGradient(brightness, colors)).withName("Set LED Gradient");
+        return Commands.runOnce(() -> setColorGradient(brightness, colors)).withName("Set LED Gradient");
     }
 
     public Command setColorBlinkCommand(int brightness, Color color)
     {
-        return run(() -> setColorBlink(brightness, color)).withName("Set LED Blink");
+        return Commands.run(() -> setColorBlink(brightness, color)).withName("Set LED Blink");
     }
 
     public Command setColorBreatheCommand(int brightness, Color ...colors)
     {
-        return runOnce(() -> setColorBreathe(brightness, colors)).withName("Set LED Breathe");
+        return Commands.runOnce(() -> setColorBreathe(brightness, colors)).withName("Set LED Breathe");
     }
 
     public Command setColorProgressBarCommand(int brightness, Color ...colors)
     {
-        return runOnce(() -> setColorProgressBar(brightness, colors)).withName("Set LED Progress Bar");
+        return Commands.runOnce(() -> setColorProgressBar(brightness, colors)).withName("Set LED Progress Bar");
     }
 
     public Command setColorRainbowCommand()
     {
-        return runOnce(() -> setColorRainbow()).withName("Set LED Rainbow");
+        return Commands.runOnce(() -> setColorRainbow()).withName("Set LED Rainbow");
     }
 
     public Command setMovingRainbowCommand()
     {
-        return run(() -> setMovingRainbow()).withName("Set LED Moving Rainbow");
+        return Commands.run(() -> setMovingRainbow()).withName("Set LED Moving Rainbow");
     }
 
     public Command offCommand()
     {
-        return runOnce(() -> off()).withName("Turn off LEDs");
+        return Commands.runOnce(() -> off()).withName("Turn off LEDs");
     }
 
     // *** OVERRIDEN METHODS ***
