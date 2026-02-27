@@ -65,9 +65,12 @@ public class ElasticLance
     // StartUp Alerts 
     private static final Alert lowVoltageAlert = new Alert("Battery voltage is LOW", AlertType.kError);
     private static final Alert gyroAlert = new Alert("Gyro is NOT zeroed", AlertType.kWarning);
-    private static final Alert canRangeAlert = new Alert("CANRange sensor offline", AlertType.kError);
-    private static final Alert cameraAlert = new Alert("Camera not responding", AlertType.kWarning);
+    private static final Alert leftCANRangeAlert = new Alert("Left CANRange sensor offline", AlertType.kError);
+    private static final Alert rightCANRangeAlert = new Alert("Right CANRange sensor offline", AlertType.kError);
+    // private static final Alert cameraAlert = new Alert("Camera not responding", AlertType.kWarning);
     private static final Alert swerveAlert = new Alert("Swerve modules misaligned", AlertType.kWarning);
+    private static final Alert operatorControllerAlert = new Alert("Operator - press Start Button", AlertType.kWarning);
+    private static final Alert driverControllerAlert = new Alert("Driver - press Back Button", AlertType.kWarning);
 
     private ElasticLance()
     {}
@@ -79,6 +82,13 @@ public class ElasticLance
         drivetrain      = robotContainer.getDrivetrain();
         useFullRobot    = robotContainer.useFullRobot();
 
+        driverControllerAlert.set(true);
+        operatorControllerAlert.set(true);
+        swerveAlert.set(true);
+        rightCANRangeAlert.set(true);
+        leftCANRangeAlert.set(true);
+        // gyroAlert.set(true);
+        lowVoltageAlert.set(true);
     }
 
     public static void sendDataToSmartDashboard()
@@ -121,6 +131,7 @@ public class ElasticLance
         updateClimbTagBox();
         updateLEDColorBox();
         updateValidAutoBox();
+        updateStartupAlerts();
 
        
 
@@ -229,12 +240,6 @@ public class ElasticLance
     {
         StartUpState state = StartUpCommands.getCurrentState();
 
-        lowVoltageAlert.set(false);
-        gyroAlert.set(false);
-        canRangeAlert.set(false);
-        cameraAlert.set(false);
-        swerveAlert.set(false);
-
         if(state != null)
         {
             switch (state)
@@ -243,23 +248,39 @@ public class ElasticLance
                     lowVoltageAlert.set(true);
                     break;
 
-                case GYRO_NOT_ZEROED:
-                    gyroAlert.set(true);
-                    break;
+                // case GYRO_NOT_ZEROED:
+                //     gyroAlert.set(true);
+                //     lowVoltageAlert.set(false);
+                //     break;
 
                 case LEFT_CAN_RANGE_OFF:
-                    canRangeAlert.set(true);
+                    leftCANRangeAlert.set(true);
+                    gyroAlert.set(false);
                     break;
                 
                 case RIGHT_CAN_RANGE_OFF:
-                    canRangeAlert.set(true);
+                    rightCANRangeAlert.set(true);
+                    leftCANRangeAlert.set(false);
                     break;
 
                 case SWERVE_MISALIGNED:
                     swerveAlert.set(true);
+                    rightCANRangeAlert.set(false);
+                    break;
+
+                case OPERATOR_CONTROLLER_OFF:
+                    operatorControllerAlert.set(true);
+                    swerveAlert.set(false);
+                    lowVoltageAlert.set(false);
+                    break;
+
+                case DRIVER_CONTROLLER_OFF:
+                    driverControllerAlert.set(true);
+                    operatorControllerAlert.set(false);
                     break;
 
                 case READY:
+                    driverControllerAlert.set(false);
                     break;
                 
                 default:

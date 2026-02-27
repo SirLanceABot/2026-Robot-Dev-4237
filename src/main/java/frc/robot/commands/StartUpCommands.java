@@ -5,11 +5,14 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.RobotContainer;
+import frc.robot.controls.OperatorBindings;
 import frc.robot.sensors.Hopper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
@@ -48,10 +51,12 @@ public final class StartUpCommands
     public enum StartUpState
     {
         LOW_VOLTAGE, 
-        GYRO_NOT_ZEROED, 
+        // GYRO_NOT_ZEROED, 
         LEFT_CAN_RANGE_OFF,
         RIGHT_CAN_RANGE_OFF, 
         SWERVE_MISALIGNED, 
+        OPERATOR_CONTROLLER_OFF,
+        DRIVER_CONTROLLER_OFF,
         READY
     }
 
@@ -62,6 +67,13 @@ public final class StartUpCommands
 
     /** Current system health state */
     public static StartUpState currentState = null;
+
+    /** Bringing in joysticks */
+    private static CommandXboxController driverController;
+    private static CommandXboxController operatorController;
+
+    private static boolean operatorVerified = false;
+    private static boolean driverVerified = false;  
 
     /** 
      * Once sensors detect something one time.
@@ -75,7 +87,7 @@ public final class StartUpCommands
     private static BooleanSupplier RightHopperSensor;
 
     /** Wheel must face forward within this tolerance */
-    private static final double SWERVE_TOLERANCE_DEGREES = 3.0;
+    private static final double SWERVE_TOLERANCE_DEGREES = 10.0;
 
     /** Gyro must be near zero within this tolerance */
     private static final double GYRO_TOLERANCE_DEGREES = 3.0;
@@ -95,6 +107,8 @@ public final class StartUpCommands
         drivetrain = robotContainer.getDrivetrain();
         leds = robotContainer.getLEDs();
         hopper = robotContainer.getHopper();
+        operatorController = robotContainer.getOperatorController();
+        driverController = robotContainer.getDriverController();
         
         if(hopper != null)
         {
@@ -128,11 +142,11 @@ public final class StartUpCommands
         }
 
         // Second - Gyro Check
-        result = checkGyro();
-        if (result != null)
-        {
-            return result;
-        }
+        // result = checkGyro();
+        // if (result != null)
+        // {
+        //     return result;
+        // }
 
         // Third - CAN Range check
         result = checkLeftCANRange();
@@ -149,6 +163,19 @@ public final class StartUpCommands
 
         // Fourth - Swerve alignment
         result = checkSwerve();
+        if (result != null)
+        {
+            return result;
+        }
+
+        // Fifth - Joystick Check
+        result = checkOperatorController();
+        if (result != null)
+        {
+            return result;
+        }
+
+        result = checkDriverController();
         if (result != null)
         {
             return result;
@@ -175,9 +202,9 @@ public final class StartUpCommands
                 command = leds.setColorBlinkCommand(80,Color.kYellow);
                 break;
 
-            case GYRO_NOT_ZEROED:
-                command = leds.setColorBlinkCommand(80, Color.kOrange);
-                break;
+            // case GYRO_NOT_ZEROED:
+            //     command = leds.setColorBlinkCommand(80, Color.kOrange);
+            //     break;
 
             case LEFT_CAN_RANGE_OFF:
                 command = leds.setColorSolidCommand(80, Color.kPurple);
@@ -189,6 +216,13 @@ public final class StartUpCommands
 
             case SWERVE_MISALIGNED:
                 command = leds.setColorBlinkCommand(80, Color.kRed);
+                break;
+
+            case OPERATOR_CONTROLLER_OFF:
+                command = leds.setColorBlinkCommand(80, Color.kBeige);
+                break;
+            case DRIVER_CONTROLLER_OFF:
+                command = leds.setColorBlinkCommand(80, Color.kMediumTurquoise);
                 break;
 
             case READY:
@@ -238,24 +272,24 @@ public final class StartUpCommands
      * Gyro must be near zero before match starts
      * FIX ME - "near zero" should be replaced with value we want
      */
-    private static StartUpState checkGyro()
-    {
-        if (!(drivetrain != null && drivetrain.getPigeon2() != null))
-        {
-            return null;
-        }
+    // private static StartUpState checkGyro()
+    // {
+    //     if (!(drivetrain != null && drivetrain.getPigeon2() != null))
+    //     {
+    //         return null;
+    //     }
 
-        double yawDegrees = drivetrain.getPigeon2().getYaw().getValueAsDouble();
-        double absYaw = Math.abs(yawDegrees);
+    //     double yawDegrees = drivetrain.getPigeon2().getYaw().getValueAsDouble();
+    //     double absYaw = Math.abs(yawDegrees);
 
-        if (absYaw > GYRO_TOLERANCE_DEGREES)
-        {
-            // System.out.println("StartUpCommands: gyro moved (" + yawDegrees + " deg) - Setting LEDs orange");
-            return StartUpState.GYRO_NOT_ZEROED;
-        }
+    //     if (absYaw > GYRO_TOLERANCE_DEGREES)
+    //     {
+    //         // System.out.println("StartUpCommands: gyro moved (" + yawDegrees + " deg) - Setting LEDs orange");
+    //         return StartUpState.GYRO_NOT_ZEROED;
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
     /**
      * CANRange sensor verification logic
@@ -323,12 +357,14 @@ public final class StartUpCommands
             return null;
         }
 
+        double minAngle = 0;
+        double maxAngle = 0;
+
         double tolRad = Math.toRadians(SWERVE_TOLERANCE_DEGREES); // converting tolerance to radians for WPILab angles
 
         // Report all misaligned modules with index and angles for easier debugging
         for (int i = 0; i < modules.length; i++)
         {
-
             Rotation2d angle = modules[i].angle;
             double angleRad = angle.getRadians();
 
@@ -342,11 +378,73 @@ public final class StartUpCommands
             // checking against tolerance
             if (angleToNearestPi > tolRad)
             {
-                // System.out.println("StartUpCommands - Swerve misaligned (module " + i + ")");
-                return StartUpState.SWERVE_MISALIGNED;
+                System.out.print("   (module " + i + ") by " + angleToNearestPi);
             }
+
+            if ((i == 0) || (angleToNearestPi < minAngle))
+                minAngle = angleToNearestPi;
+            
+            if ((i == 0) || (angleToNearestPi > maxAngle))
+                maxAngle = angleToNearestPi;
+        }
+
+        System.out.println();
+
+        if ((maxAngle - minAngle) > tolRad)
+        {
+            // System.out.println("How far off is it? : " + (maxAngle - minAngle));
+            return StartUpState.SWERVE_MISALIGNED;
         }
 
         return null;
+    }
+
+    /**
+     * Both controllers must press specific buttons to be recognized
+     */
+    private static StartUpState checkOperatorController()
+    {
+        if (operatorController == null)
+        {
+            return null;
+        }
+
+        // if already verified, don't check again
+        if (operatorVerified)
+        {
+            return null;
+        }
+
+        // check real button state
+        if (operatorController.getHID().getStartButton())
+        {
+            operatorVerified = true;
+            // System.out.println("Operator controller checked");
+            return null;
+        }
+
+        return StartUpState.OPERATOR_CONTROLLER_OFF;
+    }
+
+    private static StartUpState checkDriverController()
+    {
+         if (driverController == null)
+        {
+            return null;
+        }
+
+        if (driverVerified)
+        {
+            return null;
+        }
+
+        if (driverController.getHID().getBackButton())
+        {
+            driverVerified = true;
+            // System.out.println("Driver controller checked");
+            return null;
+        }
+
+        return StartUpState.DRIVER_CONTROLLER_OFF;
     }
 }
