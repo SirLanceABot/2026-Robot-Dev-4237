@@ -289,9 +289,9 @@ public class GeneralCommands
         {
             return 
             Commands.parallel(
-                intake.retractIntakeCommand())//,
+                intake.retractIntakeCommand(),//,
                 // indexigator.stopCommand(),
-                // setLEDCommand(ColorPattern.kSolid, Color.kGreen))
+                setLEDCommand(ColorPattern.kSolid, Color.kGreen))
             .withName("Intake Reset Into Robot");
         }
         else

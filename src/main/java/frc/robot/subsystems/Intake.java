@@ -41,7 +41,7 @@ public class Intake extends SubsystemBase
 
     
 
-    private final double PivotkP = 0.65;
+    private final double PivotkP = 0.55;
     private final double PivotkI = 0.0;
     private final double PivotkD = 0.0;
     private final double PivotkS = 0.023;
@@ -58,8 +58,8 @@ public class Intake extends SubsystemBase
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INTAKE_ROLLER_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
 
     private final double retractedPosition = 0.0; // TEST
-    private final double unjamPosition = 5.0;
-    private final double intakingPosition = 10.0; 
+    private final double unjamPosition = 2.0;
+    private final double intakingPosition = 5.5; 
     // private final double theshold = 4.0;
 
     // *** CLASS CONSTRUCTORS ***
@@ -98,6 +98,12 @@ public class Intake extends SubsystemBase
         RollersFollower.setupCoastMode();
         PivotMotor.setupBrakeMode();
         PivotFollower.setupBrakeMode();
+
+        PivotMotor.setupForwardSoftLimit(11.0, false);
+        PivotMotor.setupReverseSoftLimit(0.0, false);
+
+        PivotFollower.setupForwardSoftLimit(11.0, false);
+        PivotFollower.setupReverseSoftLimit(0.0, false);
 
         // Sets up position
         RollersMotor.setPosition(0.0);
@@ -297,6 +303,8 @@ public class Intake extends SubsystemBase
         // This method will be called once per scheduler run
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
+
+        System.out.println("intake pos: " + getPivotPosition());
     }
 
     @Override
