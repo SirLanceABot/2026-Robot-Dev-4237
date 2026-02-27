@@ -288,10 +288,13 @@ public class GeneralCommands
         if(intake != null)
         {
             return 
-            Commands.parallel(
-                intake.retractIntakeCommand(),//,
-                // indexigator.stopCommand(),
-                setLEDCommand(ColorPattern.kSolid, Color.kGreen))
+            intake.retractIntakeCommand().withTimeout(1.0)
+            .alongWith(
+                GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kGreen))
+            .andThen(
+                intake.turnOnRollersCommand().withTimeout(1.0))
+            .andThen(
+                intake.stopCommand())
             .withName("Intake Reset Into Robot");
         }
         else

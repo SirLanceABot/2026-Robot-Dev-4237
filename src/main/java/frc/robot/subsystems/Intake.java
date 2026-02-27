@@ -41,7 +41,7 @@ public class Intake extends SubsystemBase
 
     
 
-    private final double PivotkP = 0.55;
+    private final double PivotkP = 0.65;
     private final double PivotkI = 0.0;
     private final double PivotkD = 0.0;
     private final double PivotkS = 0.023;
@@ -58,7 +58,7 @@ public class Intake extends SubsystemBase
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INTAKE_ROLLER_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
 
     private final double retractedPosition = 0.0; // TEST
-    private final double unjamPosition = 2.0;
+    private final double unjamPosition = 1.0;
     private final double intakingPosition = 5.5; 
     // private final double theshold = 4.0;
 
@@ -304,7 +304,7 @@ public class Intake extends SubsystemBase
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
 
-        System.out.println("intake pos: " + getPivotPosition());
+        // System.out.println("intake pos: " + getPivotPosition());
     }
 
     @Override
