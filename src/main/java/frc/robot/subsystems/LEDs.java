@@ -18,14 +18,14 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+// import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 /**
  * LED Subsystem 
  * @author Niyati
  */
-public class LEDs extends SubsystemBase
+public class LEDs
 {
     // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -70,6 +70,9 @@ public class LEDs extends SubsystemBase
     private LEDPattern rainbow = LEDPattern.rainbow(255, 255);
     private LEDPattern off = LEDPattern.solid(Color.kBlack);
 
+    private Runnable actionPattern = null;
+    private boolean useActionPattern = false;
+
     private static Color color = Color.kBlack;
 
     private LEDPattern base;
@@ -85,7 +88,7 @@ public class LEDs extends SubsystemBase
      */
     public LEDs()
     {
-        super("LEDs Subsystem");
+        // super("LEDs Subsystem");
         System.out.println("  Constructor Started:  " + fullClassName);
 
         led.setLength(Constants.LEDs.LED_LENGTH);
@@ -201,53 +204,101 @@ public class LEDs extends SubsystemBase
 
     public Command setColorSolidCommand(int brightness, Color color)
     {
-        return Commands.runOnce(() -> setColorSolid(brightness, color)).withName("Set LED Solid");
+        return Commands.runOnce(() -> 
+        {
+            useActionPattern = false;
+            actionPattern = null;
+            setColorSolid(brightness, color);
+            System.out.println("Setting solid color");
+        }
+        ).withName("Set LED Solid");
     }
 
     public Command setColorGradientCommand(int brightness, Color ...colors)
     {
-        return Commands.runOnce(() -> setColorGradient(brightness, colors)).withName("Set LED Gradient");
+        return Commands.runOnce(() -> 
+        {
+            useActionPattern = false;
+            setColorGradient(brightness, colors);
+        }
+        ).withName("Set LED Gradient");
     }
 
     public Command setColorBlinkCommand(int brightness, Color color)
     {
-        return Commands.run(() -> setColorBlink(brightness, color)).withName("Set LED Blink");
+        return Commands.runOnce(() -> 
+            {
+                useActionPattern = true; 
+                actionPattern = () -> setColorBlink(brightness, color);
+            }
+            ).withName("Set LED Blink");
     }
 
     public Command setColorBreatheCommand(int brightness, Color ...colors)
     {
-        return Commands.run(() -> setColorBreathe(brightness, colors)).withName("Set LED Breathe");
+        return Commands.runOnce(() -> 
+        {
+            useActionPattern = true; 
+            actionPattern = () -> setColorBreathe(brightness, colors);
+        }
+        ).withName("Set LED Breathe");
     }
 
     public Command setColorProgressBarCommand(int brightness, Color ...colors)
     {
-        return Commands.runOnce(() -> setColorProgressBar(brightness, colors)).withName("Set LED Progress Bar");
+        return Commands.runOnce(() -> 
+        {
+            useActionPattern = false;
+            setColorProgressBar(brightness, colors);
+        }
+        ).withName("Set LED Progress Bar");
     }
 
     public Command setColorRainbowCommand()
     {
-        return Commands.runOnce(() -> setColorRainbow()).withName("Set LED Rainbow");
+        return Commands.runOnce(() -> 
+        {
+            useActionPattern = false;
+            setColorRainbow();
+        }
+        ).withName("Set LED Rainbow");
     }
 
     public Command setMovingRainbowCommand()
     {
-        return Commands.run(() -> setMovingRainbow()).withName("Set LED Moving Rainbow");
+        return Commands.runOnce(() -> 
+            {
+                useActionPattern = true; 
+                actionPattern = () -> setMovingRainbow();
+            }
+            ).withName("Set LED Moving Rainbow");
     }
 
     public Command offCommand()
     {
-        return Commands.runOnce(() -> off()).withName("Turn off LEDs");
+        return Commands.runOnce(() -> 
+        {
+            useActionPattern = false;
+            off();
+        }
+        ).withName("Turn off LEDs");
     }
 
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
 
-    @Override
+    // @Override
     public void periodic()
     {
         // This method will be called once per scheduler run
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
+
+        if (useActionPattern)
+        {
+            System.out.println("LED animation running");
+            actionPattern.run();
+        }
 
         led.setData(ledBuffer);
     }

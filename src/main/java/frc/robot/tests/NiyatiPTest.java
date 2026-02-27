@@ -38,7 +38,7 @@ public class NiyatiPTest implements Test
     private final RobotContainer robotContainer;
     private Intake intake;
     private LEDs leds = null;
-    // private final CommandXboxController controller = new CommandXboxController(0);
+    private final CommandXboxController controller = new CommandXboxController(0);
     private final Joystick joystick = new Joystick(0);
 
     // *** CLASS CONSTRUCTORS ***
@@ -120,22 +120,22 @@ public class NiyatiPTest implements Test
 
         // if(controller.x().getAsBoolean())
         // {
-        //     leds.setColorBlinkCommand(Color.kRed).schedule();
+        //     leds.setColorBlinkCommand(80, Color.kRed).schedule();
         // }
         // if(controller.a().getAsBoolean())
         // {
         //     leds.setColorSolidCommand(70, Color.kBlue).schedule();
         // }
 
-        // if(joystick.getRawButton(1))
-        // {
-        //     leds.setColorBlinkCommand(Color.kBlue).schedule();
-        // }
-        // else if (joystick.getRawButton(2))
-        // {
-        //     // leds.setColorRainbowCommand();
-        //     leds.setColorSolidCommand(60, Color.kRed);
-        // }
+        if(joystick.getRawButton(1))
+        {
+            leds.setColorBlinkCommand(80, Color.kBlue).schedule();
+        }
+        else if (joystick.getRawButton(2))
+        {
+            // leds.setColorRainbowCommand();
+            leds.setColorSolidCommand(60, Color.kRed).schedule();
+        }
     }
     
     /**
