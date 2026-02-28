@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 4.444594136644833,
-        "y": 0.5588044145742357
+        "y": 0.459
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.042259982638889,
-        "y": 0.6791524884259263
+        "y": 0.5793480738516907
       },
       "isLocked": false,
       "linkedName": "Right Trench"
@@ -54,8 +54,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 0.5,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -69,7 +69,7 @@
   "folder": "Right Trench Starts",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.43817569338661
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

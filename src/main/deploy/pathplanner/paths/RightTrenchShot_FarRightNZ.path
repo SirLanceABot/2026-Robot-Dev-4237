@@ -3,47 +3,76 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.060078864173945,
-        "y": 0.8
+        "x": 3.25,
+        "y": 0.85
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.086743923611111,
-        "y": 0.7889845196759255
+        "x": 6.355222222222222,
+        "y": -0.21782222222222336
       },
       "isLocked": false,
-      "linkedName": "Right Trench Shot"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.397737847222222,
-        "y": 3.505916666666667
+        "x": 7.0,
+        "y": 3.506
       },
       "prevControl": {
-        "x": 6.5828251591435185,
-        "y": 0.37347301793981513
+        "x": 7.715722222222222,
+        "y": 1.031822222222222
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Far Right NZ"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.22708504660087708,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 0.1,
+      "rotationDegrees": 180.0
     },
     {
-      "waypointRelativePos": 0.8740834018640353,
+      "waypointRelativePos": 0.35,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 0.65,
       "rotationDegrees": 90.0
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.07,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 1080.0,
+        "maxAngularAcceleration": 1080.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "Reset Intake Command",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Reset Intake Command"
+        }
+      }
+    },
+    {
       "name": "Intake Command",
-      "waypointRelativePos": 0.7174966577540107,
+      "waypointRelativePos": 0.3898117386489506,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -65,8 +94,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 0.5,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -80,7 +109,7 @@
   "folder": "Right Trench Shot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -135.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

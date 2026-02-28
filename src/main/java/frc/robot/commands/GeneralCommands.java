@@ -167,7 +167,7 @@ public class GeneralCommands
         if(intake != null)
         {
             return
-            intake.moveToUnjamPositionCommand().until(intake.isAtPosition(5.0)).withTimeout(1.0)
+            intake.moveToUnjamPositionCommand().until(intake.isAtPosition(2.0)).withTimeout(1.0)
             .andThen(
                 GeneralCommands.intakeCommand()).withTimeout(1.0);
         }
@@ -361,7 +361,7 @@ public class GeneralCommands
                 flywheel.stopCommand(),
                 indexigator.stopCommand(),
                 accelerator.stopCommand()
-            );
+            ).withTimeout(0.1);
         }
         else
         {

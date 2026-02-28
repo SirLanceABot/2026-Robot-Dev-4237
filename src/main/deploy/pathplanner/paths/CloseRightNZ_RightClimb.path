@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.728158092248908,
-        "y": 2.620705854257642
+        "x": 8.029,
+        "y": 3.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.324638554216868,
-        "y": -0.08474698795180613
+        "x": 8.62548046196796,
+        "y": 0.29454715779055185
       },
       "isLocked": false,
       "linkedName": "Close Right NZ"
@@ -88,8 +88,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 0.5,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

@@ -80,12 +80,14 @@ public class CommandsManager extends Command
         NamedCommands.registerCommand("Stop Ejecting Fuel From Intake Command", GeneralCommands.stopEjectingFuelInIntakeCommand());
         NamedCommands.registerCommand("Eject All Fuel Slowly Command", GeneralCommands.ejectAllFuelSlowlyCommand());
         NamedCommands.registerCommand("Stop Ejecting All Fuel Slowly Command", GeneralCommands.stopEjectingAllFuelCommand());
+        NamedCommands.registerCommand("Stop Shooting Command", GeneralCommands.stopShootingCommand());
 
         // Scoring Commands
         NamedCommands.registerCommand("Shoot From Standstill Command", ScoringCommands.shootFromStandstillCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
         NamedCommands.registerCommand("Shoot on the Move", ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
         NamedCommands.registerCommand("Physics Shoot on the Move", ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, indexigator, accelerator, flywheel));
         NamedCommands.registerCommand("Pass Command", ScoringCommands.passCommand(indexigator, accelerator, flywheel));
+        NamedCommands.registerCommand("Ramp up Flywheel Command", GeneralCommands.rampUpFlywheelCommand(() -> 50));
 
         // Climbing Commands
         // NamedCommands.registerCommand("Climb to L1 Command", GeneralCommands.climbToL1Command());

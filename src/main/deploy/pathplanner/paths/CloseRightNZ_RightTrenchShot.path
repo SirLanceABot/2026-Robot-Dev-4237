@@ -3,86 +3,55 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.728158092248908,
-        "y": 2.620705854257642
+        "x": 8.029,
+        "y": 3.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.596263020833334,
-        "y": 0.40636462882096014
+        "x": 7.504088888888891,
+        "y": 2.0255666666666663
       },
       "isLocked": false,
       "linkedName": "Close Right NZ"
     },
     {
       "anchor": {
-        "x": 4.060078864173945,
-        "y": 0.8
+        "x": 3.25,
+        "y": 0.85
       },
       "prevControl": {
-        "x": 7.231867469879518,
-        "y": 0.84410843373494
+        "x": 7.573366666666668,
+        "y": -0.3190222222222211
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Trench Shot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.25,
-      "rotationDegrees": -29.999999999999996
-    },
-    {
-      "waypointRelativePos": 0.75,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0.0
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    },
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0.24584717607973167,
-      "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 0.5,
-        "maxAngularVelocity": 720.0,
-        "maxAngularAcceleration": 1080.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Stop Intaking Command",
-      "waypointRelativePos": 0,
+      "name": "Ramp up Flywheel Command",
+      "waypointRelativePos": 0.3,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Stop Intaking Command"
+          "name": "Ramp up Flywheel Command"
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 0.5,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -90,7 +59,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Right NZ",
@@ -98,5 +67,5 @@
     "velocity": 0,
     "rotation": 90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

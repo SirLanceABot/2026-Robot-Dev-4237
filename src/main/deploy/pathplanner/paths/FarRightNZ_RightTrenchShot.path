@@ -3,69 +3,55 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.397737847222222,
+        "x": 7.0,
         "y": 3.505916666666667
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.413477810250891,
-        "y": 2.1283521197234347
+        "x": 7.0001999999999995,
+        "y": 1.0116666666666663
       },
       "isLocked": false,
-      "linkedName": "Far Right NZ"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.060078864173945,
-        "y": 0.8
+        "x": 3.25,
+        "y": 0.85
       },
       "prevControl": {
-        "x": 7.633178855938519,
-        "y": 0.5556008428158372
+        "x": 6.834553050843361,
+        "y": 0.21794658335547346
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Trench Shot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.9217310855263157,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0.0
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.85,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 2.0,
-        "maxAngularVelocity": 360.0,
-        "maxAngularAcceleration": 360.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Stop Intaking Command",
-      "waypointRelativePos": 0,
+      "name": "Ramp up Flywheel Command",
+      "waypointRelativePos": 0.5,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Stop Intaking Command"
+          "name": "Ramp up Flywheel Command"
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 0.5,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -73,7 +59,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Right NZ",
@@ -81,5 +67,5 @@
     "velocity": 0,
     "rotation": 90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
