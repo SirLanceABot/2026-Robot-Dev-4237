@@ -6,6 +6,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.motors.TalonFXLance;
@@ -174,6 +175,11 @@ public class Intake extends SubsystemBase
         RollersMotor.set(1.0);
     }
 
+    public void turnOnRollersAtSetSpeed(double speed)
+    {
+        RollersMotor.set(MathUtil.clamp(speed, 0.0, 1.0));
+    }
+
     /** 
      * This method makes the intake eject fuel
      */
@@ -231,6 +237,11 @@ public class Intake extends SubsystemBase
     public Command setVelocityCommand(DoubleSupplier speed)
     {
         return run( () -> setVelocity(speed.getAsDouble()));
+    }
+
+    public Command turnOnRollersAtSetSpeedCommand(double speed)
+    {
+        return run( ()-> turnOnRollersAtSetSpeed(speed));
     }
 
     public Command turnOnRollersCommand()

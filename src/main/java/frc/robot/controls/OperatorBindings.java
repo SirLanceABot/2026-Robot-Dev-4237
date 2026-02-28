@@ -128,10 +128,12 @@ public final class OperatorBindings {
     {
         Trigger aButton = controller.a();
 
-        // a ~ eject intake
-        aButton.onTrue(GeneralCommands.ejectFuelInIntakeCommand());
+        // A ~ eject intake
+        // aButton.onTrue(GeneralCommands.ejectFuelInIntakeCommand());
 
-        aButton.onFalse(GeneralCommands.stopEjectingFuelInIntakeCommand());
+        // aButton.onFalse(GeneralCommands.stopEjectingFuelInIntakeCommand());
+
+        aButton.onTrue(intake.turnOnRollersAtSetSpeedCommand(0.5));
     }
 
 
