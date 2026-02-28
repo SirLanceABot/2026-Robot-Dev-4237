@@ -16,19 +16,19 @@
     },
     {
       "anchor": {
-        "x": 4.060078864173945,
-        "y": 0.8
+        "x": 3.7195024920087487,
+        "y": 0.6287907974427993
       },
       "prevControl": {
-        "x": 6.849269531250001,
-        "y": 0.8654207899305562
+        "x": 6.499420602205225,
+        "y": 0.3923172097823408
       },
       "nextControl": {
-        "x": 1.763951107681312,
-        "y": 0.7461440577066413
+        "x": 1.1975095684724093,
+        "y": 0.8433239926816967
       },
       "isLocked": false,
-      "linkedName": "Right Trench Shot"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -47,11 +47,11 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.8209978070175438,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 180.0
     },
     {
       "waypointRelativePos": 0.9899602521929828,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [
@@ -97,13 +97,19 @@
     },
     {
       "name": "Shoot on the Move",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": 1.6966881229235877,
+      "waypointRelativePos": 1.15,
+      "endWaypointRelativePos": 1.65,
       "command": null
     },
     {
       "name": "Reset Intake Command",
-      "waypointRelativePos": 1.7,
+      "waypointRelativePos": 1.4,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Right Auto Climb L1 Command",
+      "waypointRelativePos": 2.0,
       "endWaypointRelativePos": null,
       "command": null
     }

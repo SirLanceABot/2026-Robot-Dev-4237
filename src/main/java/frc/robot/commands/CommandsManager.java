@@ -74,6 +74,7 @@ public class CommandsManager extends Command
         NamedCommands.registerCommand("Intake Command", GeneralCommands.intakeCommand());
         NamedCommands.registerCommand("Reset Intake Command", GeneralCommands.resetIntakeCommand());
         NamedCommands.registerCommand("Stop Intaking Command", GeneralCommands.stopIntakingCommand());
+        NamedCommands.registerCommand("Move Intake Out Command", GeneralCommands.moveIntakeOutCommand());
 
         // Ejecting Commands
         NamedCommands.registerCommand("Eject Fuel From Intake Command", GeneralCommands.ejectFuelInIntakeCommand());
@@ -84,10 +85,11 @@ public class CommandsManager extends Command
 
         // Scoring Commands
         NamedCommands.registerCommand("Shoot From Standstill Command", ScoringCommands.shootFromStandstillCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
-        NamedCommands.registerCommand("Shoot on the Move", ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));
+        NamedCommands.registerCommand("Shoot on the Move", ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator).repeatedly());
         NamedCommands.registerCommand("Physics Shoot on the Move", ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, indexigator, accelerator, flywheel));
         NamedCommands.registerCommand("Pass Command", ScoringCommands.passCommand(indexigator, accelerator, flywheel));
         NamedCommands.registerCommand("Ramp up Flywheel Command", GeneralCommands.rampUpFlywheelCommand(() -> 50));
+        NamedCommands.registerCommand("Angle Lock", drivetrain.angleLockDriveCommand(null, null, null, () -> (poseEstimator.getRotationToCalculatedTarget(poseEstimator.getAllianceHubPose()).getAsDouble())));
 
         // Climbing Commands
         // NamedCommands.registerCommand("Climb to L1 Command", GeneralCommands.climbToL1Command());

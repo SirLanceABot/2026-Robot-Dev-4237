@@ -16,22 +16,26 @@
     },
     {
       "anchor": {
-        "x": 3.25,
-        "y": 0.85
+        "x": 3.1852914703903097,
+        "y": 0.7925398511103641
       },
       "prevControl": {
-        "x": 7.573366666666668,
-        "y": -0.3190222222222211
+        "x": 7.462460622055853,
+        "y": 0.05099601488896388
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right Trench Shot"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 0.0
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 0.9211328125,
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
@@ -59,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -122.40356853646615
   },
   "reversed": false,
   "folder": "Right NZ",

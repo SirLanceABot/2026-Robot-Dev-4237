@@ -21,6 +21,12 @@
           "data": {
             "name": "Right Auto Climb L1 Command"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot on the Move"
+          }
         }
       ]
     }

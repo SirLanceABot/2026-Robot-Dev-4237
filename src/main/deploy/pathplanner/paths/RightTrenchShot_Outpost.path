@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5,
-        "y": 7.019583772665592
+        "x": 3.1852914703903097,
+        "y": 0.7925398511103641
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5872093460648156,
-        "y": 7.130832971643518
+        "x": 2.6021560081594886,
+        "y": 0.7819538610363395
       },
       "isLocked": false,
-      "linkedName": "Left Depot"
+      "linkedName": "Right Trench Shot"
     },
     {
       "anchor": {
@@ -20,29 +20,24 @@
         "y": 0.6248269675925928
       },
       "prevControl": {
-        "x": 3.4705232784794235,
-        "y": 0.6248269675925932
+        "x": 1.2345128490915211,
+        "y": 0.6676537790208612
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Outpost"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.27907072368421043,
-      "rotationDegrees": 180.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0.8,
-      "maxWaypointRelativePos": 1.0,
+      "maxWaypointRelativePos": 1,
       "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 1.0,
-        "maxAngularVelocity": 540.0,
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.5,
+        "maxAngularVelocity": 720.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
         "unlimited": false
@@ -52,26 +47,20 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Reset Intake Command",
-      "waypointRelativePos": 0,
+      "name": "Move Intake Out Command",
+      "waypointRelativePos": 0.6082894150831352,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Reset Intake Command"
+          "name": "Move Intake Out Command"
         }
       }
-    },
-    {
-      "name": "Shoot on the Move",
-      "waypointRelativePos": 0.09822726328903654,
-      "endWaypointRelativePos": 1.0,
-      "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -82,10 +71,10 @@
     "rotation": 89.5999504897805
   },
   "reversed": false,
-  "folder": "Depot",
+  "folder": "Right Trench Shot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -122.40356853646615
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

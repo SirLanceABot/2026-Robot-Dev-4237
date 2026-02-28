@@ -214,13 +214,13 @@ public class Intake extends SubsystemBase
 
     public void moveIntakeOut()
     {
-        PivotMotor.setControlPosition(9);
+        PivotMotor.setControlPosition(intakingPosition);
         // PivotMotor.set(0.03);
     }
     
     public void moveIntakeIn()
     {
-        PivotMotor.setControlPosition(0);
+        PivotMotor.setControlPosition(retractedPosition);
         // PivotMotor.set(-0.03);
     }
 

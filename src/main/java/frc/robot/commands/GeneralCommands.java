@@ -348,6 +348,22 @@ public class GeneralCommands
     }
 
     /**
+     * @author Greta
+     * @return moves intake out for hopper space (doesn't actually intake anything)
+     */
+    public static Command moveIntakeOutCommand()
+    {
+        if(intake != null)
+        {
+            return intake.moveIntakeOutCommand().withName("Move intake out");
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    /**
      * @author Logan
      * @return the thing
      */

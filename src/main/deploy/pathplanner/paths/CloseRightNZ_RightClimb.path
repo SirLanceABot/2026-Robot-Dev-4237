@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.62548046196796,
-        "y": 0.29454715779055185
+        "x": 8.859668257907133,
+        "y": -0.6074811784993268
       },
       "isLocked": false,
       "linkedName": "Close Right NZ"
@@ -31,36 +31,36 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.4053556743421051,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 180.0
     },
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.35,
-      "maxWaypointRelativePos": 0.75,
-      "constraints": {
-        "maxVelocity": 2.5,
-        "maxAcceleration": 2.5,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    },
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8984375,
+      "minWaypointRelativePos": 0.88,
       "maxWaypointRelativePos": 1,
       "constraints": {
         "maxVelocity": 0.25,
         "maxAcceleration": 0.25,
         "maxAngularVelocity": 360.0,
         "maxAngularAcceleration": 360.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.65,
+      "maxWaypointRelativePos": 0.88,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.5,
+        "maxAngularVelocity": 720.0,
+        "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
@@ -72,24 +72,50 @@
       "name": "Stop Intaking Command",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Stop Intaking Command"
+        }
+      }
     },
     {
       "name": "Shoot on the Move",
-      "waypointRelativePos": 0.502621470099668,
-      "endWaypointRelativePos": 0.9,
-      "command": null
+      "waypointRelativePos": 0.65,
+      "endWaypointRelativePos": 0.8753247476247031,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Shoot on the Move"
+        }
+      }
+    },
+    {
+      "name": "Angle Lock",
+      "waypointRelativePos": 0.65,
+      "endWaypointRelativePos": 0.88,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Angle Lock"
+        }
+      }
     },
     {
       "name": "Reset Intake Command",
-      "waypointRelativePos": 0.9,
+      "waypointRelativePos": 0.72,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Reset Intake Command"
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -105,5 +131,5 @@
     "velocity": 0,
     "rotation": 90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
