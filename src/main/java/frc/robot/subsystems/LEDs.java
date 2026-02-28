@@ -6,13 +6,17 @@ import static edu.wpi.first.units.Units.Second;
 import static frc.robot.Constants.ExampleSubsystem.*;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -58,6 +62,8 @@ public class LEDs
 
     private final AddressableLED led = new AddressableLED(Constants.LEDs.LED_PORT);
     private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(Constants.LEDs.LED_LENGTH);
+    private final List<LEDView> views = new ArrayList<>();
+
 
     // All Patterns
     private LEDPattern solid;
@@ -83,6 +89,267 @@ public class LEDs
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
 
+    public static class LEDView
+    {
+        private static final int MAX_HISTORY = 10;
+
+        private final int startIndex;
+        private final int endIndex;
+        private final AddressableLEDBufferView bufferView;
+        private final List<PatternState> history = new ArrayList<>();
+        private LEDPattern pattern = LEDPattern.solid(Color.kBlack);
+        private boolean isAnimated = false;
+        private boolean isDirty = true;
+
+        /**
+         * Helper class to store history states
+         */
+        private record PatternState(LEDPattern pattern, boolean isAnimated)
+        {
+        }
+
+        /**
+         * Creates the LED view
+         * 
+         * @param startIndex {@link Integer} The start index of the view
+         * @param endIndex {@link Integer} The end index of the view
+         */
+        private LEDView(int startIndex, int endIndex, AddressableLEDBufferView bufferView)
+        {
+            this.startIndex = startIndex;
+            this.endIndex = endIndex;
+            this.bufferView = bufferView;
+        }
+
+        /**
+         * Sets the pattern of the LED view
+         * 
+         * @param pattern {@link LEDPattern} The pattern to set to
+         * @param isAnimated {@link Boolean} Whether the pattern needs to be updated
+         *            constantly
+         */
+        private void setPattern(LEDPattern pattern, boolean isAnimated)
+        {
+            if (pattern == null)
+            {
+                throw new IllegalArgumentException("Pattern cannot be null");
+            }
+
+            if (this.pattern.equals(pattern) && this.isAnimated == isAnimated)
+            {
+                return;
+            }
+
+            if (history.size() >= MAX_HISTORY)
+            {
+                history.remove(0);
+            }
+            history.add(new PatternState(this.pattern, this.isAnimated));
+
+            this.pattern = pattern;
+            this.isAnimated = isAnimated;
+            this.isDirty = true;
+        }
+
+        /**
+         * Sets the pattern of the LED view to off
+         * 
+         * @return {@link Command} The command to set the leds in the LED view off
+         */
+        public Command setOffCommand()
+        {
+            return Commands.runOnce(() -> setViewColorSolid(80, Color.kBlack));
+        }
+
+        /**
+         * Sets the pattern of the LED view to a solid color
+         * 
+         * @param color {@link Color} The color to set the LED view to
+         */
+        private void setViewColorSolid(int brightness, Color color)
+        {
+            Objects.requireNonNull(color, "Color cannot be null");
+            setPattern(LEDPattern.solid(color).atBrightness(Percent.of(brightness)), false);
+        }
+
+        /**
+         * Sets the pattern of the LED view to a solid color
+         * 
+         * @param color {@link Color} The color to set the LED view to
+         * @return {@link Command} The command to set the leds in the LED view to a
+         *         solid color
+         */
+        public Command setViewColorSolidCommand(int brightness, Color color)
+        {
+            return Commands.runOnce(() -> setViewColorSolid(brightness, color));
+        }
+
+        /**
+         * Sets the pattern of the LED view to a scrolling gradient
+         * 
+         * @param colors {@link Color} The colors to set the LED view to
+         */
+        private void setViewColorGradient(int brightness, boolean isAnimated, Color... colors)
+        {
+            Objects.requireNonNull(colors, "Colors cannot be null");
+            setPattern(
+                    LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
+                            .scrollAtRelativeSpeed(Units.Percent.per(Units.Second).of(100))
+                            .atBrightness(Percent.of(brightness)),
+                    isAnimated);
+        }
+
+        /**
+         * Sets the pattern of the LED view to a scrolling gradient
+         * 
+         * @param colors {@link Color} The colors to set the LED view to
+         * @return {@link Command} The command to set the leds in the LED view to a
+         *         scrolling gradient
+         */
+        public Command setViewColorGradientCommand(int brightness, boolean isAnimated, Color... colors)
+        {
+            return Commands.runOnce(() -> setViewColorGradient(brightness, isAnimated, colors));
+        }
+
+        /**
+         * Sets the pattern of the LED view to a scrolling rainbow
+         */
+        private void setViewColorRainbow(int brightness, boolean isAnimated)
+        {
+            setPattern(
+                    LEDPattern.rainbow(255, 255)
+                            .scrollAtRelativeSpeed(Units.Percent.per(Units.Second).of(100))
+                            .atBrightness(Percent.of(brightness)),
+                    isAnimated);
+        }
+
+        /**
+         * Sets the pattern of the LED view to a scrolling rainbow
+         * 
+         * @return {@link Command} The command to set the leds in the LED view to a
+         *         scrolling rainbow
+         */
+        public Command setViewColorRainbowCommand(int brightness, boolean isAnimated)
+        {
+            return Commands.runOnce(() -> setViewColorRainbow(brightness, isAnimated));
+        }
+
+        /**
+         * Modifies the current pattern of the LED view to blink
+         * 
+         * @param seconds {@link Double} The amount of seconds between each blink
+         */
+        private void setViewColorBlink(int brightness, Color color, double seconds)
+        {
+            setViewColorSolid(brightness, color);
+            setPattern(this.pattern.blink(Units.Seconds.of(seconds)), true);
+        }
+
+        /**
+         * Modifies the current pattern of the LED view to blink
+         * 
+         * @param seconds {@link Double} The amount of seconds between each blink
+         * @return {@link Command} The command to set the leds in the LED view to blink
+         */
+        public Command setViewColorBlinkCommand(int brightness, Color color, double seconds)
+        {
+            return Commands.runOnce(() -> setViewColorBlink(brightness, color, seconds));
+        }
+
+        /**
+         * Modifies the current pattern of the LED view to blink
+         * 
+         * @param offSeconds {@link Double} The amount of seconds to stay off
+         * @param onSeconds {@link Double} The amount of seconds to stay on
+         */
+        private void setViewColorBlink(int brightness, Color color, double offSeconds, double onSeconds)
+        {
+            setViewColorSolid(brightness, color);
+            setPattern(this.pattern.blink(Units.Seconds.of(offSeconds), Units.Seconds.of(onSeconds)).atBrightness(Percent.of(brightness)), true);
+        }
+
+        /**
+         * Modifies the current pattern of the LED view to blink
+         * 
+         * @param offSeconds {@link Double} The amount of seconds to stay off
+         * @param onSeconds {@link Double} The amount of seconds to stay on
+         * @return {@link Command} The command to set the leds in the LED view to blink
+         */
+        public Command setViewColorBlinkCommand(int brightness, Color color, double offSeconds, double onSeconds)
+        {
+            return Commands.runOnce(() -> setViewColorBlink(brightness, color, offSeconds, onSeconds));
+        }
+
+        /**
+         * Modifies the current pattern of the LED view to breathe
+         * 
+         * @param seconds {@link Double} The amount of seconds between each breathe
+         */
+        private void setViewColorBreathe(int brightness, Color color, double seconds)
+        {
+            setViewColorSolid(brightness, color);
+            setPattern(this.pattern.breathe(Units.Seconds.of(seconds)), true);
+        }
+
+        /**
+         * Modifies the current pattern of the LED view to breathe
+         * 
+         * @param seconds {@link Double} The amount of seconds between each breathe
+         * @return {@link Command} The command to set the leds in the LED view to
+         *         breathe
+         */
+        public Command setViewColorBreatheCommand(int brightness, Color color, double seconds)
+        {
+            return Commands.runOnce(() -> setViewColorBreathe(brightness, color, seconds));
+        }
+
+        /**
+         * Undos the last change to the LED view's pattern
+         */
+        public void undo()
+        {
+            if (!history.isEmpty())
+            {
+                int lastIndex = history.size() - 1;
+                PatternState previousState = history.get(lastIndex);
+
+                this.pattern = previousState.pattern;
+                this.isAnimated = previousState.isAnimated;
+                this.isDirty = true;
+
+                history.remove(lastIndex);
+            }
+        }
+
+        /**
+         * Undos the last change to the LED view's pattern
+         * 
+         * @return {@link Command} The command to undo the last change
+         */
+        public Command undoCommand()
+        {
+            return Commands.runOnce(() -> undo());
+        }
+
+        /**
+         * Clears the LED view's history
+         */
+        public void clear()
+        {
+            history.clear();
+        }
+
+        /**
+         * Clears the LED view's history
+         * 
+         * @return {@link Command} The command to undo the last change
+         */
+        public Command clearCommand()
+        {
+            return Commands.runOnce(() -> clear());
+        }
+    }
+
     /** 
      * Creates a new LEDs subsystem. 
      */
@@ -101,6 +368,43 @@ public class LEDs
 
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
+
+    public LEDView createView(int startIndex, int endIndex)
+    {
+        if (startIndex < 0 || endIndex >= ledBuffer.getLength() || startIndex > endIndex)
+        {
+            throw new IllegalArgumentException("Invalid LED view bounds");
+        }
+
+        for (LEDView existing : views)
+        {
+            if (existing.startIndex == startIndex && existing.endIndex == endIndex)
+            {
+                return existing;
+            }
+
+            if (startIndex <= existing.endIndex && endIndex >= existing.startIndex)
+            {
+                throw new IllegalArgumentException(String.format("View [%s, %s] overlaps with existing view [%s, %s]",
+                        startIndex, endIndex, existing.startIndex, existing.endIndex));
+            }
+        }
+
+        AddressableLEDBufferView bufferView = ledBuffer.createView(startIndex, endIndex);
+        LEDView view = new LEDView(startIndex, endIndex, bufferView);
+        views.add(view);
+
+        return view;
+    }
+
+    public void deleteView(LEDView view)
+    {
+        view.pattern = LEDPattern.solid(Color.kBlack);
+        view.pattern.applyTo(view.bufferView);
+        led.setData(ledBuffer);
+
+        views.remove(view);
+    }
 
     private void configLEDs()
     {
@@ -298,6 +602,22 @@ public class LEDs
         {
             System.out.println("LED animation running");
             actionPattern.run();
+        }
+        boolean dirty = false;
+
+        for (LEDView view : views)
+        {
+            if (view.isAnimated || view.isDirty)
+            {
+                view.pattern.applyTo(view.bufferView);
+                view.isDirty = false;
+                dirty = true;
+            }
+        }
+
+        if (dirty)
+        {
+            led.setData(ledBuffer);
         }
 
         led.setData(ledBuffer);

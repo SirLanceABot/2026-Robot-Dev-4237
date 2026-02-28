@@ -11,9 +11,12 @@ import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
+import frc.robot.subsystems.LEDs;
 import frc.robot.commands.ScoringCommands;
 import frc.robot.sensors.CANRange;
 import frc.robot.sensors.Hopper;
@@ -64,9 +67,15 @@ public class RobbieJTest implements Test
     private Hopper hopper;
     private final CommandXboxController controller = new CommandXboxController(0);
     private Debouncer debouncer = new Debouncer(0.5);
-
+    private LEDs leds = null;
     double distance;
+    LEDs.LEDView leftView;
+    LEDs.LEDView rightView;
 
+    LEDs.LEDView view1;
+    LEDs.LEDView view2;
+    LEDs.LEDView view3;
+    LEDs.LEDView view4;
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
 
@@ -80,18 +89,19 @@ public class RobbieJTest implements Test
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.robotContainer = robotContainer;
-        // agitator = robotContainer.getAgitator();
-        intake = robotContainer.getIntake();
-        indexigator = robotContainer.getIndexigator();
-        accelerator = robotContainer.getAccelerator();
-        flywheel = robotContainer.getFlywheel();
-        hopperCamera = robotContainer.getHopperCamera();
-        climb = robotContainer.getClimb();
-        laserCan = robotContainer.getLaserCanSensor();
-        rangerDistanceSensor = robotContainer.getRangerDistanceSensor();
-        // canrange = robotContainer.getCANrange(0); 
-        // canrange1 = robotContainer.getCANrange(1); 
-        hopper = robotContainer.getHopper();
+        // // agitator = robotContainer.getAgitator();
+        // intake = robotContainer.getIntake();
+        // indexigator = robotContainer.getIndexigator();
+        // accelerator = robotContainer.getAccelerator();
+        // flywheel = robotContainer.getFlywheel();
+        // hopperCamera = robotContainer.getHopperCamera();
+        // climb = robotContainer.getClimb();
+        // laserCan = robotContainer.getLaserCanSensor();
+        // rangerDistanceSensor = robotContainer.getRangerDistanceSensor();
+        // // canrange = robotContainer.getCANrange(0); 
+        // // canrange1 = robotContainer.getCANrange(1); 
+        // hopper = robotContainer.getHopper();
+        leds = robotContainer.getLEDs();
 
 
         System.out.println("  Constructor Finished: " + fullClassName);
@@ -101,10 +111,10 @@ public class RobbieJTest implements Test
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
 
-    private BooleanSupplier isHopperFullSupplier()
-    {
-        return () -> (canrange.isBallDetected(29.5) && canrange1.isBallDetected(29.5));
-    }
+    // private BooleanSupplier isHopperFullSupplier()
+    // {
+    //     return () -> (canrange.isBallDetected(29.5) && canrange1.isBallDetected(29.5));
+    // }
 
     //     private BooleanSupplier isHopperFullSupplier()
     // {
@@ -129,7 +139,8 @@ public class RobbieJTest implements Test
 
     // *** OVERRIDDEN METHODS ***
     // Put all methods that are Overridden here
-
+    // LEDs.LEDView leftView = leds.createView(0, 17);
+    // LEDs.LEDView rightView = leds.createView(18, 35);
     /**
      * This method runs one time before the periodic() method.
      */
@@ -148,6 +159,28 @@ public class RobbieJTest implements Test
         // controller.x().onTrue(GeneralCommands.intakeUntilFullCommand());
         // controller.b().onTrue(intake.stopCommand());
         // controller.a().onTrue(indexigator.stopCommand());
+        // LEDs.LEDView leftView = leds.createView(0, 17);
+        // LEDs.LEDView rightView = leds.createView(18, 35);
+
+        // controller.a().onTrue(leftView.setViewColorSolidCommand(80, Color.kDarkSlateBlue));
+        // controller.a().onTrue(leftView.setViewColorGradientCommand(80, false, Color.kRed, Color.kLime));
+        // controller.b().onTrue(rightView.setViewColorRainbowCommand(80, false));
+        // controller.x().onTrue(leftView.setViewColorGradientCommand(80, true, Color.kRed, Color.kLime));
+
+        
+
+        // controller.x().onTrue(leftView.setViewColorBlinkCommand(40, Color.kHotPink, 0.5));
+        // controller.y().onTrue(rightView.setViewColorBreatheCommand(40, Color.kLime, 0.5));
+        // controller.back().onTrue(leftView.setOffCommand());
+        // controller.start().onTrue(rightView.setOffCommand());
+        // controller.a().onTrue(leds.setColorGradientCommand(80, Color.kAzure, Color.kRed, Color.kLime, Color.kIndigo));
+        // controller.a().onTrue(leds.setColorSolidCommand(80, Color.kAliceBlue));
+        // controller.b().onTrue(leds.setColorSolidCommand(20, Color.kAliceBlue));
+        // controller.x().onTrue(leds.offCommand());
+        // controller.b().onTrue(leds.setColorRainbowCommand());
+        // controller.x().onTrue(leds.setColorBlinkCommand(80, Color.kAliceBlue));
+        // controller.y().onTrue(leds.setColorBreatheCommand(80, Color.kBeige));
+
     }
 
     /**
@@ -155,6 +188,50 @@ public class RobbieJTest implements Test
      */
     public void periodic()
     {
+        if(controller.leftBumper().getAsBoolean())
+        {
+            if(view1 != null && view2 != null && view3 != null && view4 != null)
+            {
+                leds.deleteView(view1);
+                leds.deleteView(view2);
+                leds.deleteView(view3);
+                leds.deleteView(view4);
+            }
+            
+            leftView = leds.createView(0, 17);
+            rightView = leds.createView(18, 35);
+
+            if(controller.a().getAsBoolean())
+                leftView.setViewColorGradientCommand(80, true, Color.kRed, Color.kLime).schedule();
+            if(controller.b().getAsBoolean())
+                rightView.setViewColorRainbowCommand(80, true).schedule();
+        }
+
+        if(controller.rightBumper().getAsBoolean())
+        {
+            if(leftView != null && rightView != null)
+            {
+                leds.deleteView(leftView);
+                leds.deleteView(rightView);
+            }
+
+            // leds.setColorSolidCommand(80, Color.kRed);
+
+            view1 = leds.createView(0, 8);
+            view2 = leds.createView(9, 17);
+            view3 = leds.createView(18, 26);
+            view4 = leds.createView(27, 35);
+
+            if(controller.povDown().getAsBoolean())
+                view1.setViewColorSolidCommand(80, Color.kLime).schedule();
+            if(controller.povUp().getAsBoolean())
+                view2.setViewColorSolidCommand(80, Color.kLime).schedule();
+            if(controller.povLeft().getAsBoolean())
+                view3.setViewColorSolidCommand(80, Color.kLime).schedule();
+            if(controller.povRight().getAsBoolean())
+                view4.setViewColorSolidCommand(80, Color.kLime).schedule();
+        }
+
         // System.err.println("isYellow:" + hopperCamera.isHoppperFullSupplier().getAsBoolean());
         // SmartDashboard.putNumber("Short End sensor", canrange.getDistanceMeters());
         // SmartDashboard.putNumber("Long End sensor", canrange1.getDistanceMeters());
