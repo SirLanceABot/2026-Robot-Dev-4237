@@ -596,19 +596,25 @@ public class GeneralCommands
     {
         if(drivetrain != null && indexigator != null && accelerator != null && flywheel != null && poseEstimator != null)
         {
+            DoubleSupplier flywheelSpeed = () -> flywheel.getVelocity();
             Supplier<Pose2d> robotPose =  () -> drivetrain.getState().Pose;
             Supplier<ChassisSpeeds> velocity = () -> ChassisSpeeds.fromRobotRelativeSpeeds(drivetrain.getRobotRelativeSpeeds(), robotPose.get().getRotation());
 
-            Pose2d calculatedTarget = poseEstimator.getCalculatedTargetPose( // Pose of our caluclated target, adjusting for robot velo
+            Supplier<Pose2d> calculatedTarget = () -> poseEstimator.getCalculatedTargetPose( // Pose of our caluclated target, adjusting for robot velo
                 poseEstimator.getAlliancePassingLocationPose(), 
                 robotPose.get(), 
                 velocity.get());
 
-            DoubleSupplier distance = () -> (poseEstimator.getDistanceToTarget(robotPose.get(), calculatedTarget).getAsDouble());
+            DoubleSupplier distance = () -> (poseEstimator.getDistanceToTarget(robotPose.get(), calculatedTarget.get()).getAsDouble());
             DoubleSupplier shooterPower = () -> (flywheel.getShotPower(distance.getAsDouble() * 3.281)); // meters -> feet //TODO Add values to the ShotPower map for passing
 
             return
-            flywheel.setControlVelocityCommand(() -> shooterPower.getAsDouble()).until(flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10))     // TODO tune tolerance
+            Commands.parallel(
+                Commands.either(
+                    GeneralCommands.rampUpFlywheelCommand(() -> shooterPower.getAsDouble()).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean()), 
+                    flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean()),
+                    () -> flywheelSpeed.getAsDouble() < 1.0))     // TODO tune tolerance
+            
             .andThen(
                 Commands.parallel(
                     indexigator.setForwardCommand(), // rpm

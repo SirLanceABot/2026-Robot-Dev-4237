@@ -229,11 +229,11 @@ public class PoseEstimator extends SubsystemBase
     Pose2d redHubPose = new Pose2d(new Translation2d(11.92, 4.030), new Rotation2d(0));
     Pose2d blueHubPose = new Pose2d(new Translation2d(4.62, 4.030), new Rotation2d(0));
 
-    Pose2d redLeftPassLocationPose = new Pose2d(new Translation2d(16.236188, 0.3048), new Rotation2d());
-    Pose2d redRightPassLocationPose = new Pose2d(new Translation2d(16.236188, 7.764526), new Rotation2d());
+    Pose2d redLeftPassLocationPose = new Pose2d(new Translation2d(15.54, 1.0), new Rotation2d());
+    Pose2d redRightPassLocationPose = new Pose2d(new Translation2d(15.54, 7.069), new Rotation2d());
     
-    Pose2d blueLeftPassLocationPose = new Pose2d(new Translation2d(0.3048, 0.3048), new Rotation2d());
-    Pose2d blueRightPassLocationPose = new Pose2d(new Translation2d(0.3048, 7.764526), new Rotation2d());
+    Pose2d blueLeftPassLocationPose = new Pose2d(new Translation2d(1.0, 7.069), new Rotation2d());
+    Pose2d blueRightPassLocationPose = new Pose2d(new Translation2d(1.0, 1.0), new Rotation2d());
 
     public Pose2d getRedHubPose()
     {
@@ -579,6 +579,11 @@ public class PoseEstimator extends SubsystemBase
                     }
 
                     if(distToTag >= 3)
+                    {
+                        rejectUpdate = true;
+                    }
+
+                    if(distToTag >= 1.5 && camera.getTagCount() < 2)
                     {
                         rejectUpdate = true;
                     }

@@ -164,7 +164,7 @@ public class PathPlannerLance
                                             .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
                 new PPHolonomicDriveController(
                     new PIDConstants(1.25, 0, 0),
-                    new PIDConstants(1.25, 0, 0) // used to be 7
+                    new PIDConstants(1.65, 0, 0) // used to be 7
                 ),
                 config,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
