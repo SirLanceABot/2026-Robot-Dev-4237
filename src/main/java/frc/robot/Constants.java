@@ -126,6 +126,12 @@ public final class Constants
     public static class LEDs
     {
         public static final int LED_LENGTH = 36;
+
+        public static final int VEIW1END = (LED_LENGTH/4);
+        public static final int VEIW2END = 2*(LED_LENGTH/4);
+        public static final int VEIW3END = 3*(LED_LENGTH/4);
+
+
         public static final int LED_PORT = 0;
     }
 

@@ -52,6 +52,11 @@ public class Robot extends TimedRobot
     private String autoName = "Left2Cycle";
     private LEDs leds;
 
+    // public static LEDs.LEDView view1;
+    // public static LEDs.LEDView view2;
+    // public static LEDs.LEDView view3;
+    // public static LEDs.LEDView view4; 
+
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -138,6 +143,14 @@ public class Robot extends TimedRobot
                     PathPlannerLance.initializePose(autoName);
                 }
             }
+
+            if(leds !=null)
+            {
+                // view1 = leds.createView(0, Constants.LEDs.VEIW1END);
+                // view2 = leds.createView(Constants.LEDs.VEIW1END + 1, Constants.LEDs.VEIW2END);
+                // view3 = leds.createView(Constants.LEDs.VEIW2END + 1, Constants.LEDs.VEIW3END);
+                // view4 = leds.createView(Constants.LEDs.VEIW3END + 1, Constants.LEDs.LED_LENGTH); 
+            }
         }
     }
 
@@ -171,7 +184,15 @@ public class Robot extends TimedRobot
     /** This function is called once each time the robot exits Disabled mode. */
     @Override
     public void disabledExit() 
-    {}
+    {
+        // if(isPreMatch)
+        // {
+        //     if(leds != null)  
+        //     {
+        //         leds.deleteAllViews();
+        //     }
+        // }
+    }
 
     // public void initializePose()
     // {
@@ -205,6 +226,8 @@ public class Robot extends TimedRobot
             path.schedule();
             System.out.println("Scheduled Auto Command");
         }
+
+        
     }
 
     /** This function is called periodically during Autonomous mode. */
