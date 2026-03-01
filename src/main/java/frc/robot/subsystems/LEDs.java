@@ -91,22 +91,12 @@ public class LEDs
 
     public static class LEDView
     {
-        private static final int MAX_HISTORY = 10;
-
         private final int startIndex;
         private final int endIndex;
         private final AddressableLEDBufferView bufferView;
-        private final List<PatternState> history = new ArrayList<>();
         private LEDPattern pattern = LEDPattern.solid(Color.kBlack);
         private boolean isAnimated = false;
-        private boolean isDirty = true;
-
-        /**
-         * Helper class to store history states
-         */
-        private record PatternState(LEDPattern pattern, boolean isAnimated)
-        {
-        }
+        private boolean needsUpdate = true;
 
         /**
          * Creates the LED view
@@ -140,15 +130,9 @@ public class LEDs
                 return;
             }
 
-            if (history.size() >= MAX_HISTORY)
-            {
-                history.remove(0);
-            }
-            history.add(new PatternState(this.pattern, this.isAnimated));
-
             this.pattern = pattern;
             this.isAnimated = isAnimated;
-            this.isDirty = true;
+            this.needsUpdate = true;
         }
 
         /**
@@ -166,7 +150,7 @@ public class LEDs
          * 
          * @param color {@link Color} The color to set the LED view to
          */
-        private void setViewColorSolid(int brightness, Color color)
+        public void setViewColorSolid(int brightness, Color color)
         {
             Objects.requireNonNull(color, "Color cannot be null");
             setPattern(LEDPattern.solid(color).atBrightness(Percent.of(brightness)), false);
@@ -302,52 +286,6 @@ public class LEDs
         {
             return Commands.runOnce(() -> setViewColorBreathe(brightness, color, seconds));
         }
-
-        /**
-         * Undos the last change to the LED view's pattern
-         */
-        public void undo()
-        {
-            if (!history.isEmpty())
-            {
-                int lastIndex = history.size() - 1;
-                PatternState previousState = history.get(lastIndex);
-
-                this.pattern = previousState.pattern;
-                this.isAnimated = previousState.isAnimated;
-                this.isDirty = true;
-
-                history.remove(lastIndex);
-            }
-        }
-
-        /**
-         * Undos the last change to the LED view's pattern
-         * 
-         * @return {@link Command} The command to undo the last change
-         */
-        public Command undoCommand()
-        {
-            return Commands.runOnce(() -> undo());
-        }
-
-        /**
-         * Clears the LED view's history
-         */
-        public void clear()
-        {
-            history.clear();
-        }
-
-        /**
-         * Clears the LED view's history
-         * 
-         * @return {@link Command} The command to undo the last change
-         */
-        public Command clearCommand()
-        {
-            return Commands.runOnce(() -> clear());
-        }
     }
 
     /** 
@@ -406,6 +344,11 @@ public class LEDs
         views.remove(view);
     }
 
+    public void deleteAllViews()
+    {
+        views.clear();
+    }
+
     private void configLEDs()
     {
         led.start();
@@ -425,7 +368,7 @@ public class LEDs
     {
         solid = LEDPattern.solid(color).atBrightness(Percent.of(brightness));
         solid.applyTo(ledBuffer);
-        this.color = color;
+        LEDs.color = color;
     }
 
     /**
@@ -439,7 +382,7 @@ public class LEDs
         base = LEDPattern.solid(color).atBrightness(Percent.of(brightness));
         blink = base.breathe(Units.Seconds.of(1));
         blink.applyTo(ledBuffer);
-        this.color = color;
+        LEDs.color = color;
     }
     
     /**
@@ -451,7 +394,7 @@ public class LEDs
     {
         gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors);
         gradient.applyTo(ledBuffer);
-        this.color = colors[0];
+        LEDs.color = colors[0];
     }
 
     /*C
@@ -464,7 +407,7 @@ public class LEDs
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
         breathe = base.breathe(Units.Seconds.of(2));
         breathe.applyTo(ledBuffer);
-        this.color = colors[0];
+        LEDs.color = colors[0];
     }
 
     /**
@@ -476,7 +419,7 @@ public class LEDs
     {
         // base = LEDPattern.progressMaskLayer(() -> Climb.getPosition() / Climb.climbPosition.kL1);
         progressBar.applyTo(ledBuffer);
-        this.color = colors[0];
+        LEDs.color = colors[0];
     }
 
     /**
@@ -485,7 +428,7 @@ public class LEDs
     private void setColorRainbow()
     {
         rainbow.applyTo(ledBuffer);
-        this.color = Color.kBlack;
+        LEDs.color = Color.kBlack;
     }
 
     private void setMovingRainbow()
@@ -494,14 +437,14 @@ public class LEDs
         mask = LEDPattern.steps(maskSteps).scrollAtRelativeSpeed(Percent.per(Second).of(200));
         movingRainbow = base.mask(mask);
         movingRainbow.applyTo(ledBuffer);
-        this.color = Color.kBlack;
+        LEDs.color = Color.kBlack;
     }
 
     private void off()
     {
         off.applyTo(ledBuffer);
         led.setData(ledBuffer);
-        this.color = Color.kBlack;
+        LEDs.color = Color.kBlack;
     }
 
     // COMMANDS
@@ -603,22 +546,23 @@ public class LEDs
             System.out.println("LED animation running");
             actionPattern.run();
         }
-        boolean dirty = false;
+
+        // boolean needsUpdate = false;
 
         for (LEDView view : views)
         {
-            if (view.isAnimated || view.isDirty)
+            if (view.isAnimated || view.needsUpdate)
             {
                 view.pattern.applyTo(view.bufferView);
-                view.isDirty = false;
-                dirty = true;
+                view.needsUpdate = false;
+                // needsUpdate = true;
             }
         }
 
-        if (dirty)
-        {
-            led.setData(ledBuffer);
-        }
+        // if (needsUpdate)
+        // {
+        //     led.setData(ledBuffer);
+        // }
 
         led.setData(ledBuffer);
     }

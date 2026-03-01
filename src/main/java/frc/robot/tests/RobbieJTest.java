@@ -159,14 +159,16 @@ public class RobbieJTest implements Test
         // controller.x().onTrue(GeneralCommands.intakeUntilFullCommand());
         // controller.b().onTrue(intake.stopCommand());
         // controller.a().onTrue(indexigator.stopCommand());
-        // LEDs.LEDView leftView = leds.createView(0, 17);
-        // LEDs.LEDView rightView = leds.createView(18, 35);
+        LEDs.LEDView leftView = leds.createView(0, 16);
+        LEDs.LEDView rightView = leds.createView(18, 35);
 
-        // controller.a().onTrue(leftView.setViewColorSolidCommand(80, Color.kDarkSlateBlue));
-        // controller.a().onTrue(leftView.setViewColorGradientCommand(80, false, Color.kRed, Color.kLime));
-        // controller.b().onTrue(rightView.setViewColorRainbowCommand(80, false));
-        // controller.x().onTrue(leftView.setViewColorGradientCommand(80, true, Color.kRed, Color.kLime));
-
+        controller.a().onTrue(rightView.setViewColorSolidCommand(80, Color.kRed));
+        controller.b().onTrue(leftView.setViewColorSolidCommand(80, Color.kRed));
+        controller.y().onTrue(rightView.setViewColorSolidCommand(80, Color.kLime));
+        // controller.x().onTrue(leftView.setViewColorSolidCommand(80, Color.kLime));
+        controller.x().onTrue(leftView.setViewColorRainbowCommand(100,true));
+        controller.back().onTrue(leds.setColorBreatheCommand(80, Color.kYellow));
+        controller.start().onTrue(leds.offCommand());
         
 
         // controller.x().onTrue(leftView.setViewColorBlinkCommand(40, Color.kHotPink, 0.5));
@@ -188,49 +190,49 @@ public class RobbieJTest implements Test
      */
     public void periodic()
     {
-        if(controller.leftBumper().getAsBoolean())
-        {
-            if(view1 != null && view2 != null && view3 != null && view4 != null)
-            {
-                leds.deleteView(view1);
-                leds.deleteView(view2);
-                leds.deleteView(view3);
-                leds.deleteView(view4);
-            }
+        // if(controller.leftBumper().getAsBoolean())
+        // {
+        //     if(view1 != null && view2 != null && view3 != null && view4 != null)
+        //     {
+        //         leds.deleteView(view1);
+        //         leds.deleteView(view2);
+        //         leds.deleteView(view3);
+        //         leds.deleteView(view4);
+        //     }
             
-            leftView = leds.createView(0, 17);
-            rightView = leds.createView(18, 35);
+        //     leftView = leds.createView(0, 17);
+        //     rightView = leds.createView(18, 35);
 
-            if(controller.a().getAsBoolean())
-                leftView.setViewColorGradientCommand(80, true, Color.kRed, Color.kLime).schedule();
-            if(controller.b().getAsBoolean())
-                rightView.setViewColorRainbowCommand(80, true).schedule();
-        }
+        //     if(controller.a().getAsBoolean())
+        //         leftView.setViewColorGradientCommand(80, true, Color.kRed, Color.kLime).schedule();
+        //     if(controller.b().getAsBoolean())
+        //         rightView.setViewColorRainbowCommand(80, true).schedule();
+        // }
 
-        if(controller.rightBumper().getAsBoolean())
-        {
-            if(leftView != null && rightView != null)
-            {
-                leds.deleteView(leftView);
-                leds.deleteView(rightView);
-            }
+        // if(controller.rightBumper().getAsBoolean())
+        // {
+        //     if(leftView != null && rightView != null)
+        //     {
+        //         leds.deleteView(leftView);
+        //         leds.deleteView(rightView);
+        //     }
 
-            // leds.setColorSolidCommand(80, Color.kRed);
+        //     // leds.setColorSolidCommand(80, Color.kRed);
 
-            view1 = leds.createView(0, 8);
-            view2 = leds.createView(9, 17);
-            view3 = leds.createView(18, 26);
-            view4 = leds.createView(27, 35);
+        //     view1 = leds.createView(0, 8);
+        //     view2 = leds.createView(9, 17);
+        //     view3 = leds.createView(18, 26);
+        //     view4 = leds.createView(27, 35);
 
-            if(controller.povDown().getAsBoolean())
-                view1.setViewColorSolidCommand(80, Color.kLime).schedule();
-            if(controller.povUp().getAsBoolean())
-                view2.setViewColorSolidCommand(80, Color.kLime).schedule();
-            if(controller.povLeft().getAsBoolean())
-                view3.setViewColorSolidCommand(80, Color.kLime).schedule();
-            if(controller.povRight().getAsBoolean())
-                view4.setViewColorSolidCommand(80, Color.kLime).schedule();
-        }
+        //     if(controller.povDown().getAsBoolean())
+        //         view1.setViewColorSolidCommand(80, Color.kLime).schedule();
+        //     if(controller.povUp().getAsBoolean())
+        //         view2.setViewColorSolidCommand(80, Color.kLime).schedule();
+        //     if(controller.povLeft().getAsBoolean())
+        //         view3.setViewColorSolidCommand(80, Color.kLime).schedule();
+        //     if(controller.povRight().getAsBoolean())
+        //         view4.setViewColorSolidCommand(80, Color.kLime).schedule();
+        // }
 
         // System.err.println("isYellow:" + hopperCamera.isHoppperFullSupplier().getAsBoolean());
         // SmartDashboard.putNumber("Short End sensor", canrange.getDistanceMeters());
