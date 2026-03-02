@@ -88,24 +88,24 @@ public class LoganBTest implements Test
      */
     public void periodic()
     {
-        DoubleSupplier flywheelSpeed = () -> flywheel.getVelocity();
+        // DoubleSupplier flywheelSpeed = () -> flywheel.getVelocity();
         // controller.a().onTrue(
         //     ScoringCommands.shootFromStandstillCommand(agitator, acceleartor, flywheel)
         // );
 
-        controller.a().whileTrue(
-            GeneralCommands.intakeCommand()
-        );
-        controller.a().onFalse(
-            intake.stopCommand()
-        );
+        // controller.a().whileTrue(
+        //     GeneralCommands.intakeCommand()
+        // );
+        // controller.a().onFalse(
+        //     intake.stopCommand()
+        // );
 
-        controller.b().whileTrue(
-            GeneralCommands.resetIntakeCommand()
-        );
-        controller.b().onFalse(
-            intake.stopCommand()
-        );
+        // controller.b().whileTrue(
+        //     GeneralCommands.resetIntakeCommand()
+        // );
+        // controller.b().onFalse(
+        //     intake.stopCommand()
+        // );
 
         // controller.start().whileTrue(
         //     Commands.parallel(
@@ -119,6 +119,34 @@ public class LoganBTest implements Test
         //         accelerator.stopCommand()
         //     )
         // );
+
+        controller.a().whileTrue(
+            flywheel.setControlVelocityCommand(() -> 40.0)
+        );
+        controller.a().onFalse(
+            flywheel.stopCommand()
+        );
+
+        controller.b().whileTrue(
+            flywheel.setControlVelocityCommand(() -> 50.0)
+        );
+        controller.b().onFalse(
+            flywheel.stopCommand()
+        );
+
+        controller.y().whileTrue(
+            flywheel.setControlVelocityCommand(() -> 60.0)
+        );
+        controller.y().onFalse(
+            flywheel.stopCommand()
+        );
+
+        controller.x().whileTrue(
+            flywheel.setCommand()
+        );
+        controller.x().onFalse(
+            flywheel.stopCommand()
+        );
 
         System.out.println("flywheel speed: " + flywheel.getVelocity());
         // controller.a().onTrue(

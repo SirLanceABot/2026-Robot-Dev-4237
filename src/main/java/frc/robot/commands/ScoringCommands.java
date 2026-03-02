@@ -186,11 +186,7 @@ public class ScoringCommands
             DoubleSupplier shooterPower = () -> (flywheel.getShotPower(distance.getAsDouble() * 3.281)); // meters -> feet
 
             return
-            Commands.parallel(
-                Commands.either(
-                    GeneralCommands.rampUpFlywheelCommand(() -> shooterPower.getAsDouble()).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean()), 
-                    flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean()),
-                    () -> flywheelSpeed.getAsDouble() < 1.0))
+            flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean())
             .alongWith(GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue))
                    
             .andThen(
