@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 4.078938870408546,
-        "y": 7.282
+        "x": 3.23,
+        "y": 7.302
       },
       "prevControl": {
-        "x": 8.663033333333335,
-        "y": 7.481599999999999
+        "x": 7.814094462924789,
+        "y": 7.501599999999999
       },
       "nextControl": null,
       "isLocked": false,
@@ -73,7 +73,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 110.0
   },
   "reversed": false,
   "folder": "Left NZ",

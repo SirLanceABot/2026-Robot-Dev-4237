@@ -20,6 +20,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.controls.TakeBackHalfController;
@@ -54,11 +55,11 @@ public class Flywheel extends SubsystemBase
     private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
 
     // PID constants
-    private final double kP = 0.8; // 5
+    private final double kP = 4.5; // 5
     private final double kI = 0.0; // 0.4
-    private final double kD = 0.0; // 0.0
-    private final double kS = 0.022; // 0.016
-    private final double kV = 0.19;
+    private final double kD = 0.045; // 0.0
+    private final double kS = 0.02; // 0.016
+    private final double kV = 0.0; //0.0105 * 12;
     private final double kA = 0.00;
 
     private final double FLYWHEEL_DIAMETER_FEET  = (4.0 / 12.0); // 4.25 in
@@ -89,6 +90,7 @@ public class Flywheel extends SubsystemBase
         
         System.out.println("  Constructor Started:  " + fullClassName);
 
+        SmartDashboard.putNumber("Flywheek kV", 0);
         configMotors();
         configShotMap();
 
@@ -111,9 +113,10 @@ public class Flywheel extends SubsystemBase
         followMotor.setupCoastMode();
 
         // leadMotor.setupPIDController(0, kP, kI, kD, kV);
-        leadMotor.setupPIDController(0, kP, kI, kD, kS, kV, kA);
-        leadMotor.setupOpenLoopRampRate(5.0);
-        followMotor.setupOpenLoopRampRate(5.0);
+        leadMotor.setupPIDController(0, kP, kI, kD);
+        // followMotor.setupPIDController(1, kP, kI, kD, kV);
+        // leadMotor.setupOpenLoopRampRate(5.0);
+        // followMotor.setupOpenLoopRampRate(5.0);
 
         leadMotor.setupTorqueControl();
         followMotor.setupTorqueControl();
@@ -323,6 +326,8 @@ public class Flywheel extends SubsystemBase
     @Override
     public void periodic()
     {
+        // double testKV = SmartDashboard.getNumber("Flywheek kV", 0);
+        // leadMotor.setupPIDController(0, kP, kI, kD, kS, testKV, kA);
         // System.out.println("*****lead motor velocity (fps) = " + leadMotor.getVelocity());
         // System.out.print("-----follow motor velocity (fps) = " + followMotor.getVelocity());
         // System.out.println("*****Velocity Difference = +/- " + (leadMotor.getVelocity()-followMotor.getVelocity()));

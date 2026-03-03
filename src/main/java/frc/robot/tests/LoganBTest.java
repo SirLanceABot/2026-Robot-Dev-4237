@@ -3,6 +3,7 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -56,6 +57,7 @@ public class LoganBTest implements Test
     public LoganBTest(RobotContainer robotContainer)
     {
         System.out.println("  Constructor Started:  " + fullClassName);
+
 
         this.robotContainer = robotContainer;
         this.flywheel = robotContainer.getFlywheel();
@@ -119,34 +121,34 @@ public class LoganBTest implements Test
         //         accelerator.stopCommand()
         //     )
         // );
-
+        
         controller.a().whileTrue(
-            flywheel.setControlVelocityCommand(() -> 40.0)
+            GeneralCommands.rampUpFlywheelCommand(() -> 40.0)
         );
         controller.a().onFalse(
             flywheel.stopCommand()
         );
 
         controller.b().whileTrue(
-            flywheel.setControlVelocityCommand(() -> 50.0)
+            GeneralCommands.rampUpFlywheelCommand(() -> 50.0)
         );
         controller.b().onFalse(
             flywheel.stopCommand()
         );
 
         controller.y().whileTrue(
-            flywheel.setControlVelocityCommand(() -> 60.0)
+            GeneralCommands.rampUpFlywheelCommand(() -> 60.0)
         );
         controller.y().onFalse(
             flywheel.stopCommand()
         );
 
-        controller.x().whileTrue(
-            flywheel.setCommand()
-        );
-        controller.x().onFalse(
-            flywheel.stopCommand()
-        );
+        // controller.x().whileTrue(
+        //     flywheel.setCommand()
+        // );
+        // controller.x().onFalse(
+        //     flywheel.stopCommand()
+        // );
 
         System.out.println("flywheel speed: " + flywheel.getVelocity());
         // controller.a().onTrue(

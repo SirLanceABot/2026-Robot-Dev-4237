@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 1.38,
-        "y": 4.663
+        "x": 1.3,
+        "y": 4.7
       },
       "prevControl": {
-        "x": 3.137204545454545,
-        "y": 4.581261363636363
+        "x": 3.5597840909090905,
+        "y": 4.478193181818182
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,8 +62,8 @@
       "constraints": {
         "maxVelocity": 0.25,
         "maxAcceleration": 0.25,
-        "maxAngularVelocity": 720.0,
-        "maxAngularAcceleration": 720.0,
+        "maxAngularVelocity": 1080.0,
+        "maxAngularAcceleration": 1080.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
@@ -73,10 +73,10 @@
       "minWaypointRelativePos": 1.1,
       "maxWaypointRelativePos": 1.7,
       "constraints": {
-        "maxVelocity": 0.75,
+        "maxVelocity": 0.5,
         "maxAcceleration": 0.75,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
+        "maxAngularVelocity": 1080.0,
+        "maxAngularAcceleration": 1080.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
@@ -86,11 +86,11 @@
     {
       "fieldPosition": {
         "x": 4.9,
-        "y": 4.5
+        "y": 4.6
       },
       "rotationOffset": 180.0,
-      "minWaypointRelativePos": 1.5,
-      "maxWaypointRelativePos": 2.6,
+      "minWaypointRelativePos": 1.2,
+      "maxWaypointRelativePos": 1.8,
       "name": "Point Towards Zone"
     }
   ],
@@ -107,6 +107,17 @@
       }
     },
     {
+      "name": "Ramp up Flywheel Command",
+      "waypointRelativePos": 0.7001795332136443,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Ramp up Flywheel Command"
+        }
+      }
+    },
+    {
       "name": "Shoot on the Move",
       "waypointRelativePos": 1.2,
       "endWaypointRelativePos": 0.88,
@@ -119,7 +130,7 @@
     },
     {
       "name": "Reset Intake Command",
-      "waypointRelativePos": 1.65,
+      "waypointRelativePos": 1.55,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -127,11 +138,22 @@
           "name": "Reset Intake Command"
         }
       }
+    },
+    {
+      "name": "Stop Shooting Command",
+      "waypointRelativePos": 1.777378815080789,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Stop Shooting Command"
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 1.75,
+    "maxAcceleration": 1.75,
     "maxAngularVelocity": 1080.0,
     "maxAngularAcceleration": 1080.0,
     "nominalVoltage": 12.0,
