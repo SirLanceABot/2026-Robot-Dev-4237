@@ -81,8 +81,8 @@
     },
     {
       "name": "Shoot on the Move",
-      "waypointRelativePos": 0.65,
-      "endWaypointRelativePos": 0.8753247476247031,
+      "waypointRelativePos": 0.6,
+      "endWaypointRelativePos": 0.85,
       "command": {
         "type": "named",
         "data": {
@@ -92,8 +92,8 @@
     },
     {
       "name": "Angle Lock",
-      "waypointRelativePos": 0.65,
-      "endWaypointRelativePos": 0.88,
+      "waypointRelativePos": 0.6,
+      "endWaypointRelativePos": 0.85,
       "command": {
         "type": "named",
         "data": {
@@ -103,7 +103,7 @@
     },
     {
       "name": "Reset Intake Command",
-      "waypointRelativePos": 0.72,
+      "waypointRelativePos": 0.73,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
