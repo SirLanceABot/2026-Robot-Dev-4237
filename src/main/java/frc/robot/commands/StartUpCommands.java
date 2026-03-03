@@ -33,7 +33,7 @@ import frc.robot.Robot;
  *      Battery voltage
  *      CANRange sensors detected once
  *      Swerve modules aligned forward
- *      
+ *      Driver and Operator Controllers
  * 
  * Only first failing check will be shown on leds 
  */
@@ -85,8 +85,8 @@ public final class StartUpCommands
     // private static boolean canRangeVerified = false;
 
     /* Boolean suppliers from Hopper subsystem */
-    private static BooleanSupplier LeftHopperSensor;
-    private static BooleanSupplier RightHopperSensor;
+    // private static BooleanSupplier LeftHopperSensor;
+    // private static BooleanSupplier RightHopperSensor;
 
     /** Wheel must face forward within this tolerance */
     private static final double SWERVE_TOLERANCE_DEGREES = 10.0;
@@ -124,22 +124,11 @@ public final class StartUpCommands
         operatorController = robotContainer.getOperatorController();
         driverController = robotContainer.getDriverController();
         
-        if(hopper != null)
-        {
-            LeftHopperSensor = hopper.isLeftFullSupplier();
-            RightHopperSensor = hopper.isRightFullSupplier();
-        }
-
-        if (leds != null)
-        {
-            swerveViews = new LEDs.LEDView[]
-            {
-                leds.createView(0, Constants.LEDs.VEIW1END - 1),
-                leds.createView(Constants.LEDs.VEIW2END , Constants.LEDs.VEIW3END - 1),
-                leds.createView(Constants.LEDs.VEIW1END , Constants.LEDs.VEIW2END - 1),
-                leds.createView(Constants.LEDs.VEIW3END , Constants.LEDs.LED_LENGTH - 1)
-            };
-        }
+        // if(hopper != null)
+        // {
+        //     LeftHopperSensor = hopper.isLeftFullSupplier();
+        //     RightHopperSensor = hopper.isRightFullSupplier();
+        // }
 
         // String autoName = frc.robot.pathplanner.PathPlannerLance
         //     .getAutonomousCommand()
@@ -255,28 +244,37 @@ public final class StartUpCommands
             
             case RIGHT_CAN_RANGE_OFF:
                 command = leds.setColorSolidCommand(80, Color.kPink);
+                swerveViews = new LEDs.LEDView[]
+                {
+                    leds.createView(0, Constants.LEDs.VEIW1END - 1),
+                    leds.createView(Constants.LEDs.VEIW2END , Constants.LEDs.VEIW3END - 1),
+                    leds.createView(Constants.LEDs.VEIW1END , Constants.LEDs.VEIW2END - 1),
+                    leds.createView(Constants.LEDs.VEIW3END , Constants.LEDs.LED_LENGTH - 1)
+                };
                 break;
 
-            case SWERVE_MISALIGNED:
-                command = leds.setColorBlinkCommand(80, Color.kRed);
+            case SWERVE_MISALIGNED:     
+                // command = leds.setColorBlinkCommand(80, Color.kRed);
                 break;
 
             case OPERATOR_CONTROLLER_OFF:
+                if (swerveViews != null)
+                {
+                    leds.deleteAllViews();
+                //     for (var view : swerveViews)
+                //     {
+                //         view.setOffCommand().ignoringDisable(true).schedule();
+                //     }
+                }
                 command = leds.setColorBlinkCommand(80, Color.kBeige);
                 break;
+
             case DRIVER_CONTROLLER_OFF:
                 command = leds.setColorBlinkCommand(80, Color.kMediumTurquoise);
                 break;
 
             case READY:
-                if (swerveViews != null)
-                {
-                    for (var view : swerveViews)
-                    {
-                        view.setOffCommand().ignoringDisable(true).schedule();
-                    }
-                }
-                // command = leds.setMovingRainbowCommand();
+                command = leds.setMovingRainbowCommand();
                 break;
         }
 
@@ -357,14 +355,14 @@ public final class StartUpCommands
         //     return null;
         // }
 
-        if (LeftHopperSensor == null)
+        if (hopper == null)
         {
             return StartUpState.LEFT_CAN_RANGE_OFF;
         }
 
-        boolean leftDetected = LeftHopperSensor.getAsBoolean();
+        boolean leftDetected = hopper.isLeftFullSupplier().getAsBoolean();
 
-        if (!leftDetected)
+        if (leftDetected)
         {
             System.out.println("StartUpCommands - CANRanges verified");
             return null;
@@ -376,14 +374,14 @@ public final class StartUpCommands
 
     private static StartUpState checkRightCANRange()
     {
-        if (RightHopperSensor == null)
+        if (hopper == null)
         {
             return StartUpState.RIGHT_CAN_RANGE_OFF;
         }
 
-        boolean rightDetected = RightHopperSensor.getAsBoolean();
+        boolean rightDetected = hopper.isRightFullSupplier().getAsBoolean();
 
-        if (!rightDetected)
+        if (rightDetected)
         {
             System.out.println("StartUpCommands - CANRanges verified");
             // canRangeVerified = true; 
