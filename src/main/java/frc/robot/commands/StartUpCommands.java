@@ -18,6 +18,7 @@ import frc.robot.sensors.Hopper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 
 /**
@@ -74,7 +75,7 @@ public final class StartUpCommands
     private static CommandXboxController operatorController;
 
     private static boolean operatorVerified = false;
-    private static boolean driverVerified = false;  
+    private static boolean driverVerified = false;
 
     /** 
      * Once sensors detect something one time.
@@ -90,7 +91,7 @@ public final class StartUpCommands
     /** Wheel must face forward within this tolerance */
     private static final double SWERVE_TOLERANCE_DEGREES = 10.0;
 
-    // private static Rotation2d swerveTargetAngle = new Rotation2d();
+    private static Rotation2d swerveTargetAngle = new Rotation2d();
 
     // private static final String[] MODULE_NAMES = 
     // {
@@ -100,7 +101,7 @@ public final class StartUpCommands
     //     "BackRight"
     // };
 
-    // private static LEDs.LEDView[] swerveViews;
+    private static LEDs.LEDView[] swerveViews;
 
     /** Gyro must be near zero within this tolerance */
     private static final double GYRO_TOLERANCE_DEGREES = 3.0;
@@ -129,19 +130,16 @@ public final class StartUpCommands
             RightHopperSensor = hopper.isRightFullSupplier();
         }
 
-        // if (leds != null)
-        // {
-        //     int total = Constants.LEDs.LED_LENGTH;
-        //     int section = total / 4;
-
-        //     swerveViews = new LEDs.LEDView[]
-        //     {
-        //         leds.createView(0, section - 1),
-        //         leds.createView(section, section * 2 - 1),
-        //         leds.createView(section * 2, section * 3 - 1),
-        //         leds.createView(section * 3, total - 1)
-        //     };
-        // }
+        if (leds != null)
+        {
+            swerveViews = new LEDs.LEDView[]
+            {
+                leds.createView(0, Constants.LEDs.VEIW1END - 1),
+                leds.createView(Constants.LEDs.VEIW2END , Constants.LEDs.VEIW3END - 1),
+                leds.createView(Constants.LEDs.VEIW1END , Constants.LEDs.VEIW2END - 1),
+                leds.createView(Constants.LEDs.VEIW3END , Constants.LEDs.LED_LENGTH - 1)
+            };
+        }
 
         // String autoName = frc.robot.pathplanner.PathPlannerLance
         //     .getAutonomousCommand()
@@ -180,11 +178,11 @@ public final class StartUpCommands
         StartUpState result = null;
 
         // First - Voltage check
-        result = checkBattery();
-        if (result != null)
-        {
-            return result;
-        }
+        // result = checkBattery();
+        // if (result != null)
+        // {
+        //     return result;
+        // }
 
         // Second - Gyro Check
         // result = checkGyro();
@@ -194,17 +192,17 @@ public final class StartUpCommands
         // }
 
         // Third - CAN Range check
-        result = checkLeftCANRange();
-        if (result != null)
-        {
-            return result;
-        }
+        // result = checkLeftCANRange();
+        // if (result != null)
+        // {
+        //     return result;
+        // }
 
-        result = checkRightCANRange();
-        if (result != null)
-        {    
-            return result;
-        }
+        // result = checkRightCANRange();
+        // if (result != null)
+        // {    
+        //     return result;
+        // }
 
         // Fourth - Swerve alignment
         result = checkSwerve();
@@ -271,14 +269,14 @@ public final class StartUpCommands
                 break;
 
             case READY:
-                // if (swerveViews != null)
-                // {
-                //     for (var view : swerveViews)
-                //     {
-                //         view.setOffCommand().ignoringDisable(true).schedule();
-                //     }
-                // }
-                command = leds.setMovingRainbowCommand();
+                if (swerveViews != null)
+                {
+                    for (var view : swerveViews)
+                    {
+                        view.setOffCommand().ignoringDisable(true).schedule();
+                    }
+                }
+                // command = leds.setMovingRainbowCommand();
                 break;
         }
 
@@ -418,7 +416,7 @@ public final class StartUpCommands
         double maxAngle = 0;
 
         double tolRad = Math.toRadians(SWERVE_TOLERANCE_DEGREES); // converting tolerance to radians for WPILab angles
-        // boolean anyMisaligned = false;
+        boolean anyMisaligned = false;
 
         // Report all misaligned modules with index and angles for easier debugging
         for (int i = 0; i < modules.length; i++)
@@ -435,28 +433,29 @@ public final class StartUpCommands
 
             // // boolean isMisaligned = angleToNearestPi > tolRad;
 
-            // double targetRad = swerveTargetAngle.getRadians();
-            // double diff = Math.atan2(Math.sin(angleRad - targetRad), Math.cos(angleRad - targetRad));
+            double targetRad = swerveTargetAngle.getRadians();
+            double diff = Math.atan2(Math.sin(angleRad - targetRad), Math.cos(angleRad - targetRad));
 
-            // boolean isMisaligned = Math.abs(diff) > tolRad;
+            boolean isMisaligned = Math.abs(diff) > tolRad;
 
-            // if (leds != null && swerveViews != null && i < swerveViews.length)
-            // {
-            //     if (isMisaligned)
-            //     {
-            //         swerveViews[i].setViewColorBlinkCommand(80, Color.kRed, 0.2).ignoringDisable(true).schedule();
-            //     }
-            //     else
-            //     {
-            //         swerveViews[i].setViewColorSolidCommand(30, Color.kGreen).ignoringDisable(true).schedule();
-            //     }
+            if (leds != null && swerveViews != null && i < swerveViews.length)
+            {
+                if (isMisaligned)
+                {
+                    swerveViews[i].setViewColorBlinkCommand(80, Color.kRed, 0.2).ignoringDisable(true).schedule();
+                    System.out.println("Motor:" + i);
+                }
+                else
+                {
+                    swerveViews[i].setViewColorSolidCommand(30, Color.kGreen).ignoringDisable(true).schedule();
+                }
 
-            //     if (isMisaligned)
-            //     {
-            //         System.out.println(MODULE_NAMES[i] + " misaligned");
-            //         anyMisaligned = true;
-            //     }
-            // }
+                if (isMisaligned)
+                {
+                    // System.out.println(MODULE_NAMES[i] + " misaligned");
+                    anyMisaligned = true;
+                }
+            }
 
             // checking against tolerance
             if (angleToNearestPi > tolRad)
@@ -471,10 +470,10 @@ public final class StartUpCommands
                 maxAngle = angleToNearestPi;
         }
 
-        // if (!anyMisaligned)
-        // {
-        //     return null;
-        // }
+        if (!anyMisaligned)
+        {
+            return null;
+        }
 
         // return StartUpState.SWERVE_MISALIGNED;
 

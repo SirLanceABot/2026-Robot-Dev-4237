@@ -111,78 +111,15 @@ public class RobbieJTest implements Test
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
 
-    // private BooleanSupplier isHopperFullSupplier()
-    // {
-    //     return () -> (canrange.isBallDetected(29.5) && canrange1.isBallDetected(29.5));
-    // }
-
-    //     private BooleanSupplier isHopperFullSupplier()
-    // {
-    //     if((canrange.isBallDetected(24.0)) && (canrange1.isBallDetected(24.0)))
-    //             {
-    //                 if (timer.get() == 0)
-    //                 {
-    //                     timer.start();
-    //                 }
-    //                 else if(timer.get() >= 0.5)
-    //                 {
-    //                     return ()-> true;
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 timer.reset();
-    //                 return () -> false;
-    //             }
-    // }
-        
-
     // *** OVERRIDDEN METHODS ***
     // Put all methods that are Overridden here
-    // LEDs.LEDView leftView = leds.createView(0, 17);
-    // LEDs.LEDView rightView = leds.createView(18, 35);
+
     /**
      * This method runs one time before the periodic() method.
      */
     public void init()
     {
-        // controller.x().onTrue(ScoringCommands.IntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
-        // controller.a().onTrue(ScoringCommands.StopIntakeAndScoreCommand(intake, agitator, indexer, accelerator, flywheel));
-        // controller.b().onTrue(ScoringCommands.IntakeAndScoreCommandTheSequal(intake, agitator, indexer, accelerator, flywheel));
-        // controller.x().onTrue(agitator.forwardCommand());
-        // controller.a().onTrue(agitator.reverseCommand());
-        // controller.b().onTrue(agitator.stopCommand());
-        // controller.x().onTrue(climb.extendToL1Command());
-        // controller.a().onTrue(climb.retractFromL1Command());
-        // controller.b().onTrue(climb.stopCommand());
-        // System.out.println(canrange.toString());
-        // controller.x().onTrue(GeneralCommands.intakeUntilFullCommand());
-        // controller.b().onTrue(intake.stopCommand());
-        // controller.a().onTrue(indexigator.stopCommand());
-        LEDs.LEDView leftView = leds.createView(0, 16);
-        LEDs.LEDView rightView = leds.createView(18, 35);
-
-        controller.a().onTrue(rightView.setViewColorSolidCommand(80, Color.kRed));
-        controller.b().onTrue(leftView.setViewColorSolidCommand(80, Color.kRed));
-        controller.y().onTrue(rightView.setViewColorSolidCommand(80, Color.kLime));
-        // controller.x().onTrue(leftView.setViewColorSolidCommand(80, Color.kLime));
-        controller.x().onTrue(leftView.setViewColorRainbowCommand(100,true));
-        controller.back().onTrue(leds.setColorBreatheCommand(80, Color.kYellow));
-        controller.start().onTrue(leds.offCommand());
-        
-
-        // controller.x().onTrue(leftView.setViewColorBlinkCommand(40, Color.kHotPink, 0.5));
-        // controller.y().onTrue(rightView.setViewColorBreatheCommand(40, Color.kLime, 0.5));
-        // controller.back().onTrue(leftView.setOffCommand());
-        // controller.start().onTrue(rightView.setOffCommand());
-        // controller.a().onTrue(leds.setColorGradientCommand(80, Color.kAzure, Color.kRed, Color.kLime, Color.kIndigo));
-        // controller.a().onTrue(leds.setColorSolidCommand(80, Color.kAliceBlue));
-        // controller.b().onTrue(leds.setColorSolidCommand(20, Color.kAliceBlue));
-        // controller.x().onTrue(leds.offCommand());
-        // controller.b().onTrue(leds.setColorRainbowCommand());
-        // controller.x().onTrue(leds.setColorBlinkCommand(80, Color.kAliceBlue));
-        // controller.y().onTrue(leds.setColorBreatheCommand(80, Color.kBeige));
-
+        controller.a().onTrue(leds.setColorBlinkCommand(90, Color.kRed));
     }
 
     /**
@@ -190,63 +127,7 @@ public class RobbieJTest implements Test
      */
     public void periodic()
     {
-        // if(controller.leftBumper().getAsBoolean())
-        // {
-        //     if(view1 != null && view2 != null && view3 != null && view4 != null)
-        //     {
-        //         leds.deleteView(view1);
-        //         leds.deleteView(view2);
-        //         leds.deleteView(view3);
-        //         leds.deleteView(view4);
-        //     }
-            
-        //     leftView = leds.createView(0, 17);
-        //     rightView = leds.createView(18, 35);
-
-        //     if(controller.a().getAsBoolean())
-        //         leftView.setViewColorGradientCommand(80, true, Color.kRed, Color.kLime).schedule();
-        //     if(controller.b().getAsBoolean())
-        //         rightView.setViewColorRainbowCommand(80, true).schedule();
-        // }
-
-        // if(controller.rightBumper().getAsBoolean())
-        // {
-        //     if(leftView != null && rightView != null)
-        //     {
-        //         leds.deleteView(leftView);
-        //         leds.deleteView(rightView);
-        //     }
-
-        //     // leds.setColorSolidCommand(80, Color.kRed);
-
-        //     view1 = leds.createView(0, 8);
-        //     view2 = leds.createView(9, 17);
-        //     view3 = leds.createView(18, 26);
-        //     view4 = leds.createView(27, 35);
-
-        //     if(controller.povDown().getAsBoolean())
-        //         view1.setViewColorSolidCommand(80, Color.kLime).schedule();
-        //     if(controller.povUp().getAsBoolean())
-        //         view2.setViewColorSolidCommand(80, Color.kLime).schedule();
-        //     if(controller.povLeft().getAsBoolean())
-        //         view3.setViewColorSolidCommand(80, Color.kLime).schedule();
-        //     if(controller.povRight().getAsBoolean())
-        //         view4.setViewColorSolidCommand(80, Color.kLime).schedule();
-        // }
-
-        // System.err.println("isYellow:" + hopperCamera.isHoppperFullSupplier().getAsBoolean());
-        // SmartDashboard.putNumber("Short End sensor", canrange.getDistanceMeters());
-        // SmartDashboard.putNumber("Long End sensor", canrange1.getDistanceMeters());
-
-        // System.out.println( "is Hopper close: " + hopper.isHopperClosed().getAsBoolean());
-        // System.out.println("Left: " + hopper.getLimitSwitchLeft());
-
-        // System.out.println( "is Hopper full: " + hopper.isHopperFullSupplier().getAsBoolean());
-
-        // System.out.println(isHopperFullSupplier());
-        // System.out.println(debouncer.calculate(isHopperFullSupplier().getAsBoolean()));
-        // System.out.println(canrange.getDistanceMeters());
-        // System.out.println(climb.getForwardHardLimit());
+        // System.out.println(hopper.isHopperFullSupplier().getAsBoolean());
     }
     
     /**

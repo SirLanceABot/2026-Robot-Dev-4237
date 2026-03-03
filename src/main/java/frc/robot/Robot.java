@@ -144,13 +144,13 @@ public class Robot extends TimedRobot
                 }
             }
 
-            if(leds !=null)
-            {
+            // if(leds != null)
+            // {
                 // view1 = leds.createView(0, Constants.LEDs.VEIW1END);
                 // view2 = leds.createView(Constants.LEDs.VEIW1END + 1, Constants.LEDs.VEIW2END);
                 // view3 = leds.createView(Constants.LEDs.VEIW2END + 1, Constants.LEDs.VEIW3END);
-                // view4 = leds.createView(Constants.LEDs.VEIW3END + 1, Constants.LEDs.LED_LENGTH); 
-            }
+                // view4 = leds.createView(Constants.LEDs.VEIW3END + 1, Constants.LEDs.LED_LENGTH-1); 
+            // }
         }
     }
 
@@ -185,13 +185,13 @@ public class Robot extends TimedRobot
     @Override
     public void disabledExit() 
     {
-        // if(isPreMatch)
-        // {
-        //     if(leds != null)  
-        //     {
-        //         leds.deleteAllViews();
-        //     }
-        // }
+        if(isPreMatch)
+        {
+            if(leds != null)  
+            {
+                leds.deleteAllViews();
+            }
+        }
     }
 
     // public void initializePose()
