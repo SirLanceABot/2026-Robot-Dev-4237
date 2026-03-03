@@ -55,8 +55,8 @@ public class Climb extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private static final double MAX_SERVO_LENGTH = 38.634;      // needs to be tested on actual bot
-    private static final double MIN_SERVO_LENGTH = 10.449;      // needs to be tested on actual bot
+    private static final double MAX_SERVO_LENGTH = 47.0;      // needs to be tested on actual bot
+    private static final double MIN_SERVO_LENGTH = 2.5;      // needs to be tested on actual bot
 
     private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Lead Climb Motor ");
     // private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Follower Climb Motor");
@@ -144,12 +144,12 @@ public class Climb extends SubsystemBase
     // figure out if up is positive velo
     public void manualMoveClimbUp()
     {
-        leadMotor.set(0.5);
+        leadMotor.set(0.1);
     }
 
     public void manualMoveClimbDown()
     {
-        leadMotor.set(-0.5);
+        leadMotor.set(-0.1);
     }
 
 

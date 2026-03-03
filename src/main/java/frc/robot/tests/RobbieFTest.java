@@ -130,11 +130,11 @@ public class RobbieFTest implements Test
         );
 
         controller.povLeft().onTrue(
-            climb.setServoPositionCommand(servoPosition.kRETRACTED)
+            climb.setServoPositionCommand(servoPosition.kEXTENDED)
         );
 
         controller.povRight().onTrue(
-            climb.setServoPositionCommand(servoPosition.kEXTENDED)
+            climb.setServoPositionCommand(servoPosition.kRETRACTED)
         );
         
     }
@@ -145,8 +145,10 @@ public class RobbieFTest implements Test
     public void periodic()
     {
         // System.out.println(climb.isDetectedAfterDistanceSupplier(50.0, true).getAsBoolean());
-        // System.out.println(climb.isDetected().getAsBoolean());
-        // System.out.println("Climb Position = " + climb.getPosition());
+        // System.out.println(climb.getClimbSensor());
+        System.out.println(climb.getPosition());
+
+        // System.out.println("Servo Position = " + climb.getServoPosition());
     }
     
     /**

@@ -154,10 +154,11 @@ public final class DriverBindings {
         aButton
         .whileTrue(
             Commands.parallel(
+                Commands.runOnce(() -> scaleFactor = (scaleFactor > WALK_SPEED ? WALK_SPEED : CRAWL_SPEED)),
                 drivetrain.angleLockDriveCommand(leftYAxis, leftXAxis, scaleFactorSupplier, () -> (poseEstimator.getRotationToCalculatedTarget(poseEstimator.getAllianceHubPose()).getAsDouble())), // Tested this command in 25 repo, works there
                 ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator).repeatedly()));
             
-        aButton.onFalse(GeneralCommands.stopShootingCommand()); // TODO test this line
+        aButton.onFalse(GeneralCommands.stopShootingCommand().andThen(Commands.runOnce(() -> scaleFactor = (scaleFactor < WALK_SPEED ? WALK_SPEED : RUN_SPEED)))); // TODO test this line
     }
 
     // shoot still

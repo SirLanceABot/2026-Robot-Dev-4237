@@ -68,7 +68,7 @@ public final class Constants
 
         public static final int SERVOMOTOR         = 1;
 
-        public static final int SENSOR_PORT        = 4;
+        public static final int SENSOR_PORT        = 2;
 
         public static final String MOTOR_CAN_BUS        = CANbus.CANIVORE;    
     }

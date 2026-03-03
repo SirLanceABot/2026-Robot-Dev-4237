@@ -400,89 +400,92 @@ public final class StartUpCommands
     private static StartUpState checkSwerve()
     {
         // each swerve module contains wheel distance travelled and wheel angle (rotation2d)
-        SwerveModulePosition[] modules = drivetrain.getModuleStates();
+        if(drivetrain != null)
+        {
+            SwerveModulePosition[] modules = drivetrain.getModuleStates();
+        
+            if (modules == null || modules.length == 0)
+            {
+                return null;
+            }
+
+            double minAngle = 0;
+            double maxAngle = 0;
+
+            double tolRad = Math.toRadians(SWERVE_TOLERANCE_DEGREES); // converting tolerance to radians for WPILab angles
+            boolean anyMisaligned = false;
+
+            // Report all misaligned modules with index and angles for easier debugging
+            for (int i = 0; i < modules.length; i++)
+            {
+                Rotation2d angle = modules[i].angle;
+                double angleRad = angle.getRadians();
+
+                // normalize to [0, pi) positive angle
+                // atan2(sin, cos) = normalizes angle into [-π, π]
+                // abs() = now [0, π]
+                // Math.min(absNorm, π - absNorm) = distance to nearest forward direction
+                double absNorm = Math.abs(Math.atan2(Math.sin(angleRad), Math.cos(angleRad)));
+                double angleToNearestPi = Math.min(absNorm, Math.PI - absNorm);
+
+                // // boolean isMisaligned = angleToNearestPi > tolRad;
+
+                double targetRad = swerveTargetAngle.getRadians();
+                double diff = Math.atan2(Math.sin(angleRad - targetRad), Math.cos(angleRad - targetRad));
+
+                boolean isMisaligned = Math.abs(diff) > tolRad;
+
+                if (leds != null && swerveViews != null && i < swerveViews.length)
+                {
+                    if (isMisaligned)
+                    {
+                        swerveViews[i].setViewColorBlinkCommand(80, Color.kRed, 0.2).ignoringDisable(true).schedule();
+                        System.out.println("Motor:" + i);
+                    }
+                    else
+                    {
+                        swerveViews[i].setViewColorSolidCommand(30, Color.kGreen).ignoringDisable(true).schedule();
+                    }
+
+                    if (isMisaligned)
+                    {
+                        // System.out.println(MODULE_NAMES[i] + " misaligned");
+                        anyMisaligned = true;
+                    }
+                }
+
+                // checking against tolerance
+                if (angleToNearestPi > tolRad)
+                {
+                    System.out.print("   (module " + i + ") by " + angleToNearestPi);
+                }
+
+                if ((i == 0) || (angleToNearestPi < minAngle))
+                    minAngle = angleToNearestPi;
+                
+                if ((i == 0) || (angleToNearestPi > maxAngle))
+                    maxAngle = angleToNearestPi;
+            }
+
+            if (!anyMisaligned)
+            {
+                return null;
+            }
+
+            // return StartUpState.SWERVE_MISALIGNED;
+
+            System.out.println();
+
+            if ((maxAngle - minAngle) > tolRad)
+            {
+                // System.out.println("How far off is it? : " + (maxAngle - minAngle));
+                return StartUpState.SWERVE_MISALIGNED;
+            }
+        }
        
         if (drivetrain == null)
         {
             return null;
-        }
-
-        if (modules == null || modules.length == 0)
-        {
-            return null;
-        }
-
-        double minAngle = 0;
-        double maxAngle = 0;
-
-        double tolRad = Math.toRadians(SWERVE_TOLERANCE_DEGREES); // converting tolerance to radians for WPILab angles
-        boolean anyMisaligned = false;
-
-        // Report all misaligned modules with index and angles for easier debugging
-        for (int i = 0; i < modules.length; i++)
-        {
-            Rotation2d angle = modules[i].angle;
-            double angleRad = angle.getRadians();
-
-            // normalize to [0, pi) positive angle
-            // atan2(sin, cos) = normalizes angle into [-π, π]
-            // abs() = now [0, π]
-            // Math.min(absNorm, π - absNorm) = distance to nearest forward direction
-            double absNorm = Math.abs(Math.atan2(Math.sin(angleRad), Math.cos(angleRad)));
-            double angleToNearestPi = Math.min(absNorm, Math.PI - absNorm);
-
-            // // boolean isMisaligned = angleToNearestPi > tolRad;
-
-            double targetRad = swerveTargetAngle.getRadians();
-            double diff = Math.atan2(Math.sin(angleRad - targetRad), Math.cos(angleRad - targetRad));
-
-            boolean isMisaligned = Math.abs(diff) > tolRad;
-
-            if (leds != null && swerveViews != null && i < swerveViews.length)
-            {
-                if (isMisaligned)
-                {
-                    swerveViews[i].setViewColorBlinkCommand(80, Color.kRed, 0.2).ignoringDisable(true).schedule();
-                    System.out.println("Motor:" + i);
-                }
-                else
-                {
-                    swerveViews[i].setViewColorSolidCommand(30, Color.kGreen).ignoringDisable(true).schedule();
-                }
-
-                if (isMisaligned)
-                {
-                    // System.out.println(MODULE_NAMES[i] + " misaligned");
-                    anyMisaligned = true;
-                }
-            }
-
-            // checking against tolerance
-            if (angleToNearestPi > tolRad)
-            {
-                System.out.print("   (module " + i + ") by " + angleToNearestPi);
-            }
-
-            if ((i == 0) || (angleToNearestPi < minAngle))
-                minAngle = angleToNearestPi;
-            
-            if ((i == 0) || (angleToNearestPi > maxAngle))
-                maxAngle = angleToNearestPi;
-        }
-
-        if (!anyMisaligned)
-        {
-            return null;
-        }
-
-        // return StartUpState.SWERVE_MISALIGNED;
-
-        System.out.println();
-
-        if ((maxAngle - minAngle) > tolRad)
-        {
-            // System.out.println("How far off is it? : " + (maxAngle - minAngle));
-            return StartUpState.SWERVE_MISALIGNED;
         }
 
         return null;
