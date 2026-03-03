@@ -3,24 +3,24 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.1852914703903097,
-        "y": 0.7925398511103641
+        "x": 3.0273160758119335,
+        "y": 0.8872702865370081
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6146921345728469,
-        "y": 0.39473288512247506
+        "x": 0.4567167399944707,
+        "y": 0.4894633205491191
       },
       "isLocked": false,
-      "linkedName": "Right Trench Shot"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.634338971227592,
+        "x": 0.634,
         "y": 2.8347510971376484
       },
       "prevControl": {
-        "x": 0.2568159677553698,
+        "x": 0.25647699652777783,
         "y": 2.3386698616052413
       },
       "nextControl": null,
@@ -47,14 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot on the Move",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": 0.7,
-      "command": null
-    },
-    {
-      "name": "Reset Intake Command",
-      "waypointRelativePos": 0.75,
+      "name": "Extend Climb To L1 Command",
+      "waypointRelativePos": 0.2,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -75,7 +69,7 @@
   "folder": "Right Trench Shot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -122.40356853646615
+    "rotation": -110.0
   },
   "useDefaultConstraints": true
 }
