@@ -303,7 +303,7 @@ public class ScoringCommands
             // {
                 return
                 Commands.parallel(
-                    GeneralCommands.extendClimbToL1Command(),
+                    GeneralCommands.extendClimbToL1Command().withTimeout(2.0),
                     GeneralCommands.driveToPositionCommand(targetMiddlePose, drivetrain.getState().Pose))
                 .andThen(
                     GeneralCommands.driveToPositionCommand(targetClimbPose, drivetrain.getState().Pose))
