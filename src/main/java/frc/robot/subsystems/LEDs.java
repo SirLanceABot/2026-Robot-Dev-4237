@@ -543,7 +543,7 @@ public class LEDs
 
         if (useActionPattern)
         {
-            System.out.println("LED animation running");
+            // System.out.println("LED animation running");
             actionPattern.run();
         }
 

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.965202747356496,
-        "y": 3.5158105763783984
+        "x": 7.020355555555557,
+        "y": 0.8101111111111106
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.224954845157423,
-        "y": 0.3333717019571023
+        "x": 7.280107653356483,
+        "y": -2.3723277633101856
       },
       "isLocked": false,
       "linkedName": "Far Right NZ"
@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 6.499420602205225,
-        "y": 0.39231720978234075
+        "y": 0.3923172097823407
       },
       "nextControl": {
         "x": 1.1975095684724093,
@@ -130,7 +130,7 @@
   "folder": "Right NZ",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

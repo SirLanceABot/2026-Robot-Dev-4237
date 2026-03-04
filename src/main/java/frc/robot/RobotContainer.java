@@ -91,7 +91,7 @@ public class RobotContainer
     RobotContainer() 
     {
         // Instantiate ONLY the components selected above
-        if(useFullRobot || useExampleSubsystem)
+        if(useExampleSubsystem)
             exampleSubsystem = new ExampleSubsystem();
 
         if(useFullRobot || useDrivetrain)
@@ -112,7 +112,7 @@ public class RobotContainer
         if(useFullRobot || useAccelerator)
             accelerator = new Accelerator();
 
-        if(useFullRobot || useClimb)
+        if(useClimb)
             climb = new Climb();
 
         if(useFullRobot || useShooterCamera)
@@ -120,21 +120,21 @@ public class RobotContainer
         else
             cameraArray[0] = null;
         
-        if(useFullRobot || useIntakeCamera)
+        if(useIntakeCamera)
             cameraArray[1] = new Camera("limelight-intake");
         else
             cameraArray[1] = null;
 
-        if(useFullRobot || useLaserCAN)
+        if(useLaserCAN)
             laserCanSensor = new LaserCanSensor();
         
-        if(useFullRobot || (useHopper))
+        if((useHopper))
             hopper = new Hopper();
 
-        if(useFullRobot || useRangerDistanceSensor)
+        if(useRangerDistanceSensor)
             rangerDistanceSensor = new RangerDistanceSensor();
 
-        if(useFullRobot || useHopperCamera)
+        if(useHopperCamera)
             hopperCamera = new HopperCamera(); 
 
         if(useFullRobot || usePoseEstimator)

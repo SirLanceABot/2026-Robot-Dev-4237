@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.23,
-        "y": 7.302
+        "x": 2.667,
+        "y": 6.575
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.115314141639647,
-        "y": 7.46444578313253
+        "x": 2.495433333333334,
+        "y": 8.146733333328294
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.363817201967593,
-        "y": 4.506870949074074
+        "x": 6.798644444444444,
+        "y": 7.269966666666667
       },
       "prevControl": {
-        "x": 7.360900462962963,
-        "y": 7.547459852430556
+        "x": 6.546699999995858,
+        "y": 7.320355555560757
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,33 +30,54 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.2282994844064388,
-      "rotationDegrees": 90.0
+      "waypointRelativePos": 0.1,
+      "rotationDegrees": 180.0
     },
     {
-      "waypointRelativePos": 0.75,
-      "rotationDegrees": -106.9157734647034
+      "waypointRelativePos": 0.7,
+      "rotationDegrees": 180.0
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.1,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 1.5,
+        "maxAngularVelocity": 270.0,
+        "maxAngularAcceleration": 270.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.7,
+      "maxWaypointRelativePos": 1,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 180.0,
+        "maxAngularAcceleration": 180.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Intake Command",
-      "waypointRelativePos": 0.75,
+      "name": "Stop Shooting Command",
+      "waypointRelativePos": 0.01,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Intake Command"
+          "name": "Stop Shooting Command"
         }
       }
-    },
-    {
-      "name": "Stop Intaking Command",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
-      "command": null
     }
   ],
   "globalConstraints": {
@@ -75,7 +96,7 @@
   "folder": "Left Trench Shot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 128.2921734778054
   },
   "useDefaultConstraints": true
 }

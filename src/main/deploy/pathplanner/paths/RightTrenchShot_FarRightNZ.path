@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0273160758119335,
-        "y": 0.8872702865370081
+        "x": 2.6466000000000003,
+        "y": 1.6163333333333334
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.132828018555264,
-        "y": -0.1806489863851264
+        "x": 2.5659777777777784,
+        "y": 0.01396666666666646
       },
       "isLocked": false,
       "linkedName": "Right Trench Shot"
     },
     {
       "anchor": {
-        "x": 6.965202747356496,
-        "y": 3.5158105763783984
+        "x": 7.020355555555557,
+        "y": 0.8101111111111106
       },
       "prevControl": {
-        "x": 7.680924969578719,
-        "y": 1.0416327986006206
+        "x": 6.385454988439752,
+        "y": 0.7093369062278356
       },
       "nextControl": null,
       "isLocked": false,
@@ -36,10 +36,6 @@
     {
       "waypointRelativePos": 0.35,
       "rotationDegrees": 180.0
-    },
-    {
-      "waypointRelativePos": 0.65,
-      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [
@@ -50,8 +46,21 @@
       "constraints": {
         "maxVelocity": 1.0,
         "maxAcceleration": 1.0,
-        "maxAngularVelocity": 1080.0,
-        "maxAngularAcceleration": 1080.0,
+        "maxAngularVelocity": 180.0,
+        "maxAngularAcceleration": 180.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.3,
+      "maxWaypointRelativePos": 0.5,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 720.0,
+        "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
@@ -60,37 +69,10 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Reset Intake Command",
-      "waypointRelativePos": 0,
+      "name": "Stop Shooting Command",
+      "waypointRelativePos": 0.01,
       "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Reset Intake Command"
-        }
-      }
-    },
-    {
-      "name": "Intake Command",
-      "waypointRelativePos": 0.3898117386489506,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Intake Command"
-        }
-      }
-    },
-    {
-      "name": "Stop Intaking Command",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Stop Intaking Command"
-        }
-      }
+      "command": null
     }
   ],
   "globalConstraints": {
@@ -103,13 +85,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Right Trench Shot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -0.0
+    "rotation": -133.3153156821037
   },
   "useDefaultConstraints": false
 }

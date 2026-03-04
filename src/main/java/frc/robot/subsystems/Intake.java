@@ -59,7 +59,7 @@ public class Intake extends SubsystemBase
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INTAKE_ROLLER_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
 
     private final double retractedPosition = 0.0; // TEST
-    private final double unjamPosition = 1.0;
+    private final double unjamPosition = 3.0;
     private final double intakingPosition = 6.0; 
     // private final double theshold = 4.0;
 

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.363817201967593,
-        "y": 4.506870949074074
+        "x": 6.798644444444444,
+        "y": 7.269966666666667
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.224223170858148,
-        "y": 5.575392079134043
+        "x": 6.659050413335,
+        "y": 8.338487796726636
       },
       "isLocked": false,
       "linkedName": "Far Left NZ"
     },
     {
       "anchor": {
-        "x": 3.23,
-        "y": 7.302
+        "x": 2.667,
+        "y": 6.575
       },
       "prevControl": {
-        "x": 7.814094462924789,
-        "y": 7.501599999999999
+        "x": 7.251094462924788,
+        "y": 6.7745999999999995
       },
       "nextControl": null,
       "isLocked": false,
@@ -73,7 +73,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 110.0
+    "rotation": 124.07489931110507
   },
   "reversed": false,
   "folder": "Left NZ",

@@ -150,7 +150,7 @@ public final class OperatorBindings {
         Trigger xButton = controller.x();
 
         // X ~ get flywheel to speed
-        xButton.onTrue(GeneralCommands.getFlywheelToSpeedCommand());
+        xButton.onTrue(GeneralCommands.rampUpFlywheelCommand(() -> 40));
     }
 
     private static void configYButton()

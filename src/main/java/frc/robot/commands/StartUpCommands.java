@@ -438,7 +438,7 @@ public final class StartUpCommands
                     if (isMisaligned)
                     {
                         swerveViews[i].setViewColorBlinkCommand(80, Color.kRed, 0.2).ignoringDisable(true).schedule();
-                        System.out.println("Motor:" + i);
+                        // System.out.println("Motor:" + i);
                     }
                     else
                     {

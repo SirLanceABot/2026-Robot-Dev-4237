@@ -16,6 +16,8 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -115,8 +117,8 @@ public class PathPlannerLance
         {
             PathPlannerPath ppPath = PathPlannerPath.fromPathFile(autoName);
             Pose2d initialPose = ppPath.getStartingHolonomicPose().orElse(new Pose2d());
+            // drivetrain.getPigeon2().setYaw(initialPose.getRotation().getDegrees());
             poseEstimator.resetPose(initialPose);
-            drivetrain.getPigeon2().setYaw(initialPose.getRotation().getDegrees());
         }
         catch (Exception e)
         {

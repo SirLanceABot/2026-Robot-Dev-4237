@@ -30,10 +30,6 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.1545538651315789,
-      "rotationDegrees": 90.0
-    },
-    {
       "waypointRelativePos": 0.7475928591008771,
       "rotationDegrees": 59.99999999999999
     }
@@ -94,7 +90,7 @@
   "folder": "Right Trench Starts",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }

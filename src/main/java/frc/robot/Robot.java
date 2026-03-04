@@ -22,6 +22,7 @@ import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
 import frc.robot.elastic.ElasticLance;
 import frc.robot.pathplanner.PathPlannerLance;
+import frc.robot.sensors.Hopper;
 import frc.robot.subsystems.LEDs;
 
 /**
@@ -268,7 +269,9 @@ public class Robot extends TimedRobot
     /** This function is called periodically during Teleop mode. */
     @Override
     public void teleopPeriodic() 
-    {}
+    {
+        // System.out.println("Is Hopper Full:" + Hopper.isHopperFullSupplier().getAsBoolean());
+    }
 
     /** This function is called once each time the robot exits Teleop mode. */
     @Override

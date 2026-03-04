@@ -167,9 +167,9 @@ public class GeneralCommands
         if(intake != null)
         {
             return
-            intake.moveToUnjamPositionCommand().until(intake.isAtPosition(2.0)).withTimeout(1.0)
+            intake.moveToUnjamPositionCommand().until(intake.isAtPosition(3.0)).withTimeout(1.0)
             .andThen(
-                GeneralCommands.intakeCommand()).withTimeout(1.0);
+                GeneralCommands.intakeCommand()).withTimeout(0.1);
         }
         else
         {
