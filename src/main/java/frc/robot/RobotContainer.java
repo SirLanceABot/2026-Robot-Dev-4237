@@ -44,6 +44,7 @@ public class RobotContainer
 
     // Select the robot components to use
     private boolean useFullRobot                = false;
+    
     private boolean useExampleSubsystem         = false;
     // private boolean useAgitator                 = false;
     private boolean useIndexigator              = false;
