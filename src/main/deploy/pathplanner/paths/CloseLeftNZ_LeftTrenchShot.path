@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.007977777777777,
-        "y": 7.602533333333334
+        "x": 7.937433333333333,
+        "y": 7.62268888888889
       },
       "isLocked": false,
       "linkedName": "Close Left NZ"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 2.6667555555555555,
-        "y": 6.5746
+        "y": 6.2420333333333335
       },
       "prevControl": {
-        "x": 2.626444444444445,
-        "y": 8.176966666666667
+        "x": 2.354344444444444,
+        "y": 8.287822222222223
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 0.95,
+      "waypointRelativePos": 0.8,
       "rotationDegrees": 0.0
     }
   ],
@@ -54,11 +54,11 @@
     },
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.95,
+      "minWaypointRelativePos": 0.8,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.5,
-        "maxAcceleration": 1.5,
+        "maxVelocity": 1.25,
+        "maxAcceleration": 1.25,
         "maxAngularVelocity": 180.0,
         "maxAngularAcceleration": 90.0,
         "nominalVoltage": 12.0,
@@ -114,7 +114,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 90.0
+    "rotation": 124.75591255354144
   },
   "reversed": false,
   "folder": "Left NZ",
