@@ -231,7 +231,7 @@ public final class StartUpCommands
         switch (state)
         {
             case LOW_VOLTAGE:
-                command = leds.setColorBlinkCommand(80,Color.kYellow);
+                command = leds.setColorBlinkCommand(50,Color.kYellow);
                 break;
 
             // case GYRO_NOT_ZEROED:
@@ -239,11 +239,12 @@ public final class StartUpCommands
             //     break;
 
             case LEFT_CAN_RANGE_OFF:
-                command = leds.setColorSolidCommand(80, Color.kPurple);
+                command = leds.setColorSolidCommand(50, Color.kPurple);
                 break;
             
             case RIGHT_CAN_RANGE_OFF:
-                command = leds.setColorSolidCommand(80, Color.kPink);
+                // command = leds.setColorSolidCommand(50, Color.kPink);
+                command = leds.setColorBreatheCommand(30, Color.kRed);
                 swerveViews = new LEDs.LEDView[]
                 {
                     leds.createView(0, Constants.LEDs.VEIW1END - 1),
@@ -266,11 +267,11 @@ public final class StartUpCommands
                 //         view.setOffCommand().ignoringDisable(true).schedule();
                 //     }
                 }
-                command = leds.setColorBlinkCommand(80, Color.kBeige);
+                command = leds.setColorBlinkCommand(50, Color.kMediumVioletRed);
                 break;
 
             case DRIVER_CONTROLLER_OFF:
-                command = leds.setColorBlinkCommand(80, Color.kMediumTurquoise);
+                command = leds.setColorBlinkCommand(50, Color.kOrange);
                 break;
 
             case READY:
