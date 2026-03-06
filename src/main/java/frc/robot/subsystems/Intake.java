@@ -172,7 +172,7 @@ public class Intake extends SubsystemBase
 
     public void turnOnRollers()
     {
-        RollersMotor.set(1.0);
+        RollersMotor.set(0.5);
     }
 
     public void turnOnRollersAtSetSpeed(double speed)

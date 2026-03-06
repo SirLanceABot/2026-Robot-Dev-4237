@@ -611,8 +611,8 @@ public class GeneralCommands
             return 
             Commands.parallel(
                 Commands.either(
-                    GeneralCommands.rampUpFlywheelCommand(() -> shooterPower.getAsDouble()).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean()), 
-                    flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 5).getAsBoolean()),
+                    GeneralCommands.rampUpFlywheelCommand(() -> shooterPower.getAsDouble()).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 15).getAsBoolean()), 
+                    flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 15).getAsBoolean()),
                     () -> flywheelSpeed.getAsDouble() < 1.0))     // TODO tune tolerance
             
             .andThen(

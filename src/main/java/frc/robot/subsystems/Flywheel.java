@@ -151,8 +151,8 @@ public class Flywheel extends SubsystemBase
         distToVeloMap.put(21.0, 65.0);
         distToVeloMap.put(22.0, 67.0);
         distToVeloMap.put(23.0, 70.0);
-        distToVeloMap.put(24.0, 73.0);
-        distToVeloMap.put(25.0, 76.0);
+        distToVeloMap.put(24.0, 70.0);
+        distToVeloMap.put(25.0, 70.0);
     }
 
     // private void configPassMap()
