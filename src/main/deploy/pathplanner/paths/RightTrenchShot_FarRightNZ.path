@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 6.385454988439752,
-        "y": 0.7093369062278356
+        "y": 0.7093369062278357
       },
       "nextControl": null,
       "isLocked": false,
@@ -72,7 +72,12 @@
       "name": "Stop Shooting Command",
       "waypointRelativePos": 0.01,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Stop Shooting Command"
+        }
+      }
     }
   ],
   "globalConstraints": {
