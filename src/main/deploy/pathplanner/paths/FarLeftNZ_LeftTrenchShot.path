@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.798644444444444,
-        "y": 7.269966666666667
+        "x": 5.9386267605633805,
+        "y": 5.035680751173709
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.659050413335,
-        "y": 8.338487796726636
+        "x": 6.045082159624414,
+        "y": 6.55799295774648
       },
       "isLocked": false,
       "linkedName": "Far Left NZ"
+    },
+    {
+      "anchor": {
+        "x": 5.2786032863849774,
+        "y": 7.430927230046948
+      },
+      "prevControl": {
+        "x": 6.1507041000433125,
+        "y": 7.345762910798122
+      },
+      "nextControl": {
+        "x": 4.833627780000794,
+        "y": 7.474380963250845
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,8 +36,8 @@
         "y": 6.575
       },
       "prevControl": {
-        "x": 7.251094462924788,
-        "y": 6.7745999999999995
+        "x": 2.2765610328566708,
+        "y": 7.643838028176226
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,19 +46,23 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.9083316200657894,
-      "rotationDegrees": 90.0
+      "waypointRelativePos": 0.6,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.5660749506903249,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.85,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0.7866043613707193,
+      "maxWaypointRelativePos": 1.216510903426788,
       "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 1.0,
-        "maxAngularVelocity": 540.0,
+        "maxVelocity": 1.5,
+        "maxAcceleration": 1.5,
+        "maxAngularVelocity": 720.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
         "unlimited": false
@@ -64,8 +84,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -81,5 +101,5 @@
     "velocity": 0,
     "rotation": -90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.029,
-        "y": 3.0
+        "x": 8.00386150234742,
+        "y": 2.7362441314553996
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.859668257907133,
-        "y": -0.6074811784993268
+        "x": 8.834529760254552,
+        "y": -0.8712370470439272
       },
       "isLocked": false,
       "linkedName": "Close Right NZ"

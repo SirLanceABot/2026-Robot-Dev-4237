@@ -23,7 +23,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 5.0
+                  "waitTime": 7.0
                 }
               },
               {
@@ -40,6 +40,18 @@
                       "type": "wait",
                       "data": {
                         "waitTime": 3.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Unjam Intake Command"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
                       }
                     },
                     {
