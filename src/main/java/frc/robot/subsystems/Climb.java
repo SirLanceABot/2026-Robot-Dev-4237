@@ -144,12 +144,12 @@ public class Climb extends SubsystemBase
     // figure out if up is positive velo
     public void manualMoveClimbUp()
     {
-        leadMotor.set(0.1);
+        leadMotor.set(0.15);
     }
 
     public void manualMoveClimbDown()
     {
-        leadMotor.set(-0.1);
+        leadMotor.set(-0.15);
     }
 
 
