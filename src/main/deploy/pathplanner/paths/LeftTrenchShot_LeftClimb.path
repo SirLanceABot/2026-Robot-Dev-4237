@@ -90,7 +90,7 @@
   "folder": "Left Trench Shot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 124.07489931110507
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }

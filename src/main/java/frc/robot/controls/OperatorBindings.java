@@ -1,6 +1,7 @@
 package frc.robot.controls;
 
 import java.lang.invoke.MethodHandles;
+import java.security.GeneralSecurityException;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -194,6 +195,8 @@ public final class OperatorBindings {
         Trigger startButton = controller.start();     
         
         startButton.onTrue(GeneralCommands.unjamIntakeCommand());
+        //TODO test this binding
+        // startButton.whileTrue(GeneralCommands.agitateIntakeCommand().repeatedly());
     }
 
 
