@@ -71,8 +71,8 @@ public class TalonFXLance extends MotorControllerLance
     private final MotionMagicVelocityVoltage motionMagicVelocityVoltage;
     private final DutyCycleOut dutyCycleOut;
     private final VoltageOut voltageOut;
-    private final VelocityTorqueCurrentFOC velocityTorqueCurrent;
-    private final PositionTorqueCurrentFOC positionTorqueCurrent;
+    private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC;
+    private final PositionTorqueCurrentFOC positionTorqueCurrentFOC;
     
     private ControlType controlType = ControlType.kNormal;
     private double kF = 0.0;
@@ -108,8 +108,8 @@ public class TalonFXLance extends MotorControllerLance
         motionMagicVelocityVoltage = new MotionMagicVelocityVoltage(0.0);
         dutyCycleOut = new DutyCycleOut(0.0);
         voltageOut = new VoltageOut(0.0);
-        velocityTorqueCurrent = new VelocityTorqueCurrentFOC(0.0);
-        positionTorqueCurrent = new PositionTorqueCurrentFOC(0.0);
+        velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(0.0);
+        positionTorqueCurrentFOC = new PositionTorqueCurrentFOC(0.0);
 
         clearStickyFaults();
         setupFactoryDefaults();
@@ -678,7 +678,7 @@ public class TalonFXLance extends MotorControllerLance
      * @param kP The Proportional constant
      * @param kI The Integral constant
      * @param kD The Derivative constant
-     * @param kS Static feedforward gain
+     * @param kS Arbitrary feedforward gain
      * @param kV Velocity feedforward gain
      * @param kA Acceleration feedforward gain
      */
@@ -704,6 +704,61 @@ public class TalonFXLance extends MotorControllerLance
             slotConfigs.kP = kP;
             slotConfigs.kI = kI;
             slotConfigs.kD = kD;
+            slotConfigs.kS = kS;
+            slotConfigs.kV = kV;
+            slotConfigs.kA = kA;
+
+            // switch(slotId)
+            // {
+            //     case 0:
+            //         motorConfigs.Slot0 = Slot0Configs.from(slotConfigs);
+            //         break;
+            //     case 1:
+            //         motorConfigs.Slot1 = Slot1Configs.from(slotConfigs);
+            //         break;
+            //     case 2:
+            //         motorConfigs.Slot2 = Slot2Configs.from(slotConfigs);
+            //         break;
+            // }
+            // setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller");
+            setSlot(slotConfigs);
+        }
+    }
+
+        /**
+     * Set the PID controls for the motor.
+     * @param slotId The PID slot (0-2)
+     * @param kP The Proportional constant
+     * @param kI The Integral constant
+     * @param kD The Derivative constant
+     * @param kS Arbitrary feedforward gain
+     * @param kV Velocity feedforward gain
+     * @param kA Acceleration feedforward gain
+     */
+
+    public void setupPIDController(int slotId, double kP, double kI, double kD, double kF, double kS, double kV, double kA)
+    {
+        if(isValidSlotId(slotId))
+        {
+            // SlotConfigs slotConfigs = new SlotConfigs();
+            // setup(() -> motor.getConfigurator().refresh(slotConfigs), "");
+
+            // slotConfigs.SlotNumber = slotId;
+            // slotConfigs.kP = kP;
+            // slotConfigs.kI = kI;
+            // slotConfigs.kD = kD;
+            // slotConfigs.kS = kS;
+            // slotConfigs.kV = kV;
+            // slotConfigs.kA = kA;
+            // setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller");
+
+            SlotConfigs slotConfigs = new SlotConfigs();
+
+            slotConfigs.SlotNumber = slotId;
+            slotConfigs.kP = kP;
+            slotConfigs.kI = kI;
+            slotConfigs.kD = kD;
+            this.kF = kF;
             slotConfigs.kS = kS;
             slotConfigs.kV = kV;
             slotConfigs.kA = kA;
@@ -1050,13 +1105,13 @@ public class TalonFXLance extends MotorControllerLance
                     motor.setControl(motionMagicVoltage);
                     break;
                 case kTorque:
-                    positionTorqueCurrent.Slot = slotId;
-                    positionTorqueCurrent.Position = position;
-                    positionTorqueCurrent.FeedForward = kF;
-                    positionTorqueCurrent.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
-                    positionTorqueCurrent.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+                    positionTorqueCurrentFOC.Slot = slotId;
+                    positionTorqueCurrentFOC.Position = position;
+                    positionTorqueCurrentFOC.FeedForward = kF;
+                    positionTorqueCurrentFOC.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+                    positionTorqueCurrentFOC.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
                     
-                    motor.setControl(positionTorqueCurrent);
+                    motor.setControl(positionTorqueCurrentFOC);
                     break;
             }
 
@@ -1133,13 +1188,13 @@ public class TalonFXLance extends MotorControllerLance
                     motor.setControl(motionMagicVelocityVoltage);
                     break;
                 case kTorque:
-                    velocityTorqueCurrent.Slot = slotId;
-                    velocityTorqueCurrent.Velocity = velocity;
-                    velocityTorqueCurrent.FeedForward = kF;
-                    velocityTorqueCurrent.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
-                    velocityTorqueCurrent.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+                    velocityTorqueCurrentFOC.Slot = slotId;
+                    velocityTorqueCurrentFOC.Velocity = velocity;
+                    velocityTorqueCurrentFOC.FeedForward = kF;
+                    velocityTorqueCurrentFOC.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+                    velocityTorqueCurrentFOC.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
                     
-                    motor.setControl(velocityTorqueCurrent);
+                    motor.setControl(velocityTorqueCurrentFOC);
                     break;
             }
 
@@ -1184,11 +1239,11 @@ public class TalonFXLance extends MotorControllerLance
     @Deprecated(forRemoval = true)
     public void setControlTorque(double velocity)
     {
-        velocityTorqueCurrent.Velocity = velocity;
-        velocityTorqueCurrent.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
-        velocityTorqueCurrent.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
+        velocityTorqueCurrentFOC.Velocity = velocity;
+        velocityTorqueCurrentFOC.LimitForwardMotion = (forwardHardLimit != null) ? !forwardHardLimit.get() : false;
+        velocityTorqueCurrentFOC.LimitReverseMotion = (reverseHardLimit != null) ? !reverseHardLimit.get() : false;
         
-        motor.setControl(velocityTorqueCurrent);
+        motor.setControl(velocityTorqueCurrentFOC);
     }
     
     /**
