@@ -678,7 +678,7 @@ public class TalonFXLance extends MotorControllerLance
      * @param kP The Proportional constant
      * @param kI The Integral constant
      * @param kD The Derivative constant
-     * @param kS Arbitrary feedforward gain
+     * @param kS Static feedforward gain
      * @param kV Velocity feedforward gain
      * @param kA Acceleration feedforward gain
      */
@@ -731,7 +731,7 @@ public class TalonFXLance extends MotorControllerLance
      * @param kP The Proportional constant
      * @param kI The Integral constant
      * @param kD The Derivative constant
-     * @param kS Arbitrary feedforward gain
+     * @param kS Static feedforward gain
      * @param kV Velocity feedforward gain
      * @param kA Acceleration feedforward gain
      */
