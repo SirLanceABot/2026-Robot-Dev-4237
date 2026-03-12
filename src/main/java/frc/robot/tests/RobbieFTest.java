@@ -146,7 +146,7 @@ public class RobbieFTest implements Test
     {
         // System.out.println(climb.isDetectedAfterDistanceSupplier(50.0, true).getAsBoolean());
         // System.out.println(climb.getClimbSensor());
-        System.out.println(climb.getPosition());
+        System.out.println(climb.getServoPosition());
 
         // System.out.println("Servo Position = " + climb.getServoPosition());
     }
