@@ -199,7 +199,7 @@ public class Intake extends SubsystemBase
     public void moveToUnjamPosition()
     {
         PivotMotor.setControlPosition(unjamPosition);
-        RollersMotor.set(1.0);
+        // RollersMotor.set(1.0);
     }
 
     public double getPivotPosition()

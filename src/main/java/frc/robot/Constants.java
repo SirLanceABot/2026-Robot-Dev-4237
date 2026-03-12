@@ -84,8 +84,9 @@ public final class Constants
 
     public static class Flywheel
     {
-        public static final int LEADMOTOR               = 16;
-        public static final int FOLLOWMOTOR             = 17;
+        public static final int MASTERMOTOR               = 16;
+        public static final int SLAVE1MOTOR               = 17;
+        public static final int SLAVE2MOTOR               = 4237;
 
         public static final String MOTOR_CAN_BUS        = CANbus.CANIVORE;
     }
@@ -130,7 +131,6 @@ public final class Constants
         public static final int VEIW1END = (LED_LENGTH/4);
         public static final int VEIW2END = 2*(LED_LENGTH/4);
         public static final int VEIW3END = 3*(LED_LENGTH/4);
-
 
         public static final int LED_PORT = 0;
     }

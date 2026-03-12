@@ -1,4 +1,4 @@
-package frc.robot.commands;
+ package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
@@ -575,7 +575,7 @@ public class GeneralCommands
 
             double vxMetersPerSecond = drivetrain.getState().Speeds.vxMetersPerSecond;
             double vyMetersPerSecond = drivetrain.getState().Speeds.vyMetersPerSecond;
-
+ 
             double velocity = Math.sqrt(vxMetersPerSecond * vxMetersPerSecond + vyMetersPerSecond * vyMetersPerSecond);
 
             Rotation2d rotation = drivetrain.getPose().getRotation();
@@ -641,42 +641,4 @@ public class GeneralCommands
             return Commands.none();
         }
     }
-
-
-    
-    // maybe L3?
-
-    // ask Grant
-
-   // delete once pathplanner is fixed
-    public static Command climbToL1Command()
-    {
-        return Commands.none();
-    }
-
-    // delete once pathplanner is fixed
-    public static Command retractFromL1Command()
-    {
-         return Commands.none();
-    }
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // please?
 }

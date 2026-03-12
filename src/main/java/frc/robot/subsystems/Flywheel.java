@@ -48,8 +48,9 @@ public class Flywheel extends SubsystemBase
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Flywheel Lead Motor"); //X60
-    private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Flywheel Follow Motor"); //X60
+    private final TalonFXLance masterMotor = new TalonFXLance(MASTERMOTOR, MOTOR_CAN_BUS, "Flywheel Master Motor"); //X60
+    private final TalonFXLance slave1Motor = new TalonFXLance(SLAVE1MOTOR, MOTOR_CAN_BUS, "Flywheel Slave1 Motor"); //X60
+    private final TalonFXLance slave2Motor = new TalonFXLance(SLAVE2MOTOR, MOTOR_CAN_BUS, "Flywheel Slave2 Motor"); //X60
     
     private final double defaultGain = 1.e-5;
     private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
@@ -103,28 +104,34 @@ public class Flywheel extends SubsystemBase
 
     private void configMotors()
     {
-        leadMotor.setupFactoryDefaults();
-        followMotor.setupFactoryDefaults();
+        masterMotor.setupFactoryDefaults();
+        slave1Motor.setupFactoryDefaults();
+        slave2Motor.setupFactoryDefaults();
 
-        leadMotor.setSafetyEnabled(false);
-        followMotor.setSafetyEnabled(false);
+        masterMotor.setSafetyEnabled(false);
+        slave1Motor.setSafetyEnabled(false);
+        slave2Motor.setSafetyEnabled(false);
 
-        leadMotor.setupCoastMode();
-        followMotor.setupCoastMode();
+        masterMotor.setupCoastMode();
+        slave1Motor.setupCoastMode();
+        slave2Motor.setupCoastMode();
 
         // leadMotor.setupPIDController(0, kP, kI, kD, kV);
-        leadMotor.setupPIDController(0, kP, kI, kD);
+        masterMotor.setupPIDController(0, kP, kI, kD);
         // followMotor.setupPIDController(1, kP, kI, kD, kV);
         // leadMotor.setupOpenLoopRampRate(5.0);
         // followMotor.setupOpenLoopRampRate(5.0);
 
-        leadMotor.setupTorqueControl();
-        followMotor.setupTorqueControl();
+        masterMotor.setupTorqueControl();
+        slave1Motor.setupTorqueControl();
+        slave2Motor.setupTorqueControl();
         
-        leadMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
-        followMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
+        masterMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
+        slave1Motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
+        slave2Motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
 
-        followMotor.setupFollower(LEADMOTOR, false);
+        slave1Motor.setupFollower(MASTERMOTOR, false);
+        slave2Motor.setupFollower(MASTERMOTOR, false);
 
         // leadMotor.setupMotionMagicControl(MOTIONMAGICCRUISEVELOCITY, MOTIONMAGICACCELERATION, MOTIONMAGICJERK);
     }
@@ -181,7 +188,7 @@ public class Flywheel extends SubsystemBase
 
     public double getDutyCycle()
     {
-        return leadMotor.get();
+        return masterMotor.get();
     }
 
     /**
@@ -190,7 +197,7 @@ public class Flywheel extends SubsystemBase
      */
     private void set(double speed)
     {
-        leadMotor.set(speed);
+        masterMotor.set(speed);
         // followMotor.set(speed);
     }
     
@@ -199,7 +206,7 @@ public class Flywheel extends SubsystemBase
      */
     private void setControlVelocity(double speed)
     {
-        leadMotor.setControlVelocity(speed);
+        masterMotor.setControlVelocity(speed);
         // followMotor.setControlVelocity(speed);
     }
 
@@ -208,7 +215,7 @@ public class Flywheel extends SubsystemBase
      */
     private void burpFuel()
     {
-        leadMotor.setControlVelocity(25.0);
+        masterMotor.setControlVelocity(25.0);
     }
 
     /**
@@ -224,7 +231,7 @@ public class Flywheel extends SubsystemBase
      */
     public void setVoltage(double voltage)
     {
-        leadMotor.setVoltage(voltage);
+        masterMotor.setVoltage(voltage);
     }
     
     /**
@@ -234,7 +241,7 @@ public class Flywheel extends SubsystemBase
     public void useTBH(double speed)
     {
         TBHController.setSetpoint(speed, speed); // gain should not be speed (bad)
-        leadMotor.set(TBHController.calculate(getVelocity()));
+        masterMotor.set(TBHController.calculate(getVelocity()));
     } 
 
     /**
@@ -242,7 +249,7 @@ public class Flywheel extends SubsystemBase
      */
     public double getVelocity()
     {
-        return leadMotor.getVelocity();
+        return masterMotor.getVelocity();
     }
 
     // public void displayStatorCurrent()
@@ -258,7 +265,7 @@ public class Flywheel extends SubsystemBase
      */
     public BooleanSupplier isAtSetSpeed(double targetSpeed, double speedTolerance)
     {
-        double currentSpeed = leadMotor.getVelocity();
+        double currentSpeed = masterMotor.getVelocity();
         
         return () ->
         {
