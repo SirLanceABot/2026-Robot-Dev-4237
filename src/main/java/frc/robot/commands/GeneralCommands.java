@@ -185,7 +185,7 @@ public class GeneralCommands
             Commands.either(
                 intake.moveToUnjamPositionCommand(),
                 intake.moveIntakeOutCommand(),
-                () -> intake.getPivotPosition() > 5.0);
+                () -> intake.getPivotPosition() > 5.0).withTimeout(0.5);
         }
         else
         {

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.00386150234742,
-        "y": 2.7362441314553996
+        "x": 7.9530963855421675,
+        "y": 2.5925421686746986
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.13160798122066,
-        "y": -0.12740610328638358
+        "x": 7.83289156626506,
+        "y": 0.0900963855421697
       },
       "isLocked": false,
       "linkedName": "Close Right NZ"
     },
     {
       "anchor": {
-        "x": 2.6466000000000003,
-        "y": 1.6163333333333334
+        "x": 2.838927710843373,
+        "y": 1.0735903614457833
       },
       "prevControl": {
-        "x": 2.293877777777778,
-        "y": 0.2457555555555564
+        "x": 3.11212048192771,
+        "y": 0.352361445783132
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Trench Shot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
@@ -41,11 +41,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.37,
+      "minWaypointRelativePos": 0.457203389830504,
       "maxWaypointRelativePos": 0.527258566978194,
       "constraints": {
-        "maxVelocity": 1.75,
-        "maxAcceleration": 1.75,
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.0,
         "maxAngularVelocity": 360.0,
         "maxAngularAcceleration": 360.0,
         "nominalVoltage": 12.0,
@@ -76,8 +76,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -133.3153156821037
+    "velocity": 0.0,
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Right NZ",
