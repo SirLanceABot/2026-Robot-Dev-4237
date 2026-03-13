@@ -183,9 +183,9 @@ public class GeneralCommands
         {
             return
             Commands.either(
-                intake.moveToUnjamPositionCommand(),
-                intake.moveIntakeOutCommand(),
-                () -> intake.getPivotPosition() > 5.0).withTimeout(0.5);
+                intake.moveToUnjamPositionCommand().until(intake.isAtPosition(3.0)),
+                intake.moveIntakeOutCommand().until(intake.isAtPosition(6.0)),
+                () -> intake.getPivotPosition() > 4.0).withTimeout(0.5);
         }
         else
         {

@@ -64,7 +64,7 @@ public class Flywheel extends SubsystemBase
     private final double kA = 0.00;
 
     private final double FLYWHEEL_DIAMETER_FEET  = (4.0 / 12.0); // 4.25 in
-    private final double GEAR_RATIO = (16.0 / 24.0);
+    private final double GEAR_RATIO = 1.0; // 16.0 / 24.0
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * FLYWHEEL_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // checked
     
     // Motion Magic Constants
@@ -158,8 +158,8 @@ public class Flywheel extends SubsystemBase
         distToVeloMap.put(21.0, 65.0);
         distToVeloMap.put(22.0, 67.0);
         distToVeloMap.put(23.0, 70.0);
-        distToVeloMap.put(24.0, 70.0);
-        distToVeloMap.put(25.0, 70.0);
+        distToVeloMap.put(24.0, 73.0);
+        distToVeloMap.put(25.0, 76.0);
     }
 
     // private void configPassMap()
