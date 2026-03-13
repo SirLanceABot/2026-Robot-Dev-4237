@@ -223,16 +223,17 @@ public class GeneralCommands
      */
     public static Command intakeUntilFullCommand()
     {
-        if(intake != null && indexigator != null && hopper != null)
+        if(intake != null && hopper != null)
         {
             return
             Commands.parallel(
                 intake.pickupFuelCommand(),
-                indexigator.setForwardCommand()).until(hopper.isHopperFullSupplier())
+                setLEDCommand(ColorPattern.kBlink, Color.kYellow))
+                .until(hopper.isHopperFullSupplier())
             .andThen(
                 Commands.parallel(
                     intake.stopCommand(),
-                    indexigator.stopCommand()))
+                    setLEDCommand(ColorPattern.kSolid, Color.kGreen)))
             .withName("Intake Until Full");
         }
         else
