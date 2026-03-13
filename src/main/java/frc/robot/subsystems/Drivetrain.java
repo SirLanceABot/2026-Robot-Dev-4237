@@ -11,6 +11,7 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveModule.ModuleRequest;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -78,17 +79,8 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             .withMaxAbsRotationalRate(7)
             .withHeadingPID(7, 0, 0); //Maximum rotational rate
 
-    private static final SwerveRequest.RobotCentric driveRobotCentric = new SwerveRequest.RobotCentric()
-            .withDeadband(MaxDriveSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05)
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-
-    private static final SwerveRequest.RobotCentricFacingAngle angleLockDriveRobotCentric = new SwerveRequest.RobotCentricFacingAngle()
-            .withDeadband(MaxDriveSpeed * 0.05)
-            .withRotationalDeadband(0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-            .withMaxAbsRotationalRate(7)
-            .withHeadingPID(7, 0, 0); //Maximum rotational rate
-
+    private static final ModuleRequest tankDrive = new ModuleRequest()
+            .withDriveRequest(DriveRequestType.OpenLoopVoltage);
 
     //Lock the wheels of the robot
     public static final SwerveRequest.SwerveDriveBrake lock = new SwerveRequest.SwerveDriveBrake();
@@ -390,46 +382,25 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
         );   
     }
 
-    
-    // *** ROBOT CENTRIC DRIVE COMMANDS ***
 
     /**
-     * Returns a command that will drive the robot in a robot-centric manner
+     * Returns a command that will make the robot hallucinate and think it's a tank drive,
+     * this will likely need to be run periodically, but it hasn't been tested
      * @param leftYAxis the left Y axis of the controller
-     * @param leftXAxis the left X axis of the controller
      * @param rightXAxis the right X axis of the controller
      * @param setScaleFactor decimal number that reduces drive speed
-     * @return Command to drive robot centric
+     * @return Command to drive like a tank drive, only to be used if CANcoders on the modules are out of wack
      * @author Matthew Fontecchio
      */
-    public Command driveRobotCentricCommand(DoubleSupplier leftYAxis, DoubleSupplier leftXAxis, DoubleSupplier rightXAxis, DoubleSupplier setScaleFactor)
+    public void tankDriveRequest(DoubleSupplier leftXAxis, DoubleSupplier rightXAxis, DoubleSupplier setScaleFactor)
     {
-        return applyRequest(
-            () -> driveRobotCentric
-                .withVelocityX(leftYAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) ) //Comment out this line for tank drive
-                .withVelocityY(leftXAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
-                .withRotationalRate(rightXAxis.getAsDouble() * (MaxAngularRate * (setScaleFactor.getAsDouble() >= 1.0? 1.0:setScaleFactor.getAsDouble()) ) )
-        );
+        //I'm not sure what the ForceFeedforward unit is, so the value may need to be increase or decreased
+        getModule(0).apply(tankDrive.withWheelForceFeedforwardX( ((leftXAxis.getAsDouble() * 0.5)   +   (rightXAxis.getAsDouble() * 0.5)) * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble())  )); // Front Left
+        getModule(2).apply(tankDrive.withWheelForceFeedforwardX( ((leftXAxis.getAsDouble() * 0.5)   +   (rightXAxis.getAsDouble() * 0.5)) * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) )); // Back Left
+        getModule(1).apply(tankDrive.withWheelForceFeedforwardX( ((leftXAxis.getAsDouble() * 0.5)   -   (rightXAxis.getAsDouble() * 0.5)) * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) )); // Front Right
+        getModule(3).apply(tankDrive.withWheelForceFeedforwardX( ((leftXAxis.getAsDouble() * 0.5)   -   (rightXAxis.getAsDouble() * 0.5)) * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) )); // Back Right
     }
 
-    /**
-     * Returns a command that will drive the robot in a robotCentric manner while keeping it locked at a specific angle
-     * @param leftYAxis the left Y axis of the controller
-     * @param leftXAxis left X axis of the controller
-     * @param setScaleFactor decimal number that reduces drive speed
-     * @param lockAngle angle to lock the robot's rotation (robotRelative) at in radians
-     * @author Matthew Fontecchio 
-     */
-    public Command angleLockDriveRobotCentricCommand(DoubleSupplier leftYAxis, DoubleSupplier leftXAxis, DoubleSupplier setScaleFactor, DoubleSupplier lockAngleRadians)
-    {
-        return applyRequest(
-            () -> angleLockDriveRobotCentric
-                .withVelocityX(leftYAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
-                .withVelocityY(leftXAxis.getAsDouble() * (MaxDriveSpeed * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) ) )
-                .withTargetDirection(new Rotation2d(lockAngleRadians.getAsDouble()))
-                .withTargetRateFeedforward(0)
-        );
-    }
 
 
     /**

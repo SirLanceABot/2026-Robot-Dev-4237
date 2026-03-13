@@ -125,9 +125,16 @@ public class TunerConstants {
             .withDriveFrictionVoltage(kDriveFrictionVoltage);
 
 
+    /*TODO
+     * Test what will happen if the Encoder ID's are switched with the SteerMotor ID's.
+     * For this to work you would have to figure out how to switch the swerve generator code from using
+     * an absolute CANcoder to an relative internal encoder in the SteerMotor.
+     * This could be useful if a CANcoder breaks, and is too difficult to replace during a competition
+     */
+  
     // Front Left
     private static final int kFrontLeftDriveMotorId = 7;
-    private static final int kFrontLeftSteerMotorId = 9;
+    private static final int kFrontLeftSteerMotorId = 9;    
     private static final int kFrontLeftEncoderId = 8;
     private static final Angle kFrontLeftEncoderOffset = Rotations.of(0.124268);
 
