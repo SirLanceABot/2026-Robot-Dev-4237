@@ -64,7 +64,7 @@ public final class Constants
     public static class Climb
     {
         public static final int LEADMOTOR          = 14;
-        public static final int FOLLOWMOTOR        = 15;
+        // public static final int FOLLOWMOTOR        = 15;
 
         public static final int SERVOMOTOR         = 1;
 
@@ -86,7 +86,7 @@ public final class Constants
     {
         public static final int MASTERMOTOR               = 16;
         public static final int SLAVE1MOTOR               = 17;
-        public static final int SLAVE2MOTOR               = 4237;
+        public static final int SLAVE2MOTOR               = 15; // new motor
 
         public static final String MOTOR_CAN_BUS        = CANbus.CANIVORE;
     }

@@ -115,27 +115,27 @@ public class RobbieFTest implements Test
         //      extends climb to descend traversal, servo remains out
         // 4. GeneralCommands.resetClimbToStartCommand()
 
-        controller.povUp().onTrue(
-            climb.manualMoveClimbUpCommand());
+        // controller.povUp().onTrue(
+        //     climb.manualMoveClimbUpCommand());
 
-        controller.povUp().onFalse(
-            climb.stopMotorCommand()
-        );
+        // controller.povUp().onFalse(
+        //     climb.stopMotorCommand()
+        // );
 
-        controller.povDown().onTrue(
-            climb.manualMoveClimbDownCommand());
+        // controller.povDown().onTrue(
+        //     climb.manualMoveClimbDownCommand());
 
-        controller.povDown().onFalse(
-            climb.stopMotorCommand()
-        );
+        // controller.povDown().onFalse(
+        //     climb.stopMotorCommand()
+        // );
 
-        controller.povLeft().onTrue(
-            climb.setServoPositionCommand(servoPosition.kEXTENDED)
-        );
+        // controller.povLeft().onTrue(
+        //     climb.setServoPositionCommand(servoPosition.kEXTENDED)
+        // );
 
-        controller.povRight().onTrue(
-            climb.setServoPositionCommand(servoPosition.kRETRACTED)
-        );
+        // controller.povRight().onTrue(
+        //     climb.setServoPositionCommand(servoPosition.kRETRACTED)
+        // );
         
     }
 
@@ -145,8 +145,8 @@ public class RobbieFTest implements Test
     public void periodic()
     {
         // System.out.println(climb.isDetectedAfterDistanceSupplier(50.0, true).getAsBoolean());
-        // System.out.println(climb.getClimbSensor());
-        System.out.println(climb.getServoPosition());
+        System.out.println(climb.getClimbSensor());
+        // System.out.println(climb.getServoPosition());
 
         // System.out.println("Servo Position = " + climb.getServoPosition());
     }
