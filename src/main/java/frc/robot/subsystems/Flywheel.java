@@ -139,7 +139,7 @@ public class Flywheel extends SubsystemBase
     private void configShotMap()
     {
         // first value is distance (ft) from the hub (in alliance zone), second is flywheel velo (currently ft/s)
-        // TODO test values once we have robot
+        // TODO redo fr
         distToVeloMap.put(6.0, 41.0); // 41.5
         distToVeloMap.put(7.0, 41.0); // 42
         distToVeloMap.put(8.0, 41.5); // 42.5 // added 0.5
@@ -319,12 +319,6 @@ public class Flywheel extends SubsystemBase
     {
         return run(() -> useTBH(setpoint));
     }
-
-    // public Command test(double volt)
-    // {
-    //     return run(() -> motor.setVoltage(12.7));
-    // }
-
     
 
     // *** OVERRIDEN METHODS ***

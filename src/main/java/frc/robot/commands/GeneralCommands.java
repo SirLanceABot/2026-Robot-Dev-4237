@@ -312,6 +312,8 @@ public class GeneralCommands
                 intake.turnOnRollersCommand().withTimeout(1.0))
             .andThen(
                 intake.stopCommand())
+            .andThen(
+                defaultLEDCommand())
             .withName("Intake Reset Into Robot");
         }
         else
@@ -455,8 +457,10 @@ public class GeneralCommands
     {
         if(flywheel != null)
         {
-            return flywheel.setControlVelocityCommand(() -> 35.0)
-                .andThen(setLEDCommand(ColorPattern.kSolid, Color.kBlue).onlyIf(flywheel.isAtSetSpeed(35.0, 5.0)));
+            return flywheel.setControlVelocityCommand(() -> 40.0)
+                .andThen(setLEDCommand(ColorPattern.kBlink, Color.kDarkSlateBlue).onlyIf(flywheel.isAtSetSpeed(40.0, 5.0)))
+                .withTimeout(1.0)
+                .andThen(setLEDCommand(ColorPattern.kSolid, Color.kDarkSlateBlue));
         }
         else
         {
