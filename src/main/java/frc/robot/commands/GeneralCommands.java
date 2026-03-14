@@ -162,6 +162,29 @@ public class GeneralCommands
         }
     }
 
+    /**
+     * @author Code: Robbie J
+     * @author Name: Robert Allen Frank
+     * @return read the title
+     */
+    public static Command intakeAndTellUsIfItsFullAndKeepGoingCommand()
+    {
+        if(intake != null)
+        {
+            return 
+            Commands.parallel(
+                intake.pickupFuelCommand(),
+                setLEDCommand(ColorPattern.kSolid, Color.kYellow).unless(() -> hopper != null),
+                setLEDCommand(ColorPattern.kSolid, Color.kYellow).onlyIf(() -> hopper != null).until(hopper.isHopperFullSupplier()).andThen(setLEDCommand(ColorPattern.kSolid, Color.kLimeGreen)))
+                // indexigator.setForwardCommand())
+            .withName("Intaking Fuel");
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
     public static Command unjamIntakeCommand()
     {
         if(intake != null)
