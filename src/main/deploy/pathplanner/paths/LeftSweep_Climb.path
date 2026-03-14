@@ -16,19 +16,19 @@
     },
     {
       "anchor": {
-        "x": 2.667,
-        "y": 6.575
+        "x": 3.80080736400463,
+        "y": 7.351087528935185
       },
       "prevControl": {
-        "x": 4.8168476593574905,
-        "y": 6.539963746814131
+        "x": 5.973893807870371,
+        "y": 7.390519458912037
       },
       "nextControl": {
-        "x": 0.5171523406425083,
-        "y": 6.61003625318587
+        "x": 1.6510281207229438,
+        "y": 7.312078521803387
       },
       "isLocked": false,
-      "linkedName": "Left Trench Shot"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -36,8 +36,8 @@
         "y": 4.7
       },
       "prevControl": {
-        "x": 0.30000000000000004,
-        "y": 4.7
+        "x": 1.4050387731481484,
+        "y": 5.989668981481482
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +46,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.8459851839237055,
+      "waypointRelativePos": 0.7,
       "rotationDegrees": 90.0
     },
     {
