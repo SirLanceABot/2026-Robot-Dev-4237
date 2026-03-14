@@ -154,6 +154,7 @@ public class GeneralCommands
                 setLEDCommand(ColorPattern.kSolid, Color.kYellow),
                 intake.pickupFuelCommand())
                 // indexigator.setForwardCommand())
+                .andThen(defaultLEDCommand())
             .withName("Intaking Fuel");
         }
         else
@@ -353,12 +354,13 @@ public class GeneralCommands
      */
     public static Command ejectFuelInIntakeCommand()
     {
-        if(intake != null && indexigator != null)
+        if(intake != null)
         {
             return 
             Commands.parallel(
                 setLEDCommand(ColorPattern.kSolid, Color.kOrange),
                 intake.ejectFuelCommand())
+                .andThen(defaultLEDCommand())
             .withName("Ejecting Fuel In Intake");
         }
         else
@@ -445,6 +447,7 @@ public class GeneralCommands
                 Commands.parallel(
                     indexigator.setForwardCommand(() -> 0.4),
                     accelerator.feedToShooterCommand(() -> 0.4))))
+            .andThen(defaultLEDCommand())
             .withName("ejecting all fuel slowly");
         }
         else
@@ -589,7 +592,7 @@ public class GeneralCommands
      */
     public static Command driveToPositionCommand(Pose2d targetPose, Pose2d currentPose)
     {
-        if(AutoBuilder.isConfigured())
+        if(AutoBuilder.isConfigured() && drivetrain != null)
         {
             PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(360), Units.degreesToRadians(360));
         

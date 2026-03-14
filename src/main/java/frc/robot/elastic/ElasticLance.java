@@ -2,6 +2,8 @@ package frc.robot.elastic;
 
 import java.lang.invoke.MethodHandles;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 // import edu.wpi.first.math.trajectory.Trajectory;
@@ -16,6 +18,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.RobotContainer;
 import frc.robot.pathplanner.PathPlannerLance;
 import frc.robot.sensors.Camera;
+import frc.robot.sensors.Hopper;
 import frc.robot.sensors.HopperCamera;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
@@ -37,6 +40,7 @@ public class ElasticLance
     private static Color LEDColor = new Color();
     private static Color hubTagColor = new Color();
     private static Color climbTagColor = new Color();
+    private static Color hopperColor = new Color();
 
     static
     {
@@ -57,6 +61,7 @@ public class ElasticLance
     private static LEDs leds;
     private static Drivetrain drivetrain;
     private static boolean useFullRobot;
+    private static Hopper hopper;
 
     private static Alert useFullRobotAlert = new Alert("NOT using Full Robot!", AlertType.kError);
     private static Alert autoAlert = new Alert("INVALID AUTO", AlertType.kWarning);
@@ -80,6 +85,7 @@ public class ElasticLance
         leds            = robotContainer.getLEDs();
         drivetrain      = robotContainer.getDrivetrain();
         useFullRobot    = robotContainer.useFullRobot();
+        hopper          = robotContainer.getHopper();
 
         driverControllerAlert.set(true);
         operatorControllerAlert.set(true);
@@ -130,8 +136,7 @@ public class ElasticLance
         updateLEDColorBox();
         updateValidAutoBox();
         updateStartupAlerts();
-
-       
+        updateHopperFullBox();
 
         if(!useFullRobot && DriverStation.isDisabled())
         {
@@ -141,7 +146,7 @@ public class ElasticLance
 
     public static void updateValidAutoBox()
     {
-        if(DriverStation.isDisabled())
+        if(DriverStation.isDisabled() && AutoBuilder.isConfigured())
         {
             if(PathPlannerLance.getAutonomousCommand().getName().equalsIgnoreCase("InstantCommand"))
             {
@@ -232,6 +237,27 @@ public class ElasticLance
         LEDColor = LEDs.getColor();
 
         SmartDashboard.putString("LED Color", LEDColor.toHexString());
+    }
+
+    public static void updateHopperFullBox()
+    {
+        if(hopper != null)
+        {
+            if(hopper.isHopperFullSupplier().getAsBoolean())
+            {
+                hopperColor = Color.kGreen;
+            }
+            else
+            {
+                hopperColor = Color.kYellow;
+            }
+        }
+        else
+        {
+            hopperColor = Color.kRed;
+        }
+
+        SmartDashboard.putString("Hopper Color", hopperColor.toHexString());
     }
 
     public static void updateStartupAlerts()

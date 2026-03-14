@@ -78,8 +78,6 @@ public class ScoringCommands
 
     public static Command IntakeAndScoreCommand(Intake intake, Indexigator indexigator, Accelerator accelerator, Flywheel flywheel)
     {
-
-        
         if(intake != null && indexigator != null  && accelerator != null  && flywheel != null)
         {
             return  Commands.parallel(
@@ -87,7 +85,8 @@ public class ScoringCommands
                 (intake.pickupFuelCommand()),
                 (indexigator.onCommand()),
                 (accelerator.feedToShooterCommand(()-> 0.25)),
-                (flywheel.setControlVelocityCommand(() -> 10.0)));
+                (flywheel.setControlVelocityCommand(() -> 10.0))
+                .andThen(GeneralCommands.defaultLEDCommand()));
         }
         else
         {
@@ -151,7 +150,8 @@ public class ScoringCommands
                 Commands.parallel(
                     GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kPurple),
                     indexigator.setForwardCommand(), // rpm
-                    accelerator.setVelocityCommand(12.0)));
+                    accelerator.setVelocityCommand(12.0)))
+            .andThen(GeneralCommands.defaultLEDCommand());
         }
         else
         {
@@ -199,7 +199,8 @@ public class ScoringCommands
                     indexigator.setForwardCommand(), // rpm
                     accelerator.setVelocityCommand(12.0)).withTimeout(0.05)
                 .alongWith(
-                   GeneralCommands.setLEDCommand(ColorPattern.kRainbow)));
+                   GeneralCommands.setLEDCommand(ColorPattern.kRainbow)))
+            .andThen(GeneralCommands.defaultLEDCommand());
         }
         else
         {
@@ -233,7 +234,8 @@ public class ScoringCommands
                 Commands.parallel(
                     GeneralCommands.setLEDCommand(ColorPattern.kRainbow),
                     indexigator.setForwardCommand(),
-                    accelerator.feedToShooterCommand(() -> 0.1)));
+                    accelerator.feedToShooterCommand(() -> 0.1)))
+            .andThen(GeneralCommands.defaultLEDCommand());
         }
         else
         {
@@ -253,7 +255,8 @@ public class ScoringCommands
                 Commands.parallel(
                     GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kWhite),
                     indexigator.setForwardCommand(), //rpm
-                    accelerator.setVelocityCommand(12.0)));
+                    accelerator.setVelocityCommand(12.0)))
+            .andThen(GeneralCommands.defaultLEDCommand());
         }
         else
         {
