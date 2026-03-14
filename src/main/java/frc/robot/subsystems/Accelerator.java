@@ -37,8 +37,11 @@ public class Accelerator extends SubsystemBase
     // Put all class variables and instance variables here
     private final TalonFXLance motor = new TalonFXLance(MOTOR, MOTOR_CAN_BUS, "Accelerator Motor"); // Kraken x44
     
-    private final double ACCELERATOR_DIAMETER = (2.25 / 12.0); // ft
-    // Neo 550:
+    private final double kP = 2.2;
+    private final double kI = 0.0;
+    private final double kD = 0.0;
+
+    private final double ACCELERATOR_DIAMETER = (2.25 / 12.0); // TODO check gear ratio
     private final double GEAR_RATIO = (1.0 / 12.0);
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * ACCELERATOR_DIAMETER) / GEAR_RATIO; // rev/m to ft/s using gear ratio
 
@@ -72,7 +75,7 @@ public class Accelerator extends SubsystemBase
 
         motor.setPosition(0);
 
-        motor.setupPIDController(0, 2.2, 0, 0);
+        motor.setupPIDController(0, kP, kI, kD);
 
         // motor.setupForwardHardLimitSwitch(false, true);
         // motor.setupReverseHardLimitSwitch(false, true);

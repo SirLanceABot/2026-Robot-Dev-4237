@@ -54,6 +54,7 @@ public class Flywheel extends SubsystemBase
     
     private final double defaultGain = 1.e-5;
     private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
+    
 
     // PID constants
     private final double kP = 3.6; // 5
@@ -132,6 +133,9 @@ public class Flywheel extends SubsystemBase
 
         slave1Motor.setupFollower(MASTERMOTOR, false);
         slave2Motor.setupFollower(MASTERMOTOR, true);
+
+        // var supplyVoltageSignal = masterMotor.getMotorSupplyVoltage();
+        // supplyVoltageSignal.setUpdateFrequency(0);
 
         // leadMotor.setupMotionMagicControl(MOTIONMAGICCRUISEVELOCITY, MOTIONMAGICACCELERATION, MOTIONMAGICJERK);
     }

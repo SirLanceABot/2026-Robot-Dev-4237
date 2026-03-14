@@ -542,7 +542,6 @@ public class GeneralCommands
         if(climb != null)
         {
             return climb.extendToL1FromRetractedCommand()
-            // .andThen( () -> drivetrain.resetForFieldCentric())       // included in autoclimb
             .withName("climb unmounted L1 (servo still extended)");
         } 
         else
@@ -665,7 +664,7 @@ public class GeneralCommands
             
             .andThen(
                 Commands.parallel(
-                    indexigator.setForwardCommand(), // rpm
+                    indexigator.setForwardCommand(),
                     accelerator.setVelocityCommand(12.0)));
         }
         else

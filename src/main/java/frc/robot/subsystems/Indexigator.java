@@ -47,12 +47,6 @@ public class Indexigator extends SubsystemBase
     private final double INDEXIGATOR_DIAMETER_FEET = 4237.0;
     private final double GEAR_RATIO = 1.0 / 1.0;
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INDEXIGATOR_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked
-    
-    // test for TalonFXSLance
-    // private final double kS = 0.0121;    // small number
-    // private final double kV = 0.000084;  // change once roller is attached
-    // private final double kA = 0.0;
-    // private final double kG = 0.0;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
