@@ -7,6 +7,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import javax.lang.model.util.ElementScanner14;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
@@ -24,6 +26,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.StructPublisher;
@@ -79,8 +82,6 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
             .withMaxAbsRotationalRate(7)
             .withHeadingPID(7, 0, 0); //Maximum rotational rate
 
-    private static final ModuleRequest tankDrive = new ModuleRequest()
-            .withDriveRequest(DriveRequestType.OpenLoopVoltage);
 
     //Lock the wheels of the robot
     public static final SwerveRequest.SwerveDriveBrake lock = new SwerveRequest.SwerveDriveBrake();
@@ -88,6 +89,10 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
 
     //Point the wheels of the robot without moving
     public static final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+
+    //Move modules individually
+    private static final ModuleRequest individualModuleDrive = new ModuleRequest()
+            .withDriveRequest(DriveRequestType.OpenLoopVoltage);
 
 
     /* Swerve requests to apply during SysId characterization */
@@ -383,23 +388,131 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
     }
 
 
+    
     /**
      * Returns a command that will make the robot hallucinate and think it's a tank drive,
-     * this will likely need to be run periodically, but it hasn't been tested
+     * has NOT been tested
      * @param leftYAxis the left Y axis of the controller
      * @param rightXAxis the right X axis of the controller
      * @param setScaleFactor decimal number that reduces drive speed
      * @return Command to drive like a tank drive, only to be used if CANcoders on the modules are out of wack
      * @author Matthew Fontecchio
      */
-    public void tankDriveRequest(DoubleSupplier leftXAxis, DoubleSupplier rightXAxis, DoubleSupplier setScaleFactor)
+    public Command tankDriveRequest(DoubleSupplier leftYAxis, DoubleSupplier rightXAxis, DoubleSupplier setScaleFactor)
     {
-        //I'm not sure what the ForceFeedforward unit is, so the value may need to be increase or decreased
-        getModule(0).apply(tankDrive.withWheelForceFeedforwardX( ((leftXAxis.getAsDouble() * 0.5)   +   (rightXAxis.getAsDouble() * 0.5)) * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble())  )); // Front Left
-        getModule(2).apply(tankDrive.withWheelForceFeedforwardX( ((leftXAxis.getAsDouble() * 0.5)   +   (rightXAxis.getAsDouble() * 0.5)) * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) )); // Back Left
-        getModule(1).apply(tankDrive.withWheelForceFeedforwardX( ((leftXAxis.getAsDouble() * 0.5)   -   (rightXAxis.getAsDouble() * 0.5)) * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) )); // Front Right
-        getModule(3).apply(tankDrive.withWheelForceFeedforwardX( ((leftXAxis.getAsDouble() * 0.5)   -   (rightXAxis.getAsDouble() * 0.5)) * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()) )); // Back Right
+        return Commands.run( () ->
+        {
+            if(leftYAxis.getAsDouble() > 0.1 || rightXAxis.getAsDouble() > 0.1)
+            {
+                getModule(0).apply(individualModuleDrive.withState(new SwerveModuleState( ((leftYAxis.getAsDouble() * 0.5)   +   (rightXAxis.getAsDouble() * 0.5)) * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()), getModule(0).getCurrentState().angle ))); // Front Left
+                getModule(2).apply(individualModuleDrive.withState(new SwerveModuleState( ((leftYAxis.getAsDouble() * 0.5)   +   (rightXAxis.getAsDouble() * 0.5)) * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()), getModule(2).getCurrentState().angle ))); // Back Left
+                getModule(1).apply(individualModuleDrive.withState(new SwerveModuleState( ((leftYAxis.getAsDouble() * 0.5)   -   (rightXAxis.getAsDouble() * 0.5)) * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()), getModule(1).getCurrentState().angle ))); // Front Right
+                getModule(3).apply(individualModuleDrive.withState(new SwerveModuleState( ((leftYAxis.getAsDouble() * 0.5)   -   (rightXAxis.getAsDouble() * 0.5)) * (setScaleFactor.getAsDouble() >= 1.0 ? 1.0:setScaleFactor.getAsDouble()), getModule(3).getCurrentState().angle ))); // Back Right
+            }
+            else
+            {
+                getModule(0).apply(individualModuleDrive.withState(new SwerveModuleState( 0.0, getModule(0).getCurrentState().angle)));
+                getModule(2).apply(individualModuleDrive.withState(new SwerveModuleState( 0.0, getModule(2).getCurrentState().angle)));
+                getModule(1).apply(individualModuleDrive.withState(new SwerveModuleState( 0.0, getModule(1).getCurrentState().angle)));
+                getModule(3).apply(individualModuleDrive.withState(new SwerveModuleState( 0.0, getModule(3).getCurrentState().angle)));
+            }
+        });
     }
+
+    /**
+     * Attempt to make a swerve driving command that is not reliant on the CANCoder,
+     * has NOT been tested
+     * @param leftXAxis the leftX Axis of the controller
+     * @param leftYAxis the left Y axis of the controller
+     * @param rightXAxis the right X axis of the controller
+     * @param setScaleFactor decimal number that reduces drive speed
+     * @return Command to drive without working CANCoder
+     */
+    public Command noCANCoderDriveCommand(DoubleSupplier leftYAxis, DoubleSupplier leftXAxis, DoubleSupplier rightXAxis, DoubleSupplier setScaleFactor)
+    {
+        return Commands.run( () -> 
+        {
+            //give you your relative steer motor encoder angle
+            DoubleSupplier actual0 = () ->  (getModule(0).getSteerMotor().getPosition().getValueAsDouble() < 0 ? (1 + (getModule(0).getSteerMotor().getPosition().getValueAsDouble() - (int)getModule(0).getSteerMotor().getPosition().getValueAsDouble())) * (2 * Math.PI) : (getModule(0).getSteerMotor().getPosition().getValueAsDouble() - (int)getModule(0).getSteerMotor().getPosition().getValueAsDouble()) * (2 * Math.PI));
+            DoubleSupplier hallucination0 = () -> getModule(0).getCurrentState().angle.getRadians() - actual0.getAsDouble();
+
+            DoubleSupplier actual2 = () ->  (getModule(0).getSteerMotor().getPosition().getValueAsDouble() < 0 ? (1 + (getModule(2).getSteerMotor().getPosition().getValueAsDouble() - (int)getModule(2).getSteerMotor().getPosition().getValueAsDouble())) * (2 * Math.PI) : (getModule(2).getSteerMotor().getPosition().getValueAsDouble() - (int)getModule(2).getSteerMotor().getPosition().getValueAsDouble()) * (2 * Math.PI));
+            DoubleSupplier hallucination2 = () -> getModule(2).getCurrentState().angle.getRadians() - actual2.getAsDouble();
+
+            DoubleSupplier actual1 = () ->  (getModule(0).getSteerMotor().getPosition().getValueAsDouble() < 0 ? (1 + (getModule(1).getSteerMotor().getPosition().getValueAsDouble() - (int)getModule(1).getSteerMotor().getPosition().getValueAsDouble())) * (2 * Math.PI) : (getModule(1).getSteerMotor().getPosition().getValueAsDouble() - (int)getModule(1).getSteerMotor().getPosition().getValueAsDouble()) * (2 * Math.PI));
+            DoubleSupplier hallucination1 = () -> getModule(1).getCurrentState().angle.getRadians() - actual1.getAsDouble();
+
+            DoubleSupplier actual3 = () ->  (getModule(3).getSteerMotor().getPosition().getValueAsDouble() < 0 ? (1 + (getModule(3).getSteerMotor().getPosition().getValueAsDouble() - (int)getModule(3).getSteerMotor().getPosition().getValueAsDouble())) * (2 * Math.PI) : (getModule(3).getSteerMotor().getPosition().getValueAsDouble() - (int)getModule(3).getSteerMotor().getPosition().getValueAsDouble()) * (2 * Math.PI));
+            DoubleSupplier hallucination3 = () -> getModule(3).getCurrentState().angle.getRadians() - actual3.getAsDouble();
+
+            if(rightXAxis.getAsDouble() > 0.1)
+            {
+                getModule(0).apply(individualModuleDrive.withState(new SwerveModuleState(
+                    rightXAxis.getAsDouble() * setScaleFactor.getAsDouble(), 
+                    new Rotation2d(0.125 * 2 * Math.PI) // Rotation value will need to be tuned
+                        .plus(new Rotation2d(hallucination0.getAsDouble()))
+                )));
+
+                getModule(2).apply(individualModuleDrive.withState(new SwerveModuleState(
+                    rightXAxis.getAsDouble() * setScaleFactor.getAsDouble(), 
+                    new Rotation2d(-0.125 * 2 * Math.PI) // Rotation value will need to be tuned
+                        .plus(new Rotation2d(hallucination2.getAsDouble()))
+                )));
+
+                getModule(1).apply(individualModuleDrive.withState(new SwerveModuleState(
+                    rightXAxis.getAsDouble() * setScaleFactor.getAsDouble(), 
+                    new Rotation2d(-0.125 * 2 * Math.PI) // Rotation value will need to be tuned
+                        .plus(new Rotation2d(hallucination1.getAsDouble()))
+                )));
+
+                getModule(3).apply(individualModuleDrive.withState(new SwerveModuleState(
+                    rightXAxis.getAsDouble() * setScaleFactor.getAsDouble(), 
+                    new Rotation2d(0.125 * 2 * Math.PI) // Rotation value will need to be tuned
+                        .plus(new Rotation2d(hallucination3.getAsDouble()))
+                )));
+            }
+            else if(leftYAxis.getAsDouble() > 0.1 || leftXAxis.getAsDouble() > 0.1)
+            {
+                getModule(0).apply(individualModuleDrive.withState(new SwerveModuleState(   
+                    Math.hypot(leftYAxis.getAsDouble(), leftXAxis.getAsDouble()) * setScaleFactor.getAsDouble(), 
+                    new Rotation2d(leftYAxis.getAsDouble(), leftXAxis.getAsDouble())
+                        .plus(new Rotation2d(hallucination0.getAsDouble()   )))));
+                
+                getModule(2).apply(individualModuleDrive.withState(new SwerveModuleState(   
+                    Math.hypot(leftYAxis.getAsDouble(), leftXAxis.getAsDouble()) * setScaleFactor.getAsDouble(), 
+                    new Rotation2d(leftYAxis.getAsDouble(), leftXAxis.getAsDouble())
+                        .plus(new Rotation2d(hallucination2.getAsDouble()   )))));
+
+                getModule(1).apply(individualModuleDrive.withState(new SwerveModuleState(   
+                    Math.hypot(leftYAxis.getAsDouble(), leftXAxis.getAsDouble()) * setScaleFactor.getAsDouble(), 
+                    new Rotation2d(leftYAxis.getAsDouble(), leftXAxis.getAsDouble())
+                        .plus(new Rotation2d(hallucination1.getAsDouble()  )))));
+
+                getModule(3).apply(individualModuleDrive.withState(new SwerveModuleState(   
+                    Math.hypot(leftYAxis.getAsDouble(), leftXAxis.getAsDouble()) * setScaleFactor.getAsDouble(), 
+                    new Rotation2d(leftYAxis.getAsDouble(), leftXAxis.getAsDouble())
+                        .plus(new Rotation2d(hallucination3.getAsDouble()   )))));
+            }  
+            else
+            {
+                getModule(0).apply(individualModuleDrive.withState(new SwerveModuleState(
+                    0.0, new Rotation2d(getModule(0).getCurrentState().angle.getRadians()))));
+
+                getModule(2).apply(individualModuleDrive.withState(new SwerveModuleState(
+                    0.0, new Rotation2d(getModule(2).getCurrentState().angle.getRadians()))));
+
+                getModule(1).apply(individualModuleDrive.withState(new SwerveModuleState(
+                    0.0, new Rotation2d(getModule(1).getCurrentState().angle.getRadians()))));
+
+                getModule(3).apply(individualModuleDrive.withState(new SwerveModuleState(
+                    0.0, new Rotation2d(getModule(3).getCurrentState().angle.getRadians()))));
+            }
+
+        });
+    }
+
+
+   
 
 
 
