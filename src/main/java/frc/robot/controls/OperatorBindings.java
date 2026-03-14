@@ -151,7 +151,7 @@ public final class OperatorBindings {
         Trigger xButton = controller.x();
 
         // X ~ get flywheel to speed
-        xButton.onTrue(GeneralCommands.rampUpFlywheelCommand(() -> 40));
+        xButton.onTrue(GeneralCommands.getFlywheelToSpeedCommand());
     }
 
     private static void configYButton()
@@ -194,9 +194,9 @@ public final class OperatorBindings {
     {
         Trigger startButton = controller.start();     
         
-        startButton.onTrue(GeneralCommands.unjamIntakeCommand());
+        // startButton.onTrue(GeneralCommands.unjamIntakeCommand());
         //TODO test this binding
-        // startButton.whileTrue(GeneralCommands.agitateIntakeCommand().repeatedly());
+        startButton.whileTrue(GeneralCommands.agitateIntakeCommand().repeatedly());
     }
 
 

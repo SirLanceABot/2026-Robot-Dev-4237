@@ -456,7 +456,7 @@ public class LEDs
             useActionPattern = false;
             actionPattern = null;
             setColorSolid(brightness, color);
-            System.out.println("Setting solid color");
+            // System.out.println("Setting solid color");
         }
         ).withName("Set LED Solid");
     }

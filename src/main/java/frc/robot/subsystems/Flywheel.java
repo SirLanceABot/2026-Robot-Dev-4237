@@ -56,9 +56,9 @@ public class Flywheel extends SubsystemBase
     private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
 
     // PID constants
-    private final double kP = 4.5; // 5
+    private final double kP = 3.6; // 5
     private final double kI = 0.0; // 0.4
-    private final double kD = 0.045; // 0.0
+    private final double kD = 0.05; // 0.0
     private final double kS = 0.02; // 0.016
     private final double kV = 0.0; //0.0105 * 12;
     private final double kA = 0.00;
@@ -140,26 +140,26 @@ public class Flywheel extends SubsystemBase
     {
         // first value is distance (ft) from the hub (in alliance zone), second is flywheel velo (currently ft/s)
         // TODO redo fr
-        distToVeloMap.put(6.0, 41.0); // 41.5
-        distToVeloMap.put(7.0, 41.0); // 42
-        distToVeloMap.put(8.0, 41.5); // 42.5 // added 0.5
-        distToVeloMap.put(9.0, 43.0); // 45.5
-        distToVeloMap.put(10.0, 44.5); // 47.25
-        distToVeloMap.put(11.0, 46.25); // 49.0
-        distToVeloMap.put(12.0, 48.0); // 51.75
-        distToVeloMap.put(13.0, 51.0); // 53.75
-        distToVeloMap.put(14.0, 53.0); // 59.0
-        distToVeloMap.put(15.0, 53.75); // 60 // last 0.5
-        distToVeloMap.put(16.0, 54.5); // 60
-        distToVeloMap.put(17.0, 56.5); // 60
-        distToVeloMap.put(18.0, 58.5);
-        distToVeloMap.put(19.0, 61.0);
-        distToVeloMap.put(20.0, 63.0);
-        distToVeloMap.put(21.0, 65.0);
-        distToVeloMap.put(22.0, 67.0);
-        distToVeloMap.put(23.0, 70.0);
-        distToVeloMap.put(24.0, 73.0);
-        distToVeloMap.put(25.0, 76.0);
+        distToVeloMap.put(6.0, 41.5); // 41.5
+        distToVeloMap.put(7.0, 41.5); // 42
+        distToVeloMap.put(8.0, 42.0); // 42.5 // added 0.5
+        distToVeloMap.put(9.0, 43.5); // 45.5
+        distToVeloMap.put(10.0, 45.0); // 47.25
+        distToVeloMap.put(11.0, 46.75); // 49.0
+        distToVeloMap.put(12.0, 48.5); // 51.75
+        distToVeloMap.put(13.0, 51.5); // 53.75
+        distToVeloMap.put(14.0, 53.5); // 59.0
+        distToVeloMap.put(15.0, 54.25); // 60 // last 0.5
+        distToVeloMap.put(16.0, 55.0); // 60
+        distToVeloMap.put(17.0, 57.0); // 60
+        distToVeloMap.put(18.0, 59.0);
+        distToVeloMap.put(19.0, 61.5);
+        distToVeloMap.put(20.0, 63.5);
+        distToVeloMap.put(21.0, 65.5);
+        distToVeloMap.put(22.0, 67.5);
+        distToVeloMap.put(23.0, 70.5);
+        distToVeloMap.put(24.0, 73.5);
+        distToVeloMap.put(25.0, 76.5);
     }
 
     // private void configPassMap()
@@ -307,7 +307,7 @@ public class Flywheel extends SubsystemBase
 
     public Command setCommand()
     {
-        return run(() -> set(0.45));
+        return run(() -> set(0.5));
     }
 
     public Command runMotorUsingVoltageCommand(double voltage)

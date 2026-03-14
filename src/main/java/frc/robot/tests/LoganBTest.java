@@ -122,26 +122,40 @@ public class LoganBTest implements Test
         //     )
         // );
         
-        controller.a().onTrue(
-            flywheel.setCommand()
+        controller.a().whileTrue(
+            flywheel.setControlVelocityCommand(() -> 43)
             // flywheel.setCommand()
+            // flywheel.setCommand()
+        );
+        controller.a().onFalse(
+            flywheel.stopCommand()
+        );
+
+        controller.b().whileTrue(
+            flywheel.setControlVelocityCommand(() -> 55)
+        );
+        controller.b().onFalse(
+            flywheel.stopCommand()
+        );
+
+        controller.x().whileTrue(
+            flywheel.setControlVelocityCommand(() -> 70)
+        );
+        controller.x().onFalse(
+            flywheel.stopCommand()
         );
         // controller.a().onFalse(
         //     flywheel.stopCommand()
         // );
 
-        controller.b().onTrue(
+        controller.y().onTrue(
             Commands.parallel(
                 indexigator.setForwardCommand(),
                 accelerator.setVelocityCommand(12.0)
             )
         );
 
-        controller.y().onTrue(
-            flywheel.stopCommand()
-        );
-
-        controller.x().onTrue(
+        controller.start().onTrue(
             Commands.parallel(
                 indexigator.stopCommand(),
                 accelerator.stopCommand())
