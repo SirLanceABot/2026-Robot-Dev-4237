@@ -175,7 +175,8 @@ public class GeneralCommands
             Commands.parallel(
                 intake.pickupFuelCommand(),
                 setLEDCommand(ColorPattern.kSolid, Color.kYellow).unless(() -> hopper != null),
-                setLEDCommand(ColorPattern.kSolid, Color.kYellow).onlyIf(() -> hopper != null).until(hopper.isHopperFullSupplier()).andThen(setLEDCommand(ColorPattern.kSolid, Color.kLimeGreen)))
+                setLEDCommand(ColorPattern.kSolid, Color.kYellow).onlyIf(() -> hopper != null).until(hopper.isHopperFullSupplier())
+                    .andThen(setLEDCommand(ColorPattern.kSolid, Color.kLimeGreen)))
                 // indexigator.setForwardCommand())
             .withName("Intaking Fuel");
         }
