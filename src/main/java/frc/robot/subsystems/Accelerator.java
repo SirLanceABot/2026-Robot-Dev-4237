@@ -46,7 +46,7 @@ public class Accelerator extends SubsystemBase
     // Put all class constructors here
 
     /** 
-     * Creates a new ExampleSubsystem. 
+     * Creates a new Accelerator. 
      */
     public Accelerator()
     {
@@ -171,13 +171,7 @@ public class Accelerator extends SubsystemBase
     // Put all methods that are Overridden here
 
     @Override
-    public void periodic()
-    {
-        // This method will be called once per scheduler run
-        // Use this for sensors that need to be read periodically.
-        // Use this for data that needs to be logged.
-
-    }
+    public void periodic(){}
 
     @Override
     public String toString()

@@ -152,13 +152,20 @@ public class Climb extends SubsystemBase
         leadMotor.set(-0.15);
     }
 
-
+    /**
+     * @param Climb position
+     * @return Bolean suplier of is at a postion within tolerance
+     */
     public BooleanSupplier isClimbMotorAtPosition(climbPosition position)
     {
         return () -> Math.abs(leadMotor.getPosition() - position.value) < tolerance;
         // return () -> false;
     }
 
+    /**
+     * @param position
+     * @return Bolean suplier of is at a postion within tolerance
+     */
     public BooleanSupplier isServoAtPosition(double position)
     {
         return () -> Math.abs(leadMotor.getPosition() - position) < servoTolerance;
@@ -169,6 +176,10 @@ public class Climb extends SubsystemBase
         leadMotor.set(0.0);
     }
 
+    /**
+     * Moves to target position using a PID, Slot 0 for up slot 1 for down
+     * @param targetPosition
+     */
     private void moveToPosition(climbPosition targetPosition)
     {
         if(targetPosition.value < getPosition())

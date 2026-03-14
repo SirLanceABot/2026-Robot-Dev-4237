@@ -129,7 +129,7 @@ public class Indexigator extends SubsystemBase
     {
         return run( () -> set(0.4));
     }
-
+    
     public Command setBackwardCommand(DoubleSupplier speed)
     {
         return run( () -> set(MathUtil.clamp(-speed.getAsDouble(), -0.5, 0.0)));
@@ -140,15 +140,27 @@ public class Indexigator extends SubsystemBase
         return run( () -> set(-0.2));
     }
 
-    // public Command setVelocityForwardCommand(DoubleSupplier speed)
-    // {
-    //     return run( () -> setVelocity(speed.getAsDouble()));
-    // }
+    /**
+     * WARNING WARNING UNTESTED AND UNTUNED
+     * @author Greta Howe
+     * @param speed
+     * @return
+     */
+    public Command setVelocityForwardCommand(DoubleSupplier speed)
+    {
+        return run( () -> setVelocity(speed.getAsDouble()));
+    }
 
-    // public Command setVelocityBackwardCommand(DoubleSupplier speed)
-    // {
-    //     return run( () -> setVelocity(-speed.getAsDouble()));
-    // }
+    /**
+     * WARNING WARNING UNTESTED AND UNTUNED
+     * @author Greta Howe
+     * @param speed
+     * @return
+     */
+    public Command setVelocityBackwardCommand(DoubleSupplier speed)
+    {
+        return run( () -> setVelocity(-speed.getAsDouble()));
+    }
 
     // Use a method reference instead of this method
     public Command stopCommand()

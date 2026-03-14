@@ -207,6 +207,11 @@ public class Intake extends SubsystemBase
         return PivotMotor.getPosition();
     }
 
+    /**
+     * Checks to see is at posotion within a tolrence of 1.0
+     * @param desiredPosition
+     * @return
+     */
     public BooleanSupplier isAtPosition(double desiredPosition)
     {
         return () -> (Math.abs(PivotMotor.getPosition() - desiredPosition) <= 1.0);
