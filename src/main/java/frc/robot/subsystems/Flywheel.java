@@ -131,7 +131,7 @@ public class Flywheel extends SubsystemBase
         slave2Motor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
 
         slave1Motor.setupFollower(MASTERMOTOR, false);
-        slave2Motor.setupFollower(MASTERMOTOR, false);
+        slave2Motor.setupFollower(MASTERMOTOR, true);
 
         // leadMotor.setupMotionMagicControl(MOTIONMAGICCRUISEVELOCITY, MOTIONMAGICACCELERATION, MOTIONMAGICJERK);
     }
@@ -307,7 +307,7 @@ public class Flywheel extends SubsystemBase
 
     public Command setCommand()
     {
-        return run(() -> set(0.5));
+        return run(() -> set(0.45));
     }
 
     public Command runMotorUsingVoltageCommand(double voltage)
