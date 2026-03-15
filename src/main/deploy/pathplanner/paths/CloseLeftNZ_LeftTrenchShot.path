@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.83289156626506,
-        "y": 7.870626506024097
+        "x": 7.981409090909091,
+        "y": 7.889749999999999
       },
       "isLocked": false,
       "linkedName": "Close Left NZ"
     },
     {
       "anchor": {
-        "x": 2.8935662650602403,
-        "y": 7.105686746987953
+        "x": 2.848613636363636,
+        "y": 6.663238636363636
       },
       "prevControl": {
-        "x": 3.636650602409638,
-        "y": 7.739493975903613
+        "x": 2.6527840909090905,
+        "y": 7.9825113636363625
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,11 +41,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.9,
+      "minWaypointRelativePos": 0.8,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 2.0,
+        "maxVelocity": 1.5,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 360.0,
         "maxAngularAcceleration": 360.0,
         "nominalVoltage": 12.0,
@@ -54,11 +54,11 @@
     },
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.36228813559321993,
-      "maxWaypointRelativePos": 0.46059322033898037,
+      "minWaypointRelativePos": 0.33,
+      "maxWaypointRelativePos": 0.5,
       "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 2.0,
+        "maxVelocity": 1.75,
+        "maxAcceleration": 1.75,
         "maxAngularVelocity": 720.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -92,8 +92,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -101,7 +101,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 0.0
+    "rotation": 124.62415507994895
   },
   "reversed": false,
   "folder": "Left NZ",

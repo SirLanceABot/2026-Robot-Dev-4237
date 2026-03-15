@@ -83,6 +83,7 @@ public class CommandsManager extends Command
         NamedCommands.registerCommand("Stop Ejecting All Fuel Slowly Command", GeneralCommands.stopEjectingAllFuelCommand());
         NamedCommands.registerCommand("Stop Shooting Command", GeneralCommands.stopShootingCommand());
         NamedCommands.registerCommand("Unjam Intake Command", GeneralCommands.unjamIntakeCommand());
+        NamedCommands.registerCommand("Agitate Intake Command", GeneralCommands.agitateIntakeCommand().repeatedly());
 
         // Scoring Commands
         NamedCommands.registerCommand("Shoot From Standstill Command", ScoringCommands.shootFromStandstillCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator));

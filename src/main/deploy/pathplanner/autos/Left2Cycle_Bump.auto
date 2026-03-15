@@ -23,7 +23,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 5.0
+                  "waitTime": 3.5
                 }
               },
               {
@@ -33,49 +33,24 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Unjam Intake Command"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Reset Intake Command"
-                      }
-                    }
-                  ]
+                  "name": "Agitate Intake Command"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "LeftTrenchShot_FarLeftNZ"
+            "name": "Reset Intake Command"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "FarLeftNZ_LeftBumpShot"
+            "pathName": "LeftTrenchShotRoomba"
           }
         },
         {
@@ -85,7 +60,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 5.0
+                  "waitTime": 3.5
                 }
               },
               {
@@ -95,25 +70,18 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Reset Intake Command"
-                      }
-                    }
-                  ]
+                  "name": "Agitate Intake Command"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Intake Command"
           }
         }
       ]

@@ -3,43 +3,70 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.259301204819276,
-        "y": 4.931072289156628
+        "x": 5.703602272727272,
+        "y": 4.5503409090909095
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.040746987951807,
-        "y": 5.81621686746988
+        "x": 5.962141976998905,
+        "y": 7.405950438116099
       },
       "isLocked": false,
       "linkedName": "Far Left NZ"
     },
     {
       "anchor": {
-        "x": 3.0902650602409643,
-        "y": 5.63044578313253
+        "x": 5.116113636363637,
+        "y": 7.415636363636363
       },
       "prevControl": {
-        "x": 4.860554216867469,
-        "y": 5.597662650602409
+        "x": 6.105568181818182,
+        "y": 7.405329545454545
+      },
+      "nextControl": {
+        "x": 4.169080492578358,
+        "y": 7.42550129221746
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.05475,
+        "y": 7.137352272727274
+      },
+      "prevControl": {
+        "x": 3.817454545454545,
+        "y": 7.704227272727274
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Bump Shot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.25,
-      "rotationDegrees": -45.0
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "Stop Intaking Command",
+      "waypointRelativePos": 0.01,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Stop Intaking Command"
+        }
+      }
+    },
+    {
       "name": "Ramp up Flywheel Command",
-      "waypointRelativePos": 0.07245762711864297,
+      "waypointRelativePos": 0.15,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -50,16 +77,16 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -45.0
+    "velocity": 0.0,
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Left NZ",
