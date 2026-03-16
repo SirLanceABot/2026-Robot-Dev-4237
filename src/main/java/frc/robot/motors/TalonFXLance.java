@@ -1257,6 +1257,33 @@ public class TalonFXLance extends MotorControllerLance
     }
 
     /**
+     * Updates motor voltage update frequency
+     * @param frequency to update the motor voltage at
+     */
+    public void setVoltageUpdateFrequency(double frequency)
+    {
+        motor.getMotorVoltage().setUpdateFrequency(frequency);
+    }
+
+    /**
+     * Updates duty cycle update frequency
+     * @param frequency to update the duty cycle at
+     */
+    public void setDutyCycleUpdateFrequency(double frequency)
+    {
+        motor.getDutyCycle().setUpdateFrequency(frequency);
+    }
+
+    /**
+     * Updates torque current update frequency
+     * @param frequency to update the torque current at
+     */
+    public void setTorqueCurrentUpdateFrequency(double frequency)
+    {
+        motor.getTorqueCurrent().setUpdateFrequency(frequency);
+    }
+
+    /**
      * Returns the value of the forward hard limit
      * @return The status of the limit switch
      */

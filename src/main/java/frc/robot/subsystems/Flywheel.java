@@ -134,10 +134,9 @@ public class Flywheel extends SubsystemBase
         slave1Motor.setupFollower(MASTERMOTOR, false);
         slave2Motor.setupFollower(MASTERMOTOR, true);
 
-        // var supplyVoltageSignal = masterMotor.getMotorSupplyVoltage();
-        // supplyVoltageSignal.setUpdateFrequency(0);
-
-        // leadMotor.setupMotionMagicControl(MOTIONMAGICCRUISEVELOCITY, MOTIONMAGICACCELERATION, MOTIONMAGICJERK);
+        // TODO see if makes a difference
+        masterMotor.setVoltageUpdateFrequency(200);
+        masterMotor.setTorqueCurrentUpdateFrequency(1000);
     }
  
     private void configShotMap()
