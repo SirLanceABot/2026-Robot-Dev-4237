@@ -165,7 +165,7 @@ public class PathPlannerLance
                                             .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
                                             .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
                 new PPHolonomicDriveController(
-                    new PIDConstants(1.25, 0, 0),
+                    new PIDConstants(1.1, 0, 0),
                     new PIDConstants(1.65, 0, 0) // used to be 7
                 ),
                 config,
