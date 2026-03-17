@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.981409090909091,
-        "y": 7.889749999999999
+        "x": 7.641284090909091,
+        "y": 7.848522727272728
       },
       "isLocked": false,
       "linkedName": "Close Left NZ"
@@ -34,7 +34,7 @@
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 0.8,
+      "waypointRelativePos": 0.75,
       "rotationDegrees": 0.0
     }
   ],

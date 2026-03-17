@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 7.9530963855421675,
-        "y": 2.5925421686746986
+        "y": 2.55
       },
       "prevControl": null,
       "nextControl": {
         "x": 8.7837646434493,
-        "y": -1.0149390098246283
+        "y": -1.057481178499327
       },
       "isLocked": false,
       "linkedName": "Close Right NZ"
