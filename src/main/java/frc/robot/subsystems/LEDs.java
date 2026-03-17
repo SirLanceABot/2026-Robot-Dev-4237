@@ -70,6 +70,7 @@ public class LEDs
     private LEDPattern blink;
     private LEDPattern gradient;
     private LEDPattern breathe;
+    private LEDPattern FranksThing;
     private LEDPattern progressBar;
     private LEDPattern movingRainbow;
     private LEDPattern mask;
@@ -440,6 +441,16 @@ public class LEDs
         LEDs.color = Color.kBlack;
     }
 
+    private void setFrankThingy(int brightness, Color color)
+    {
+        // Map of thingy works by setting 25% OF Leds to colo
+        base = LEDPattern.steps(Map.of(0.25, color));
+        mask = LEDPattern.steps(maskSteps).scrollAtRelativeSpeed(Percent.per(Second).of(200));
+        FranksThing = base.mask(mask);
+        FranksThing.applyTo(ledBuffer);
+        LEDs.color = Color.kBlack;        
+    }
+
     private void off()
     {
         off.applyTo(ledBuffer);
@@ -519,6 +530,16 @@ public class LEDs
                 actionPattern = () -> setMovingRainbow();
             }
             ).withName("Set LED Moving Rainbow");
+    }
+
+    public Command setFrankThing(int brightness, Color color)
+    {
+        return Commands.runOnce(() -> 
+            {
+                useActionPattern = true; 
+                actionPattern = () -> setFrankThingy(brightness, color);
+            }
+            ).withName("Set IDK what to name this LEDs");
     }
 
     public Command offCommand()
