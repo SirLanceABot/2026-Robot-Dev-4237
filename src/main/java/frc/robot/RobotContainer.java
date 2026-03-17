@@ -58,9 +58,9 @@ public class RobotContainer
     private boolean useDriverController         = false;
     private boolean useOperatorController       = false;
 
-    private boolean useLaserCAN                 = false;
+    private boolean useLaserCAN                 = true;
     private boolean useRangerDistanceSensor     = false;
-    private boolean useHopper                   = false;
+    private boolean useHopper                   = true;
 
     private boolean useHopperCamera             = false;
     private boolean useShooterCamera            = false;

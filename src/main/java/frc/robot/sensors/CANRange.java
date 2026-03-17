@@ -1,5 +1,7 @@
 package frc.robot.sensors;
 
+import static edu.wpi.first.units.Units.Inches;
+
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -46,7 +48,7 @@ public class CANRange
     {   
         System.out.println("  Constructor Started:  " + fullClassName);
         
-        canRange = new CoreCANrange(CANID, "rio");
+        canRange = new CoreCANrange(CANID, "CANivore");
         configCANRange(isDetectedThreshold);
         
 
@@ -64,16 +66,16 @@ public class CANRange
         config.ProximityParams.MinSignalStrengthForValidMeasurement = 2000; 
         // If CANrange detects an object within x meters, it will trigger the "isDetected" signal.
         config.ProximityParams.ProximityHysteresis = 0.001;
-        config.ProximityParams.ProximityThreshold = isDetectedThreshold; // in meters
+        config.ProximityParams.ProximityThreshold = isDetectedThreshold / 39.3701; // in meters
 
         // Make the CANrange update as fast as possible at 100 Hz. This requires short-range mode.
-        // Short range mode has the same range as long range mode, but is more accurate for distances less than a meter
+        // Short range mode has the same range as glong range mode, but is more accurate for distances less than a meter
         config.ToFParams.UpdateMode = UpdateModeValue.ShortRange100Hz; 
         
         FovParamsConfigs fov = new FovParamsConfigs();
         fov.FOVCenterX = 0; // Center of FOV in X direction in degrees (value must be within -11 and 11)
-        fov.FOVCenterY = -3.5; // Center of FOV in Y direction in degrees (value must be within -11 and 11)
-        fov.FOVRangeX = 27; // Range of FOV in X direction in degrees (value must be within 7 and 27)
+        fov.FOVCenterY =0; // Center of FOV in Y direction in degrees (value must be within -11 and 11)
+        fov.FOVRangeX = 7; // Range of FOV in X direction in degrees (value must be within 7 and 27)
         fov.FOVRangeY = 7; // Range of FOV in Y direction in degrees (value must be within 7 and 27)
         config = config.withFovParams(fov);
 
@@ -88,19 +90,19 @@ public class CANRange
      * Returns the distance from the nearest object in the FOV
     * @return The value of periodData.sensorValue
     */
-    public double getDistanceMeters()
+    public double getDistanceInches()
     {
-        return canRange.getDistance().getValue().magnitude();
+        return canRange.getDistance().getValue().in(Inches);
     }
 
     public DoubleSupplier getDistanceSupplier()
     {
-        return () -> getDistanceMeters();
+        return () -> getDistanceInches();
     }
 
     public boolean isBallDetected(double distance)
     {
-        return getDistanceMeters() * 39.3701 < distance; // Meters to inches
+        return getDistanceInches() < distance; // Meters to inches
     }
     
     public BooleanSupplier isBallDetectedSupplier(double distance)

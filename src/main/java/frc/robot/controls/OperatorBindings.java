@@ -158,10 +158,7 @@ public final class OperatorBindings {
     {
         Trigger yButton = controller.y();
 
-        // Y ~ eject shooter
-        yButton.onTrue(GeneralCommands.ejectAllFuelSlowlyCommand());
-
-        yButton.onFalse(GeneralCommands.stopEjectingAllFuelCommand());
+        yButton.onTrue(GeneralCommands.intakeAndTellUsIfItsFullAndKeepGoingCommand());
     }
 
 
@@ -206,7 +203,11 @@ public final class OperatorBindings {
         Trigger leftTrigger = controller.leftTrigger();
 
         // Left Trigger ~ left auto climb
-        leftTrigger.whileTrue(new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> true), Set.of()));    
+        // leftTrigger.whileTrue(new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> true), Set.of()));   
+        
+        leftTrigger.onTrue(GeneralCommands.ejectAllFuelSlowlyCommand());
+
+        leftTrigger.onTrue(GeneralCommands.stopEjectingAllFuelCommand());
     }
 
     // TESTED and WORKS (need to add climb)
@@ -215,7 +216,9 @@ public final class OperatorBindings {
         Trigger rightTrigger = controller.rightTrigger();
 
         // Right Trigger ~ right auto climb
-        rightTrigger.whileTrue(new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> false), Set.of()));
+        // rightTrigger.whileTrue(new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> false), Set.of()));
+        rightTrigger.onTrue(GeneralCommands.intakeAndTellUsIfItsFullAndKeepGoingCommand());
+
     }
 
 

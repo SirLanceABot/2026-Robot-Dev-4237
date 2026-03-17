@@ -32,8 +32,8 @@ public class Hopper
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
 
-    private CANRange canRangeRight = new CANRange(CAN_RANGE_RIGHT, 3.0);
-    private CANRange canRangeLeft = new CANRange(CAN_RANGE_LEFT, 3.0);
+    private CANRange canRangeRight = new CANRange(CAN_RANGE_RIGHT, HOPPER_EXTENDED_LENGTH);
+    private CANRange canRangeLeft = new CANRange(CAN_RANGE_LEFT, HOPPER_EXTENDED_LENGTH);
     // private final DigitalInput limitSwitchRight = new DigitalInput(LIMIT_SWITCH_RIGHT);
     // private final DigitalInput limitSwitchLeft = new DigitalInput(LIMIT_SWITCH_LEFT);
     private Debouncer debouncer = new Debouncer(0.5);
@@ -78,25 +78,25 @@ public class Hopper
     @Logged
     public DoubleSupplier getRightCanRangeDistance()
     {
-        return () -> canRangeRight.getDistanceMeters();
+        return () -> canRangeRight.getDistanceInches();
     }
 
     @Logged
     public DoubleSupplier getLeftCanRangeDistance()
     {
-        return () -> canRangeLeft.getDistanceMeters();
+        return () -> canRangeLeft.getDistanceInches();
     }
 
     @Logged
     public BooleanSupplier isRightFullSupplier()
     {
-        return () -> debouncer.calculate(canRangeRight.isBallDetected(HOPPER_EXTENDED_LENGTH));
+        return () -> debouncer.calculate(canRangeRight.isCANRangeDetecting());
     }
 
     @Logged
     public BooleanSupplier isLeftFullSupplier()
     {
-        return () -> debouncer.calculate(canRangeLeft.isBallDetected(HOPPER_EXTENDED_LENGTH));
+        return () -> debouncer.calculate(canRangeLeft.isCANRangeDetecting());
     }
 
     public BooleanSupplier isHopperFullSupplier()

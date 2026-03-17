@@ -122,22 +122,7 @@ public class GeneralCommands
     // color and pattern for LEDS to default to during a match
     public static Command defaultLEDCommand()
     {
-        if(hopper != null)
-        {
-            //TODO should this also check if hopper is closed?
-            if(hopper.isHopperFullSupplier().getAsBoolean())
-            {        
-                return setLEDCommand(ColorPattern.kBlink, Color.kYellow).withName("Set LED to hopper full mode (blinking yellow)");
-            }
-            else
-            {
-                return setLEDCommand(ColorPattern.kSolid, Color.kRed).withName("Set LED to default (red)");
-            }
-        }
-        else
-        {
-            return setLEDCommand(ColorPattern.kSolid, Color.kRed).withName("Set LED to default (red)");
-        }
+        return setLEDCommand(ColorPattern.kSolid, Color.kRed).withName("Set LED to default (red)");
     }
 
     // tested
@@ -154,7 +139,7 @@ public class GeneralCommands
                 setLEDCommand(ColorPattern.kSolid, Color.kYellow),
                 intake.pickupFuelCommand())
                 // indexigator.setForwardCommand())
-                .andThen(defaultLEDCommand())
+                // .andThen(defaultLEDCommand())
             .withName("Intaking Fuel");
         }
         else
@@ -170,15 +155,18 @@ public class GeneralCommands
      */
     public static Command intakeAndTellUsIfItsFullAndKeepGoingCommand()
     {
-        if(intake != null)
+        if(intake != null && hopper != null)
         {
             return 
-            Commands.parallel(
+            Commands.race(
                 intake.pickupFuelCommand(),
-                setLEDCommand(ColorPattern.kSolid, Color.kYellow).unless(() -> hopper != null),
-                setLEDCommand(ColorPattern.kSolid, Color.kYellow).onlyIf(() -> hopper != null).until(hopper.isHopperFullSupplier())
-                    .andThen(setLEDCommand(ColorPattern.kSolid, Color.kLimeGreen)))
-                // indexigator.setForwardCommand())
+                Commands.waitSeconds(2.0)
+                    .andThen(Commands.either(
+                        setLEDCommand(ColorPattern.kSolid, Color.kPurple),
+                        setLEDCommand(ColorPattern.kSolid, Color.kYellow),
+                        hopper.isHopperFullSupplier()
+                    ).repeatedly())
+            )
             .withName("Intaking Fuel");
         }
         else

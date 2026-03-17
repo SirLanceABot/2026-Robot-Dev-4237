@@ -196,8 +196,7 @@ public class ScoringCommands
                     indexigator.setForwardCommand(), // rpm
                     accelerator.setVelocityCommand(12.0)).withTimeout(0.05)
                 .alongWith(
-                   GeneralCommands.setLEDCommand(ColorPattern.kRainbow)))
-            .andThen(GeneralCommands.defaultLEDCommand());
+                   GeneralCommands.setLEDCommand(ColorPattern.kRainbow)));
         }
         else
         {
