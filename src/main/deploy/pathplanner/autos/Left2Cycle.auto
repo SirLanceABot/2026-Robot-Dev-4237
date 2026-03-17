@@ -54,19 +54,13 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "wait",
-                "data": {
-                  "waitTime": 3.5
-                }
-              },
-              {
                 "type": "named",
                 "data": {
-                  "name": "Shoot From Standstill Command"
+                  "name": "Eject All Fuel Slowly Command"
                 }
               },
               {
@@ -76,12 +70,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Reset Intake Command"
           }
         }
       ]

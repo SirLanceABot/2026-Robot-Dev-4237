@@ -430,7 +430,7 @@ public class GeneralCommands
             return 
             Commands.parallel(
             setLEDCommand(ColorPattern.kSolid, Color.kOrange),
-            flywheel.burpFuelCommand().until(() -> (flywheel.isAtSetSpeed(25.0, 10.0).getAsBoolean())) // velocity that can slowy eject fuel
+            flywheel.burpFuelCommand().until(() -> (flywheel.isAtSetSpeed(30.0, 10.0).getAsBoolean())) // velocity that can slowy eject fuel
             .andThen(
                 Commands.parallel(
                     indexigator.setForwardCommand(() -> 0.4),

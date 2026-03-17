@@ -205,9 +205,9 @@ public final class OperatorBindings {
         // Left Trigger ~ left auto climb
         // leftTrigger.whileTrue(new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> true), Set.of()));   
         
-        leftTrigger.onTrue(GeneralCommands.ejectAllFuelSlowlyCommand());
+        leftTrigger.whileTrue(GeneralCommands.ejectAllFuelSlowlyCommand());
 
-        leftTrigger.onTrue(GeneralCommands.stopEjectingAllFuelCommand());
+        leftTrigger.onFalse(GeneralCommands.stopEjectingAllFuelCommand());
     }
 
     // TESTED and WORKS (need to add climb)

@@ -145,18 +145,18 @@ public class Flywheel extends SubsystemBase
         // TODO redo fr
         distToVeloMap.put(6.0, 41.5); // 41.5
         distToVeloMap.put(7.0, 41.5); // 42
-        distToVeloMap.put(8.0, 42.0); // 42.5 // added 0.5
-        distToVeloMap.put(9.0, 43.5); // 45.5
-        distToVeloMap.put(10.0, 45.0); // 47.25
-        distToVeloMap.put(11.0, 46.75); // 49.0
-        distToVeloMap.put(12.0, 48.5); // 51.75
-        distToVeloMap.put(13.0, 51.5); // 53.75
-        distToVeloMap.put(14.0, 53.5); // 59.0
-        distToVeloMap.put(15.0, 54.25); // 60 // last 0.5
-        distToVeloMap.put(16.0, 55.0); // 60
-        distToVeloMap.put(17.0, 57.0); // 60
-        distToVeloMap.put(18.0, 59.0);
-        distToVeloMap.put(19.0, 61.5);
+        distToVeloMap.put(8.0, 42.5); // 42.5 // added 0.5
+        distToVeloMap.put(9.0, 44.0); // 45.5
+        distToVeloMap.put(10.0, 45.5); // 47.25
+        distToVeloMap.put(11.0, 47.25); // 49.0
+        distToVeloMap.put(12.0, 49.0); // 51.75
+        distToVeloMap.put(13.0, 52.0); // 53.75
+        distToVeloMap.put(14.0, 54.0); // 59.0
+        distToVeloMap.put(15.0, 54.75); // 60 // last 0.5
+        distToVeloMap.put(16.0, 55.5); // 60
+        distToVeloMap.put(17.0, 57.5); // 60
+        distToVeloMap.put(18.0, 59.5);
+        distToVeloMap.put(19.0, 62.0);
         distToVeloMap.put(20.0, 63.5);
         distToVeloMap.put(21.0, 68.5);
         distToVeloMap.put(22.0, 71.5);
@@ -218,7 +218,7 @@ public class Flywheel extends SubsystemBase
      */
     private void burpFuel()
     {
-        masterMotor.setControlVelocity(25.0);
+        masterMotor.setControlVelocity(30.0);
     }
 
     /**
