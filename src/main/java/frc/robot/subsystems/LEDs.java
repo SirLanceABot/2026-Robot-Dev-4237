@@ -52,6 +52,7 @@ public class LEDs
         kGradient,
         kBreathe,
         kProgressBar,
+        kFrankThing,
         kRainbow,
         kOff
     }
@@ -532,7 +533,7 @@ public class LEDs
             ).withName("Set LED Moving Rainbow");
     }
 
-    public Command setFrankThing(int brightness, Color color)
+    public Command setFrankThingCommand(int brightness, Color color)
     {
         return Commands.runOnce(() -> 
             {
