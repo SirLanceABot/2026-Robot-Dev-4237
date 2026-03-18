@@ -64,12 +64,28 @@
     },
     {
       "anchor": {
-        "x": 5.6497777777777785,
-        "y": 5.365266666666667
+        "x": 6.023113636360729,
+        "y": 7.3537954545454545
       },
       "prevControl": {
-        "x": 5.8995610460508665,
-        "y": 5.35485903048862
+        "x": 6.3220113636334565,
+        "y": 6.683852272727273
+      },
+      "nextControl": {
+        "x": 5.921253227788098,
+        "y": 7.582103266863421
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.353647727272727,
+        "y": 7.466301204819277
+      },
+      "prevControl": {
+        "x": 3.603430995545815,
+        "y": 7.45589356864123
       },
       "nextControl": null,
       "isLocked": false,
@@ -96,22 +112,13 @@
     {
       "waypointRelativePos": 2.9402515723270413,
       "rotationDegrees": 105.68645679831872
+    },
+    {
+      "waypointRelativePos": 3.922955974842783,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 3.15,
-      "maxWaypointRelativePos": 4.0,
-      "constraints": {
-        "maxVelocity": 1.5,
-        "maxAcceleration": 1.5,
-        "maxAngularVelocity": 720.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    },
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 1.2,
@@ -132,6 +139,19 @@
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 2.0,
+        "maxAngularVelocity": 1080.0,
+        "maxAngularAcceleration": 1080.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 3.662477558348296,
+      "maxWaypointRelativePos": 4.210053859964094,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 1080.0,
         "maxAngularAcceleration": 1080.0,
         "nominalVoltage": 12.0,
@@ -165,7 +185,7 @@
     },
     {
       "name": "Stop Intaking Command",
-      "waypointRelativePos": 3.35,
+      "waypointRelativePos": 3.7,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

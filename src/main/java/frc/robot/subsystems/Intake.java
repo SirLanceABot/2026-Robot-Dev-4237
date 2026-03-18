@@ -61,6 +61,9 @@ public class Intake extends SubsystemBase
     private final double retractedPosition = 0.0; // TEST
     private final double unjamPosition = 2.0;
     private final double intakingPosition = 6.0; 
+    private final double depotPosition = 4.75
+    ;
+
     // private final double theshold = 4.0;
 
     // *** CLASS CONSTRUCTORS ***
@@ -170,6 +173,12 @@ public class Intake extends SubsystemBase
         PivotMotor.setControlPosition(intakingPosition);
     }
 
+    public void pickupFuelFromDepot()
+    {
+        RollersMotor.set(.87);
+        PivotMotor.setControlPosition(depotPosition);
+    }
+
     public void turnOnRollers()
     {
         RollersMotor.set(0.5);
@@ -257,6 +266,11 @@ public class Intake extends SubsystemBase
     public Command pickupFuelCommand()
     {
         return run(() -> pickUpFuel()).withName("Pickup Fuel");
+    }
+
+    public Command pickupFuelFromDepotCommand()
+    {
+        return run(() -> pickupFuelFromDepot()).withName("Pickup Fuel From Depot");
     }
 
     public Command ejectFuelCommand() 

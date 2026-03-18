@@ -50,7 +50,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftTrenchShotRoomba"
+            "pathName": "LeftTrenchShotRoomba_Pass"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Eject All Fuel Slowly Command"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Agitate Intake Command"
+                }
+              }
+            ]
           }
         }
       ]

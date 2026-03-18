@@ -64,28 +64,12 @@
     },
     {
       "anchor": {
-        "x": 5.8211,
-        "y": 0.689177777777777
+        "x": 5.659855555555555,
+        "y": 2.795433333333333
       },
       "prevControl": {
-        "x": 6.667234601636859,
-        "y": 0.8878557919742762
-      },
-      "nextControl": {
-        "x": 5.074886363636364,
-        "y": 0.5139618686868686
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.929,
-        "y": 0.689177777777777
-      },
-      "prevControl": {
-        "x": 3.3825,
-        "y": 0.739566666666666
+        "x": 6.113355555555555,
+        "y": 2.845822222222222
       },
       "nextControl": null,
       "isLocked": false,
@@ -112,17 +96,13 @@
     {
       "waypointRelativePos": 2.8947368421053294,
       "rotationDegrees": -102.314
-    },
-    {
-      "waypointRelativePos": 3.9544025157232774,
-      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 3.7701974865350065,
-      "maxWaypointRelativePos": 4.165170556552969,
+      "minWaypointRelativePos": 3.2,
+      "maxWaypointRelativePos": 4.0,
       "constraints": {
         "maxVelocity": 1.5,
         "maxAcceleration": 1.5,
@@ -185,7 +165,7 @@
     },
     {
       "name": "Stop Intaking Command",
-      "waypointRelativePos": 3.8,
+      "waypointRelativePos": 3.4,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

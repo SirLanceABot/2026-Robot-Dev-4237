@@ -90,7 +90,7 @@ public class CommandsManager extends Command
         NamedCommands.registerCommand("Shoot on the Move", ScoringCommands.shootOnTheMoveCommand(drivetrain, indexigator, accelerator, flywheel, poseEstimator).repeatedly());
         NamedCommands.registerCommand("Physics Shoot on the Move", ScoringCommands.physicsShootOnTheMove(drivetrain, poseEstimator, indexigator, accelerator, flywheel));
         NamedCommands.registerCommand("Pass Command", ScoringCommands.passCommand(indexigator, accelerator, flywheel));
-        NamedCommands.registerCommand("Ramp up Flywheel Command", GeneralCommands.rampUpFlywheelCommand(() -> 50));
+        NamedCommands.registerCommand("Ramp up Flywheel Command", GeneralCommands.getFlywheelToSpeedCommand());
         // NamedCommands.registerCommand("Angle Lock", drivetrain.angleLockDriveCommand(null, null, null, () -> (poseEstimator.getRotationToCalculatedTarget(poseEstimator.getAllianceHubPose()).getAsDouble())));
 
         // Climbing Commands

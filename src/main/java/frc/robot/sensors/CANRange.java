@@ -74,9 +74,9 @@ public class CANRange
         
         FovParamsConfigs fov = new FovParamsConfigs();
         fov.FOVCenterX = 0; // Center of FOV in X direction in degrees (value must be within -11 and 11)
-        fov.FOVCenterY =0; // Center of FOV in Y direction in degrees (value must be within -11 and 11)
+        fov.FOVCenterY = -6; // Center of FOV in Y direction in degrees (value must be within -11 and 11)
         fov.FOVRangeX = 7; // Range of FOV in X direction in degrees (value must be within 7 and 27)
-        fov.FOVRangeY = 7; // Range of FOV in Y direction in degrees (value must be within 7 and 27)
+        fov.FOVRangeY = 27; // Range of FOV in Y direction in degrees (value must be within 7 and 27)
         config = config.withFovParams(fov);
 
 

@@ -148,6 +148,22 @@ public class GeneralCommands
         }
     }
 
+    public static Command intakeDepotCommand()
+    {
+        if(intake != null)
+        {
+            return
+            Commands.parallel(
+                setLEDCommand(ColorPattern.kSolid, Color.kRosyBrown),
+                intake.pickupFuelFromDepotCommand()
+            );
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
     /**
      * @author Code: Robbie J
      * @author Name: Robert Allen Frank
@@ -160,14 +176,16 @@ public class GeneralCommands
             return 
             Commands.race(
                 intake.pickupFuelCommand(),
-                Commands.waitSeconds(2.0)
-                    .andThen(Commands.either(
-                        setLEDCommand(ColorPattern.kSolid, Color.kPurple),
-                        setLEDCommand(ColorPattern.kSolid, Color.kYellow),
-                        hopper.isHopperFullSupplier()
-                    ).repeatedly())
-            )
+                Commands.either(
+                    setLEDCommand(ColorPattern.kSolid, Color.kPurple),
+                    setLEDCommand(ColorPattern.kSolid, Color.kYellow),
+                    hopper.isHopperFullSupplier()
+                ).repeatedly())
             .withName("Intaking Fuel");
+        }
+        else if(intake != null)
+        {
+            return intakeCommand();
         }
         else
         {
@@ -318,11 +336,11 @@ public class GeneralCommands
         if(intake != null)
         {
             return 
-            intake.retractIntakeCommand().withTimeout(1.0)
-            .alongWith(
+            Commands.parallel(
+                intake.retractIntakeCommand().withTimeout(0.5),
                 GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kGreen))
             .andThen(
-                intake.turnOnRollersCommand().withTimeout(1.0))
+                intake.turnOnRollersCommand().withTimeout(0.5))
             .andThen(
                 intake.stopCommand())
             .andThen(
@@ -472,7 +490,7 @@ public class GeneralCommands
     {
         if(flywheel != null)
         {
-            return flywheel.setControlVelocityCommand(() -> 40.0)
+            return flywheel.setControlVelocityCommand(() -> 45.0)
                 .andThen(setLEDCommand(ColorPattern.kBlink, Color.kDarkSlateBlue).onlyIf(flywheel.isAtSetSpeed(40.0, 5.0)))
                 .withTimeout(1.0)
                 .andThen(setLEDCommand(ColorPattern.kSolid, Color.kDarkSlateBlue));

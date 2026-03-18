@@ -140,12 +140,10 @@ public class ScoringCommands
             DoubleSupplier distance = () -> (poseEstimator.getDistanceToTarget(drivetrain.getState().Pose, poseEstimator.getAllianceHubPose()).getAsDouble());
             DoubleSupplier shooterPower = () -> (flywheel.getShotPower(distance.getAsDouble() * 3.281));
             return
-            drivetrain.lockWheelsCommand().withTimeout(0.1)
-            .andThen(
-                Commands.parallel(
-                    drivetrain.angleLockDriveCommand(() -> 0, () -> 0, () -> 0.05, () -> (poseEstimator.getAngleToAllianceHub().getAsDouble())).withTimeout(1.0),
-                    flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10).getAsBoolean()), // within 2 feet per second
-                    GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue)))
+            Commands.parallel(
+                drivetrain.angleLockDriveCommand(() -> 0, () -> 0, () -> 0.05, () -> (poseEstimator.getAngleToAllianceHub().getAsDouble())).withTimeout(0.25),
+                flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10).getAsBoolean()), // within 2 feet per second
+                GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue))
             .andThen(
                 Commands.parallel(
                     GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kPurple),
