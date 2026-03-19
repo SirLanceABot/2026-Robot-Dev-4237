@@ -54,6 +54,7 @@ public class LEDs
         kProgressBar,
         kFrankThing,
         kRainbow,
+        kFranksThingy,
         kOff
     }
 
@@ -445,7 +446,7 @@ public class LEDs
     private void setFrankThingy(int brightness, Color color)
     {
         // Map of thingy works by setting 25% OF Leds to colo
-        base = LEDPattern.steps(Map.of(0.25, color));
+        base = LEDPattern.steps(Map.of(0.1, color));
         mask = LEDPattern.steps(maskSteps).scrollAtRelativeSpeed(Percent.per(Second).of(200));
         FranksThing = base.mask(mask);
         FranksThing.applyTo(ledBuffer);

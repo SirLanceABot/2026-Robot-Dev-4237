@@ -124,7 +124,7 @@ public class GeneralCommands
     // color and pattern for LEDS to default to during a match
     public static Command defaultLEDCommand()
     {
-        return setLEDCommand(ColorPattern.kSolid, Color.kRed).withName("Set LED to default (red)");
+        return setLEDCommand(ColorPattern.kFrankThing, Color.kRed).withName("Set LED to default (red)");
     }
 
     // tested
