@@ -32,7 +32,7 @@ public class Climb extends SubsystemBase
     // Put all inner enums and inner classes here
     public enum climbPosition
     {
-        kEXTENDL1(100.0), kRETRACTL1(30.0), kL2(4237), kL3(4237), kSTART(0.0); // 32.0, 10.0
+        kEXTENDL1(65.0), kRETRACTL1(2.0),  kSTART(0.0); // 32.0, 10.0
 
         public final double value;
         private climbPosition(double value)
@@ -70,8 +70,8 @@ public class Climb extends SubsystemBase
     private final double tolerance = 0.2;
     private final double servoTolerance = 0.05;
 
-    private static final double kPUP = 5.0; //9.9;
-    private static final double kPDOWN = 5.0; //9.9;
+    private static final double kPUP = 2.5; //9.9;
+    private static final double kPDOWN = 2.5; //9.9;
     private static final double kI = 0;
     private static final double kD = 0.0;
 
@@ -109,6 +109,8 @@ public class Climb extends SubsystemBase
 
         leadMotor.setSafetyEnabled(false);
 
+        leadMotor.setupInverted(true);
+
         // leadMotor.setupForwardSoftLimit(32.0, true);
         // followMotor.setupForwardSoftLimit(0, false);
 
@@ -144,12 +146,12 @@ public class Climb extends SubsystemBase
     // figure out if up is positive velo
     public void manualMoveClimbUp()
     {
-        leadMotor.set(0.15);
+        leadMotor.set(0.6);
     }
 
     public void manualMoveClimbDown()
     {
-        leadMotor.set(-0.15);
+        leadMotor.set(-0.6);
     }
 
     /**
@@ -360,7 +362,8 @@ public class Climb extends SubsystemBase
 
     public BooleanSupplier isDetectedAfterDistanceSupplier(double distance, boolean isForward)
     {
-        return ()-> getClimbSensorAfterDistance(distance, isForward);
+        // return ()-> getClimbSensorAfterDistance(distance, isForward);
+        return () -> false;
     }
     
 
@@ -373,6 +376,8 @@ public class Climb extends SubsystemBase
         // This method will be called once per scheduler run
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
+
+        System.out.println("*** climb pos: " + leadMotor.getPosition());
 
         // servo.updateCurPos();
     }

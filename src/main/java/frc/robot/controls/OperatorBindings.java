@@ -216,7 +216,7 @@ public final class OperatorBindings {
         Trigger rightTrigger = controller.rightTrigger();
 
         // Right Trigger ~ right auto climb
-        // rightTrigger.whileTrue(new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> false), Set.of()));
+        // rightTrigger.whileTrue(new DeferredCommand(() -> ScoriDngCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> false), Set.of()));
         // rightTrigger.onTrue(GeneralCommands.intakeAndTellUsIfItsFullAndKeepGoingCommand());
 
         rightTrigger.onTrue(GeneralCommands.intakeDepotCommand());    
@@ -226,12 +226,20 @@ public final class OperatorBindings {
     private static void configLeftStick()
     {
         Trigger leftStick = controller.leftStick();
+
+        leftStick.onTrue(climb.manualMoveClimbDownCommand());
+
+        leftStick.onFalse(climb.stopMotorCommand());
     }
 
 
     private static void configRightStick()
     {
         Trigger rightStick = controller.rightStick();
+
+        rightStick.onTrue(climb.manualMoveClimbUpCommand());
+
+        rightStick.onFalse(climb.stopMotorCommand());
     }
 
     // TODO test binding and command
@@ -242,9 +250,10 @@ public final class OperatorBindings {
         if(climb != null)
         {
              // dpad Up ~ manual extend climb
-            dpadUp.onTrue(climb.manualMoveClimbUpCommand());
+            dpadUp.onTrue(GeneralCommands.extendClimbToL1Command());
+            // dpadUp.onTrue(climb.manualMoveClimbUpCommand());
 
-            dpadUp.onFalse(climb.stopMotorCommand());
+            // dpadUp.onFalse(climb.stopMotorCommand());
         }
     }
 
@@ -256,9 +265,10 @@ public final class OperatorBindings {
         if(climb != null)
         {
             // dpad Down ~ mantual retract climb
-            dpadDown.onTrue(climb.manualMoveClimbDownCommand());
+            dpadDown.onTrue(GeneralCommands.ascendFromL1Command());
+            // dpadDown.onTrue(climb.manualMoveClimbDownCommand());
 
-            dpadDown.onFalse(climb.stopMotorCommand());
+            // dpadDown.onFalse(climb.stopMotorCommand());
         }
     }
 

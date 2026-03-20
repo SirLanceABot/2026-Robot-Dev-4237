@@ -17,6 +17,7 @@ import frc.robot.controls.OperatorBindings;
 import frc.robot.sensors.Hopper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.LEDs.ColorPattern;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -76,6 +77,9 @@ public final class StartUpCommands
 
     private static boolean operatorVerified = false;
     private static boolean driverVerified = false;
+
+    private static boolean rightCanRangeCheckDone = false;
+    private static boolean leftCanRangeCheckDone = false;
 
     /** 
      * Once sensors detect something one time.
@@ -167,11 +171,11 @@ public final class StartUpCommands
         StartUpState result = null;
 
         // First - Voltage check
-        // result = checkBattery();
-        // if (result != null)
-        // {
-        //     return result;
-        // }
+        result = checkBattery();
+        if (result != null)
+        {
+            return result;
+        }
 
         // Second - Gyro Check
         // result = checkGyro();
@@ -181,17 +185,17 @@ public final class StartUpCommands
         // }
 
         // Third - CAN Range check
-        // result = checkLeftCANRange();
-        // if (result != null)
-        // {
-        //     return result;
-        // }
+        result = checkLeftCANRange();
+        if (result != null)
+        {
+            return result;
+        }
 
-        // result = checkRightCANRange();
-        // if (result != null)
-        // {    
-        //     return result;
-        // }
+        result = checkRightCANRange();
+        if (result != null)
+        {    
+            return result;
+        }
 
         // Fourth - Swerve alignment
         result = checkSwerve();
@@ -231,7 +235,7 @@ public final class StartUpCommands
         switch (state)
         {
             case LOW_VOLTAGE:
-                command = leds.setColorBlinkCommand(50,Color.kYellow);
+                command = GeneralCommands.setLEDCommand(ColorPattern.kFranksThingy, Color.kOrangeRed);
                 break;
 
             // case GYRO_NOT_ZEROED:
@@ -239,7 +243,7 @@ public final class StartUpCommands
             //     break;
 
             case LEFT_CAN_RANGE_OFF:
-                command = leds.setColorSolidCommand(50, Color.kPurple);
+                command = GeneralCommands.setLEDCommand(ColorPattern.kFranksThingy, Color.kDarkRed);
                 break;
             
             case RIGHT_CAN_RANGE_OFF:
@@ -255,6 +259,7 @@ public final class StartUpCommands
                 break;
 
             case SWERVE_MISALIGNED:     
+                // done in class 
                 // command = leds.setColorBlinkCommand(80, Color.kRed);
                 break;
 
@@ -361,15 +366,21 @@ public final class StartUpCommands
             return StartUpState.LEFT_CAN_RANGE_OFF;
         }
 
+        if (leftCanRangeCheckDone)
+        {
+            return null;
+        }
+
         boolean leftDetected = hopper.isLeftFullSupplier().getAsBoolean();
 
         if (leftDetected)
         {
-            System.out.println("StartUpCommands - CANRanges verified");
+            // System.out.println("StartUpCommands - CANRanges verified");
+            leftCanRangeCheckDone = true;
             return null;
         }
 
-        System.out.println("StartUpCommands - CANRanges weird - LEDs");
+        // System.out.println("StartUpCommands - CANRanges weird - LEDs");
         return StartUpState.LEFT_CAN_RANGE_OFF;
     }
 
@@ -380,16 +391,21 @@ public final class StartUpCommands
             return StartUpState.RIGHT_CAN_RANGE_OFF;
         }
 
+        if (rightCanRangeCheckDone)
+        {
+            return null;
+        }
+
         boolean rightDetected = hopper.isRightFullSupplier().getAsBoolean();
 
         if (rightDetected)
         {
-            System.out.println("StartUpCommands - CANRanges verified");
-            // canRangeVerified = true; 
+            // System.out.println("StartUpCommands - CANRanges verified");
+            rightCanRangeCheckDone = true; 
             return null;
         }
 
-        System.out.println("StartUpCommands - CANRanges weird - LEDs");
+        // System.out.println("StartUpCommands - CANRanges weird - LEDs");
         return StartUpState.RIGHT_CAN_RANGE_OFF;
     }
 

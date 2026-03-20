@@ -107,8 +107,8 @@ public class GeneralCommands
                     return colors != null ? leds.setColorGradientCommand(100, colors) : Commands.none();
                 case kRainbow:
                     return leds.setColorRainbowCommand();
-                case kFrankThing:
-                    return leds.setFrankThingCommand(100, colors[0]);
+                case kFranksThingy:
+                    return leds.setFranksThingyCommand(100, colors[0]);
                 case kOff:
                     return leds.offCommand();
                 default:

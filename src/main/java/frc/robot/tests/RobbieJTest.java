@@ -119,7 +119,7 @@ public class RobbieJTest implements Test
      */
     public void init()
     {
-        controller.a().onTrue(leds.setFrankThingCommand(90, Color.kRed));
+        controller.a().onTrue(leds.setFranksThingyCommand(90, Color.kRed));
     }
 
     /**

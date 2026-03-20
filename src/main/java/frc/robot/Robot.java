@@ -159,11 +159,11 @@ public class Robot extends TimedRobot
     @Override
     public void disabledPeriodic() 
     {
-        // StartUpCommands.checkAndUpdate(); // put here for testing purposes
+        StartUpCommands.checkAndUpdate(); // put here for testing purposes
         // Put code to run here before the match starts, but not between auto and teleop
         if(isPreMatch)
         {
-            StartUpCommands.checkAndUpdate();
+            // StartUpCommands.checkAndUpdate();
             selectedCommand = PathPlannerLance.getAutonomousCommand();
             if(!selectedCommand.getName().equalsIgnoreCase(autonomousCommand.getName()))
             {
