@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.641284090909091,
-        "y": 7.848522727272728
+        "x": 7.625022222222222,
+        "y": 8.086266666666667
       },
       "isLocked": false,
       "linkedName": "Close Left NZ"
     },
     {
       "anchor": {
-        "x": 2.848613636363636,
-        "y": 6.663238636363636
+        "x": 2.8481555555555556,
+        "y": 6.5040555555555555
       },
       "prevControl": {
-        "x": 2.6218636363636363,
-        "y": 7.951590909090909
+        "x": 2.5962111111111112,
+        "y": 8.06611111111111
       },
       "nextControl": null,
       "isLocked": false,
@@ -54,11 +54,11 @@
     },
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.33,
+      "minWaypointRelativePos": 0.3,
       "maxWaypointRelativePos": 0.5,
       "constraints": {
-        "maxVelocity": 1.75,
-        "maxAcceleration": 1.75,
+        "maxVelocity": 1.5,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 720.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.937433333333333,
-        "y": 0.03412222222222239
+        "x": 8.048288888888889,
+        "y": 0.04419999999999957
       },
       "isLocked": false,
       "linkedName": "Close Right NZ"
     },
     {
       "anchor": {
-        "x": 2.928777777777778,
-        "y": 1.3946222222222229
+        "x": 2.908622222222222,
+        "y": 1.5961777777777773
       },
       "prevControl": {
-        "x": 2.817922222222222,
-        "y": 0.13490000000000002
+        "x": 2.6163666666666665,
+        "y": 0.10466666666666691
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,11 +30,11 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3684210526315843,
+      "waypointRelativePos": 0.3666666666666675,
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 0.7947368421052681,
       "rotationDegrees": 0.0
     }
   ],
@@ -44,8 +44,8 @@
       "minWaypointRelativePos": 0.3,
       "maxWaypointRelativePos": 0.5,
       "constraints": {
-        "maxVelocity": 1.75,
-        "maxAcceleration": 1.75,
+        "maxVelocity": 1.5,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 360.0,
         "maxAngularAcceleration": 360.0,
         "nominalVoltage": 12.0,

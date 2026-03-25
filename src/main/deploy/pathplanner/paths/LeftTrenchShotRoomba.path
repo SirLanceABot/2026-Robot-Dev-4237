@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.849,
-        "y": 6.663
+        "x": 2.848,
+        "y": 6.504
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.137204545454545,
-        "y": 7.508397727272728
+        "x": 2.6869111111111112,
+        "y": 7.380822222222222
       },
       "isLocked": false,
       "linkedName": null
@@ -72,20 +72,20 @@
         "y": 6.683852272727273
       },
       "nextControl": {
-        "x": 5.921253227788098,
-        "y": 7.582103266863421
+        "x": 5.921253227788097,
+        "y": 7.582103266863423
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.353647727272727,
-        "y": 7.466301204819277
+        "x": 2.849,
+        "y": 6.663
       },
       "prevControl": {
-        "x": 3.603430995545815,
-        "y": 7.45589356864123
+        "x": 2.717144444444445,
+        "y": 7.693233333333334
       },
       "nextControl": null,
       "isLocked": false,
@@ -115,6 +115,10 @@
     },
     {
       "waypointRelativePos": 3.922955974842783,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 4.649122807017575,
       "rotationDegrees": 0.0
     }
   ],
@@ -196,8 +200,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 1080.0,
     "maxAngularAcceleration": 1080.0,
     "nominalVoltage": 12.0,
@@ -205,7 +209,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 0.0
+    "rotation": 120.28373186115675
   },
   "reversed": false,
   "folder": "Left Trench Shot",

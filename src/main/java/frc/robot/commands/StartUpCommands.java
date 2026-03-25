@@ -243,12 +243,12 @@ public final class StartUpCommands
             //     break;
 
             case LEFT_CAN_RANGE_OFF:
-                command = GeneralCommands.setLEDCommand(ColorPattern.kFranksThingy, Color.kDarkRed);
+                command = GeneralCommands.setLEDCommand(ColorPattern.kFranksThingy, Color.kMediumVioletRed);
                 break;
             
             case RIGHT_CAN_RANGE_OFF:
                 // command = leds.setColorSolidCommand(50, Color.kPink);
-                command = leds.setColorBreatheCommand(30, Color.kRed);
+                command = GeneralCommands.setLEDCommand(ColorPattern.kFranksThingy, Color.kMediumVioletRed);
                 swerveViews = new LEDs.LEDView[]
                 {
                     leds.createView(0, Constants.LEDs.VEIW1END - 1),
@@ -272,11 +272,11 @@ public final class StartUpCommands
                 //         view.setOffCommand().ignoringDisable(true).schedule();
                 //     }
                 }
-                command = leds.setColorBlinkCommand(50, Color.kMediumVioletRed);
+                command = GeneralCommands.setLEDCommand(ColorPattern.kFranksThingy, Color.kDarkRed);
                 break;
 
             case DRIVER_CONTROLLER_OFF:
-                command = leds.setColorBlinkCommand(50, Color.kOrange);
+                command = GeneralCommands.setLEDCommand(ColorPattern.kFranksThingy, Color.kDarkRed);
                 break;
 
             case READY:

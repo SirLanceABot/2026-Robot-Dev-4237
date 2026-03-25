@@ -108,7 +108,7 @@ public class GeneralCommands
                 case kRainbow:
                     return leds.setColorRainbowCommand();
                 case kFranksThingy:
-                    return leds.setFranksThingyCommand(100, colors[0]);
+                    return leds.setFranksThingyCommand(75, colors[0]);
                 case kOff:
                     return leds.offCommand();
                 default:

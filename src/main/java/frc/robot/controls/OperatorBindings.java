@@ -169,7 +169,7 @@ public final class OperatorBindings {
         Trigger leftBumper = controller.leftBumper();
 
         // Left Bumper ~ extend and turn intake on
-        leftBumper.onTrue(GeneralCommands.intakeCommand());
+        leftBumper.onTrue(GeneralCommands.intakeAndTellUsIfItsFullAndKeepGoingCommand());
     }
 
     private static void configRightBumper()
@@ -207,7 +207,7 @@ public final class OperatorBindings {
         // Left Trigger ~ left auto climb
         // leftTrigger.whileTrue(new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> true), Set.of()));   
         
-        leftTrigger.onTrue(GeneralCommands.intakeAndTellUsIfItsFullAndKeepGoingCommand());
+        leftTrigger.onTrue(GeneralCommands.intakeCommand());
     }
 
     // TESTED and WORKS (need to add climb)
@@ -227,9 +227,9 @@ public final class OperatorBindings {
     {
         Trigger leftStick = controller.leftStick();
 
-        leftStick.onTrue(climb.manualMoveClimbDownCommand());
+        // leftStick.onTrue(climb.manualMoveClimbDownCommand());
 
-        leftStick.onFalse(climb.stopMotorCommand());
+        // leftStick.onFalse(climb.stopMotorCommand());
     }
 
 
@@ -237,9 +237,9 @@ public final class OperatorBindings {
     {
         Trigger rightStick = controller.rightStick();
 
-        rightStick.onTrue(climb.manualMoveClimbUpCommand());
+        // rightStick.onTrue(climb.manualMoveClimbUpCommand());
 
-        rightStick.onFalse(climb.stopMotorCommand());
+        // rightStick.onFalse(climb.stopMotorCommand());
     }
 
     // TODO test binding and command
@@ -250,7 +250,7 @@ public final class OperatorBindings {
         if(climb != null)
         {
              // dpad Up ~ manual extend climb
-            dpadUp.onTrue(GeneralCommands.extendClimbToL1Command());
+            // dpadUp.onTrue(GeneralCommands.extendClimbToL1Command());
             // dpadUp.onTrue(climb.manualMoveClimbUpCommand());
 
             // dpadUp.onFalse(climb.stopMotorCommand());
@@ -265,7 +265,7 @@ public final class OperatorBindings {
         if(climb != null)
         {
             // dpad Down ~ mantual retract climb
-            dpadDown.onTrue(GeneralCommands.ascendFromL1Command());
+            // dpadDown.onTrue(GeneralCommands.ascendFromL1Command());
             // dpadDown.onTrue(climb.manualMoveClimbDownCommand());
 
             // dpadDown.onFalse(climb.stopMotorCommand());
@@ -279,7 +279,7 @@ public final class OperatorBindings {
         if(climb != null)
         {
             // dpad Left ~ move servo to start position
-            dpadLeft.onTrue(climb.setServoPositionCommand(servoPosition.kRETRACTED));
+            // dpadLeft.onTrue(climb.setServoPositionCommand(servoPosition.kRETRACTED));
         }
     }
 
@@ -290,7 +290,7 @@ public final class OperatorBindings {
         if(climb != null)
         {
             // dpad Right ~ move servo to climb position
-            dpadRight.onTrue(climb.setServoPositionCommand(servoPosition.kEXTENDED));
+            // dpadRight.onTrue(climb.setServoPositionCommand(servoPosition.kEXTENDED));
         }
     }
 
