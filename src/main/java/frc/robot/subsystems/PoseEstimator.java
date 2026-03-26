@@ -583,7 +583,7 @@ public class PoseEstimator extends SubsystemBase
                         rejectUpdate = true;
                     }
 
-                    if(distToTag >= 1.75 && camera.getTagCount() < 2)
+                    if(distToTag >= 2.5 && camera.getTagCount() < 2)
                     {
                         rejectUpdate = true;
                     }

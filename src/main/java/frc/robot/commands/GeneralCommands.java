@@ -492,7 +492,7 @@ public class GeneralCommands
     {
         if(flywheel != null)
         {
-            return flywheel.setControlVelocityCommand(() -> 45.0)
+            return flywheel.setControlVelocityCommand(() -> 50.0)
                 .andThen(setLEDCommand(ColorPattern.kBlink, Color.kDarkSlateBlue).onlyIf(flywheel.isAtSetSpeed(40.0, 5.0)))
                 .withTimeout(1.0)
                 .andThen(setLEDCommand(ColorPattern.kSolid, Color.kDarkSlateBlue));
