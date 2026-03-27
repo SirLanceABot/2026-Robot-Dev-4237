@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.920313253012047,
-        "y": 0.38514457831325233
+        "x": 7.846733333333335,
+        "y": 0.2860666666666667
       },
       "isLocked": false,
       "linkedName": "Close Right NZ"
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3666666666666675,
+      "waypointRelativePos": 0.28245614035088074,
       "rotationDegrees": 0.0
     },
     {
@@ -41,7 +41,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.3,
+      "minWaypointRelativePos": 0.2679955703211537,
       "maxWaypointRelativePos": 0.5,
       "constraints": {
         "maxVelocity": 1.5,
