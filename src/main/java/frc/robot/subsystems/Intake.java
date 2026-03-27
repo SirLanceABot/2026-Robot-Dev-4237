@@ -60,7 +60,7 @@ public class Intake extends SubsystemBase
 
     private final double retractedPosition = 0.0; // TEST
     private final double unjamPosition = 2.0;
-    private final double intakingPosition = 6.0; 
+    private final double intakingPosition = 6.5; 
     private final double depotPosition = 5.25;
     ;
 

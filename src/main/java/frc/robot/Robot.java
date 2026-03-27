@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.CommandsManager;
+import frc.robot.commands.GeneralCommands;
 import frc.robot.commands.StartUpCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
@@ -246,6 +247,8 @@ public class Robot extends TimedRobot
             autonomousCommand.cancel();
             autonomousCommand = null;
         }
+
+        GeneralCommands.stopShootingCommand();
 
         isPreMatch = false;
     }
