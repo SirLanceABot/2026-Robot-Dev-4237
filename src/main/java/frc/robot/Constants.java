@@ -63,14 +63,21 @@ public final class Constants
 
     public static class Climb
     {
-        public static final int LEADMOTOR          = 14;
+        public static final int MOTOR              = 4237;
         // public static final int FOLLOWMOTOR        = 15;
 
-        public static final int SERVOMOTOR         = 1;
+        public static final int SERVOMOTOR         = 4237;
 
-        public static final int SENSOR_PORT        = 2;
+        public static final int SENSOR_PORT        = 4237;
 
-        public static final String MOTOR_CAN_BUS        = CANbus.CANIVORE;    
+        public static final String MOTOR_CAN_BUS   = CANbus.CANIVORE;    
+    }
+
+    public static class ExpandingHopper
+    {
+        public static final int MOTOR               = 14;
+
+        public static final String MOTOR_CAN_BUS    = CANbus.CANIVORE;
     }
 
      /**

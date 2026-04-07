@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Climb.LEADMOTOR;
+import static frc.robot.Constants.Climb.MOTOR;
 import static frc.robot.Constants.Climb.MOTOR_CAN_BUS;
 import static frc.robot.Constants.Climb.SENSOR_PORT;
 import static frc.robot.Constants.Climb.SERVOMOTOR;
@@ -58,7 +58,7 @@ public class Climb extends SubsystemBase
     private static final double MAX_SERVO_LENGTH = 47.0;      // needs to be tested on actual bot
     private static final double MIN_SERVO_LENGTH = 2.5;      // needs to be tested on actual bot
 
-    private final TalonFXLance leadMotor = new TalonFXLance(LEADMOTOR, MOTOR_CAN_BUS, "Lead Climb Motor ");
+    private final TalonFXLance leadMotor = new TalonFXLance(MOTOR, MOTOR_CAN_BUS, "Lead Climb Motor ");
     // private final TalonFXLance followMotor = new TalonFXLance(FOLLOWMOTOR, MOTOR_CAN_BUS, "Follower Climb Motor");
     
     private final Servo servo = new Servo(SERVOMOTOR);

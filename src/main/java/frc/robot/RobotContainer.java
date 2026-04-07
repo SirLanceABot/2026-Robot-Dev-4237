@@ -18,6 +18,7 @@ import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ExpandingHopper;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Intake;
@@ -54,6 +55,7 @@ public class RobotContainer
     private boolean useClimb                    = false;
     private boolean usePoseEstimator            = false;
     private boolean useDrivetrain               = false;
+    private boolean useExpandingHopper          = false;
 
     private boolean useDriverController         = false;
     private boolean useOperatorController       = false;
@@ -81,6 +83,7 @@ public class RobotContainer
     private LaserCanSensor laserCanSensor = null;
     private RangerDistanceSensor rangerDistanceSensor = null;
     private Hopper hopper = null;
+    private ExpandingHopper expandingHopper = null;
 
     private CommandXboxController driverController = null;
     private CommandXboxController operatorController = null;
@@ -128,8 +131,11 @@ public class RobotContainer
         if(useLaserCAN)
             laserCanSensor = new LaserCanSensor();
         
-        if((useHopper))
+        if(useHopper)
             hopper = new Hopper();
+
+        if(useExpandingHopper)
+            expandingHopper = new ExpandingHopper();
 
         if(useRangerDistanceSensor)
             rangerDistanceSensor = new RangerDistanceSensor();
@@ -232,6 +238,11 @@ public class RobotContainer
     public Hopper getHopper()
     {
         return hopper;
+    }
+
+    public ExpandingHopper getExpandingHopper()
+    {
+        return expandingHopper;
     }
 
     public RangerDistanceSensor getRangerDistanceSensor()
