@@ -1,0 +1,96 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.920313253012047,
+        "y": 5.63044578313253
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.510638554216867,
+        "y": 5.379108433734939
+      },
+      "isLocked": false,
+      "linkedName": "Close Left NZ"
+    },
+    {
+      "anchor": {
+        "x": 2.6,
+        "y": 5.7
+      },
+      "prevControl": {
+        "x": 3.636650602409638,
+        "y": 5.597662650602409
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.2711433756805811,
+      "rotationDegrees": 59.99999999999999
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.4029661016949146,
+      "maxWaypointRelativePos": 0.6758474576271112,
+      "constraints": {
+        "maxVelocity": 1.75,
+        "maxAcceleration": 1.75,
+        "maxAngularVelocity": 720.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Stop Intaking Command",
+      "waypointRelativePos": 0.018220338983050414,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Stop Intaking Command"
+        }
+      }
+    },
+    {
+      "name": "Ramp up Flywheel Command",
+      "waypointRelativePos": 0.5487288135593109,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Ramp up Flywheel Command"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": "Left NZ",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": false
+}
