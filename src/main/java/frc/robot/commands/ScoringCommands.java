@@ -145,11 +145,6 @@ public class ScoringCommands
                 drivetrain.angleLockDriveCommand(() -> 0, () -> 0, () -> 0.05, () -> (poseEstimator.getAngleToAllianceHub().getAsDouble())).withTimeout(0.25),
                 flywheel.setControlVelocityCommand(() -> (shooterPower.getAsDouble())).until(() -> flywheel.isAtSetSpeed(shooterPower.getAsDouble(), 10).getAsBoolean()), // within 2 feet per second
                 GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kBlue))
-            // .andThen(
-            //     Commands.runOnce(() -> {DoubleSupplier newDistance = () -> (poseEstimator.getDistanceToTarget(drivetrain.getState().Pose, poseEstimator.getAllianceHubPose()).getAsDouble());}, poseEstimator))
-            // .andThen(
-            //     Commands.runOnce(() -> {DoubleSupplier newShooterPower = () -> (flywheel.getShotPower(newDistance.getAsDouble() * 3.281));}, flywheel)
-            // )
             .andThen(
                 Commands.parallel(
                     GeneralCommands.setLEDCommand(ColorPattern.kSolid, Color.kPurple),

@@ -53,7 +53,7 @@
       },
       "prevControl": {
         "x": 6.013378571518469,
-        "y": 3.786126388102294
+        "y": 3.7861263881022937
       },
       "nextControl": {
         "x": 5.851333333333334,
@@ -116,6 +116,10 @@
     {
       "waypointRelativePos": 3.922955974842783,
       "rotationDegrees": 59.62859231825494
+    },
+    {
+      "waypointRelativePos": 4.719298245614043,
+      "rotationDegrees": 59.99999999999999
     }
   ],
   "constraintZones": [
@@ -203,7 +207,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 67.10944834375165
+    "rotation": 128.30543511632087
   },
   "reversed": false,
   "folder": "Left Trench Shot",

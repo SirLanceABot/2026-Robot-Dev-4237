@@ -32,6 +32,10 @@
     {
       "waypointRelativePos": 0.2711433756805811,
       "rotationDegrees": 59.99999999999999
+    },
+    {
+      "waypointRelativePos": 0.7684210526315755,
+      "rotationDegrees": 59.99999999999999
     }
   ],
   "constraintZones": [
@@ -84,7 +88,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 124.31377311913751
   },
   "reversed": false,
   "folder": "Left NZ",
