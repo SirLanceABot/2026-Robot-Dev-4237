@@ -44,7 +44,7 @@ public class RobotContainer
     }
 
     // Select the robot components to use
-    private boolean useFullRobot                = false;
+    private boolean useFullRobot                = true;
     
     private boolean useExampleSubsystem         = false;
     // private boolean useAgitator                 = false;
@@ -55,14 +55,14 @@ public class RobotContainer
     private boolean useClimb                    = false;
     private boolean usePoseEstimator            = false;
     private boolean useDrivetrain               = false;
-    private boolean useExpandingHopper          = false;
+    private boolean useExpandingHopper          = true;
 
     private boolean useDriverController         = false;
     private boolean useOperatorController       = false;
 
-    private boolean useLaserCAN                 = false;
+    private boolean useLaserCAN                 = true;
     private boolean useRangerDistanceSensor     = false;
-    private boolean useHopper                   = false;
+    private boolean useHopper                   = true;
 
     private boolean useHopperCamera             = false;
     private boolean useShooterCamera            = false;

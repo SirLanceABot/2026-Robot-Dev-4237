@@ -46,8 +46,8 @@ public class ExpandingHopper extends SubsystemBase
 
     private final TalonFXLance motor = new TalonFXLance(MOTOR, MOTOR_CAN_BUS, "Hopper Motor ");
 
-    private static final double kPUP = .01;
-    private static final double kPDOWN = .01;
+    private static final double kPUP = .45;
+    private static final double kPDOWN = .45;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
 
@@ -90,7 +90,7 @@ public class ExpandingHopper extends SubsystemBase
 
         // motor.setupForwardHardLimitSwitch(true, true, 1);
 
-        motor.setupReverseHardLimitSwitch(true, true, 0);
+        motor.setupReverseHardLimitSwitch(true, true, 2);
 
         // motor.setupFollower(LEADMOTOR, true);
 
@@ -117,12 +117,12 @@ public class ExpandingHopper extends SubsystemBase
     // figure out if up is positive velo
     public void manualExtendHopper()
     {
-        motor.set(0.1);
+        motor.set(0.25);
     }
 
     public void manualRetractHopper()
     {
-        motor.set(-0.1);
+        motor.set(-0.25);
     }
 
     /**
@@ -203,7 +203,8 @@ public class ExpandingHopper extends SubsystemBase
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
 
-        System.out.println("**hopper posiition = " + motor.getPosition());
+        // System.out.println("**hopper posiition = " + motor.getPosition());
+        // System.out.println("ispressed: " + motor.getReverseHardLimit());
     }
 
     @Override
