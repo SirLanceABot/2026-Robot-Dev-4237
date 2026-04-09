@@ -131,8 +131,8 @@ public class Intake extends SubsystemBase
         PivotMotor.setSafetyEnabled(false);
         PivotFollower.setSafetyEnabled(false);
 
-        PivotMotor.setupForwardHardLimitSwitch(true, true, 0);
-        PivotMotor.setupReverseHardLimitSwitch(true, true, 1);
+        PivotMotor.setupForwardHardLimitSwitch(false, true, 0);
+        PivotMotor.setupReverseHardLimitSwitch(false, true, 1);
 
         // Configure Velocity Conversion Factor (rev/s to ft/s)
         // intakeRollersMotor.setupVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);

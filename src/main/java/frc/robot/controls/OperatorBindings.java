@@ -23,6 +23,7 @@ import frc.robot.subsystems.Accelerator;
 // import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.ExpandingHopper;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Intake;
@@ -54,6 +55,7 @@ public final class OperatorBindings {
     private static Flywheel flywheel;
     private static Indexigator indexigator;
     private static Intake intake;
+    private static ExpandingHopper expandingHopper;
     private static PoseEstimator poseEstimator;
 
     private static DoubleSupplier leftYAxis;
@@ -79,6 +81,7 @@ public final class OperatorBindings {
         indexigator = robotContainer.getIndexigator();
         intake = robotContainer.getIntake();
         poseEstimator = robotContainer.getPoseEstimator();
+        expandingHopper = robotContainer.getExpandingHopper();
 
         if(controller != null)
         {
@@ -129,12 +132,11 @@ public final class OperatorBindings {
     {
         Trigger aButton = controller.a();
 
-        // A ~ eject intake
-        // aButton.onTrue(GeneralCommands.ejectFuelInIntakeCommand());
-
-        // aButton.onFalse(GeneralCommands.stopEjectingFuelInIntakeCommand());
-
-        aButton.onTrue(intake.turnOnRollersAtSetSpeedCommand(0.5));
+        // A ~ retract hopper command
+        if(expandingHopper != null)
+        {
+            aButton.onTrue(expandingHopper.retractHopperCommand());
+        }
     }
 
 
@@ -150,14 +152,18 @@ public final class OperatorBindings {
     {
         Trigger xButton = controller.x();
 
-        // X ~ get flywheel to speed
-        xButton.onTrue(GeneralCommands.getFlywheelToSpeedCommand());
+        // X ~ extend hopper command
+        if(expandingHopper != null)
+        {
+            xButton.onTrue(expandingHopper.extendHopperCommand());
+        }
     }
 
     private static void configYButton()
     {
         Trigger yButton = controller.y();
 
+        // Y ~ eject fuel through shooter
         yButton.whileTrue(GeneralCommands.ejectAllFuelSlowlyCommand());
 
         yButton.onFalse(GeneralCommands.stopEjectingAllFuelCommand());
@@ -224,36 +230,22 @@ public final class OperatorBindings {
 
 
     private static void configLeftStick()
-    {
-        Trigger leftStick = controller.leftStick();
-
-        // leftStick.onTrue(climb.manualMoveClimbDownCommand());
-
-        // leftStick.onFalse(climb.stopMotorCommand());
-    }
+    {}
 
 
     private static void configRightStick()
-    {
-        Trigger rightStick = controller.rightStick();
+    {}
 
-        // rightStick.onTrue(climb.manualMoveClimbUpCommand());
-
-        // rightStick.onFalse(climb.stopMotorCommand());
-    }
-
-    // TODO test binding and command
     private static void configDpadUp()
     {
         Trigger dpadUp = controller.povUp();
 
-        if(climb != null)
+        // dpad Up ~ manual extend hopper
+        if(expandingHopper != null)
         {
-             // dpad Up ~ manual extend climb
-            // dpadUp.onTrue(GeneralCommands.extendClimbToL1Command());
-            // dpadUp.onTrue(climb.manualMoveClimbUpCommand());
+            dpadUp.onTrue(expandingHopper.manualExtendHopperCommand());
 
-            // dpadUp.onFalse(climb.stopMotorCommand());
+            dpadUp.onFalse(expandingHopper.stopMotorCommand());
         }
     }
 
@@ -262,36 +254,23 @@ public final class OperatorBindings {
     {
         Trigger dpadDown = controller.povDown();
 
-        if(climb != null)
+        // dpad Down ~ manual retract hopper
+        if(expandingHopper != null)
         {
-            // dpad Down ~ mantual retract climb
-            // dpadDown.onTrue(GeneralCommands.ascendFromL1Command());
-            // dpadDown.onTrue(climb.manualMoveClimbDownCommand());
+            dpadDown.onTrue(expandingHopper.manualRetractHopperCommand());
 
-            // dpadDown.onFalse(climb.stopMotorCommand());
+            dpadDown.onFalse(expandingHopper.stopMotorCommand());
         }
     }
 
     private static void configDpadLeft()
     {
         Trigger dpadLeft = controller.povLeft();
-
-        if(climb != null)
-        {
-            // dpad Left ~ move servo to start position
-            // dpadLeft.onTrue(climb.setServoPositionCommand(servoPosition.kRETRACTED));
-        }
     }
 
     private static void configDpadRight()
     {
         Trigger dpadRight = controller.povRight();
-
-        if(climb != null)
-        {
-            // dpad Right ~ move servo to climb position
-            // dpadRight.onTrue(climb.setServoPositionCommand(servoPosition.kEXTENDED));
-        }
     }
 
     public static void configRumble(int time)
@@ -305,7 +284,5 @@ public final class OperatorBindings {
     }
 
     private static void configDefaultCommands()
-    {
-       
-    }    
+    {}    
 }

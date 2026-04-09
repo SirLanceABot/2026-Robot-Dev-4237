@@ -32,7 +32,7 @@ public class ExpandingHopper extends SubsystemBase
     // Put all inner enums and inner classes here
     public enum hopperPosition
     {
-        kRETRACTED(0.0), kEXTENDED(10.0);
+        kRETRACTED(0.0), kEXTENDED(31.0);
 
         public final double value;
         private hopperPosition(double value)
@@ -46,9 +46,9 @@ public class ExpandingHopper extends SubsystemBase
 
     private final TalonFXLance motor = new TalonFXLance(MOTOR, MOTOR_CAN_BUS, "Hopper Motor ");
 
-    private static final double kPUP = 0;
-    private static final double kPDOWN = 0;
-    private static final double kI = 0;
+    private static final double kPUP = .01;
+    private static final double kPDOWN = .01;
+    private static final double kI = 0.0;
     private static final double kD = 0.0;
 
 
@@ -84,13 +84,13 @@ public class ExpandingHopper extends SubsystemBase
 
         motor.setupInverted(true);
 
-        // motor.setupForwardSoftLimit(32.0, true);
+        motor.setupForwardSoftLimit(32.0, true);
 
-        // motor.setupReverseSoftLimit(0.0, true);
+        motor.setupReverseSoftLimit(-1.0, true);
 
-        // motor.setupForwardHardLimitSwitch(true, true, 0);
+        // motor.setupForwardHardLimitSwitch(true, true, 1);
 
-        // motor.setupReverseHardLimitSwitch(true, true, 1);
+        motor.setupReverseHardLimitSwitch(true, true, 0);
 
         // motor.setupFollower(LEADMOTOR, true);
 
@@ -171,16 +171,16 @@ public class ExpandingHopper extends SubsystemBase
         return runOnce( () -> stopMotor());
     }
 
-    public Command retractHopperCommand()
-    {
-        return run( () -> moveToPosition(hopperPosition.kRETRACTED))
-            .until(isHopperAtPosition(hopperPosition.kRETRACTED));
-    }
-
     public Command extendHopperCommand()
     {
         return run( () -> moveToPosition(hopperPosition.kEXTENDED))
             .until(isHopperAtPosition(hopperPosition.kEXTENDED));
+    }
+    
+    public Command retractHopperCommand()
+    {
+        return run( () -> moveToPosition(hopperPosition.kRETRACTED))
+            .until(isHopperAtPosition(hopperPosition.kRETRACTED));
     }
 
     public Command manualExtendHopperCommand()
