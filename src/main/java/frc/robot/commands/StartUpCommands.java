@@ -454,12 +454,12 @@ public final class StartUpCommands
                 {
                     if (isMisaligned)
                     {
-                        swerveViews[i].setViewColorBlinkCommand(80, Color.kRed, 0.2).ignoringDisable(true).schedule();
+                        swerveViews[i].setViewColorBlinkCommand(Color.kRed, 0.2).ignoringDisable(true).schedule();
                         // System.out.println("Motor:" + i);
                     }
                     else
                     {
-                        swerveViews[i].setViewColorSolidCommand(30, Color.kGreen).ignoringDisable(true).schedule();
+                        swerveViews[i].setViewColorSolidCommand(Color.kGreen).ignoringDisable(true).schedule();
                     }
 
                     if (isMisaligned)

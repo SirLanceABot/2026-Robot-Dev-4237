@@ -3,6 +3,7 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 // import frc.robot.subsystems.Agitator;
@@ -11,6 +12,7 @@ import frc.robot.commands.ScoringCommands;
 import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.LEDs;
 
 @SuppressWarnings("unused")
 public class GretaHTest implements Test
@@ -39,6 +41,7 @@ public class GretaHTest implements Test
     private final Climb climb;
     // private final Agitator agitator;
     private final Flywheel flywheel;
+    private final LEDs LEDs;
     private final CommandXboxController controller = new CommandXboxController(0);
 
 
@@ -60,6 +63,7 @@ public class GretaHTest implements Test
         this.climb = robotContainer.getClimb();
         // this.agitator = robotContainer.getAgitator();
         this.flywheel = robotContainer.getFlywheel();
+        this.LEDs = robotContainer.getLEDs();
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -85,6 +89,10 @@ public class GretaHTest implements Test
         // controller.b().onTrue(climb.retractServoCommand());
         // controller.x().onTrue(climb.setServoPositionCommand(48));
         // controller.y().onTrue(climb.setServoPositionCommand(0.0));
+        controller.a().onTrue(LEDs.setColorSolidCommand(Color.kBlue));
+        controller.b().onTrue(LEDs.setColorBlinkCommand(Color.kYellow));
+        controller.x().onTrue(LEDs.setColorRainbowCommand());
+        controller.y().onTrue(LEDs.offCommand());
 
     }
 

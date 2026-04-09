@@ -100,15 +100,15 @@ public class GeneralCommands
             switch(pattern)
             { 
                 case kSolid:
-                    return colors != null ? leds.setColorSolidCommand(100, colors[0]) : Commands.none();
+                    return colors != null ? leds.setColorSolidCommand(colors[0]) : Commands.none();
                 case kBlink:
-                    return colors != null ? leds.setColorBlinkCommand(80, colors[0]) : Commands.none();
+                    return colors != null ? leds.setColorBlinkCommand(colors[0]) : Commands.none();
                 case kGradient:
-                    return colors != null ? leds.setColorGradientCommand(100, colors) : Commands.none();
+                    return colors != null ? leds.setColorGradientCommand(colors) : Commands.none();
                 case kRainbow:
                     return leds.setColorRainbowCommand();
                 case kFranksThingy:
-                    return leds.setFranksThingyCommand(75, colors[0]);
+                    return leds.setFranksThingyCommand(colors[0]);
                 case kOff:
                     return leds.offCommand();
                 default:

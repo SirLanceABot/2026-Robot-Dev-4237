@@ -65,6 +65,7 @@ public class LEDs
     private final AddressableLED led = new AddressableLED(Constants.LEDs.LED_PORT);
     private final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(Constants.LEDs.LED_LENGTH);
     private final List<LEDView> views = new ArrayList<>();
+    private static final int brightness = 50;
 
 
     // All Patterns
@@ -73,7 +74,7 @@ public class LEDs
     private LEDPattern gradient;
     private LEDPattern breathe;
     private LEDPattern FranksThing;
-    private LEDPattern progressBar;
+    // private LEDPattern progressBar;
     private LEDPattern movingRainbow;
     private LEDPattern mask;
     private LEDPattern rainbow = LEDPattern.rainbow(255, 255);
@@ -145,7 +146,7 @@ public class LEDs
          */
         public Command setOffCommand()
         {
-            return Commands.runOnce(() -> setViewColorSolid(80, Color.kBlack));
+            return Commands.runOnce(() -> setViewColorSolid(Color.kBlack));
         }
 
         /**
@@ -153,7 +154,7 @@ public class LEDs
          * 
          * @param color {@link Color} The color to set the LED view to
          */
-        public void setViewColorSolid(int brightness, Color color)
+        public void setViewColorSolid(Color color)
         {
             Objects.requireNonNull(color, "Color cannot be null");
             setPattern(LEDPattern.solid(color).atBrightness(Percent.of(brightness)), false);
@@ -166,9 +167,9 @@ public class LEDs
          * @return {@link Command} The command to set the leds in the LED view to a
          *         solid color
          */
-        public Command setViewColorSolidCommand(int brightness, Color color)
+        public Command setViewColorSolidCommand(Color color)
         {
-            return Commands.runOnce(() -> setViewColorSolid(brightness, color));
+            return Commands.runOnce(() -> setViewColorSolid(color));
         }
 
         /**
@@ -176,7 +177,7 @@ public class LEDs
          * 
          * @param colors {@link Color} The colors to set the LED view to
          */
-        private void setViewColorGradient(int brightness, boolean isAnimated, Color... colors)
+        private void setViewColorGradient(boolean isAnimated, Color... colors)
         {
             Objects.requireNonNull(colors, "Colors cannot be null");
             setPattern(
@@ -193,15 +194,15 @@ public class LEDs
          * @return {@link Command} The command to set the leds in the LED view to a
          *         scrolling gradient
          */
-        public Command setViewColorGradientCommand(int brightness, boolean isAnimated, Color... colors)
+        public Command setViewColorGradientCommand(boolean isAnimated, Color... colors)
         {
-            return Commands.runOnce(() -> setViewColorGradient(brightness, isAnimated, colors));
+            return Commands.runOnce(() -> setViewColorGradient(isAnimated, colors));
         }
 
         /**
          * Sets the pattern of the LED view to a scrolling rainbow
          */
-        private void setViewColorRainbow(int brightness, boolean isAnimated)
+        private void setViewColorRainbow(boolean isAnimated)
         {
             setPattern(
                     LEDPattern.rainbow(255, 255)
@@ -216,9 +217,9 @@ public class LEDs
          * @return {@link Command} The command to set the leds in the LED view to a
          *         scrolling rainbow
          */
-        public Command setViewColorRainbowCommand(int brightness, boolean isAnimated)
+        public Command setViewColorRainbowCommand(boolean isAnimated)
         {
-            return Commands.runOnce(() -> setViewColorRainbow(brightness, isAnimated));
+            return Commands.runOnce(() -> setViewColorRainbow(isAnimated));
         }
 
         /**
@@ -226,10 +227,10 @@ public class LEDs
          * 
          * @param seconds {@link Double} The amount of seconds between each blink
          */
-        private void setViewColorBlink(int brightness, Color color, double seconds)
+        private void setViewColorBlink(Color color, double seconds)
         {
-            setViewColorSolid(brightness, color);
-            setPattern(this.pattern.blink(Units.Seconds.of(seconds)), true);
+            setViewColorSolid(color);
+            setPattern(this.pattern.blink(Units.Seconds.of(seconds)).atBrightness(Percent.of(brightness)), true);
         }
 
         /**
@@ -238,9 +239,9 @@ public class LEDs
          * @param seconds {@link Double} The amount of seconds between each blink
          * @return {@link Command} The command to set the leds in the LED view to blink
          */
-        public Command setViewColorBlinkCommand(int brightness, Color color, double seconds)
+        public Command setViewColorBlinkCommand(Color color, double seconds)
         {
-            return Commands.runOnce(() -> setViewColorBlink(brightness, color, seconds));
+            return Commands.runOnce(() -> setViewColorBlink(color, seconds));
         }
 
         /**
@@ -249,9 +250,9 @@ public class LEDs
          * @param offSeconds {@link Double} The amount of seconds to stay off
          * @param onSeconds {@link Double} The amount of seconds to stay on
          */
-        private void setViewColorBlink(int brightness, Color color, double offSeconds, double onSeconds)
+        private void setViewColorBlink(Color color, double offSeconds, double onSeconds)
         {
-            setViewColorSolid(brightness, color);
+            setViewColorSolid(color);
             setPattern(this.pattern.blink(Units.Seconds.of(offSeconds), Units.Seconds.of(onSeconds)).atBrightness(Percent.of(brightness)), true);
         }
 
@@ -262,9 +263,9 @@ public class LEDs
          * @param onSeconds {@link Double} The amount of seconds to stay on
          * @return {@link Command} The command to set the leds in the LED view to blink
          */
-        public Command setViewColorBlinkCommand(int brightness, Color color, double offSeconds, double onSeconds)
+        public Command setViewColorBlinkCommand(Color color, double offSeconds, double onSeconds)
         {
-            return Commands.runOnce(() -> setViewColorBlink(brightness, color, offSeconds, onSeconds));
+            return Commands.runOnce(() -> setViewColorBlink(color, offSeconds, onSeconds));
         }
 
         /**
@@ -272,10 +273,10 @@ public class LEDs
          * 
          * @param seconds {@link Double} The amount of seconds between each breathe
          */
-        private void setViewColorBreathe(int brightness, Color color, double seconds)
+        private void setViewColorBreathe(Color color, double seconds)
         {
-            setViewColorSolid(brightness, color);
-            setPattern(this.pattern.breathe(Units.Seconds.of(seconds)), true);
+            setViewColorSolid(color);
+            setPattern(this.pattern.breathe(Units.Seconds.of(seconds)).atBrightness(Percent.of(brightness)), true);
         }
 
         /**
@@ -285,9 +286,9 @@ public class LEDs
          * @return {@link Command} The command to set the leds in the LED view to
          *         breathe
          */
-        public Command setViewColorBreatheCommand(int brightness, Color color, double seconds)
+        public Command setViewColorBreatheCommand(Color color, double seconds)
         {
-            return Commands.runOnce(() -> setViewColorBreathe(brightness, color, seconds));
+            return Commands.runOnce(() -> setViewColorBreathe(color, seconds));
         }
     }
 
@@ -367,7 +368,7 @@ public class LEDs
      * @param color The LED color
      * @param brightness The LED brightness
      */
-    private void setColorSolid(int brightness, Color color)
+    private void setColorSolid(Color color)
     {
         solid = LEDPattern.solid(color).atBrightness(Percent.of(brightness));
         solid.applyTo(ledBuffer);
@@ -377,9 +378,8 @@ public class LEDs
     /**
      * This sets the LEDs to blink
      * @param color The LED colors
-     * @param brightness The LED brightness
      */
-    private void setColorBlink(int brightness, Color color)
+    private void setColorBlink(Color color)
     {
         // base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
         base = LEDPattern.solid(color).atBrightness(Percent.of(brightness));
@@ -390,40 +390,39 @@ public class LEDs
     
     /**
      * This sets the LEDs to a gradient
-     * @param color The LED colors
-     * @param brightness The LED brightness
+     * @param colors The LED colors]
      */
-    private void setColorGradient(int brightness, Color... colors)
+    private void setColorGradient(Color... colors)
     {
-        gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors);
+        gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors).atBrightness(Percent.of(brightness));
         gradient.applyTo(ledBuffer);
         LEDs.color = colors[0];
+        
     }
 
-    /*C
+    /**
      * This sets the LEDs to breathe pattern
-     * @param color The LED colors
-     * @param brightness The LED brightness
+     * @param colors The LED colors
      */
-    private void setColorBreathe(int brightness, Color... colors)
+    private void setColorBreathe(Color... colors)
     {
-        base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
+        base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors).atBrightness(Percent.of(brightness));
         breathe = base.breathe(Units.Seconds.of(2));
         breathe.applyTo(ledBuffer);
         LEDs.color = colors[0];
     }
 
-    /**
-     * This sets the LEDs to a progress bar
-     * @param color The LED colors
-     * @param brightness The LED brightness
-     */
-    private void setColorProgressBar(int brightness, Color... colors)
-    {
-        // base = LEDPattern.progressMaskLayer(() -> Climb.getPosition() / Climb.climbPosition.kL1);
-        progressBar.applyTo(ledBuffer);
-        LEDs.color = colors[0];
-    }
+    // /**
+    //  * This sets the LEDs to a progress bar
+    //  * @param color The LED colors
+    //  * @param brightness The LED brightness
+    //  */
+    // private void setColorProgressBar(Color... colors)
+    // {
+    //     // base = LEDPattern.progressMaskLayer(() -> Climb.getPosition() / Climb.climbPosition.kL1);
+    //     progressBar.applyTo(ledBuffer);
+    //     LEDs.color = colors[0];
+    // }
 
     /**
      * This sets the LEDs to rainbow
@@ -443,10 +442,10 @@ public class LEDs
         LEDs.color = Color.kBlack;
     }
 
-    private void setFrankThingy(int brightness, Color color)
+    private void setFrankThingy(Color color)
     {
         // Map of thingy works by setting 25% OF Leds to colo
-        base = LEDPattern.steps(Map.of(0.05, color));
+        base = LEDPattern.steps(Map.of(0.05, color)).atBrightness(Percent.of(brightness));
         mask = LEDPattern.steps(maskSteps).scrollAtRelativeSpeed(Percent.per(Second).of(100));
         FranksThing = base.mask(mask);
         FranksThing.applyTo(ledBuffer);
@@ -462,57 +461,57 @@ public class LEDs
 
     // COMMANDS
 
-    public Command setColorSolidCommand(int brightness, Color color)
+    public Command setColorSolidCommand(Color color)
     {
         return Commands.runOnce(() -> 
         {
             useActionPattern = false;
             actionPattern = null;
-            setColorSolid(brightness, color);
+            setColorSolid(color);
             // System.out.println("Setting solid color");
         }
         ).withName("Set LED Solid");
     }
 
-    public Command setColorGradientCommand(int brightness, Color ...colors)
+    public Command setColorGradientCommand(Color ...colors)
     {
         return Commands.runOnce(() -> 
         {
             useActionPattern = false;
-            setColorGradient(brightness, colors);
+            setColorGradient(colors);
         }
         ).withName("Set LED Gradient");
     }
 
-    public Command setColorBlinkCommand(int brightness, Color color)
+    public Command setColorBlinkCommand(Color color)
     {
         return Commands.runOnce(() -> 
             {
                 useActionPattern = true; 
-                actionPattern = () -> setColorBlink(brightness, color);
+                actionPattern = () -> setColorBlink(color);
             }
             ).withName("Set LED Blink");
     }
 
-    public Command setColorBreatheCommand(int brightness, Color ...colors)
+    public Command setColorBreatheCommand(Color ...colors)
     {
         return Commands.runOnce(() -> 
         {
             useActionPattern = true; 
-            actionPattern = () -> setColorBreathe(brightness, colors);
+            actionPattern = () -> setColorBreathe(colors);
         }
         ).withName("Set LED Breathe");
     }
 
-    public Command setColorProgressBarCommand(int brightness, Color ...colors)
-    {
-        return Commands.runOnce(() -> 
-        {
-            useActionPattern = false;
-            setColorProgressBar(brightness, colors);
-        }
-        ).withName("Set LED Progress Bar");
-    }
+    // public Command setColorProgressBarCommand(Color ...colors)
+    // {
+    //     return Commands.runOnce(() -> 
+    //     {
+    //         useActionPattern = false;
+    //         setColorProgressBar(colors);
+    //     }
+    //     ).withName("Set LED Progress Bar");
+    // }
 
     public Command setColorRainbowCommand()
     {
@@ -534,12 +533,12 @@ public class LEDs
             ).withName("Set LED Moving Rainbow");
     }
 
-    public Command setFranksThingyCommand(int brightness, Color color)
+    public Command setFranksThingyCommand(Color color)
     {
         return Commands.runOnce(() -> 
             {
                 useActionPattern = true; 
-                actionPattern = () -> setFrankThingy(brightness, color);
+                actionPattern = () -> setFrankThingy(color);
             }
             ).withName("Set IDK what to name this LEDs");
     }
