@@ -7,23 +7,10 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.StatusSignalCollection;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
-import com.ctre.phoenix6.hardware.TalonFX;
-
-// import com.ctre.phoenix6.configs.TalonFXConfiguration;
-// import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
-// import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.controls.TakeBackHalfController;
 import frc.robot.motors.TalonFXLance;
 
 /**
@@ -52,26 +39,20 @@ public class Flywheel extends SubsystemBase
     private final TalonFXLance slave1Motor = new TalonFXLance(SLAVE1MOTOR, MOTOR_CAN_BUS, "Flywheel Slave1 Motor"); //X60
     private final TalonFXLance slave2Motor = new TalonFXLance(SLAVE2MOTOR, MOTOR_CAN_BUS, "Flywheel Slave2 Motor"); //X60
     
-    private final double defaultGain = 1.e-5;
-    private final TakeBackHalfController TBHController = new TakeBackHalfController(defaultGain, 0.05);
-    
 
     // PID constants
     private final double kP = 3.6; // 5
     private final double kI = 0.0; // 0.4
     private final double kD = 0.05; // 0.0
-    private final double kS = 0.02; // 0.016
-    private final double kV = 0.0; //0.0105 * 12;
-    private final double kA = 0.00;
 
     private final double FLYWHEEL_DIAMETER_FEET  = (4.0 / 12.0); // 4.25 in
     private final double GEAR_RATIO = 1.0; // 16.0 / 24.0
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * FLYWHEEL_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // checked
     
     // Motion Magic Constants
-    private final double MOTIONMAGICCRUISEVELOCITY = 70.0; // target cruise velocity
-    private final double MOTIONMAGICACCELERATION = 25.0; // target acceleration
-    private final double MOTIONMAGICJERK = 3000.0; // target jerk
+    // private final double MOTIONMAGICCRUISEVELOCITY = 70.0; // target cruise velocity
+    // private final double MOTIONMAGICACCELERATION = 25.0; // target acceleration
+    // private final double MOTIONMAGICJERK = 3000.0; // target jerk
 
     // private final DynamicMotionMagicVoltage request = new DynamicMotionMagicVoltage(0, 20, 50).withJerk(4000);
 
@@ -241,11 +222,11 @@ public class Flywheel extends SubsystemBase
      * uses TBH to control velocity
      * @param speed velocity to spin flywheel at
      */
-    public void useTBH(double speed)
-    {
-        TBHController.setSetpoint(speed, speed); // gain should not be speed (bad)
-        masterMotor.set(TBHController.calculate(getVelocity()));
-    } 
+    // public void useTBH(double speed)
+    // {
+    //     TBHController.setSetpoint(speed, speed); // gain should not be speed (bad)
+    //     masterMotor.set(TBHController.calculate(getVelocity()));
+    // } 
 
     /**
      * @return velocity of lead motor
@@ -316,11 +297,6 @@ public class Flywheel extends SubsystemBase
     public Command runMotorUsingVoltageCommand(double voltage)
     {
         return run( () -> setVoltage(voltage));
-    }
-
-    public Command useTBHCommand(double setpoint)
-    {
-        return run(() -> useTBH(setpoint));
     }
     
 

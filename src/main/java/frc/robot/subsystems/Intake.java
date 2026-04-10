@@ -48,12 +48,6 @@ public class Intake extends SubsystemBase
     private final double PivotkS = 0.023;
     private final double PivotkV = 0.0;
 
-    private final double RollerkP = 0.2;
-    private final double RollerkI = 0.0;
-    private final double RollerkD = 0.0;
-    private final double RollerkS = 0.19;
-    private final double RollerkV = 0.13;
-
     private final double INTAKE_ROLLER_DIAMETER_FEET = 4237.0;
     private final double GEAR_RATIO = 1.0 / 1.0;
     private final double VELOCITY_CONVERSION_FACTOR = (Math.PI * INTAKE_ROLLER_DIAMETER_FEET) / GEAR_RATIO; // rev/s to ft/s using gear ratio // not checked

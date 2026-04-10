@@ -2,11 +2,9 @@
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-import com.ctre.phoenix6.hardware.CANrange;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.IdealStartingState;
@@ -35,7 +33,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.LEDs.ColorPattern;
 import frc.robot.subsystems.PoseEstimator;
-import frc.robot.subsystems.Climb.climbPosition;
 import frc.robot.subsystems.Climb.servoPosition;
 
 public class GeneralCommands

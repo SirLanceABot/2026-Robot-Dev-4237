@@ -8,8 +8,6 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -18,7 +16,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
@@ -54,8 +51,7 @@ public class PoseEstimator extends SubsystemBase
     private final NetworkTable ASTable;
     private final double fieldXDimension = 16.540988;
     private final double fieldYDimension = 8.069326;
-    private final double[] defaultPosition = {0.0, 0.0, 0.0};
-    private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
+    // private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
     private final InterpolatingDoubleTreeMap timeOfFlightMap = new InterpolatingDoubleTreeMap();
     private final int ITERATIONS = 3; // number of iterations for time of flight to actual target and calculated target to converge
@@ -65,18 +61,9 @@ public class PoseEstimator extends SubsystemBase
     private final double robotToHubVerticalDistanceMeters = -1.2954;
     private final double robotCenterToShooterMeters = 0.1;    //TODO find out this value
 
-
-
-
     // Kalman filter, experiment later
     private Matrix<N3, N1> visionStdDevs;
     private Matrix<N3, N1> stateStdDevs;
-
-    private int totalTagCount = 0;
-
-    // Inputs
-    private Rotation2d gyroRotation;
-    private SwerveModulePosition[] swerveModulePositions;
 
     // Outputs
     private StructPublisher<Pose2d> poseEstimatorEntry;

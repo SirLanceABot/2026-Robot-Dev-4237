@@ -55,7 +55,7 @@ public class RobotContainer
     private boolean useClimb                    = false;
     private boolean usePoseEstimator            = false;
     private boolean useDrivetrain               = false;
-    private boolean useExpandingHopper          = true;
+    private boolean useExpandingHopper          = false;
 
     private boolean useDriverController         = false;
     private boolean useOperatorController       = false;
@@ -134,7 +134,7 @@ public class RobotContainer
         if(useHopper)
             hopper = new Hopper();
 
-        if(useExpandingHopper)
+        if(useFullRobot || useExpandingHopper)
             expandingHopper = new ExpandingHopper();
 
         if(useRangerDistanceSensor)
