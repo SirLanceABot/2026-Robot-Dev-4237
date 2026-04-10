@@ -328,7 +328,7 @@ public class GeneralCommands
     // }
 
     
-    // tested
+    // TODO add rollers on to parallel group?
     /**
      * @author Robbie Frank
      * @return command stop intake rollers and reset it inside the robot

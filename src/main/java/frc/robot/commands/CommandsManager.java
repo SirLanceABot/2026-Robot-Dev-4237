@@ -16,6 +16,7 @@ import frc.robot.subsystems.Accelerator;
 import frc.robot.subsystems.Climb;
 // import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.ExpandingHopper;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Indexigator;
 import frc.robot.subsystems.PoseEstimator;
@@ -40,6 +41,7 @@ public class CommandsManager extends Command
     private static PoseEstimator poseEstimator;
     private static Indexigator indexigator;
     private static Climb climb;
+    private static ExpandingHopper expandingHopper;
 
     /**
      * Creates a new Commands Manager
@@ -61,6 +63,7 @@ public class CommandsManager extends Command
         poseEstimator = robotContainer.getPoseEstimator();
         indexigator = robotContainer.getIndexigator();
         climb = robotContainer.getClimb();
+        expandingHopper = robotContainer.getExpandingHopper();
 
 
         createNamedCommands();
@@ -75,6 +78,12 @@ public class CommandsManager extends Command
         NamedCommands.registerCommand("Reset Intake Command", GeneralCommands.resetIntakeCommand());
         NamedCommands.registerCommand("Stop Intaking Command", GeneralCommands.stopIntakingCommand());
         NamedCommands.registerCommand("Move Intake Out Command", GeneralCommands.moveIntakeOutCommand());
+
+        if(expandingHopper != null)
+        {
+            NamedCommands.registerCommand("Expand Hopper Command", expandingHopper.extendHopperCommand());
+            NamedCommands.registerCommand("Retract Hopper Command", expandingHopper.retractHopperCommand());
+        }
 
         // Ejecting Commands
         NamedCommands.registerCommand("Eject Fuel From Intake Command", GeneralCommands.ejectFuelInIntakeCommand());

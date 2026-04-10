@@ -32,7 +32,7 @@ public class ExpandingHopper extends SubsystemBase
     // Put all inner enums and inner classes here
     public enum hopperPosition
     {
-        kRETRACTED(0.0), kEXTENDED(31.0);
+        kRETRACTED(-0.5), kEXTENDED(31.0);
 
         public final double value;
         private hopperPosition(double value)
@@ -46,8 +46,8 @@ public class ExpandingHopper extends SubsystemBase
 
     private final TalonFXLance motor = new TalonFXLance(MOTOR, MOTOR_CAN_BUS, "Hopper Motor ");
 
-    private static final double kPUP = .45;
-    private static final double kPDOWN = .45;
+    private static final double kPUP = .7;
+    private static final double kPDOWN = .9;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
 

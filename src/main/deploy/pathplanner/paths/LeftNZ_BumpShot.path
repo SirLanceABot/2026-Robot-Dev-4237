@@ -1,0 +1,100 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.506,
+        "y": 5.416
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.337366666666667,
+        "y": 5.6071333333333335
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.414811111111111,
+        "y": 5.838922222222222
+      },
+      "prevControl": {
+        "x": 3.451461713520749,
+        "y": 5.736584872824631
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.19473684210526665,
+      "rotationDegrees": 59.99999999999999
+    },
+    {
+      "waypointRelativePos": 0.7684210526315755,
+      "rotationDegrees": 59.99999999999999
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.2591362126245878,
+      "maxWaypointRelativePos": 0.547065337763008,
+      "constraints": {
+        "maxVelocity": 1.75,
+        "maxAcceleration": 1.75,
+        "maxAngularVelocity": 720.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Stop Intaking Command",
+      "waypointRelativePos": 0.018220338983050414,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Stop Intaking Command"
+        }
+      }
+    },
+    {
+      "name": "Ramp up Flywheel Command",
+      "waypointRelativePos": 0.5487288135593109,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Ramp up Flywheel Command"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 132.9457009284941
+  },
+  "reversed": false,
+  "folder": "Left NZ",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 50.452370284035204
+  },
+  "useDefaultConstraints": false
+}
