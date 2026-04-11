@@ -233,9 +233,8 @@ public final class OperatorBindings {
         // dpad Up ~ manual extend hopper
         if(expandingHopper != null)
         {
-            dpadUp.whileTrue(expandingHopper.manualExtendHopperCommand());
-
-            dpadUp.onFalse(expandingHopper.manualResetReverseCommand());
+            dpadUp.onTrue(expandingHopper.manualExtendHopperCommand())
+                .onFalse(expandingHopper.stopMotorCommand());
         }
     }
 
@@ -247,20 +246,27 @@ public final class OperatorBindings {
         // dpad Down ~ manual retract hopper
         if(expandingHopper != null)
         {
-            dpadDown.whileTrue(expandingHopper.manualRetractHopperCommand());
-
-            dpadDown.onFalse(expandingHopper.manualResetForwardCommand());
+            dpadDown.onTrue(expandingHopper.manualRetractHopperCommand())
+                .onFalse(expandingHopper.manualResetReverseCommand());
+            
+            // dpadDown.onFalse(expandingHopper.stopMotorCommand());
         }
     }
 
     private static void configDpadLeft()
     {
         Trigger dpadLeft = controller.povLeft();
+
+        dpadLeft.onTrue(intake.manualRetractIntakeCommand())
+            .onFalse(intake.manualResetReverseCommand());
     }
 
     private static void configDpadRight()
     {
         Trigger dpadRight = controller.povRight();
+
+        dpadRight.onTrue(intake.manualExtendIntakeCommand())
+            .onFalse(intake.stopCommand());
     }
 
     public static void configRumble(int time)

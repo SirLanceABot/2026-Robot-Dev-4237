@@ -179,41 +179,42 @@ public class ExpandingHopper extends SubsystemBase
 
     public Command extendHopperCommand()
     {
-        return run( () -> moveToPosition(hopperPosition.kEXTENDED))
+        return runOnce( () -> moveToPosition(hopperPosition.kEXTENDED))
             .until(isHopperAtPosition(hopperPosition.kEXTENDED));
     }
     
     public Command retractHopperCommand()
     {
-        return run( () -> moveToPosition(hopperPosition.kRETRACTED))
+        return runOnce( () -> moveToPosition(hopperPosition.kRETRACTED))
             .until(isHopperAtPosition(hopperPosition.kRETRACTED));
     }
 
     public Command manualExtendHopperCommand()
     {
-        return run( () -> motor.setupReverseSoftLimit(reverseSoftLimit, false))
+        return run( () -> manualExtendHopper());
+    }
+
+    // public Command manualResetForwardCommand()
+    // {
+    //     return runOnce( () -> stopMotorCommand())
+    //         .andThen( () -> resetExtendedPosition())
+    //         .andThen( () -> motor.setupForwardSoftLimit(forwardSoftLimit, true));
+    // }
+
+     public Command manualRetractHopperCommand()
+    {
+        return runOnce( () -> motor.setupReverseSoftLimit(reverseSoftLimit, false))
             .andThen( () -> manualRetractHopper());
+        // return run( () -> manualRetractHopper());
     }
 
     public Command manualResetReverseCommand()
     {
-        return run( () -> stopMotorCommand() )
+        return runOnce( () -> stopMotorCommand() )
             .andThen( () -> resetRetractedPosition())
             .andThen( () -> motor.setupReverseSoftLimit(reverseSoftLimit, true));
     }
 
-    public Command manualRetractHopperCommand()
-    {
-        return run( () -> motor.setupForwardSoftLimit(forwardSoftLimit, false))
-            .andThen( () -> manualExtendHopper());
-    }
-
-    public Command manualResetForwardCommand()
-    {
-        return run( () -> stopMotorCommand())
-            .andThen( () -> resetExtendedPosition())
-            .andThen( () -> motor.setupForwardSoftLimit(forwardSoftLimit, true));
-    }
 
     // *** OVERRIDEN METHODS ***!
     // Put all methods that are Overridden here

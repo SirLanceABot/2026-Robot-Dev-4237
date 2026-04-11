@@ -40,7 +40,8 @@ public class Intake extends SubsystemBase
     private final TalonFXLance PivotMotor = new TalonFXLance(PIVOT_MOTOR_LEADER, MOTOR_CAN_BUS, "Lead Pivot Motor");
     private final TalonFXLance PivotFollower = new TalonFXLance(PIVOT_MOTOR_FOLLOWER, MOTOR_CAN_BUS, "Follow Pivot Motor");
 
-    
+    private final double forwardSoftLimit = 11.0;
+    private final double reverseSoftLimit = 0.0;
 
     private final double PivotkP = 0.75;
     private final double PivotkI = 0.0;
@@ -209,6 +210,11 @@ public class Intake extends SubsystemBase
         return PivotMotor.getPosition();
     }
 
+    public void resetPosition()
+    {
+        PivotMotor.setPosition(0.0);
+    }
+
     /**
      * Checks to see is at posotion within a tolrence of 1.0
      * @param desiredPosition
@@ -217,6 +223,16 @@ public class Intake extends SubsystemBase
     public BooleanSupplier isAtPosition(double desiredPosition)
     {
         return () -> (Math.abs(PivotMotor.getPosition() - desiredPosition) <= 1.0);
+    }
+
+    public void manualExtendIntake()
+    {
+        PivotMotor.set(0.10);
+    }
+
+    public void manualRetractIntake()
+    {
+        PivotMotor.set(-0.10);
     }
 
     public void moveIntakeOut()
@@ -301,6 +317,25 @@ public class Intake extends SubsystemBase
     {
         return runOnce(() -> stop()).withName("Stop Intake");
     }
+
+    public Command manualRetractIntakeCommand()
+    {
+        return runOnce( () -> PivotMotor.setupReverseSoftLimit(reverseSoftLimit, false))
+            .andThen( () -> manualRetractIntake());
+    }
+
+    public Command manualResetReverseCommand()
+    {
+        return runOnce( () -> stopCommand())
+            .andThen(() -> resetPosition())
+            .andThen(() -> PivotMotor.setupReverseSoftLimit(reverseSoftLimit, true));
+    }
+
+    public Command manualExtendIntakeCommand()
+    {
+        return runOnce( () -> manualExtendIntake());
+    }
+
 
     /**
      * @author Robbie F
