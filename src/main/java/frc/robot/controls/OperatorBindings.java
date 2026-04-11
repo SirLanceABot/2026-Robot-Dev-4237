@@ -165,7 +165,7 @@ public final class OperatorBindings {
         Trigger leftBumper = controller.leftBumper();
 
         // Left Bumper ~ extend and turn intake on
-        leftBumper.onTrue(GeneralCommands.intakeAndTellUsIfItsFullAndKeepGoingCommand());
+        leftBumper.onTrue(GeneralCommands.intakeCommand());
     }
 
     private static void configRightBumper()

@@ -60,9 +60,9 @@ public class RobotContainer
     private boolean useDriverController         = false;
     private boolean useOperatorController       = false;
 
-    private boolean useLaserCAN                 = true;
+    // private boolean useLaserCAN                 = false;
     private boolean useRangerDistanceSensor     = false;
-    private boolean useHopper                   = true;
+    // private boolean useHopper                   = false;
 
     private boolean useHopperCamera             = false;
     private boolean useShooterCamera            = false;
@@ -80,7 +80,7 @@ public class RobotContainer
     private Drivetrain drivetrain = null;
     private HopperCamera hopperCamera = null;
     private LEDs leds = null;
-    private LaserCanSensor laserCanSensor = null;
+    // private LaserCanSensor laserCanSensor = null;
     private RangerDistanceSensor rangerDistanceSensor = null;
     private Hopper hopper = null;
     private ExpandingHopper expandingHopper = null;
@@ -128,11 +128,11 @@ public class RobotContainer
         else
             cameraArray[1] = null;
 
-        if(useLaserCAN)
-            laserCanSensor = new LaserCanSensor();
+        // if(useLaserCAN)
+        //     laserCanSensor = new LaserCanSensor();
         
-        if(useHopper)
-            hopper = new Hopper();
+        // if(useHopper)
+        //     hopper = new Hopper();
 
         if(useFullRobot || useExpandingHopper)
             expandingHopper = new ExpandingHopper();
@@ -230,10 +230,10 @@ public class RobotContainer
         return operatorController;
     }
 
-    public LaserCanSensor getLaserCanSensor()
-    {
-        return laserCanSensor;
-    }
+    // public LaserCanSensor getLaserCanSensor()
+    // {
+    //     return laserCanSensor;
+    // }
 
     public Hopper getHopper()
     {

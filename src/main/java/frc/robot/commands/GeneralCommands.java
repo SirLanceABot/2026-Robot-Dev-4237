@@ -168,29 +168,29 @@ public class GeneralCommands
      * @author Name: Robert Allen Frank
      * @return read the title
      */
-    public static Command intakeAndTellUsIfItsFullAndKeepGoingCommand()
-    {
-        if(intake != null && hopper != null)
-        {
-            return 
-            Commands.race(
-                intake.pickupFuelCommand(),
-                Commands.either(
-                    setLEDCommand(ColorPattern.kSolid, Color.kPurple),
-                    setLEDCommand(ColorPattern.kSolid, Color.kYellow),
-                    hopper.isHopperFullSupplier()
-                ).repeatedly())
-            .withName("Intaking Fuel");
-        }
-        else if(intake != null)
-        {
-            return intakeCommand();
-        }
-        else
-        {
-            return Commands.none();
-        }
-    }
+    // public static Command intakeAndTellUsIfItsFullAndKeepGoingCommand()
+    // {
+    //     if(intake != null && hopper != null)
+    //     {
+    //         return 
+    //         Commands.race(
+    //             intake.pickupFuelCommand(),
+    //             Commands.either(
+    //                 setLEDCommand(ColorPattern.kSolid, Color.kPurple),
+    //                 setLEDCommand(ColorPattern.kSolid, Color.kYellow),
+    //                 hopper.isHopperFullSupplier()
+    //             ).repeatedly())
+    //         .withName("Intaking Fuel");
+    //     }
+    //     else if(intake != null)
+    //     {
+    //         return intakeCommand();
+    //     }
+    //     else
+    //     {
+    //         return Commands.none();
+    //     }
+    // }
 
     public static Command unjamIntakeCommand()
     {
@@ -213,7 +213,12 @@ public class GeneralCommands
         {
             return
             Commands.either(
-                intake.moveToUnjamPositionCommand().until(intake.isAtPosition(2.0)),
+                intake.moveToUnjamPositionCommand().until(intake.isAtPosition(2.0))
+                .andThen(
+                    intake.turnOnRollersCommand().withTimeout(0.1))
+                .andThen(
+                    intake.stopCommand()),
+
                 intake.moveIntakeOutCommand().until(intake.isAtPosition(6.0)),
                 () -> intake.getPivotPosition() > 4.0).withTimeout(0.5);
         }
