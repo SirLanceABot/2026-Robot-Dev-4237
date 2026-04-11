@@ -63,14 +63,14 @@
                     }
                   ]
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Reset Intake Command"
-                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Intake Command"
           }
         },
         {
