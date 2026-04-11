@@ -4,6 +4,7 @@ import static frc.robot.Constants.ExpandingHopper.MOTOR;
 import static frc.robot.Constants.ExpandingHopper.MOTOR_CAN_BUS;
 
 import java.lang.invoke.MethodHandles;
+import java.security.KeyPairGeneratorSpi;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,6 +18,9 @@ public class ExpandingHopper extends SubsystemBase
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
 
     private final double tolerance = 0.0;
+
+    private final double reverseSoftLimit = -1.0;
+    private final double forwardSoftLimit = 32.0;
 
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
@@ -153,10 +157,14 @@ public class ExpandingHopper extends SubsystemBase
 
         }
     }
-
-    public void resetPosition()
+    public void resetRetractedPosition()
     {
         motor.setPosition(0.0);
+    }
+
+    public void resetExtendedPosition()
+    {
+        motor.setPosition(32.0);
     }
 
     /**
@@ -183,12 +191,28 @@ public class ExpandingHopper extends SubsystemBase
 
     public Command manualExtendHopperCommand()
     {
-        return run( () -> manualExtendHopper());
+        return run( () -> motor.setupReverseSoftLimit(reverseSoftLimit, false))
+            .andThen( () -> manualRetractHopper());
+    }
+
+    public Command manualResetReverseCommand()
+    {
+        return run( () -> stopMotorCommand() )
+            .andThen( () -> resetRetractedPosition())
+            .andThen( () -> motor.setupReverseSoftLimit(reverseSoftLimit, true));
     }
 
     public Command manualRetractHopperCommand()
     {
-        return run( () -> manualRetractHopper());
+        return run( () -> motor.setupForwardSoftLimit(forwardSoftLimit, false))
+            .andThen( () -> manualExtendHopper());
+    }
+
+    public Command manualResetForwardCommand()
+    {
+        return run( () -> stopMotorCommand())
+            .andThen( () -> resetExtendedPosition())
+            .andThen( () -> motor.setupForwardSoftLimit(forwardSoftLimit, true));
     }
 
     // *** OVERRIDEN METHODS ***!

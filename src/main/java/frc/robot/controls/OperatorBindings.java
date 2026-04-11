@@ -233,9 +233,9 @@ public final class OperatorBindings {
         // dpad Up ~ manual extend hopper
         if(expandingHopper != null)
         {
-            dpadUp.onTrue(expandingHopper.manualExtendHopperCommand());
+            dpadUp.whileTrue(expandingHopper.manualExtendHopperCommand());
 
-            dpadUp.onFalse(expandingHopper.stopMotorCommand());
+            dpadUp.onFalse(expandingHopper.manualResetReverseCommand());
         }
     }
 
@@ -247,9 +247,9 @@ public final class OperatorBindings {
         // dpad Down ~ manual retract hopper
         if(expandingHopper != null)
         {
-            dpadDown.onTrue(expandingHopper.manualRetractHopperCommand());
+            dpadDown.whileTrue(expandingHopper.manualRetractHopperCommand());
 
-            dpadDown.onFalse(expandingHopper.stopMotorCommand());
+            dpadDown.onFalse(expandingHopper.manualResetForwardCommand());
         }
     }
 
