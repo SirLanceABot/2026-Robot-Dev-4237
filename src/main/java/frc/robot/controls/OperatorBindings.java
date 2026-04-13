@@ -215,7 +215,7 @@ public final class OperatorBindings {
         // rightTrigger.whileTrue(new DeferredCommand(() -> ScoriDngCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> false), Set.of()));
         // rightTrigger.onTrue(GeneralCommands.intakeAndTellUsIfItsFullAndKeepGoingCommand());
 
-        rightTrigger.onTrue(GeneralCommands.intakeDepotCommand());    
+        // rightTrigger.onTrue(intake.turnOnRollersAtSetSpeedCommand(0.87));    
     }
 
 

@@ -299,7 +299,7 @@ public class Intake extends SubsystemBase
 
     public Command onCommand()
     {
-        return run( () -> setVelocity(0.25) );
+        return run( () -> setVelocity(0.1) );
     }
 
     public Command moveIntakeOutCommand()

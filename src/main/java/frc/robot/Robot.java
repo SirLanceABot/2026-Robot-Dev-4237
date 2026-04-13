@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,6 +23,8 @@ import frc.robot.commands.StartUpCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
 import frc.robot.elastic.ElasticLance;
+import frc.robot.loggers.DataLogFile;
+import frc.robot.motors.MotorControllerLance;
 import frc.robot.pathplanner.PathPlannerLance;
 import frc.robot.sensors.Hopper;
 import frc.robot.subsystems.LEDs;
@@ -68,7 +71,7 @@ public class Robot extends TimedRobot
         // The order of the code below is important.
 
         // 1. Configure the Data Loggers
-        // DataLogFile.config();
+        DataLogFile.config();
         // new CommandSchedulerLog(
         //     EnumSet.of(CommandStageSelector.initialize, CommandStageSelector.interrupt, CommandStageSelector.finish, CommandStageSelector.execute), 
         //     EnumSet.of(LogsSelector.useConsole, LogsSelector.useDataLog, LogsSelector.useShuffleBoardLog));
@@ -160,11 +163,11 @@ public class Robot extends TimedRobot
     @Override
     public void disabledPeriodic() 
     {
-        StartUpCommands.checkAndUpdate(); // put here for testing purposes
+        // StartUpCommands.checkAndUpdate(); // put here for testing purposes
         // Put code to run here before the match starts, but not between auto and teleop
         if(isPreMatch)
         {
-            // StartUpCommands.checkAndUpdate();
+            StartUpCommands.checkAndUpdate();
             selectedCommand = PathPlannerLance.getAutonomousCommand();
             if(!selectedCommand.getName().equalsIgnoreCase(autonomousCommand.getName()))
             {
@@ -214,7 +217,9 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit() 
     {
-        // DataLogManager.start();
+        DataLogManager.start();
+
+        System.out.println("Autonomous Started");
 
         isPreMatch = false;
 
@@ -257,7 +262,9 @@ public class Robot extends TimedRobot
     @Override
     public void teleopInit() 
     {
-        // DataLogManager.start();
+        DataLogManager.start();
+
+        System.out.println("Teleop Started");
 
         // This makes sure that the autonomous stops running when teleop starts running.
         if (autonomousCommand != null) 
@@ -280,10 +287,10 @@ public class Robot extends TimedRobot
     @Override
     public void teleopExit() 
     {
-        // MotorControllerLance.logAllStickyFaults();
-        // DataLogManager.stop();
+        MotorControllerLance.logAllStickyFaults();
+        DataLogManager.stop();
 
-        // isPreMatch = true;
+        isPreMatch = true;
     }
 
     /** This function is called once each time the robot enters Test mode. */
