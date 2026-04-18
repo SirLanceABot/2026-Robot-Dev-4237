@@ -43,7 +43,7 @@ public class Intake extends SubsystemBase
     private final double forwardSoftLimit = 11.0;
     private final double reverseSoftLimit = 0.0;
 
-    private final double PivotkP = 0.75;
+    private final double PivotkP = 0.85;
     private final double PivotkI = 0.0;
     private final double PivotkD = 0.0;
     private final double PivotkS = 0.023;
@@ -126,6 +126,12 @@ public class Intake extends SubsystemBase
         PivotMotor.setSafetyEnabled(false);
         PivotFollower.setSafetyEnabled(false);
 
+        RollersMotor.setupCurrentLimit(30.0, 35.0, 0.1);
+        RollersFollower.setupCurrentLimit(30.0, 35.0, 0.1);
+
+        PivotMotor.setupCurrentLimit(25.0, 30.0, 0.1);
+        PivotFollower.setupCurrentLimit(25.0, 30.0, 0.1);
+
         PivotMotor.setupForwardHardLimitSwitch(false, true, 0);
         PivotMotor.setupReverseHardLimitSwitch(false, true, 1);
 
@@ -188,8 +194,9 @@ public class Intake extends SubsystemBase
      */
     public void ejectFuel()
     {
-        setVelocity(-10.0);
-        PivotMotor.setControlPosition(intakingPosition);
+        // setVelocity(-10.0);
+        RollersMotor.set(-0.3);
+        // PivotMotor.setControlPosition(intakingPosition);
         // setVelocity(-0.20);
     }
 

@@ -203,7 +203,8 @@ public final class OperatorBindings {
         // Left Trigger ~ left auto climb
         // leftTrigger.whileTrue(new DeferredCommand(() -> ScoringCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> true), Set.of()));   
         
-        leftTrigger.onTrue(GeneralCommands.intakeCommand());
+        // leftTrigger.onTrue(GeneralCommands.intakeCommand());
+        leftTrigger.onTrue(GeneralCommands.ejectFuelInIntakeCommand());
     }
 
     // TESTED and WORKS (need to add climb)
@@ -215,7 +216,8 @@ public final class OperatorBindings {
         // rightTrigger.whileTrue(new DeferredCommand(() -> ScoriDngCommands.autoClimbCommand(drivetrain, poseEstimator, climb, () -> false), Set.of()));
         // rightTrigger.onTrue(GeneralCommands.intakeAndTellUsIfItsFullAndKeepGoingCommand());
 
-        // rightTrigger.onTrue(intake.turnOnRollersAtSetSpeedCommand(0.87));    
+        // rightTrigger.onTrue(intake.turnOnRollersAtSetSpeedCommand(0.87));  
+        rightTrigger.onTrue(flywheel.setControlVelocityCommand(() -> -30.0));
     }
 
 

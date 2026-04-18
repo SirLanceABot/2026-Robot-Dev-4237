@@ -369,7 +369,8 @@ public class GeneralCommands
             return 
             Commands.parallel(
                 setLEDCommand(ColorPattern.kSolid, Color.kOrange),
-                intake.ejectFuelCommand())
+                intake.ejectFuelCommand(),
+                indexigator.setBackwardCommand())
                 .andThen(defaultLEDCommand())
             .withName("Ejecting Fuel In Intake");
         }
